@@ -1,0 +1,38 @@
+{
+  "schema": {
+    "users": {
+      "type": "table",
+      "columns": {
+        "username": { "type": "String" }
+      }
+    },
+
+    "products": {
+      "type": "table",
+      "columns": {
+        "id"          : { "type": "String" },
+        "name"        : { "type": "Text", "analyzer": "English" },
+        "category"    : { "type": "String" },
+        "price"       : { "type": "Decimal" },
+        "tags"        : { "type": "Text", "analyzer": "Whitespace" }
+      }
+    },
+
+    "sessions" : {
+      "type": "table",
+      "columns": {
+         "id"     : { "type" : "String" },
+         "user"   : { "type" : "String", "link": "users.username" }
+      }
+    },
+
+    "impressions" : {
+      "type": "table",
+      "columns": {
+        "session"  : { "type": "String", "link": "sessions.id" },
+        "product"  : { "type": "String", "link": "products.id" },
+        "purchase"   : { "type": "Boolean" }
+      }
+    }
+  }
+}
