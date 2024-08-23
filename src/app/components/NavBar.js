@@ -73,6 +73,7 @@ class NavBar extends Component {
                 <DropdownItem onClick={() => this.onUserSelected('alice')}>{getUserName('alice')}</DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem onClick={() => props.actions.setPage('/admin')}>Admin view</DropdownItem>
+                <DropdownItem onClick={() => props.actions.setPage('/analysis')}>Analysis view</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </li>

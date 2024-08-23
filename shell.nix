@@ -2,6 +2,7 @@
 
 pkgs.mkShell {
   buildInputs = [
+   pkgs.vscode
    pkgs.nodejs
    pkgs.python310
    pkgs.docker-compose

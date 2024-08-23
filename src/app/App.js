@@ -10,6 +10,7 @@ import * as data from './data'
 import NavBar from './components/NavBar'
 import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
+import AnalysisPage from './pages/AnalysisPage'
 import CartPage from './pages/CartPage'
 import DataInspectPage from './pages/DataInspectPage'
 
@@ -69,6 +70,8 @@ class App extends Component {
         return CartPage
       case '/admin':
         return AdminPage
+      case '/analysis':
+        return AnalysisPage
       case '/data':
         return DataInspectPage
       case '/':
@@ -102,6 +105,10 @@ class App extends Component {
         (searchValue) => Promise.resolve(
           data.getProductSearchResults(state.selectedUserId, searchValue)
         ),
+
+      getAutoComplete: 
+        (query) => Promise.resolve(data.getAutoComplete(state.selectedUserId, query)),
+
     }
 
     const actions = {
