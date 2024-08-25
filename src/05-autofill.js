@@ -20,11 +20,16 @@ export function getProductsByIds(ids) {
 }
 
 export function getAutoFill(userId) {
+  var where = {}
+  if (userId) {
+    where['user'] = userId
+  }
+
+
+
   return axios.post(`${aitoUrl}/api/v1/_predict`, {
     "from": "visits",
-    "where" : {
-      "user": userId
-    },
+    "where" : where,
     "predict":"purchases",
     "exclusiveness" : false,
     "select": ["$p", "$value"]
@@ -37,7 +42,7 @@ export function getAutoFill(userId) {
       var ids = []
 
       result.data.hits.forEach(hit => {
-        if (hit.$p >= 0.5) {
+        if (hit.$p >= 0.4) {
           ids.push(hit.$value)
         }
       })

@@ -14,6 +14,8 @@ function getUserName(userId) {
       return 'Lactose-free Larry'
     case 'alice':
       return 'All-goes Alice'
+    case null:
+        return 'Unknown user'
     default:
       throw new Error(`Unknown user id: ${userId}`)
   }
@@ -71,6 +73,7 @@ class NavBar extends Component {
                 <DropdownItem onClick={() => this.onUserSelected('larry')}>{getUserName('larry')}</DropdownItem>
                 <DropdownItem onClick={() => this.onUserSelected('veronica')}>{getUserName('veronica')}</DropdownItem>
                 <DropdownItem onClick={() => this.onUserSelected('alice')}>{getUserName('alice')}</DropdownItem>
+                <DropdownItem onClick={() => this.onUserSelected(null)}>Unknown user</DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem onClick={() => props.actions.setPage('/admin')}>Admin view</DropdownItem>
                 <DropdownItem onClick={() => props.actions.setPage('/analysis')}>Analysis view</DropdownItem>
