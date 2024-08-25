@@ -106,8 +106,14 @@ class App extends Component {
           data.getProductSearchResults(state.selectedUserId, searchValue)
         ),
 
+      getProductsByIds: 
+        (ids) => Promise.resolve(data.getProductsByIds(ids)),
+
       getAutoComplete: 
         (query) => Promise.resolve(data.getAutoComplete(state.selectedUserId, query)),
+
+      getAutoFill: 
+        () => Promise.resolve(data.getAutoFill(state.selectedUserId)),
 
     }
 

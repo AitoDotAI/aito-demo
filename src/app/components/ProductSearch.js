@@ -1,21 +1,39 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import ProductList from './ProductList'
+import Autosuggest from 'react-autosuggest'
 
 import './ProductSearch.css'
+
 
 class ProductSearch extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      suggestions: [],
       inputValue: '',
-      searchResults: null,
+      searchResults: null
     }
 
+    this.debouncedGetAutoComplete = _.debounce(this.getAutoComplete, 300).bind(this)
     this.debouncedGetSearchResults = _.debounce(this.getSearchResults, 300).bind(this)
+
+    this.debouncedGetAutoComplete(this.state.inputValue)
   }
 
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.debouncedGetAutoComplete(value)
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({ suggestions: [] });
+  };
+
+  getSuggestionValue = suggestion => suggestion.$value;
+
+  renderSuggestion = suggestion => <div>{suggestion.$value}</div>;
+  
   componentDidUpdate(prevProps) {
     if (this.props.selectedUserId !== prevProps.selectedUserId) {
       this.setState({
@@ -26,14 +44,18 @@ class ProductSearch extends Component {
     }
   }
 
-  onInputChange = (e) => {
-    const inputVal = e.target.value
-    this.setState({ inputValue: inputVal })
-
+  onInputChange = (event, { newValue, method }) => {
+    const inputVal = newValue
+    
     if (!inputVal) {
-      this.setState({ searchResults: null })
+      this.setState({ 
+        inputValue: "", 
+        searchResults: null 
+      })
     } else {
-      this.debouncedGetSearchResults(e.target.value)
+      this.setState({ inputValue: newValue })
+      this.debouncedGetSearchResults(newValue)
+      this.debouncedGetAutoComplete(newValue)
     }
   }
 
@@ -51,6 +73,19 @@ class ProductSearch extends Component {
       .catch(err => this.props.actions.showError(err))
   }
 
+  setAutoComplete = (autoCompletions) => {
+    autoCompletions = autoCompletions.filter(v => v.$value != "" && v.$p > 0.05).slice(0, 5)
+
+    this.setState( { suggestions: autoCompletions })
+  }
+
+  getAutoComplete = (inputVal) => {
+    console.log(`get autocomplete for ${inputVal}`)
+    return this.props.dataFetchers.getAutoComplete(inputVal)
+      .then(autoCompletions => this.setAutoComplete(autoCompletions))
+      .catch(err => this.props.actions.showError(err))
+  }
+
   onItemAddedToCart = (itemIndex) => {
     const { searchResults } = this.state
     const product = searchResults[itemIndex]
@@ -64,17 +99,27 @@ class ProductSearch extends Component {
   }
 
   render() {
-    const { state, props } = this
+    const { suggestions, inputValue, searchResults } = this.state
+    const { state, props} = this 
+
+    console.log("input:" + inputValue)
 
     return (
       <div className="ProductSearch">
-        <input
-          className="ProductSearch__input"
-          type="search"
-          placeholder="Search products"
-          value={state.inputValue}
-          onChange={this.onInputChange}
-          onKeyPress={this.handleKeyPress}
+         <Autosuggest
+          suggestions={state.suggestions}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          getSuggestionValue={this.getSuggestionValue}
+          renderSuggestion={this.renderSuggestion}
+          inputProps={{
+            className:"ProductSearch__input",
+            type:"search",
+            placeholder:"Search products",
+            value: state.inputValue,
+            onChange:this.onInputChange,
+            onKeyPress:this.handleKeyPress
+          }}
         />
 
         {

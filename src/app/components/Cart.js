@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import { FaTrashAlt } from 'react-icons/fa'
 import ProductList from './ProductList'
+import {
+  Button,
+} from 'reactstrap';
 
 import './Cart.css'
 
