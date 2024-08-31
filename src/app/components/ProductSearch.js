@@ -18,8 +18,6 @@ class ProductSearch extends Component {
 
     this.debouncedGetAutoComplete = _.debounce(this.getAutoComplete, 300).bind(this)
     this.debouncedGetSearchResults = _.debounce(this.getSearchResults, 300).bind(this)
-
-    this.debouncedGetAutoComplete(this.state.inputValue)
   }
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -41,6 +39,7 @@ class ProductSearch extends Component {
       })
 
       this.getSearchResults(this.state.inputValue)
+      this.debouncedGetAutoComplete(this.state.inputValue)
     }
   }
 
@@ -74,7 +73,9 @@ class ProductSearch extends Component {
   }
 
   setAutoComplete = (autoCompletions) => {
-    autoCompletions = autoCompletions.filter(v => v.$value != "" && v.$p > 0.05).slice(0, 5)
+    console.log(`auto completions ${JSON.stringify(autoCompletions)}`)
+    autoCompletions = autoCompletions.filter(v => v.$value != "" && v.$p > 0.001).slice(0, 5)
+    console.log(`auto completions ${JSON.stringify(autoCompletions)}`)
 
     this.setState( { suggestions: autoCompletions })
   }

@@ -10,11 +10,12 @@ import * as data from './data'
 import NavBar from './components/NavBar'
 import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
-import AnalysisPage from './pages/AnalysisPage'
+import FaqPage from './pages/FaqPage'
 import CartPage from './pages/CartPage'
 import DataInspectPage from './pages/DataInspectPage'
 
 import './App.css'
+import { FaQq } from 'react-icons/fa';
 
 const history = createBrowserHistory();
 
@@ -70,8 +71,8 @@ class App extends Component {
         return CartPage
       case '/admin':
         return AdminPage
-      case '/analysis':
-        return AnalysisPage
+      case '/faq':
+        return FaqPage
       case '/data':
         return DataInspectPage
       case '/':
@@ -114,6 +115,9 @@ class App extends Component {
 
       getAutoFill: 
         () => Promise.resolve(data.getAutoFill(state.selectedUserId)),
+
+      getAnswer: 
+        (question) => Promise.resolve(data.getAnswer(question)),
 
     }
 

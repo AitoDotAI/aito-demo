@@ -4,7 +4,13 @@ import { aitoApiKey, aitoUrl } from './config'
 
 export function getProductSearchResults(userId, inputValue) {
   var where = {
-    'product.name': { "$match": inputValue },
+    'product' : {
+      '$or': [
+        {'tags': { "$match": inputValue }},
+        {'name': { "$match": inputValue }}
+      ]
+    },
+    'context.query': inputValue
   }
   if (userId) {
     where['context.user'] = userId
@@ -12,10 +18,7 @@ export function getProductSearchResults(userId, inputValue) {
 
   return axios.post(`${aitoUrl}/api/v1/_recommend`, {
     from: 'impressions',
-    where: {
-      'product.name': { "$match": inputValue },
-      'context.user': userId
-    },
+    where: where,
     recommend: 'product',
     goal: { 'purchase': true },
     limit: 5
