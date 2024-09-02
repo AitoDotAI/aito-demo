@@ -10,6 +10,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap'
 
 import './AnalyticsPage.css'
@@ -22,18 +26,19 @@ class AnalyticsPage extends Component {
       modalOpen: false,
       field: 'user.tags',
       value: 'female', 
-      results: []
+      results: [],
+      dropDownOpen: false
     }
 
     this.debouncedFetchResults = _.debounce(this.fetchResults, 300).bind(this)
     this.debouncedFetchResults()
   }
 
-  onFieldChange = (e) => {
-    const val = e.target.value
-
+  setField = (val) => {
     this.setState({
       field: val,
+      dropDownOpen: false,
+      value: this.getDefaultFieldValue(val)
     })
 
     if (!val) {
@@ -47,7 +52,7 @@ class AnalyticsPage extends Component {
     const val = e.target.value
 
     this.setState({
-      value: val,
+      value: val
     })
 
     if (!val) {
@@ -66,6 +71,36 @@ class AnalyticsPage extends Component {
       .catch(err => this.props.actions.showError(err))
   }
 
+  toggleDropDown = () => {
+    this.setState({dropDownOpen: !this.state.dropDownOpen})
+  }
+
+  getFieldName = (fieldName) => {
+    switch (fieldName) {
+      case 'user.id':
+        return 'User id'
+      case 'user.tags':
+        return 'User tag'
+      case 'weekday':
+        return 'Weekday'
+      default:
+        throw new Error(`Unknown field id: ${fieldName}`)
+    }
+  }
+
+  getDefaultFieldValue = (fieldName) => {
+    switch (fieldName) {
+      case 'user.id':
+        return 'veronica'
+      case 'user.tags':
+        return 'club-member'
+      case 'weekday':
+        return 'saturday'
+      default:
+        throw new Error(`Unknown field id: ${fieldName}`)
+    }
+  }
+
   render() {
     const items = _.map(this.state.results, item => {
       const hit = item["value"]
@@ -75,18 +110,14 @@ class AnalyticsPage extends Component {
     return (
       <div className="FaqPage">
         <h4>Field:</h4>
-        <Form>
-          <FormGroup>
-            <Input
-              value={this.state.field}
-              onChange={this.onFieldChange}
-              type="text"
-              name="question"
-              id="question"
-              placeholder="Question"
-            />
-          </FormGroup>
-        </Form>
+        <Dropdown className="DropDown" isOpen={this.state.dropDownOpen} toggle={this.toggleDropDown}>
+          <DropdownToggle caret>{this.getFieldName(this.state.field)}</DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem onClick={() => this.setField('user.tags')}>User tag</DropdownItem>
+            <DropdownItem onClick={() => this.setField('user.id')}>User id</DropdownItem>
+            <DropdownItem onClick={() => this.setField('weekday')}>Weekday</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         <h4>Value:</h4>
         <Form>
           <FormGroup>
@@ -100,7 +131,7 @@ class AnalyticsPage extends Component {
             />
           </FormGroup>
         </Form>
-        <h4>Relations:</h4>
+        <h4>Preference:</h4>
         <ul>{items}</ul>
         </div>
     )

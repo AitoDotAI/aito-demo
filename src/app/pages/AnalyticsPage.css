@@ -1,6 +1,10 @@
 .AnalyticsPage {
 }
 
+.DropDown {
+  margin-bottom: 20px;
+}
+
 
 .TagsInput ul {
   list-style: none;
@@ -9,6 +13,7 @@
   display: block;
   margin-bottom: 10px;
 }
+
 
 .TagsInput li  {
   display: inline-block;
