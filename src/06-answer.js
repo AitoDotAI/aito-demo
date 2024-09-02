@@ -2,8 +2,6 @@ import axios from 'axios'
 import { aitoApiKey, aitoUrl } from './config'
 
 export function getAnswer(question) {
-  var where = {}
-
   return axios.post(`${aitoUrl}/api/v1/_query`, {
     "from": "questions",
     "where" : {

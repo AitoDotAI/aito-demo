@@ -10,6 +10,7 @@ import * as data from './data'
 import NavBar from './components/NavBar'
 import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
+import AnalyticsPage from './pages/AnalyticsPage'
 import FaqPage from './pages/FaqPage'
 import CartPage from './pages/CartPage'
 import DataInspectPage from './pages/DataInspectPage'
@@ -75,6 +76,8 @@ class App extends Component {
         return FaqPage
       case '/data':
         return DataInspectPage
+      case '/analytics':
+        return AnalyticsPage
       case '/':
       default:
         return LandingPage
@@ -118,6 +121,9 @@ class App extends Component {
 
       getAnswer: 
         (question) => Promise.resolve(data.getAnswer(question)),
+
+      relate: 
+        (field, value) => Promise.resolve(data.relate(field, value)),
 
     }
 

@@ -4,6 +4,7 @@ import { getTagSuggestions } from '../../03-get-tag-suggestions'
 import { getAutoComplete } from '../../04-autocomplete'
 import { getAutoFill, getProductsByIds } from '../../05-autofill'
 import { getAnswer } from '../../06-answer'
+import { relate } from '../../07-relate'
 
 export {
   getProductSearchResults,
@@ -12,5 +13,6 @@ export {
   getAutoComplete,
   getAutoFill,
   getProductsByIds,
-  getAnswer
+  getAnswer,
+  relate
 }
