@@ -77,7 +77,8 @@ class NavBar extends Component {
                 <DropdownItem divider />
                 <DropdownItem onClick={() => props.actions.setPage('/admin')}>Admin view</DropdownItem>
                 <DropdownItem onClick={() => props.actions.setPage('/analytics')}>Analytics</DropdownItem>
-                <DropdownItem onClick={() => props.actions.setPage('/faq')}>Help</DropdownItem>
+                <DropdownItem onClick={() => props.actions.setPage('/invoicing')}>Invoicing</DropdownItem>
+                <DropdownItem onClick={() => props.actions.setPage('/help')}>Help</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </li>

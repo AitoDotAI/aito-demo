@@ -11,12 +11,14 @@ import NavBar from './components/NavBar'
 import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
 import AnalyticsPage from './pages/AnalyticsPage'
-import FaqPage from './pages/FaqPage'
+import InvoicingPage from './pages/InvoicingPage'
+import HelpPage from './pages/HelpPage'
 import CartPage from './pages/CartPage'
 import DataInspectPage from './pages/DataInspectPage'
 
 import './App.css'
 import { FaQq } from 'react-icons/fa';
+import { predictInvoices } from '../08-predict-invoice';
 
 const history = createBrowserHistory();
 
@@ -72,13 +74,15 @@ class App extends Component {
         return CartPage
       case '/admin':
         return AdminPage
-      case '/faq':
-        return FaqPage
+      case '/help':
+        return HelpPage
       case '/data':
         return DataInspectPage
       case '/analytics':
         return AnalyticsPage
-      case '/':
+      case '/invoicing':
+        return InvoicingPage
+        case '/':
       default:
         return LandingPage
     }
@@ -119,11 +123,14 @@ class App extends Component {
       getAutoFill: 
         () => Promise.resolve(data.getAutoFill(state.selectedUserId)),
 
-      getAnswer: 
-        (question) => Promise.resolve(data.getAnswer(question)),
+      prompt: 
+        (question) => Promise.resolve(data.prompt(question)),
 
       relate: 
         (field, value) => Promise.resolve(data.relate(field, value)),
+
+      predictInvoice: 
+        (input, output) => Promise.resolve(data.predictInvoice(input, output)),
 
     }
 

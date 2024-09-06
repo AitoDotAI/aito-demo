@@ -95,7 +95,7 @@ class AnalyticsPage extends Component {
       case 'user.tags':
         return 'club-member'
       case 'weekday':
-        return 'saturday'
+        return 'Saturday'
       default:
         throw new Error(`Unknown field id: ${fieldName}`)
     }

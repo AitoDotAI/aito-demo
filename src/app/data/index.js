@@ -3,8 +3,9 @@ import { getRecommendedProducts } from '../../02-recommend'
 import { getTagSuggestions } from '../../03-get-tag-suggestions'
 import { getAutoComplete } from '../../04-autocomplete'
 import { getAutoFill, getProductsByIds } from '../../05-autofill'
-import { getAnswer } from '../../06-answer'
+import { prompt } from '../../06-prompt'
 import { relate } from '../../07-relate'
+import { predictInvoice } from '../../08-predict-invoice'
 
 export {
   getProductSearchResults,
@@ -13,6 +14,7 @@ export {
   getAutoComplete,
   getAutoFill,
   getProductsByIds,
-  getAnswer,
-  relate
+  prompt,
+  relate,
+  predictInvoice
 }
