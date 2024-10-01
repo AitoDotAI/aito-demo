@@ -25,6 +25,7 @@ const history = createBrowserHistory();
 function getPath(pathname) {
   return _.trimEnd(pathname, '/')
 }
+
 class App extends Component {
   constructor() {
     super()
