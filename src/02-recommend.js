@@ -1,10 +1,11 @@
 import axios from 'axios'
+import { aitoApiKey, aitoUrl } from './config'
 
 export function getRecommendedProducts(userId, currentShoppingBasket, count) {
-  return axios.post('https://cloud-test.aito.app/api/v1/_recommend', {
+  return axios.post(`${aitoUrl}/api/v1/_recommend`, {
     from: 'impressions',
     where: {
-      'session.user': String(userId),
+      'context.user': String(userId),
       'product.id': {
         $and: currentShoppingBasket.map(item => ({ $not: item.id })),
       }
@@ -14,7 +15,7 @@ export function getRecommendedProducts(userId, currentShoppingBasket, count) {
     limit: count
   }, {
     headers: {
-      'x-api-key': 'TJrQLOCdxP5eT85X9osJo8cIInoaXL8w1D7enGCX'
+      'x-api-key': aitoApiKey
     },
   })
     .then(result => {

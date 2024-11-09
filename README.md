@@ -11,6 +11,12 @@
 * `npm install`
 * `npm start`
 
+## testing locally against local Aito instance without CORS
+
+You can run e.g. google chrome without CORS using:
+
+google-chrome-stable --disable-web-security --user-data-dir ~/tmp/
+
 
 ## Background
 This demo app has been created by Aito.ai for the purpose of showing features and functionalities of the [Aito.ai managed machine learning database](https://aito.ai).

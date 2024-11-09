@@ -10,16 +10,22 @@ import * as data from './data'
 import NavBar from './components/NavBar'
 import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
+import AnalyticsPage from './pages/AnalyticsPage'
+import InvoicingPage from './pages/InvoicingPage'
+import HelpPage from './pages/HelpPage'
 import CartPage from './pages/CartPage'
 import DataInspectPage from './pages/DataInspectPage'
 
 import './App.css'
+import { FaQq } from 'react-icons/fa';
+import { predictInvoices } from '../08-predict-invoice';
 
 const history = createBrowserHistory();
 
 function getPath(pathname) {
   return _.trimEnd(pathname, '/')
 }
+
 class App extends Component {
   constructor() {
     super()
@@ -69,9 +75,15 @@ class App extends Component {
         return CartPage
       case '/admin':
         return AdminPage
+      case '/help':
+        return HelpPage
       case '/data':
         return DataInspectPage
-      case '/':
+      case '/analytics':
+        return AnalyticsPage
+      case '/invoicing':
+        return InvoicingPage
+        case '/':
       default:
         return LandingPage
     }
@@ -102,6 +114,25 @@ class App extends Component {
         (searchValue) => Promise.resolve(
           data.getProductSearchResults(state.selectedUserId, searchValue)
         ),
+
+      getProductsByIds: 
+        (ids) => Promise.resolve(data.getProductsByIds(ids)),
+
+      getAutoComplete: 
+        (query) => Promise.resolve(data.getAutoComplete(state.selectedUserId, query)),
+
+      getAutoFill: 
+        () => Promise.resolve(data.getAutoFill(state.selectedUserId)),
+
+      prompt: 
+        (question) => Promise.resolve(data.prompt(question)),
+
+      relate: 
+        (field, value) => Promise.resolve(data.relate(field, value)),
+
+      predictInvoice: 
+        (input, output) => Promise.resolve(data.predictInvoice(input, output)),
+
     }
 
     const actions = {

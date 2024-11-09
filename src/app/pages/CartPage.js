@@ -20,7 +20,32 @@ class CartPage extends Component {
     }
   }
 
+  addProducts = (products) => {
+    products.forEach(product => {
+      this.props.actions.addItemToCart(product)
+    })
+  }
+
+  setAutoFill = (ids) => {
+    console.log("ids: " + ids)
+    return this.props.dataFetchers.getProductsByIds(ids)
+      .then(products => this.addProducts(products))
+      .catch(err => this.props.actions.showError(err))
+}
+
+  autoFill = () => {
+    return this.props.dataFetchers.getAutoFill()
+      .then(autoFill => this.setAutoFill(autoFill))
+      .catch(err => this.props.actions.showError(err))
+  }
+
   toggleModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen,
+    })
+  }
+
+  toggleFill = () => {
     this.setState({
       modalOpen: !this.state.modalOpen,
     })
@@ -44,7 +69,8 @@ class CartPage extends Component {
 
         <Cart actions={this.props.actions} cart={cart} />
 
-        <Button onClick={this.toggleModal} disabled={cart.length === 0} color="primary">Purchase</Button>
+        <Button color="primary" onClick={this.autoFill}>Autofill</Button>
+        <Button style={{float:'right'}} onClick={this.toggleModal} disabled={cart.length === 0} color="primary">Purchase</Button>
 
         <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>This is a demo</ModalHeader>
