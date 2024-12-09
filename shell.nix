@@ -3,7 +3,7 @@
 pkgs.mkShell {
   buildInputs = [
    pkgs.vscode
-   pkgs.nodejs
+   pkgs.nodejs_18
    pkgs.python310
    pkgs.docker-compose
    pkgs.postgresql

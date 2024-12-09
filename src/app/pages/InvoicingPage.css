@@ -2,9 +2,26 @@
 }
 
 .DropDown {
-  margin-bottom: 20px;
+  width: 200px;
+  margin-bottom: 0px;
 }
 
 .Button {
+}
+
+.Item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.Name {
+  font-weight: bold;
+}
+
+.dropdown-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
   margin-bottom: 20px;
 }

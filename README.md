@@ -15,7 +15,7 @@
 
 You can run e.g. google chrome without CORS using:
 
-google-chrome-stable --disable-web-security --user-data-dir ~/tmp/
+google-chrome-stable --disable-web-security --user-data-dir=${HOME}/tmp/chrome
 
 
 ## Background

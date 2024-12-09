@@ -18,6 +18,7 @@ import {
 
 import './AnalyticsPage.css'
 
+
 class AnalyticsPage extends Component {
   constructor(props) {
     super(props)
@@ -29,7 +30,7 @@ class AnalyticsPage extends Component {
       results: [],
       dropDownOpen: false
     }
-
+    
     this.debouncedFetchResults = _.debounce(this.fetchResults, 300).bind(this)
     this.debouncedFetchResults()
   }
