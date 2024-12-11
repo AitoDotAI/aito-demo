@@ -12,6 +12,7 @@ export function getRecommendedProducts(userId, currentShoppingBasket, count) {
     },
     recommend: 'product',
     goal: { 'purchase': true },
+    select: ["name", "id", "tags", "price"],
     limit: count
   }, {
     headers: {

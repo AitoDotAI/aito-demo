@@ -9,18 +9,29 @@ export function getProductSearchResults(userId, inputValue) {
         {'tags': { "$match": inputValue }},
         {'name': { "$match": inputValue }}
       ]
-    },
-    'context.query': inputValue
+    }
   }
   if (userId) {
-    where['context.user'] = userId
+    where['context.user'] = String(userId)
   }
 
-  return axios.post(`${aitoUrl}/api/v1/_recommend`, {
+  return axios.post(`${aitoUrl}/api/v1/_query`, {
     from: 'impressions',
     where: where,
-    recommend: 'product',
-    goal: { 'purchase': true },
+    get: 'product',
+    orderBy: { 
+      '$multiply': [
+        "$similarity",
+        {
+          "$p": {
+            "$context": {
+              "purchase": true 
+            }
+          }
+        }
+      ]
+    },
+    select: ["name", "id", "tags", "price", "$matches"],
     limit: 5
   }, {
     headers: { 'x-api-key': aitoApiKey },
