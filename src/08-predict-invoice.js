@@ -15,12 +15,11 @@ export function predictInvoice(input, output) {
       select.push(field)
     })
 
-    return axios.post(`${aitoUrl}/api/v1/_query`, {
+    return axios.post(`${aitoUrl}/api/v1/_predict`, {
       from: 'invoices',
       where: input,
-      get: predicted,
-      orderBy: "$p",
-      select: select, 
+      predict: predicted + ".Name",
+      select: ["feature", "$p", "$why"],
       limit: 10
     }, {
       headers: {

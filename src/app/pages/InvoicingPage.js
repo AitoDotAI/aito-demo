@@ -175,30 +175,36 @@ class InvoicingPage extends Component {
     const output = Object.entries(this.state.output).map(([field, hits]) => {
       var name = field
       var why = ""
+      var topValue = undefined
       var p = undefined
       var factors = []
       if (hits.length > 0 && hits[0].$p >= 0.5) {
-        name = this.hitValueAndName(hits[0])[1]
+        [name, topValue] = this.hitValueAndName(hits[0])
         why = hits[0].$why
         p = hits[0].$p
         factors = why["factors"].map(factor => {
           const t = factor["type"]
           const value = factor["value"]
-          var content = ""
+          var rv = null
           if (t == "baseP") {
-            content = `Base probability ${(value*100).toFixed(0)}%`
-          } else if (t == "hitPropositionLift") {
+            rv = <li>Base probability is {(value*100).toFixed(0)}%</li>
+          } else if (t == "product") {
+            rv = []
+            factor.factors.forEach(f => {
+              rv.push(<li>{f.value.toFixed(2)}x for {f.name}</li>)
+            })
+          } else if (t == "relatedPropositionLift") {
             const prop = propositionString(factor["proposition"])
             var factors2 = factor["factors"]
             var because = ""
             if (factors2) {
               because = factors2.map(f => propositionString(f["proposition"])).join(" and ")
             }
-            content = `${(value).toFixed(2)}x for ${prop}, because ${because}`
+            rv = <li>{(value).toFixed(2)}x, because {prop}</li>
           } else {
-            content = JSON.stringify(factor)
+            rv = <li>JSON.stringify(factor)</li>
           }
-          return <li>{content}</li>
+          return rv
         })
       }
       var tooltipName = "tooltip_" + field
@@ -224,10 +230,10 @@ class InvoicingPage extends Component {
             target={tooltipName}
             toggle={() => this.toggleTooltip(field)}
           >
-            <b>Why {(100*p).toFixed(0)}%?</b>
-            <ul>
+            <b>Why {field} is {topValue} with {(100*p).toFixed(0)}% probability?</b>
+            <ol>
             {factors}
-            </ul>
+            </ol>
           </Tooltip>
 
         </div>

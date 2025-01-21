@@ -111,7 +111,9 @@ class AnalyticsPage extends Component {
     return (
       <div className="FaqPage">
         <h4>Field:</h4>
-        <Dropdown className="DropDown" isOpen={this.state.dropDownOpen} toggle={this.toggleDropDown}>
+        <Dropdown className="FieldDropDown" 
+                  isOpen={this.state.dropDownOpen} 
+                  toggle={this.toggleDropDown} >
           <DropdownToggle caret>{this.getFieldName(this.state.field)}</DropdownToggle>
           <DropdownMenu>
             <DropdownItem onClick={() => this.setField('user.tags')}>User tag</DropdownItem>

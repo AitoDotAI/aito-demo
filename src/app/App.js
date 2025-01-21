@@ -14,11 +14,10 @@ import AnalyticsPage from './pages/AnalyticsPage'
 import InvoicingPage from './pages/InvoicingPage'
 import HelpPage from './pages/HelpPage'
 import CartPage from './pages/CartPage'
+import ProductPage from './pages/ProductPage'
 import DataInspectPage from './pages/DataInspectPage'
 
 import './App.css'
-import { FaQq } from 'react-icons/fa';
-import { predictInvoices } from '../08-predict-invoice';
 
 const history = createBrowserHistory();
 
@@ -70,6 +69,9 @@ class App extends Component {
   }
 
   getPage(urlPath) {
+    if (urlPath.startsWith('/product/')) {
+      return ProductPage
+    }
     switch (urlPath) {
       case '/cart':
         return CartPage
@@ -83,7 +85,9 @@ class App extends Component {
         return AnalyticsPage
       case '/invoicing':
         return InvoicingPage
-        case '/':
+      case '/product':
+        return ProductPage
+      case '/':
       default:
         return LandingPage
     }
@@ -132,6 +136,18 @@ class App extends Component {
 
       predictInvoice: 
         (input, output) => Promise.resolve(data.predictInvoice(input, output)),
+
+      getProductDetails: 
+        (productId) => Promise.resolve(data.getProductDetails(productId)),
+      
+      getAllProducts:
+        () => Promise.resolve(data.getAllProducts()),
+
+      getProductStats:
+        (productId) => Promise.resolve(data.getProductStats(productId)),
+
+      getProductAnalytics:
+        (productId) => Promise.resolve(data.getProductAnalytics(productId)),
 
     }
 

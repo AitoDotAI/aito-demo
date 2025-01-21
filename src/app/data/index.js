@@ -6,6 +6,7 @@ import { getAutoFill, getProductsByIds } from '../../05-autofill'
 import { prompt } from '../../06-prompt'
 import { relate } from '../../07-relate'
 import { predictInvoice } from '../../08-predict-invoice'
+import { getProductDetails, getAllProducts, getProductStats, getProductAnalytics } from '../../09-product'
 
 export {
   getProductSearchResults,
@@ -16,5 +17,9 @@ export {
   getProductsByIds,
   prompt,
   relate,
-  predictInvoice
+  predictInvoice,
+  getProductDetails,
+  getAllProducts,
+  getProductStats, 
+  getProductAnalytics
 }
