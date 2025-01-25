@@ -88,6 +88,19 @@ export function getProductAnalytics(id){
         "get": "context.queryPhrase",
         "orderBy": { "$sum": {"$context": "purchase" } },
         "select": ["$score", "$value"]
+      },
+      { // purchases by month
+        "from": "impressions",
+        "where": {
+          "product.id": id
+        }, 
+        "get": "context.week",
+        "select": [
+          "$value",
+          "$f",
+          {"$sum": {"$context": "purchase"}},
+          {"$mean": {"$context": "purchase"}}
+        ]
       }
     ], {
     headers: { 'x-api-key': aitoApiKey },

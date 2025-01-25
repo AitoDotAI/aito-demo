@@ -13,6 +13,7 @@ import {
 } from 'reactstrap'
 
 import './AdminPage.css'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 class ProductPage extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class ProductPage extends Component {
         "name": ""
       },
       "stats": {
-        sum: 0, 
+        sum: 0,
         mean: 0
       },
       "analytics": null
@@ -55,7 +56,7 @@ class ProductPage extends Component {
     return this.props.dataFetchers.getAllProducts()
       .then(result => {
         var allProducts = result.hits
-        this.setState({ 
+        this.setState({
           allProducts,
           details: allProducts[this.state.product]
         })
@@ -83,8 +84,8 @@ class ProductPage extends Component {
   prev = () => {
     const current = this.state.product
     if (current > 0) {
-      this.setState({ 
-        product: current -1,
+      this.setState({
+        product: current - 1,
         details: this.state.allProducts[current - 1]
       })
     }
@@ -92,7 +93,7 @@ class ProductPage extends Component {
   }
   next = () => {
     const current = this.state.product
-    this.setState({ 
+    this.setState({
       product: current + 1,
       details: this.state.allProducts[current + 1]
     })
@@ -107,44 +108,65 @@ class ProductPage extends Component {
 
     return (
       <div className="ProductPage">
-        <Button className="Button" style={{ marginRight: 10 }} onClick={this.prev}>Prev</Button>
-        <Button className="Button" style={{ marginRight: 10 }} onClick={this.next}>Next</Button>
-        <div style={{ display: "flex", alignItems: "center" }}>
+      <Button className="Button" style={{ marginRight: 10 }} onClick={this.prev}>Prev</Button>
+      <Button className="Button" style={{ marginRight: 10 }} onClick={this.next}>Next</Button>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div>
           <h3>{this.state.details["name"]}</h3>
-          <img src={imageUrl} alt="" style={{ marginLeft: "auto" }} />
+          <p><b>Tags:</b><br/>{this.state.details["tags"]}</p>
+          <p><b>Category:</b><br/>{this.state.details["category"]}</p>
         </div>
-        <p><b>Tags:</b> {this.state.details["tags"]}</p>
-        <p><b>Impressions:</b> {this.state.stats.count}</p>
-        <p><b>Purchases:</b> {this.state.stats.sum}</p>
-        <p><b>Ctr:</b> {(100*this.state.stats.mean).toFixed(1)}%</p>
-        <h4>CTR by product property</h4>
-        <ol>
-        {this.state.analytics && this.state.analytics[0].hits.filter(x => x.lift.toFixed(2) != 1 && (x.related["product.name"] || x.related["product.tags"])).map(a => {
-          if (a.related["product.name"]) {
-            return <li>{a.lift.toFixed(2)}x title:{a.related["product.name"]["$has"]}</li>
-          } else {
-            return <li>{a.lift.toFixed(2)}x tag:{a.related["product.tags"]["$has"]}</li>
-          }
+        <img src={imageUrl} alt="" style={{ marginLeft: "auto" }} />
+      </div>
+      <div style={{ height: 20 }}></div>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div>
+        <p><b>Impressions:</b><br/>{this.state.stats.count}</p>
+        <p><b>Purchases:</b><br/>{this.state.stats.sum}</p>
+        <p><b>Ctr:</b><br/>{(100 * this.state.stats.mean).toFixed(1)}%</p>
+        </div>
+        <div style={{  alignItems: "right", marginLeft: "auto" }}>
+        <LineChart width={400} height={300} data={this.state.analytics ? this.state.analytics[4].hits : []  }>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="$value" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line name="Purchases" type="monotone" dataKey="$sum" stroke="#82ca9d" activeDot={{ r: 8 }} />
+        </LineChart>
+        </div>
+      </div>
+      <div style={{ height: 20 }}></div>
+      <h4>CTR by product property</h4>
+      <ol>
+        {this.state.analytics && this.state.analytics[0].hits.filter(x => x.lift.toFixed(2) != 1 && (x.related["product.name"] || x.related["product.tags"] || x.related["product.category"])).map(a => {
+        if (a.related["product.name"]) {
+          return <li>{a.lift.toFixed(2)}x title:{a.related["product.name"]["$has"]}</li>
+        } else if (a.related["product.category"]) {
+          return <li>{a.lift.toFixed(2)}x title:{a.related["product.category"]["$has"]}</li>
+        } else {
+          return <li>{a.lift.toFixed(2)}x tag:{a.related["product.tags"]["$has"]}</li>
+        }
         })}
-        </ol>
-        <h4>Puchase % by Customer Segment </h4>
-        <ol>
+      </ol>
+      <h4>Puchase % by Customer Segment </h4>
+      <ol>
         {this.state.analytics && this.state.analytics[1].hits.map(a => {
-          return <li>{a.lift.toFixed(2)}x {a.related["user.tags"]["$has"]}</li>
+        return <li>{a.lift.toFixed(2)}x {a.related["user.tags"]["$has"]}</li>
         })}
-        </ol>
-        <h4>Shopping basket</h4>
-        <ol>
+      </ol>
+      <h4>Shopping basket</h4>
+      <ol>
         {this.state.analytics && this.state.analytics[2].hits.filter(x => x.related["purchases"]["$has"] != this.state.details.id).map(a => {
-          return <li>{a.lift.toFixed(2)}x {this.productDetails(a.related["purchases"]["$has"])["name"]}</li>
+        return <li>{a.lift.toFixed(2)}x {this.productDetails(a.related["purchases"]["$has"])["name"]}</li>
         })}
-        </ol>
-        <h4>Query word frequencies</h4>
-        <ol>
+      </ol>
+      <h4>Query word frequencies</h4>
+      <ol>
         {this.state.analytics && this.state.analytics[3].hits.filter((x) => x.$score > 0 && x.$value).map(a => {
-          return <li>{a.$score}x {a.$value}</li>
+        return <li>{a.$score}x {a.$value}</li>
         })}
-        </ol>
+      </ol>
       </div>
     )
   }

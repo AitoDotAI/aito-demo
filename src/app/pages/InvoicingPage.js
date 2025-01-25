@@ -184,23 +184,27 @@ class InvoicingPage extends Component {
         p = hits[0].$p
         factors = why["factors"].map(factor => {
           const t = factor["type"]
-          const value = factor["value"]
+          var value = factor["value"]
           var rv = null
           if (t == "baseP") {
-            rv = <li>Base probability is {(value*100).toFixed(0)}%</li>
+            rv = <li>{(value*100).toFixed(0)}% for base probability</li>
           } else if (t == "product") {
-            rv = []
+            value = 1
             factor.factors.forEach(f => {
-              rv.push(<li>{f.value.toFixed(2)}x for {f.name}</li>)
+              value *= f.value
             })
+            rv = <li>* {(value).toFixed(2)} for normalization</li>
           } else if (t == "relatedPropositionLift") {
-            const prop = propositionString(factor["proposition"])
+            var prop = propositionString(factor["proposition"])
             var factors2 = factor["factors"]
-            var because = ""
             if (factors2) {
-              because = factors2.map(f => propositionString(f["proposition"])).join(" and ")
+              prop = factors2.map(f => propositionString(f["proposition"])).join(" and ")
             }
-            rv = <li>{(value).toFixed(2)}x, because {prop}</li>
+            if (factor["highlight"]) {
+              prop = factor["highlight"].map(h => h["field"].substring(9) + " is " + h["highlight"]).join(" and ")
+            }
+
+            rv = <li>* {(value).toFixed(2)} for <span dangerouslySetInnerHTML={{__html: prop}} /></li>
           } else {
             rv = <li>JSON.stringify(factor)</li>
           }

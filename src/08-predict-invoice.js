@@ -19,7 +19,7 @@ export function predictInvoice(input, output) {
       from: 'invoices',
       where: input,
       predict: predicted + ".Name",
-      select: ["feature", "$p", "$why"],
+      select: ["feature", "$p", {"$why": {"highlight": {"posPreTag": "<b>", "posPostTag": "</b>"}}}],
       limit: 10
     }, {
       headers: {
