@@ -38,7 +38,7 @@ export function prompt(question) {
             return match
           })
         } else if (top.feature == "feedback") {
-          const fields = ["sentiment", "categories", "tags"]
+          const fields = ["sentiment", "categories.$feature", "tags"]
 
           return Promise.all(fields.map(predicted => {
             return axios.post(`${aitoUrl}/api/v1/_predict`, {
@@ -61,7 +61,8 @@ export function prompt(question) {
             console.log(JSON.stringify(responses))
             for (var i = 0; i < fields.length; i++) {
               if (responses[i].$p >= 0.5) {
-                rv[fields[i]] = responses[i].feature
+                const key = fields[i].split(".")[0]
+                rv[key] = responses[i].feature
               }
             }
             console.log(JSON.stringify(rv))

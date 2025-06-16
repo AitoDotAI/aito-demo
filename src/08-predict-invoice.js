@@ -10,7 +10,17 @@ const outputFields = {
 
 export function predictInvoice(input, output) {
   return Promise.all(output.map(predicted => {
-    var select = ["$p", "$why"]
+    var select = [
+      "$p", 
+      {
+        "$why": {
+          "highlight": {
+            "posPreTag": "<b>", 
+            "posPostTag": "</b>"
+          }
+        }
+      }
+    ]
     outputFields[predicted].forEach(field => {
       select.push(field)
     })
@@ -18,8 +28,8 @@ export function predictInvoice(input, output) {
     return axios.post(`${aitoUrl}/api/v1/_predict`, {
       from: 'invoices',
       where: input,
-      predict: predicted + ".Name",
-      select: ["feature", "$p", {"$why": {"highlight": {"posPreTag": "<b>", "posPostTag": "</b>"}}}],
+      predict: predicted,
+      select: select,
       limit: 10
     }, {
       headers: {

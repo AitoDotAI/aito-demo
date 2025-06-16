@@ -175,7 +175,7 @@ class InvoicingPage extends Component {
     const output = Object.entries(this.state.output).map(([field, hits]) => {
       var name = field
       var why = ""
-      var topValue = undefined
+      var topValue = field
       var p = undefined
       var factors = []
       if (hits.length > 0 && hits[0].$p >= 0.5) {
@@ -216,7 +216,7 @@ class InvoicingPage extends Component {
         <h4>{field}:</h4>
         <div className="dropdown-container">
           <Dropdown className="DropDown" isOpen={this.state.dropDownOpen[field]} toggle={(x) => this.toggleDropDown(field, x)}>
-            <DropdownToggle caret>{name}</DropdownToggle>
+            <DropdownToggle caret>{topValue}</DropdownToggle>
             <DropdownMenu>
               {
                 hits.filter(hit => hit.$p >= 0.1).map(hit => {
