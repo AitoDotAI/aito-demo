@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { aitoApiKey, aitoUrl } from './config'
+import config from './config'
 
 export function getProductSearchResults(userId, inputValue) {
   var where = {
@@ -15,7 +15,7 @@ export function getProductSearchResults(userId, inputValue) {
     where['context.user'] = String(userId)
   }
 
-  return axios.post(`${aitoUrl}/api/v1/_query`, {
+  return axios.post(`${config.aito.url}/api/v1/_query`, {
     from: 'impressions',
     where: where,
     get: 'product',
@@ -34,7 +34,7 @@ export function getProductSearchResults(userId, inputValue) {
     select: ["name", "id", "tags", "price", "$matches"],
     limit: 5
   }, {
-    headers: { 'x-api-key': aitoApiKey },
+    headers: { 'x-api-key': config.aito.apiKey },
   })
     .then(response => {
       return response.data.hits

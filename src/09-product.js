@@ -1,15 +1,15 @@
 import axios from 'axios'
-import { aitoApiKey, aitoUrl } from './config'
+import config from './config'
 
 
 export function getProductDetails(id){
-  return axios.post(`${aitoUrl}/api/v1/_query`,
+  return axios.post(`${config.aito.url}/api/v1/_query`,
     {
       from: 'products',
       limit:1,
       offset: id
     }, {
-    headers: { 'x-api-key': aitoApiKey },
+    headers: { 'x-api-key': config.aito.apiKey },
   })
     .then(response => {
       return response.data    
@@ -17,12 +17,12 @@ export function getProductDetails(id){
 }
 
 export function getAllProducts(){
-  return axios.post(`${aitoUrl}/api/v1/_query`,
+  return axios.post(`${config.aito.url}/api/v1/_query`,
     {
       from: 'products',
       limit: 100
     }, {
-    headers: { 'x-api-key': aitoApiKey },
+    headers: { 'x-api-key': config.aito.apiKey },
   })
     .then(response => {
       return response.data    
@@ -34,7 +34,7 @@ export function getProductStats(id){
     'id': id
   }
 
-  return axios.post(`${aitoUrl}/api/v1/_aggregate`, 
+  return axios.post(`${config.aito.url}/api/v1/_aggregate`, 
     {
       "from": "impressions",
       "where": {
@@ -42,7 +42,7 @@ export function getProductStats(id){
       },
       "aggregate": ["purchase.$sum", "purchase.$mean"]
     }, {
-    headers: { 'x-api-key': aitoApiKey },
+    headers: { 'x-api-key': config.aito.apiKey },
   })
     .then(response => {
       return response.data    
@@ -54,7 +54,7 @@ export function getProductAnalytics(id){
     'id': id
   }
 
-  return axios.post(`${aitoUrl}/api/v1/_batch`,
+  return axios.post(`${config.aito.url}/api/v1/_batch`,
     [
       { // product properties
         "from": "impressions",
@@ -103,7 +103,7 @@ export function getProductAnalytics(id){
         ]
       }
     ], {
-    headers: { 'x-api-key': aitoApiKey },
+    headers: { 'x-api-key': config.aito.apiKey },
   })
     .then(response => {
       return response.data    

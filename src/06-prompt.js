@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { aitoApiKey, aitoUrl } from './config'
+import config from './config'
 
 export function prompt(question) {
-  return axios.post(`${aitoUrl}/api/v1/_predict`, {
+  return axios.post(`${config.aito.url}/api/v1/_predict`, {
     "from": "prompts",
     "where" : {
       "prompt": question
@@ -11,13 +11,13 @@ export function prompt(question) {
     "limit": 1
   }, {
     headers: {
-      'x-api-key': aitoApiKey
+      'x-api-key': config.aito.apiKey
     },
   }).then(result => {
       const top = result.data.hits[0]
       if (top.$p > 0.5) {
         if (top.feature == "question") {
-          return axios.post(`${aitoUrl}/api/v1/_query`, {
+          return axios.post(`${config.aito.url}/api/v1/_query`, {
             "from": "prompts",
             "where" : {
               "$nn": [{"prompt": question}]
@@ -27,7 +27,7 @@ export function prompt(question) {
             "select": ["prompt", "type", "answer.answer"]
           }, {
             headers: {
-              'x-api-key': aitoApiKey
+              'x-api-key': config.aito.apiKey
             },
           }).then(result => {
             var match = null
@@ -41,7 +41,7 @@ export function prompt(question) {
           const fields = ["sentiment", "categories.$feature", "tags"]
 
           return Promise.all(fields.map(predicted => {
-            return axios.post(`${aitoUrl}/api/v1/_predict`, {
+            return axios.post(`${config.aito.url}/api/v1/_predict`, {
               from: 'prompts',
               where: {
                 "prompt": question,
@@ -51,7 +51,7 @@ export function prompt(question) {
               limit: 1
             }, {
               headers: {
-                'x-api-key': aitoApiKey
+                'x-api-key': config.aito.apiKey
               },
             }).then(response => response.data.hits[0])
           })).then(responses => {
@@ -69,7 +69,7 @@ export function prompt(question) {
             return rv
           })
         } else if (top.feature == "request") {
-          const assignee = axios.post(`${aitoUrl}/api/v1/_query`, {
+          const assignee = axios.post(`${config.aito.url}/api/v1/_query`, {
             from: 'prompts',
             where: {
               "prompt": question,
@@ -80,14 +80,14 @@ export function prompt(question) {
             limit: 1
           }, {
             headers: {
-              'x-api-key': aitoApiKey
+              'x-api-key': config.aito.apiKey
             },
           }).then(response => {
             const top = response.data.hits[0]
             return [top.$p, `${top.Name} (${top.Role})`]
           }) 
 
-          const categories = axios.post(`${aitoUrl}/api/v1/_predict`, {
+          const categories = axios.post(`${config.aito.url}/api/v1/_predict`, {
             from: {
               "from": 'prompts',
               "where": {
@@ -102,14 +102,14 @@ export function prompt(question) {
             limit: 1
           }, {
             headers: {
-              'x-api-key': aitoApiKey
+              'x-api-key': config.aito.apiKey
             },
           }).then(response => {
             const top = response.data.hits[0]
             return [top.$p, top.feature]
           }) 
 
-          const urgency = axios.post(`${aitoUrl}/api/v1/_predict`, {
+          const urgency = axios.post(`${config.aito.url}/api/v1/_predict`, {
             from: 'prompts',
             where: {
               "prompt": question,
@@ -119,7 +119,7 @@ export function prompt(question) {
             limit: 1
           }, {
             headers: {
-              'x-api-key': aitoApiKey
+              'x-api-key': config.aito.apiKey
             },
           }).then(response => {
             const top = response.data.hits[0]

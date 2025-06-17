@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { aitoApiKey, aitoUrl } from './config'
+import config from './config'
 
 export function getAutoComplete(userId, prefix) {
   var where = {}
@@ -11,7 +11,7 @@ export function getAutoComplete(userId, prefix) {
   if (userId) {
     where['user'] = userId
   }
-  return axios.post(`${aitoUrl}/api/v1/_query`, {
+  return axios.post(`${config.aito.url}/api/v1/_query`, {
     from: 'contexts',
     where: where,
     get: 'queryPhrase',
@@ -19,7 +19,7 @@ export function getAutoComplete(userId, prefix) {
     select: ["$p", "$value"]
   }, {
     headers: {
-      'x-api-key': aitoApiKey
+      'x-api-key': config.aito.apiKey
     },
   })
     .then(result => {

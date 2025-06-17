@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { aitoApiKey, aitoUrl } from './config'
+import config from './config'
 
 export function getProductsByIds(ids) {
-  return axios.post(`${aitoUrl}/api/v1/_query`, {
+  return axios.post(`${config.aito.url}/api/v1/_query`, {
     "from": "products",
     "where" : {
       "id": {
@@ -11,7 +11,7 @@ export function getProductsByIds(ids) {
     }
   }, {
     headers: {
-      'x-api-key': aitoApiKey
+      'x-api-key': config.aito.apiKey
     },
   })
     .then(result => {
@@ -27,7 +27,7 @@ export function getAutoFill(userId) {
 
 
 
-  return axios.post(`${aitoUrl}/api/v1/_predict`, {
+  return axios.post(`${config.aito.url}/api/v1/_predict`, {
     "from": "visits",
     "where" : where,
     "predict":"purchases",
@@ -35,7 +35,7 @@ export function getAutoFill(userId) {
     "select": ["$p", "$value"]
   }, {
     headers: {
-      'x-api-key': aitoApiKey
+      'x-api-key': config.aito.apiKey
     },
   })
     .then(result => {

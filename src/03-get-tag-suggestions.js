@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { aitoApiKey, aitoUrl } from './config'
+import config from './config'
 
 export function getTagSuggestions(productName) {
-  return axios.post(`${aitoUrl}/api/v1/_predict`, {
+  return axios.post(`${config.aito.url}/api/v1/_predict`, {
     from: 'products',
     where: {
       name: productName
@@ -12,7 +12,7 @@ export function getTagSuggestions(productName) {
     limit: 10
   }, {
     headers: {
-      'x-api-key': aitoApiKey
+      'x-api-key': config.aito.apiKey
     },
   })
     .then(response => {
