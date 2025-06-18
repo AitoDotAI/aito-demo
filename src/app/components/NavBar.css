@@ -3,47 +3,124 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 20px;
-  margin-bottom: 10px;
+  padding: var(--aito-spacing-md) var(--aito-spacing-lg);
+  margin-bottom: 0;
+  background-color: var(--aito-background);
 }
 
 .NavBar__logo {
-  height: 28px;
+  height: 35px;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.NavBar__logo:hover {
+  transform: scale(1.05);
 }
 
 .NavBar__links {
   list-style: none;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: var(--aito-spacing-lg);
+  margin: 0;
+  padding: 0;
 }
 
 .NavBar__links li {
   cursor: pointer;
-  font-size: 1.8rem;
-  margin-left: 34px;
-  color: #34495e;
+  font-size: 1.5rem;
+  color: var(--aito-accent);
+  transition: all 0.2s ease;
+  padding: var(--aito-spacing-sm);
+  border-radius: var(--aito-radius-small);
+}
+
+.NavBar__links li:hover {
+  color: var(--aito-primary-light);
+  background-color: var(--aito-surface);
+  transform: translateY(-1px);
 }
 
 .NavBar__cart-link, .NavBar__profile-link {
   margin: 0;
-  padding: 0;
+  padding: var(--aito-spacing-sm);
   position: relative;
+  border-radius: var(--aito-radius-small);
+  transition: all 0.2s ease;
 }
 
-.NavBar__cart-link-text, .NavBar__profile-link-name {
+.NavBar__cart-link:hover, .NavBar__profile-link:hover {
+  background-color: var(--aito-surface);
+  transform: translateY(-1px);
+}
+
+.NavBar__cart-link-text {
   margin: 0;
   padding: 0;
   position: absolute;
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 600;
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, 16px);
+  transform: translate(-50%, 6px);
   white-space: nowrap;
+  color: var(--aito-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.NavBar__profile-link-name {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 14px);
+  white-space: nowrap;
+  color: var(--aito-text-muted);
+  letter-spacing: 0.5px;
 }
 
 .NavBar .dropdown-item {
-  font-size: 1rem;
+  font-size: 0.875rem;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  color: var(--aito-text-primary);
+  transition: all 0.2s ease;
+}
+
+.NavBar .dropdown-item:hover {
+  background-color: var(--aito-surface);
+  color: var(--aito-primary);
+}
+
+.NavBar .dropdown {
+  z-index: 10000 !important;
+  position: static;
+}
+
+.NavBar .dropdown-menu {
+  z-index: 10001 !important;
+  position: fixed !important;
+  transform: none !important;
+  will-change: auto !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .NavBar {
+    padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  }
+  
+  .NavBar__links {
+    gap: var(--aito-spacing-md);
+  }
+  
+  .NavBar__links li {
+    font-size: 1.25rem;
+  }
 }

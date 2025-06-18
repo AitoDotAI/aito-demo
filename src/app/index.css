@@ -1,7 +1,35 @@
+/* Aito.ai Design System Variables */
+:root {
+  --aito-primary: #6c757d;
+  --aito-primary-light: #adb5bd;
+  --aito-primary-dark: #495057;
+  --aito-secondary: #f8f9fa;
+  --aito-accent: #FF6B35;
+  --aito-warning: #FFB800;
+  --aito-red: rgb(194, 6, 20);
+  --aito-text-primary: #2c3e50;
+  --aito-text-secondary: #6c757d;
+  --aito-text-muted: #7F8C8D;
+  --aito-background: #ffffff;
+  --aito-surface: #f8f9fa;
+  --aito-surface-light: #fafbfc;
+  --aito-border: #e9ecef;
+  --aito-shadow: 0 2px 8px rgba(108, 117, 125, 0.1);
+  --aito-shadow-hover: 0 4px 16px rgba(108, 117, 125, 0.15);
+  --aito-radius: 8px;
+  --aito-radius-small: 6px;
+  --aito-spacing-xs: 4px;
+  --aito-spacing-sm: 8px;
+  --aito-spacing-md: 16px;
+  --aito-spacing-lg: 24px;
+  --aito-spacing-xl: 32px;
+}
+
 html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
+  background-color: var(--aito-background);
 }
 
 /* apply a natural box layout model to all elements, but allowing components to change */
@@ -15,41 +43,47 @@ html {
 /* typography */
 
 html {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  color: var(--aito-text-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Lato", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   margin: 0;
   padding: 0;
+  font-weight: 600;
+  color: var(--aito-text-primary);
 }
 
 h1 {
-  font-size: 3.998rem;
+  font-size: 2.5rem;
   margin-bottom: 1.5rem;
+  font-weight: 700;
 }
 
 h2 {
-  font-size: 2.827rem;
+  font-size: 2rem;
   margin-bottom: 1.4rem;
 }
 
 h3 {
-  font-size: 1.999rem;
+  font-size: 1.5rem;
   margin-bottom: 1.3rem;
 }
 
 h4 {
-  font-size: 1.414rem;
+  font-size: 1.25rem;
   margin-bottom: 1.2rem;
 }
 
 /* global default styles */
 
 a, a:visited, a:hover {
-  color: #0077FF;
+  color: var(--aito-accent);
+  transition: color 0.2s ease;
 }
 
 a {
@@ -58,4 +92,5 @@ a {
 a:hover {
   text-decoration: underline;
   cursor: pointer;
+  color: var(--aito-primary);
 }

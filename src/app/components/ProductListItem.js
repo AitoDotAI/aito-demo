@@ -100,16 +100,23 @@ class ProductListItem extends Component {
 
     return (
       <div className="ProductListItem">
-        <div className="ProductListItem__left">
+        <div className="ProductListItem__image-container">
           <img className="ProductListItem__image" src={imageUrl} alt="" />
-          <span className="ProductListItem__name">
-            <HighlightedText field="name" text={item.name} matches={item.$matches} />
-            {tags}
-            </span>
         </div>
-        <button className={actionClass} href="#" onClick={this.props.onActionClick}>
-          {this.props.actionElement}
-        </button>
+        <div className="ProductListItem__content">
+          <div className="ProductListItem__name">
+            <HighlightedText field="name" text={item.name} matches={item.$matches} />
+          </div>
+          {tags}
+          <div className="ProductListItem__bottom-row">
+            <div className="ProductListItem__price">
+              €{item.price?.toFixed(2) || '0.00'}
+            </div>
+            <button className={actionClass} onClick={this.props.onActionClick}>
+              {this.props.actionElement}
+            </button>
+          </div>
+        </div>
       </div>
     )
   }

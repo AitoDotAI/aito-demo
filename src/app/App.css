@@ -1,9 +1,36 @@
 .App {
   width: 100%;
-  max-width: 550px;
+  max-width: 1200px;
   margin: 0 auto;
+  background: linear-gradient(135deg, var(--aito-surface-light) 0%, var(--aito-background) 100%);
+  min-height: 100vh;
 }
 
 .App__page {
-  padding: 0 20px 40px 20px;
+  padding: 0 var(--aito-spacing-md) var(--aito-spacing-xl) var(--aito-spacing-md);
+  background-color: var(--aito-background);
+}
+
+/* Mobile-first responsive design */
+@media (min-width: 768px) {
+  .App {
+    max-width: 1200px;
+  }
+  
+  .App__page {
+    padding: 0 var(--aito-spacing-lg) var(--aito-spacing-xl) var(--aito-spacing-lg);
+  }
+}
+
+/* Modern card-based layout for pages */
+.App__page--card {
+  background-color: var(--aito-surface);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  margin: var(--aito-spacing-md);
+  transition: box-shadow 0.2s ease;
+}
+
+.App__page--card:hover {
+  box-shadow: var(--aito-shadow-hover);
 }

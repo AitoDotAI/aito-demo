@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="130" height="40" viewBox="0 0 130 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="24" cy="22" r="15" fill="#FF6B35" stroke="#FF6B35" stroke-width="2"/>
+  
+  <!-- Letter 'a' -->
+  <text x="24" y="28" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#FFFFFF" text-anchor="middle">a</text>
+  
+  <!-- Acme Text -->
+  <text x="45" y="32" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#FF6B35">Acme</text>
+</svg>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
-import logoImage from '../assets/logo.svg'
+import logoImage from '../assets/acme-logo.svg'
 import { FaShoppingCart, FaUserCircle } from 'react-icons/fa'
 
 import './NavBar.css'
@@ -52,15 +52,6 @@ class NavBar extends Component {
         />
 
         <ol className="NavBar__links">
-          <li className="NavBar__cart-link" onClick={() => props.actions.setPage('/cart')}>
-            <FaShoppingCart />
-            <span className="NavBar__cart-link-text">
-              {props.cart.length}
-              {' '}
-              ITEMS
-            </span>
-          </li>
-
           <li className="NavBar__profile-link">
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle tag="a">
@@ -83,7 +74,15 @@ class NavBar extends Component {
               </DropdownMenu>
             </Dropdown>
           </li>
-        </ol>
+          <li className="NavBar__cart-link" onClick={() => props.actions.setPage('/cart')}>
+            <FaShoppingCart />
+            <span className="NavBar__cart-link-text">
+              {props.cart.length}
+              {' '}
+              ITEMS
+            </span>
+          </li>
+      </ol>
       </nav>
     )
   }
