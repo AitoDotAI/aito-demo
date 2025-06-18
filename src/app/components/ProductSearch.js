@@ -74,7 +74,7 @@ class ProductSearch extends Component {
 
   setAutoComplete = (autoCompletions) => {
     console.log(`auto completions ${JSON.stringify(autoCompletions)}`)
-    autoCompletions = autoCompletions.filter(v => v.$value != "" && v.$p > 0.001).slice(0, 5)
+    autoCompletions = autoCompletions.filter(v => v.$value !== "" && v.$p > 0.001).slice(0, 5)
     console.log(`auto completions ${JSON.stringify(autoCompletions)}`)
 
     this.setState( { suggestions: autoCompletions })
@@ -100,7 +100,7 @@ class ProductSearch extends Component {
   }
 
   render() {
-    const { suggestions, inputValue, searchResults } = this.state
+    const { inputValue, searchResults } = this.state
     const { state, props} = this 
 
     console.log("input:" + inputValue)

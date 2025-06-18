@@ -1,7 +1,16 @@
 import axios from 'axios'
 import config from './config'
 
+/**
+ * Analyzes a user prompt to determine its type and extract relevant information
+ * Uses Aito.ai's predictive capabilities to classify prompts as questions, feedback, or requests
+ * and extract structured data accordingly
+ * 
+ * @param {string} question - The user's input prompt to analyze
+ * @returns {Promise<Object>} - Structured analysis result with type and extracted data
+ */
 export function prompt(question) {
+  // First, predict the type of prompt (question, feedback, or request)
   return axios.post(`${config.aito.url}/api/v1/_predict`, {
     "from": "prompts",
     "where" : {
@@ -16,7 +25,7 @@ export function prompt(question) {
   }).then(result => {
       const top = result.data.hits[0]
       if (top.$p > 0.5) {
-        if (top.feature == "question") {
+        if (top.feature === "question") {
           return axios.post(`${config.aito.url}/api/v1/_query`, {
             "from": "prompts",
             "where" : {
@@ -37,7 +46,7 @@ export function prompt(question) {
             }
             return match
           })
-        } else if (top.feature == "feedback") {
+        } else if (top.feature === "feedback") {
           const fields = ["sentiment", "categories.$feature", "tags"]
 
           return Promise.all(fields.map(predicted => {
@@ -68,7 +77,7 @@ export function prompt(question) {
             console.log(JSON.stringify(rv))
             return rv
           })
-        } else if (top.feature == "request") {
+        } else if (top.feature === "request") {
           const assignee = axios.post(`${config.aito.url}/api/v1/_query`, {
             from: 'prompts',
             where: {

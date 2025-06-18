@@ -76,6 +76,13 @@ const TagsText = ({ text, matches  }) => {
     });
   }
 
+  // Add any remaining text after the last highlight
+  if (currentIndex < text.length) {
+    segments.push(
+      <span key="normal-last">{text.slice(currentIndex)}</span>
+    );
+  }
+
   return <div style={{fontStyle: 'italic'}} >tags: {segments}</div>;
 };
 

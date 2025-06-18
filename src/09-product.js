@@ -1,7 +1,12 @@
 import axios from 'axios'
 import config from './config'
 
-
+/**
+ * Retrieves detailed information for a specific product by ID
+ * 
+ * @param {string|number} id - The product ID to retrieve details for
+ * @returns {Promise<Object>} - Product details from the database
+ */
 export function getProductDetails(id){
   return axios.post(`${config.aito.url}/api/v1/_query`,
     {
@@ -16,6 +21,11 @@ export function getProductDetails(id){
   })
 }
 
+/**
+ * Retrieves all products from the database (limited to 100)
+ * 
+ * @returns {Promise<Object>} - Array of all products with their details
+ */
 export function getAllProducts(){
   return axios.post(`${config.aito.url}/api/v1/_query`,
     {
@@ -29,10 +39,13 @@ export function getAllProducts(){
   })
 }
 
+/**
+ * Retrieves statistical data for a specific product including purchase metrics
+ * 
+ * @param {string|number} id - The product ID to get statistics for
+ * @returns {Promise<Object>} - Aggregated purchase statistics (sum and mean)
+ */
 export function getProductStats(id){
-  var where = {
-    'id': id
-  }
 
   return axios.post(`${config.aito.url}/api/v1/_aggregate`, 
     {
@@ -49,14 +62,23 @@ export function getProductStats(id){
   })
 }
 
+/**
+ * Performs comprehensive analytics for a product including:
+ * - Related product properties
+ * - User demographics correlation
+ * - Shopping basket analysis
+ * - Search query analysis
+ * - Purchase trends over time
+ * 
+ * @param {string|number} id - The product ID to analyze
+ * @returns {Promise<Object>} - Comprehensive analytics data
+ */
 export function getProductAnalytics(id){
-  var where = {
-    'id': id
-  }
 
+  // Execute multiple analytics queries in parallel using batch API
   return axios.post(`${config.aito.url}/api/v1/_batch`,
     [
-      { // product properties
+      { // Analyze which product properties correlate with purchases
         "from": "impressions",
         "where": {"purchase": true},
         "relate": {
@@ -64,7 +86,7 @@ export function getProductAnalytics(id){
         },
         "select": ["lift", "related"]
       },
-      { // relation to user tags
+      { // Analyze correlation between user demographics and this product
         "from": "visits",
         "where": {
           "purchases": {"$has": id}
@@ -72,7 +94,7 @@ export function getProductAnalytics(id){
         "relate": "user.tags",
         "select": ["lift", "related"]
       },
-      { // shopping basket analysis
+      { // Market basket analysis - what other products are bought together
         "from": "visits",
         "where": {
           "purchases": {"$has": id}
@@ -80,7 +102,7 @@ export function getProductAnalytics(id){
         "relate": "purchases",
         "select": ["lift", "related"]
       },
-      { // query words
+      { // Analyze which search terms lead to this product being purchased
         "from": "impressions",
         "where": {
           "product.id": id
@@ -89,7 +111,7 @@ export function getProductAnalytics(id){
         "orderBy": { "$sum": {"$context": "purchase" } },
         "select": ["$score", "$value"]
       },
-      { // purchases by month
+      { // Time-series analysis of purchase patterns
         "from": "impressions",
         "where": {
           "product.id": id
