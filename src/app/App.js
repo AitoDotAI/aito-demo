@@ -19,12 +19,29 @@ import DataInspectPage from './pages/DataInspectPage'
 
 import './App.css'
 
+// Browser history instance for navigation
 const history = createBrowserHistory();
 
+/**
+ * Normalizes pathname by removing trailing slashes
+ * @param {string} pathname - URL pathname to normalize
+ * @returns {string} - Normalized pathname
+ */
 function getPath(pathname) {
   return _.trimEnd(pathname, '/')
 }
 
+/**
+ * Main application component for the Aito Grocery Store Demo
+ * Manages routing, user selection, shopping cart, and data fetching
+ * 
+ * Features:
+ * - User persona selection (Larry, Veronica, Alice)
+ * - Intelligent product search and recommendations
+ * - Shopping cart management
+ * - Analytics and admin interfaces
+ * - Real-time predictions and insights
+ */
 class App extends Component {
   constructor() {
     super()
@@ -49,6 +66,11 @@ class App extends Component {
     })
   }
 
+  /**
+   * Adds a product to the shopping cart, ensuring no duplicates
+   * @param {Object} product - Product object to add to cart
+   * @param {Function} cb - Optional callback function
+   */
   addItemToCart = (product, cb) => {
     const { state } = this
     const newCart = state.cart.concat([product])
@@ -57,6 +79,11 @@ class App extends Component {
     }, cb)
   }
 
+  /**
+   * Removes a product from the shopping cart by ID
+   * @param {string|number} productId - ID of product to remove
+   * @param {Function} cb - Optional callback function
+   */
   removeItemFromCart = (productId, cb) => {
     const { state } = this
     this.setState({
