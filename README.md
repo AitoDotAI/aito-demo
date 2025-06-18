@@ -25,19 +25,25 @@ cd grocery-store-demo
 # Install dependencies  
 npm install
 
+# Copy demo environment configuration (includes public demo instance)
+cp .env.example .env
+
 # Start development server
 npm start
 ```
 
 The application will open at `http://localhost:3000`.
 
-### Environment Configuration
+**Note**: The demo uses a public Aito demo instance by default, so no API key setup is required! The `.env.example` file contains working credentials for the demo.
 
-Create a `.env` file for custom Aito instance:
+### Custom Environment Configuration
+
+For your own Aito instance:
 
 ```bash
-cp .env.example .env
 # Edit .env with your Aito credentials
+REACT_APP_AITO_URL=https://your-instance.aito.app
+REACT_APP_AITO_API_KEY=your-api-key-here
 ```
 
 ## 🏪 Demo Features
