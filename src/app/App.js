@@ -55,8 +55,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // Listen for changes to the current location.
-    history.listen((location, action) => {
+    // Listen for changes to the current location (back/forward buttons, direct URL changes)
+    this.historyUnlisten = history.listen(({ location, action }) => {
       window.scrollTo(0, 0);
 
       const urlPath = getPath(location.pathname)
@@ -64,6 +64,13 @@ class App extends Component {
         urlPath,
       })
     })
+  }
+
+  componentWillUnmount() {
+    // Clean up history listener
+    if (this.historyUnlisten) {
+      this.historyUnlisten()
+    }
   }
 
   /**
@@ -91,8 +98,23 @@ class App extends Component {
     }, cb)
   }
 
-  setPage(urlPath) {
+  /**
+   * Navigates to a specific page by updating both history and component state
+   * @param {string} urlPath - The path to navigate to
+   */
+  setPage = (urlPath) => {
+    const normalizedPath = getPath(urlPath)
+    
+    // Update browser history
     history.push(urlPath)
+    
+    // Force immediate state update to ensure UI responds
+    this.setState({
+      urlPath: normalizedPath
+    })
+    
+    // Scroll to top when navigating
+    window.scrollTo(0, 0)
   }
 
   getPage(urlPath) {
