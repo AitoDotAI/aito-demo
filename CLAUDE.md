@@ -137,3 +137,14 @@ The codebase includes:
 - Vercel - `vercel.json` with serverless configuration  
 - Docker - Multi-stage builds with security best practices
 - Traditional hosting - nginx configuration included
+
+## Design System
+
+The application follows a comprehensive design system documented in [`org/guides/ui-design-system.md`](org/guides/ui-design-system.md). Key design principles include:
+
+- **Orange Accent Theme**: `#FF6B35` used consistently for interactive elements, buttons, and highlights
+- **Professional Layout**: Clean typography, proper spacing, and visual hierarchy
+- **Responsive Design**: Mobile-first approach with CSS Grid and Flexbox
+- **Component Consistency**: Unified styling across landing page, invoice page, and all UI elements
+
+For detailed styling guidelines, color palettes, spacing systems, and implementation patterns, refer to the full design system documentation.
