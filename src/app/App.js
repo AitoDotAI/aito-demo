@@ -207,6 +207,10 @@ class App extends Component {
       getProductAnalytics:
         (productId) => data.getProductAnalytics(productId),
 
+      // Get distinct values for a field
+      getDistinctValues:
+        (field) => data.getDistinctValues(field),
+
     }
 
     const actions = {

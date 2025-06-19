@@ -28,32 +28,40 @@ class AnalyticsPage extends Component {
       field: 'user.tags',
       value: 'female', 
       results: [],
-      dropDownOpen: false
+      dropDownOpen: false,
+      valueDropdownOpen: false,
+      availableValues: []
     }
     
     this.debouncedFetchResults = _.debounce(this.fetchResults, 300).bind(this)
     this.debouncedFetchResults()
   }
 
+  componentDidMount() {
+    // Load initial available values for the default field
+    this.fetchAvailableValues(this.state.field)
+  }
+
   setField = (val) => {
     this.setState({
       field: val,
       dropDownOpen: false,
-      value: this.getDefaultFieldValue(val)
+      value: this.getDefaultFieldValue(val),
+      availableValues: []
     })
 
     if (!val) {
       this.setState({ field: null })
     } else {
+      this.fetchAvailableValues(val)
       this.debouncedFetchResults()
     }
   }
 
-  onValueChange = (e) => {
-    const val = e.target.value
-
+  setValue = (val) => {
     this.setState({
-      value: val
+      value: val,
+      valueDropdownOpen: false
     })
 
     if (!val) {
@@ -74,6 +82,22 @@ class AnalyticsPage extends Component {
 
   toggleDropDown = () => {
     this.setState({dropDownOpen: !this.state.dropDownOpen})
+  }
+
+  toggleValueDropdown = () => {
+    this.setState({valueDropdownOpen: !this.state.valueDropdownOpen})
+  }
+
+  fetchAvailableValues = (field) => {
+    // Get distinct values for the selected field using Aito query
+    return this.props.dataFetchers.getDistinctValues(field)
+      .then(values => {
+        this.setState({ availableValues: values })
+      })
+      .catch(err => {
+        console.error('Error fetching available values:', err)
+        this.setState({ availableValues: [] })
+      })
   }
 
   getFieldName = (fieldName) => {
@@ -147,18 +171,29 @@ class AnalyticsPage extends Component {
             </div>
 
             <div className="AnalyticsPage__control-group">
-              <label className="AnalyticsPage__control-label" htmlFor="value">
+              <label className="AnalyticsPage__control-label">
                 Value to Analyze
               </label>
-              <input
-                className="AnalyticsPage__input"
-                value={this.state.value}
-                onChange={this.onValueChange}
-                type="text"
-                name="value"
-                id="value"
-                placeholder="Enter value to analyze"
-              />
+              <Dropdown 
+                isOpen={this.state.valueDropdownOpen} 
+                toggle={this.toggleValueDropdown}
+              >
+                <DropdownToggle caret>
+                  {this.state.value || 'Select value...'}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {this.state.availableValues.map((value, index) => (
+                    <DropdownItem key={index} onClick={() => this.setValue(value)}>
+                      {value}
+                    </DropdownItem>
+                  ))}
+                  {this.state.availableValues.length === 0 && (
+                    <DropdownItem disabled>
+                      Loading values...
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </div>
         </div>

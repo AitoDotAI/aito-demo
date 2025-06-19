@@ -1,0 +1,3151 @@
+[{
+  "answer": 1,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I place an order?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 1,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What is the process to buy groceries online?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 1,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I start shopping on your website?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 2,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What payment methods do you support?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 2,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Which payment options are available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 2,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I pay with a credit card or PayPal?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 3,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I split payment between two cards?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 3,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it possible to use more than one payment method?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 3,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I pay using multiple payment options?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 4,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is there a minimum order amount?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 4,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do I need to spend a certain amount to place an order?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 4,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What is the minimum purchase required?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 5,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I use a promo code?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 5,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I apply a discount code during checkout?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 5,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Where can I enter a coupon code?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 6,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I change my order after placing it?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 6,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it possible to modify or cancel my order?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 6,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I edit or cancel an order after it’s been made?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 7,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I know if my order went through?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 7,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Did my order get placed successfully?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 7,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Will I receive confirmation after ordering?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 8,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What if an item I ordered is out of stock?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 8,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What happens if something I ordered is unavailable?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 8,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Will I be notified if an item is not in stock?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 9,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I save my cart for later?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 9,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it possible to keep items in my cart for future purchases?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 9,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I save my shopping cart?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 10,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you offer subscriptions for regular deliveries?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 10,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I set up a recurring order?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 10,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is there an option for automatic reorders?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 11,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What are your delivery fees?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 11,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How much does delivery cost?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 11,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Are there any delivery charges?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 12,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How long does delivery take?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 12,
+  "assignee": null,
+  "categories": null,
+  "prompt": "When will my order arrive?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 12,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What is the estimated delivery time?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 13,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you offer same-day delivery?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 13,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is express delivery available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 13,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I get my order delivered today?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 14,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I schedule my delivery?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 14,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it possible to choose a delivery time?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 14,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I pick a specific delivery window?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 15,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Where do you deliver?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 15,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What areas do you cover for delivery?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 15,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can you deliver to my location?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 16,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What should I do if my delivery is late?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 16,
+  "assignee": null,
+  "categories": null,
+  "prompt": "My order hasn’t arrived, what now?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 16,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Who do I contact if my delivery is delayed?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 17,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I track my order?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 17,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I know where my order is?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 17,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is order tracking available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 18,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you offer contactless delivery?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 18,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I get my order without direct contact?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 18,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is a no-contact delivery option available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 19,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What happens if I’m not home for the delivery?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 19,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Will my order be left if I’m not there?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 19,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can my order be redelivered if I miss it?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 20,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I pick up my order?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 20,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is store pickup available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 20,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I use the Click and Collect service?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 21,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I check if a product is in stock?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 21,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is there a way to see if an item is available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 21,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I confirm product availability before ordering?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 22,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What should I do if a product is out of stock?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 22,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I request an out-of-stock item?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 22,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Will you notify me if an item is back in stock?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 23,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I request a product that’s not listed?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 23,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I ask for a specific brand?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 23,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it possible to suggest new products for your store?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 24,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Are your products fresh?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 24,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you ensure high-quality groceries?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 24,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What measures do you take to guarantee product quality?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 25,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do you handle perishable items?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 25,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What precautions are taken for fresh products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 25,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How are temperature-sensitive items delivered?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 26,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you sell organic products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 26,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I find specialty items like gluten-free?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 26,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What types of organic or dietary products do you offer?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 27,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I see product expiration dates?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 27,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I know the shelf life of an item?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 27,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Where can I find expiration details for your products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 28,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Where can I find product ingredients?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 28,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I check the nutritional information?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 28,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Are ingredients and nutrition details available online?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 29,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What should I do if I receive a damaged product?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 29,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do you handle expired or defective items?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 29,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Who do I contact about receiving spoiled goods?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 30,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you offer bulk buying options?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 30,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I purchase large quantities?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 30,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Are there discounts for buying in bulk?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 31,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I create an account?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 31,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Where can I sign up?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 31,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it necessary to register to shop on your site?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 32,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I reset my password?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 32,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What do I do if I forgot my password?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 32,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I recover my account password?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 33,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I update my account information?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 33,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Where do I change my personal details?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 33,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it possible to edit my profile information?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 34,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I save multiple delivery addresses?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 34,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it possible to have more than one address on my account?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 34,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I manage different delivery locations?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 35,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I view my past orders?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 35,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Where can I see my order history?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 35,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I check what I’ve ordered before?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 36,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is my personal information secure?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 36,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do you protect my data?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 36,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Are my payment details safe on your site?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 37,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I subscribe to your newsletter?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 37,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I unsubscribe from promotional emails?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 37,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I manage my email preferences?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 38,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What is your return policy?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 38,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I return items I don’t want?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 38,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How long do I have to return a product?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 39,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I return a product?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 39,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What is the process for returning items?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 39,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I get a refund for a returned product?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 40,
+  "assignee": null,
+  "categories": null,
+  "prompt": "When will I receive my refund?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 40,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How long does it take to get a refund?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 40,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What is the refund processing time?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 41,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I exchange a product?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 41,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is it possible to swap an item for another?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 41,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do I request an exchange instead of a return?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 42,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What should I do if I receive the wrong product?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 42,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do you handle incorrect orders?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 42,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Who do I contact about a mistaken delivery?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 43,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I contact customer support?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 43,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What’s the best way to reach your support team?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 43,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you offer phone or chat support?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 44,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What are your customer support hours?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 44,
+  "assignee": null,
+  "categories": null,
+  "prompt": "When is customer service available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 44,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I find out when support is open?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 45,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is live chat available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 45,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I chat with a representative online?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 45,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you offer live support through your website?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 46,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I leave feedback or a review?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 46,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Where can I rate my experience?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 46,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is there a place to write a product review?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 47,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you have a rewards program?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 47,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How can I earn points with my purchases?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 47,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Is there a loyalty program available?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 48,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you offer eco-friendly packaging?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 48,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Can I choose sustainable packaging?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 48,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What are your options for reducing packaging waste?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 49,
+  "assignee": null,
+  "categories": null,
+  "prompt": "What are you doing to reduce environmental impact?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 49,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do you minimize your carbon footprint?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 49,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Are you taking steps to be more eco-friendly?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 50,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Do you support local farmers?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 50,
+  "assignee": null,
+  "categories": null,
+  "prompt": "How do you promote local suppliers?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": 50,
+  "assignee": null,
+  "categories": null,
+  "prompt": "Are your products sourced from local farms?",
+  "sentiment": null,
+  "tags": null,
+  "type": "question",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Great grocery store! It's super fast and easy to use.",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "The refund process took too long.",
+  "sentiment": "negative",
+  "tags": "refund",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "Customer support was slow to respond.",
+  "sentiment": "negative",
+  "tags": "customer support",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "quality",
+  "prompt": "The app keeps crashing on my iPhone!",
+  "sentiment": "negative",
+  "tags": "iPhone,app",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Everything was fine, but the packaging could be improved.",
+  "sentiment": "neutral",
+  "tags": "packaging",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "Good for basic groceries, but limited in specialty products.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "It's a decent service, but I prefer going to the store in person.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Everything was fine, but the packaging could be improved.",
+  "sentiment": "neutral",
+  "tags": "packaging",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "The delivery was quick and hassle-free.",
+  "sentiment": "positive",
+  "tags": "fast delivery",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Delivery was on time, but not faster than competitors.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "The refund process took too long.",
+  "sentiment": "negative",
+  "tags": "refund",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "Good for basic groceries, but limited in specialty products.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "I love the selection of organic products.",
+  "sentiment": "positive",
+  "tags": "organic",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "Customer support was slow to respond.",
+  "sentiment": "negative",
+  "tags": "customer support",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "My delivery was missing a few items.",
+  "sentiment": "negative",
+  "tags": "missing items",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Delivery took much longer than expected.",
+  "sentiment": "negative",
+  "tags": "delayed delivery",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "It's a decent service, but I prefer going to the store in person.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "Some products were out of stock after I ordered.",
+  "sentiment": "negative",
+  "tags": "out of stock",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Delivery was on time, but not faster than competitors.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I like the website, but it could use a fresher design.",
+  "sentiment": "neutral",
+  "tags": "website",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "pricing",
+  "prompt": "Prices are a bit high compared to local stores.",
+  "sentiment": "negative",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had no problems finding what I needed.",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I like the website, but it could use a fresher design.",
+  "sentiment": "neutral",
+  "tags": "website",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The store is okay, but there's room for improvement.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Overall, it's a good service, but nothing too impressive.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "It's a decent service, but I prefer going to the store in person.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Great grocery store! It's super fast and easy to use.",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "Customer support was slow to respond.",
+  "sentiment": "negative",
+  "tags": "customer support",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "It's a decent service, but I prefer going to the store in person.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "The selection is fine, but I wish they had more organic items.",
+  "sentiment": "neutral",
+  "tags": "organic",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "quality",
+  "prompt": "The website is laggy and takes too long to load.",
+  "sentiment": "negative",
+  "tags": "website",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "Customer support was slow to respond.",
+  "sentiment": "negative",
+  "tags": "customer support",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Delivery was on time, but not faster than competitors.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The app works fine, but there’s nothing special about it.",
+  "sentiment": "neutral",
+  "tags": "app",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "pricing",
+  "prompt": "Amazing discounts and offers every week!",
+  "sentiment": "positive",
+  "tags": "promo code",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I like the website, but it could use a fresher design.",
+  "sentiment": "neutral",
+  "tags": "website",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The store is okay, but there's room for improvement.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Very convenient, I can shop anytime!",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "It's a decent service, but I prefer going to the store in person.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "pricing",
+  "prompt": "I had trouble applying the promo code during checkout.",
+  "sentiment": "negative",
+  "tags": "promo code",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Fast delivery, and everything was fresh!",
+  "sentiment": "positive",
+  "tags": "fresh products",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "I couldn't find many vegan options.",
+  "sentiment": "negative",
+  "tags": "vegan",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Delivery took much longer than expected.",
+  "sentiment": "negative",
+  "tags": "delayed delivery",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had no problems finding what I needed.",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Delivery was on time, but not faster than competitors.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Fast delivery, and everything was fresh!",
+  "sentiment": "positive",
+  "tags": "fresh products",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Very convenient, I can shop anytime!",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "It's a decent service, but I prefer going to the store in person.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "quality",
+  "prompt": "The app keeps crashing on my iPhone!",
+  "sentiment": "negative",
+  "tags": "iPhone,app",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Overall, it's a good service, but nothing too impressive.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "My delivery was missing a few items.",
+  "sentiment": "negative",
+  "tags": "missing items",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "quality",
+  "prompt": "The website is laggy and takes too long to load.",
+  "sentiment": "negative",
+  "tags": "website",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "It's a decent service, but I prefer going to the store in person.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "Good for basic groceries, but limited in specialty products.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Fast delivery, and everything was fresh!",
+  "sentiment": "positive",
+  "tags": "fresh products",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "The delivery was quick and hassle-free.",
+  "sentiment": "positive",
+  "tags": "fast delivery",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The app is intuitive and very user-friendly.",
+  "sentiment": "positive",
+  "tags": "app",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The app works fine, but there’s nothing special about it.",
+  "sentiment": "neutral",
+  "tags": "app",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "I love the selection of organic products.",
+  "sentiment": "positive",
+  "tags": "organic",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Very convenient, I can shop anytime!",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The website is smooth and easy to navigate.",
+  "sentiment": "positive",
+  "tags": "website",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Overall, it's a good service, but nothing too impressive.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Fast delivery, and everything was fresh!",
+  "sentiment": "positive",
+  "tags": "fresh products",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "Good for basic groceries, but limited in specialty products.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "Customer support was helpful and resolved my issue fast.",
+  "sentiment": "positive",
+  "tags": "customer support",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "Customer support was helpful and resolved my issue fast.",
+  "sentiment": "positive",
+  "tags": "customer support",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "quality",
+  "prompt": "The website is laggy and takes too long to load.",
+  "sentiment": "negative",
+  "tags": "website",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The website is smooth and easy to navigate.",
+  "sentiment": "positive",
+  "tags": "website",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had no problems finding what I needed.",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The store is okay, but there's room for improvement.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "pricing",
+  "prompt": "Prices are a bit high compared to local stores.",
+  "sentiment": "negative",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Fast delivery, and everything was fresh!",
+  "sentiment": "positive",
+  "tags": "fresh products",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "The delivery was quick and hassle-free.",
+  "sentiment": "positive",
+  "tags": "fast delivery",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "quality",
+  "prompt": "The app keeps crashing on my iPhone!",
+  "sentiment": "negative",
+  "tags": "iPhone,app",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Delivery was on time, but not faster than competitors.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Very convenient, I can shop anytime!",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Overall, it's a good service, but nothing too impressive.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Great grocery store! It's super fast and easy to use.",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Everything was fine, but the packaging could be improved.",
+  "sentiment": "neutral",
+  "tags": "packaging",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "product selection",
+  "prompt": "I couldn't find many vegan options.",
+  "sentiment": "negative",
+  "tags": "vegan",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "Everything was fine, but the packaging could be improved.",
+  "sentiment": "neutral",
+  "tags": "packaging",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "It's a decent service, but I prefer going to the store in person.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "My delivery was missing a few items.",
+  "sentiment": "negative",
+  "tags": "missing items",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "The refund process took too long.",
+  "sentiment": "negative",
+  "tags": "refund",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "The delivery was quick and hassle-free.",
+  "sentiment": "positive",
+  "tags": "fast delivery",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "delivery",
+  "prompt": "My delivery was missing a few items.",
+  "sentiment": "negative",
+  "tags": "missing items",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Great grocery store! It's super fast and easy to use.",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "customer service",
+  "prompt": "The refund process took too long.",
+  "sentiment": "negative",
+  "tags": "refund",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The store is okay, but there's room for improvement.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "Great grocery store! It's super fast and easy to use.",
+  "sentiment": "positive",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "I had an average experience. Nothing extraordinary.",
+  "sentiment": "neutral",
+  "tags": "",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": null,
+  "categories": "usability",
+  "prompt": "The app works fine, but there’s nothing special about it.",
+  "sentiment": "neutral",
+  "tags": "app",
+  "type": "feedback",
+  "urgency": null
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add a feature to save favorite products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add a feature to save favorite products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I’m unable to update my address in the app. Can you assist?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Some of the items in my order were missing.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I’m having trouble applying a discount code during checkout.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The driver couldn’t find my address and I had to wait.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I’m unable to update my address in the app. Can you assist?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "The app is freezing whenever I try to open it.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "There’s an incorrect charge on my receipt.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "The website loads very slowly, can you help?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Some of the items in my order were missing.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Can you improve the communication during delivery delays?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "I didn’t receive the refund for my returned products.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I’m having trouble applying a discount code during checkout.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add a feature to save favorite products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The packaging was damaged upon arrival.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "Can you stock more gluten-free products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "Could you add more dairy-free options?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "Could you start offering organic eggs?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Can you improve the communication during delivery delays?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "I was charged twice for my order. Can you fix this?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "I’d like to see more vegan options in the store.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "There’s a bug in the mobile app when applying promo codes.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Can you improve the communication during delivery delays?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add voice commands for searching products in the app?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "Would it be possible to get a Prime drink in the store?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "There’s a bug in the mobile app when applying promo codes.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add a feature to save favorite products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "There’s an incorrect charge on my receipt.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "I can’t proceed to payment, it’s stuck on the checkout screen.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I didn’t receive a confirmation for my order. Can you check it?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "My delivery was late. Can you help with that?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "Can you help me? The app crashes, whenever I try to buy the products.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add voice commands for searching products in the app?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Could you add a feature to filter by dietary needs?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "I want the App to have better support for the color blind!",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add voice commands for searching products in the app?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add a feature to save favorite products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "I want the App to have better support for the color blind!",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "Can you help me? The app crashes, whenever I try to buy the products.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I’m having trouble applying a discount code during checkout.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "There’s a bug in the mobile app when applying promo codes.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Can you improve the communication during delivery delays?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "I’m unable to reset my password on the app.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "My delivery was late. Can you help with that?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The packaging was damaged upon arrival.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Some of the items in my order were missing.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "I’m unable to reset my password on the app.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "It would be great if I could track my delivery in real-time.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The packaging was damaged upon arrival.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Can you improve the communication during delivery delays?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "I’d like to see more vegan options in the store.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "I’d like to see more vegan options in the store.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "I’d like to see more vegan options in the store.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I can’t log into my account. Can you assist?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The packaging was damaged upon arrival.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "The app is freezing whenever I try to open it.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "I’d like to see more vegan options in the store.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Can you improve the communication during delivery delays?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The packaging was damaged upon arrival.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "I’m unable to reset my password on the app.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I’m having trouble applying a discount code during checkout.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "I was charged twice for my order. Can you fix this?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Could you add a feature to filter by dietary needs?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add a feature to save favorite products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "The app is freezing whenever I try to open it.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "I was charged twice for my order. Can you fix this?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "I’d like to see more vegan options in the store.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "The app is freezing whenever I try to open it.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "Would it be possible to get a Prime drink in the store?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The driver couldn’t find my address and I had to wait.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add voice commands for searching products in the app?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "I’m unable to reset my password on the app.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "Could you add more dairy-free options?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Some of the items in my order were missing.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Some of the items in my order were missing.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add voice commands for searching products in the app?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Can you improve the communication during delivery delays?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "My delivery was late. Can you help with that?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Can you improve the communication during delivery delays?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "I didn’t receive the refund for my returned products.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "I’d like to see more vegan options in the store.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "Some of the items in my order were missing.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "The receipt shows the wrong amount, can you check?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The driver couldn’t find my address and I had to wait.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Emily Davis",
+  "categories": "finance issue",
+  "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "I’m having trouble applying a discount code during checkout.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add a feature to save favorite products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "Can you stock more gluten-free products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Could you add a feature to filter by dietary needs?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "David Green",
+  "categories": "product wish",
+  "prompt": "Would it be possible to get a Prime drink in the store?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}, {
+  "answer": null,
+  "assignee": "Bob Smith",
+  "categories": "support request",
+  "prompt": "Can you help me? The app crashes, whenever I try to buy the products.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Frank Wilson",
+  "categories": "operations issue",
+  "prompt": "The packaging was damaged upon arrival.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "high"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "product feature",
+  "prompt": "Can you add a feature to save favorite products?",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "medium"
+}, {
+  "answer": null,
+  "assignee": "Carol White",
+  "categories": "technical issue",
+  "prompt": "The app is freezing whenever I try to open it.",
+  "sentiment": null,
+  "tags": null,
+  "type": "request",
+  "urgency": "low"
+}]
