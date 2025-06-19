@@ -22,6 +22,17 @@ import { invoiceEvaluationData } from '../data/data'
 
 import './InvoicingPage.css'
 
+const FIELD_LABELS = {
+  'InvoiceID': 'Invoice ID',
+  'SenderName': 'Sender Name',
+  'ProductName': 'Product Name',
+  'AccountNumber': 'Account Number',
+  'Description': 'Description',
+  'Processor': 'Processor',
+  'Acceptor': 'Acceptor',
+  'GLCode': 'GL Code'
+}
+
 class InvoicingPage extends Component {
   constructor(props) {
     super(props)
@@ -134,21 +145,17 @@ class InvoicingPage extends Component {
 
   render() {
     const input = Object.entries(this.state.input).map(([field, value]) => 
-      <div>
-        <h4>{field}</h4>
-        <Form>
-          <FormGroup>
-            <Input
-              value={value}
-              onChange={(value) => this.onInputChange(field, value)}
-              type="text"
-              name="value"
-              id="value"
-              placeholder="Value"
-            />
-          </FormGroup>
-        </Form>
-
+      <div key={field} className="form-field">
+        <Label className="form-field__label">{FIELD_LABELS[field] || field}</Label>
+        <Input
+          className="form-field__input"
+          value={value}
+          onChange={(e) => this.onInputChange(field, e)}
+          type="text"
+          name={field}
+          id={field}
+          placeholder={`Enter ${(FIELD_LABELS[field] || field).toLowerCase()}`}
+        />
       </div>
     )
 
@@ -212,21 +219,40 @@ class InvoicingPage extends Component {
         })
       }
       var tooltipName = "tooltip_" + field
-      return <div>
-        <h4>{field}:</h4>
-        <div className="dropdown-container">
-          <Dropdown className="DropDown" isOpen={this.state.dropDownOpen[field]} toggle={(x) => this.toggleDropDown(field, x)}>
+      return <div key={field} className="prediction-item">
+        <h4 className="prediction-item__title">{FIELD_LABELS[field] || field}</h4>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--aito-spacing-md)' }}>
+          <Dropdown isOpen={this.state.dropDownOpen[field]} toggle={(x) => this.toggleDropDown(field, x)}>
             <DropdownToggle caret>{topValue}</DropdownToggle>
             <DropdownMenu>
               {
-                hits.filter(hit => hit.$p >= 0.1).map(hit => {
+                hits.filter(hit => hit.$p >= 0.1).map((hit, index) => {
                   var [value, name] = this.hitValueAndName(hit)
-                  return <DropdownItem onClick={() => this.setOutput(field, value)}>{(100*hit.$p).toFixed(1)}% {name}</DropdownItem>
+                  return <DropdownItem key={index} onClick={() => this.setOutput(field, value)}>{(100*hit.$p).toFixed(1)}% {name}</DropdownItem>
                 })
               }
             </DropdownMenu>
           </Dropdown>
-          <Button id={tooltipName} onClick={() => this.toggleTooltip(field)} >?</Button>
+          <div 
+            id={tooltipName} 
+            onClick={() => this.toggleTooltip(field)}
+            style={{
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
+              backgroundColor: '#FF6B35',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              userSelect: 'none'
+            }}
+          >
+            ?
+          </div>
           <Tooltip
             autohide={false}
             flip={false}
@@ -239,16 +265,34 @@ class InvoicingPage extends Component {
             {factors}
             </ol>
           </Tooltip>
-
         </div>
       </div>
     })
 
     return (
       <div className="InvoicingPage">
-        <Button className="Button" onClick={this.next}>Next invoice</Button>
-        {input}
-        {output}
+        <div className="InvoicingPage__header">
+          <h1 className="InvoicingPage__title">Invoice Processing</h1>
+          <p className="InvoicingPage__subtitle">
+            Automatically classify and route invoices using AI-powered predictions. Enter invoice details to see intelligent suggestions for processor assignment, approval routing, and GL code classification.
+          </p>
+        </div>
+        
+        <div className="InvoicingPage__actions">
+          <button className="Button" onClick={this.next}>Load Sample Invoice</button>
+        </div>
+
+        <div className="InvoicingPage__content">
+          <div className="InvoicingPage__input-section">
+            <h3 className="InvoicingPage__section-title">Invoice Details</h3>
+            {input}
+          </div>
+          
+          <div className="InvoicingPage__output-section">
+            <h3 className="InvoicingPage__section-title">AI Predictions</h3>
+            {output}
+          </div>
+        </div>
       </div>
     )
   }

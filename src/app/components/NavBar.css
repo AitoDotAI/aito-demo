@@ -53,7 +53,7 @@
 
 .NavBar__cart-link:hover, .NavBar__profile-link:hover {
   background-color: var(--aito-surface);
-  transform: translateY(-1px);
+  transform: translateY(5x);
 }
 
 .NavBar__cart-link-text {
@@ -80,7 +80,7 @@
   font-weight: 600;
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, 14px);
+  transform: translate(-50%, 15px);
   white-space: nowrap;
   color: var(--aito-text-muted);
   letter-spacing: 0.5px;
@@ -98,16 +98,8 @@
   color: var(--aito-primary);
 }
 
-.NavBar .dropdown {
-  z-index: 10000 !important;
-  position: static;
-}
-
 .NavBar .dropdown-menu {
-  z-index: 10001 !important;
-  position: fixed !important;
-  transform: none !important;
-  will-change: auto !important;
+  z-index: 1050 !important;
 }
 
 /* Mobile responsive */
