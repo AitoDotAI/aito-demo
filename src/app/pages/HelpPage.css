@@ -1,36 +1,235 @@
-.FaqPage {
+.HelpPage {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--aito-spacing-lg);
+}
 
+.HelpPage__header {
+  background-color: var(--aito-background);
+  padding: var(--aito-spacing-xl);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  border: 1px solid var(--aito-border);
+  margin-bottom: var(--aito-spacing-xl);
+  text-align: center;
+}
+
+.HelpPage__title {
+  color: var(--aito-text-primary);
+  margin-bottom: var(--aito-spacing-sm);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.HelpPage__subtitle {
+  color: var(--aito-text-secondary);
+  font-size: 1.1rem;
+  font-weight: 400;
+  max-width: 500px;
+  margin: 0 auto var(--aito-spacing-lg);
+  line-height: 1.6;
+}
+
+.HelpPage__input-section {
+  background-color: var(--aito-background);
+  padding: var(--aito-spacing-xl);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  border: 1px solid var(--aito-border);
+  margin-bottom: var(--aito-spacing-xl);
+}
+
+.HelpPage__input-label {
+  display: block;
+  font-weight: 600;
+  color: var(--aito-text-primary);
+  margin-bottom: var(--aito-spacing-sm);
+  font-size: 1rem;
+}
+
+.HelpPage__input {
+  width: 100%;
+  padding: var(--aito-spacing-md);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius-small);
+  background-color: var(--aito-background);
+  color: var(--aito-text-primary);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.HelpPage__input:focus {
+  outline: none;
+  border-color: var(--aito-accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.HelpPage__input::placeholder {
+  color: var(--aito-text-secondary);
+}
+
+.HelpPage__result {
+  background-color: var(--aito-background);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  padding: var(--aito-spacing-xl);
+  margin-bottom: var(--aito-spacing-lg);
+  transition: all 0.2s ease;
+}
+
+.HelpPage__result:hover {
+  box-shadow: var(--aito-shadow-hover);
+}
+
+.HelpPage__result-title {
+  color: var(--aito-text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--aito-spacing-lg);
+  padding-bottom: var(--aito-spacing-sm);
+  border-bottom: 2px solid var(--aito-accent);
+}
+
+.HelpPage__result-content {
+  color: var(--aito-text-primary);
+  line-height: 1.6;
+  margin-bottom: var(--aito-spacing-lg);
+}
+
+.HelpPage__metadata {
+  margin-bottom: var(--aito-spacing-lg);
+}
+
+.HelpPage__metadata-item {
+  margin-bottom: var(--aito-spacing-md);
+  padding: var(--aito-spacing-sm);
+  background-color: var(--aito-surface);
+  border-radius: var(--aito-radius-small);
+  border: 1px solid var(--aito-border);
+}
+
+.HelpPage__metadata-label {
+  font-weight: 600;
+  color: var(--aito-text-primary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--aito-spacing-xs);
+}
+
+.HelpPage__metadata-value {
+  color: var(--aito-text-secondary);
+  font-size: 0.9rem;
+}
+
+.HelpPage__button {
+  padding: var(--aito-spacing-sm) var(--aito-spacing-lg);
+  background-color: var(--aito-accent);
+  color: white;
+  border: none;
+  border-radius: var(--aito-radius-small);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aito-spacing-xs);
+}
+
+.HelpPage__button:hover {
+  background-color: #e55a2b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.25);
+}
+
+.HelpPage__button:active {
+  transform: translateY(0);
+}
+
+.HelpPage__answer-content {
+  background-color: var(--aito-surface);
+  padding: var(--aito-spacing-lg);
+  border-radius: var(--aito-radius-small);
+  border-left: 4px solid var(--aito-accent);
+  margin-bottom: var(--aito-spacing-lg);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--aito-text-primary);
+}
+
+.HelpPage__question-title {
+  color: var(--aito-accent);
+  font-weight: 600;
+  margin-bottom: var(--aito-spacing-md);
+  font-size: 1.1rem;
+}
+
+/* Tag styling */
+.HelpPage__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--aito-spacing-xs);
+}
+
+.HelpPage__tag {
+  display: inline-block;
+  padding: var(--aito-spacing-xs) var(--aito-spacing-sm);
+  background-color: var(--aito-accent);
+  color: white;
+  border-radius: var(--aito-radius-small);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .HelpPage {
+    padding: var(--aito-spacing-md);
+  }
+  
+  .HelpPage__title {
+    font-size: 1.5rem;
+  }
+  
+  .HelpPage__input-section,
+  .HelpPage__result {
+    padding: var(--aito-spacing-lg);
+  }
+}
+
+/* Legacy classes for backward compatibility */
+.FaqPage {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--aito-spacing-lg);
 }
 
 .header {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.value {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.TagsInput ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.TagsInput li  {
-  display: inline-block;
-  padding: 5px 16px;
-  background: #34495e;
-  color: white;
-  text-align: center;
-  margin: 4px;
-  border-radius: 50px;
+  font-weight: 600;
+  color: var(--aito-text-primary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: var(--aito-spacing-md) 0 var(--aito-spacing-xs) 0;
 }
 
 .Button {
-  margin-top: 20px;
-  margin-bottom: 20px; 
+  padding: var(--aito-spacing-sm) var(--aito-spacing-lg);
+  background-color: var(--aito-accent);
+  color: white;
+  border: none;
+  border-radius: var(--aito-radius-small);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: var(--aito-spacing-lg) 0;
+}
+
+.Button:hover {
+  background-color: #e55a2b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.25);
 }

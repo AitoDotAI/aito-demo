@@ -1,26 +1,282 @@
 .AnalyticsPage {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--aito-spacing-lg);
 }
 
-.FieldDropDown {
-  margin-bottom: 20px;
+.AnalyticsPage__header {
+  background-color: var(--aito-background);
+  padding: var(--aito-spacing-xl);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  border: 1px solid var(--aito-border);
+  margin-bottom: var(--aito-spacing-xl);
+  text-align: center;
 }
 
+.AnalyticsPage__title {
+  color: var(--aito-text-primary);
+  margin-bottom: var(--aito-spacing-sm);
+  font-size: 2rem;
+  font-weight: 700;
+}
 
-.TagsInput ul {
+.AnalyticsPage__subtitle {
+  color: var(--aito-text-secondary);
+  font-size: 1.1rem;
+  font-weight: 400;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.AnalyticsPage__controls {
+  background-color: var(--aito-background);
+  padding: var(--aito-spacing-xl);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  border: 1px solid var(--aito-border);
+  margin-bottom: var(--aito-spacing-xl);
+}
+
+.AnalyticsPage__controls-title {
+  color: var(--aito-text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--aito-spacing-lg);
+  padding-bottom: var(--aito-spacing-sm);
+  border-bottom: 2px solid var(--aito-accent);
+}
+
+.AnalyticsPage__control-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--aito-spacing-lg);
+  align-items: end;
+}
+
+.AnalyticsPage__control-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aito-spacing-sm);
+}
+
+.AnalyticsPage__control-label {
+  font-weight: 600;
+  color: var(--aito-text-primary);
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.AnalyticsPage__input {
+  width: 100%;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius-small);
+  background-color: var(--aito-background);
+  color: var(--aito-text-primary);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.AnalyticsPage__input:focus {
+  outline: none;
+  border-color: var(--aito-accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.AnalyticsPage__input::placeholder {
+  color: var(--aito-text-secondary);
+}
+
+.AnalyticsPage__results {
+  background-color: var(--aito-background);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  padding: var(--aito-spacing-xl);
+  transition: all 0.2s ease;
+}
+
+.AnalyticsPage__results:hover {
+  box-shadow: var(--aito-shadow-hover);
+}
+
+.AnalyticsPage__results-title {
+  color: var(--aito-text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--aito-spacing-lg);
+  padding-bottom: var(--aito-spacing-sm);
+  border-bottom: 2px solid var(--aito-accent);
+}
+
+.AnalyticsPage__results-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: block;
-  margin-bottom: 10px;
 }
 
+.AnalyticsPage__results-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--aito-spacing-md);
+  margin-bottom: var(--aito-spacing-sm);
+  background-color: var(--aito-surface);
+  border-radius: var(--aito-radius-small);
+  border: 1px solid var(--aito-border);
+  transition: all 0.2s ease;
+}
 
-.TagsInput li  {
-  display: inline-block;
-  padding: 5px 16px;
-  background: #34495e;
-  color: white;
+.AnalyticsPage__results-item:hover {
+  background-color: rgba(255, 107, 53, 0.05);
+  border-color: var(--aito-accent);
+}
+
+.AnalyticsPage__results-item:last-child {
+  margin-bottom: 0;
+}
+
+.AnalyticsPage__results-label {
+  color: var(--aito-text-primary);
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.AnalyticsPage__results-value {
+  color: var(--aito-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.AnalyticsPage__results-value--positive {
+  color: #28a745;
+}
+
+.AnalyticsPage__results-value--negative {
+  color: #dc3545;
+}
+
+.AnalyticsPage__empty-state {
   text-align: center;
-  margin: 4px;
-  border-radius: 50px;
+  padding: var(--aito-spacing-xl);
+  color: var(--aito-text-secondary);
+  font-style: italic;
+}
+
+/* Dropdown styling */
+.AnalyticsPage .dropdown-toggle {
+  width: 100%;
+  background-color: var(--aito-background);
+  border: 1px solid var(--aito-border);
+  color: var(--aito-text-primary);
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.AnalyticsPage .dropdown-toggle:hover {
+  background-color: var(--aito-surface);
+  border-color: var(--aito-accent);
+}
+
+.AnalyticsPage .dropdown-toggle:focus {
+  background-color: var(--aito-background);
+  border-color: var(--aito-accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+  color: var(--aito-text-primary);
+}
+
+.AnalyticsPage .dropdown-toggle:active,
+.AnalyticsPage .dropdown-toggle.show {
+  background-color: var(--aito-surface);
+  border-color: var(--aito-accent);
+  color: var(--aito-text-primary);
+}
+
+.AnalyticsPage .dropdown-menu {
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius-small);
+  box-shadow: var(--aito-shadow);
+  background-color: var(--aito-background);
+  width: 100%;
+}
+
+.AnalyticsPage .dropdown-item {
+  color: var(--aito-text-primary);
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.AnalyticsPage .dropdown-item:hover {
+  background-color: var(--aito-surface);
+  color: var(--aito-accent);
+}
+
+.AnalyticsPage .dropdown-item:active {
+  background-color: var(--aito-accent);
+  color: white;
+}
+
+/* Info section */
+.AnalyticsPage__info {
+  background-color: rgba(255, 107, 53, 0.1);
+  border: 1px solid var(--aito-accent);
+  border-radius: var(--aito-radius-small);
+  padding: var(--aito-spacing-md);
+  margin-bottom: var(--aito-spacing-xl);
+  color: var(--aito-text-primary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.AnalyticsPage__info-title {
+  font-weight: 600;
+  color: var(--aito-accent);
+  margin-bottom: var(--aito-spacing-xs);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .AnalyticsPage {
+    padding: var(--aito-spacing-md);
+  }
+  
+  .AnalyticsPage__title {
+    font-size: 1.5rem;
+  }
+  
+  .AnalyticsPage__control-row {
+    grid-template-columns: 1fr;
+    gap: var(--aito-spacing-md);
+  }
+  
+  .AnalyticsPage__results-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--aito-spacing-xs);
+  }
+  
+  .AnalyticsPage__results-value {
+    text-align: right;
+  }
+}
+
+/* Legacy compatibility */
+.FaqPage {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--aito-spacing-lg);
+}
+
+.FieldDropDown {
+  margin-bottom: var(--aito-spacing-lg);
+  width: 100%;
 }

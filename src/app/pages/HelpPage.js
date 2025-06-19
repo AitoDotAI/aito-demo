@@ -60,61 +60,99 @@ class HelpPage extends Component {
     if (match != null) {
       if (match.type == "question") {
         result = 
-          <div>
-            <h4>{match["prompt"]}</h4>
-            {match["answer.answer"]}
+          <div className="HelpPage__result">
+            <h3 className="HelpPage__result-title">Question & Answer</h3>
+            <div className="HelpPage__question-title">{match["prompt"]}</div>
+            <div className="HelpPage__answer-content">
+              {match["answer.answer"]}
+            </div>
           </div>
       } else if (match.type == "feedback") {
         result = 
-          <div>
-            <h4>Would you like to send feedback about this?</h4>
-            <div>
-              <h5 className="header">Text:</h5>
-              {this.state.question}
-              <h5 className="header">Sentiment:</h5>
-              {match.sentiment}
-              <h5 className="header">Category:</h5>
-              {match.categories}
-              { (match.tags != null) ? <div><h5 className="header">Tags:</h5>{match.tags}</div> : null }
+          <div className="HelpPage__result">
+            <h3 className="HelpPage__result-title">Send Feedback</h3>
+            <div className="HelpPage__result-content">
+              We've analyzed your feedback and can help you submit it to the appropriate team.
             </div>
-            <Button className="Button">Send feedback</Button>
+            <div className="HelpPage__metadata">
+              <div className="HelpPage__metadata-item">
+                <div className="HelpPage__metadata-label">Your Message</div>
+                <div className="HelpPage__metadata-value">{this.state.question}</div>
+              </div>
+              <div className="HelpPage__metadata-item">
+                <div className="HelpPage__metadata-label">Detected Sentiment</div>
+                <div className="HelpPage__metadata-value">{match.sentiment}</div>
+              </div>
+              <div className="HelpPage__metadata-item">
+                <div className="HelpPage__metadata-label">Category</div>
+                <div className="HelpPage__metadata-value">{match.categories}</div>
+              </div>
+              {match.tags && (
+                <div className="HelpPage__metadata-item">
+                  <div className="HelpPage__metadata-label">Tags</div>
+                  <div className="HelpPage__tags">
+                    {match.tags.split(',').map((tag, index) => (
+                      <span key={index} className="HelpPage__tag">{tag.trim()}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <button className="HelpPage__button">Send Feedback</button>
           </div>
       } else if (match.type == "request") {
         result = 
-          <div>
-            <h3>Would you like to create a ticket about this?</h3>
-            <div>
-              <h5 className="header">Text:</h5>
-              {this.state.question}
-              <h5 className="header">Assignee</h5>
-              {match.assignee}
-              <h5 className="header">Category</h5>
-              {match.categories}
-              <h5 className="header">Urgency</h5>
-              {match.urgency}
+          <div className="HelpPage__result">
+            <h3 className="HelpPage__result-title">Create Support Ticket</h3>
+            <div className="HelpPage__result-content">
+              We've analyzed your request and prepared a support ticket with the appropriate routing and priority.
             </div>
-            <Button className="Button">Create ticket</Button>
+            <div className="HelpPage__metadata">
+              <div className="HelpPage__metadata-item">
+                <div className="HelpPage__metadata-label">Request Details</div>
+                <div className="HelpPage__metadata-value">{this.state.question}</div>
+              </div>
+              <div className="HelpPage__metadata-item">
+                <div className="HelpPage__metadata-label">Suggested Assignee</div>
+                <div className="HelpPage__metadata-value">{match.assignee}</div>
+              </div>
+              <div className="HelpPage__metadata-item">
+                <div className="HelpPage__metadata-label">Category</div>
+                <div className="HelpPage__metadata-value">{match.categories}</div>
+              </div>
+              <div className="HelpPage__metadata-item">
+                <div className="HelpPage__metadata-label">Priority Level</div>
+                <div className="HelpPage__metadata-value">{match.urgency}</div>
+              </div>
+            </div>
+            <button className="HelpPage__button">Create Ticket</button>
           </div>
       }
     }
     return (
-      <div className="FaqPage">
-        <h3>How can I help you?</h3>
-
-        <Form>
-          <FormGroup>
-            <Input
-              value={this.state.productNameInputValue}
-              onChange={this.onQuestionChange}
-              type="text"
-              name="question"
-              id="question"
-              placeholder="Question"
-            />
-          </FormGroup>
-        </Form>
-        {result}
+      <div className="HelpPage">
+        <div className="HelpPage__header">
+          <h1 className="HelpPage__title">Help & Support</h1>
+          <p className="HelpPage__subtitle">
+            Ask questions about the grocery store or get help with AI-powered assistance. Our intelligent system can answer questions, process feedback, and create support tickets.
+          </p>
         </div>
+
+        <div className="HelpPage__input-section">
+          <label className="HelpPage__input-label">How can I help you?</label>
+          <input
+            className="HelpPage__input"
+            value={this.state.question}
+            onChange={this.onQuestionChange}
+            type="text"
+            name="question"
+            id="question"
+            placeholder="Type your question or feedback here..."
+          />
+        </div>
+        
+        {result}
+      </div>
     )
   }
 }

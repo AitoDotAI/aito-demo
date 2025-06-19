@@ -8,6 +8,12 @@
   background-color: var(--aito-background);
 }
 
+.NavBar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--aito-spacing-md);
+}
+
 .NavBar__logo {
   height: 35px;
   cursor: pointer;
@@ -100,6 +106,31 @@
 
 .NavBar .dropdown-menu {
   z-index: 1050 !important;
+}
+
+.NavBar__hamburger {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--aito-accent);
+  padding: var(--aito-spacing-sm);
+  border-radius: var(--aito-radius-small);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.NavBar__hamburger:hover {
+  background-color: var(--aito-surface);
+  color: var(--aito-primary);
+  transform: translateY(-1px);
+}
+
+.NavBar__hamburger:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25);
 }
 
 /* Mobile responsive */
