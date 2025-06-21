@@ -26,15 +26,19 @@ npm run lint:fix            # Fix ESLint issues automatically
 npm run format              # Format code with Prettier
 npm run format:check        # Check code formatting
 
-# Data Management  
-# Note: Data files are now provided as static JSON files in src/data/
-# No data generation script - data is pre-created with realistic patterns
+# Data Management
+npm run upload-data           # Upload all data to Aito.ai instance
+npm run upload-data:dry-run   # Test upload process without actual upload
+
+# Note: Data files are provided as static JSON files in src/data/
+# See UPLOAD_README.md for detailed upload instructions
 ```
 
 ### Environment Notes
 - **No API key setup required** - Uses public demo instance by default
 - The `.env.example` contains working credentials for immediate use
 - Source maps disabled (`GENERATE_SOURCEMAP=false`) for smaller builds
+- **Custom Aito Instance**: Set `AITO_URL` and `AITO_API_KEY` environment variables to use your own instance
 
 ## Architecture Overview
 

@@ -6,6 +6,7 @@
     "ajv": "^8.17.1",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "form-data": "^4.0.3",
     "history": "^5.3.0",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
@@ -29,6 +30,8 @@
     "format": "prettier --write src/**/*.{js,jsx,json,css,md}",
     "format:check": "prettier --check src/**/*.{js,jsx,json,css,md}",
     "generate-data": "node src/generator/index.js",
+    "upload-data": "node upload-data.js",
+    "upload-data:dry-run": "node upload-data.js --dry-run",
     "prepare": "husky install"
   },
   "eslintConfig": {
