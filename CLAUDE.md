@@ -63,7 +63,7 @@ This is a single-page React application that demonstrates 9 different Aito.ai us
 - **HTTP Client**: Axios for API calls
 - **Styling**: Custom CSS with Bootstrap integration
 - **State Management**: Component-based state (no Redux/Context API)
-- **Quality Tools**: ESLint, Prettier, Husky git hooks
+- **Quality Tools**: ESLint, Prettier
 
 ### Aito.ai Integration Patterns
 

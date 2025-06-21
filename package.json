@@ -30,8 +30,7 @@
     "format:check": "prettier --check src/**/*.{js,jsx,json,css,md}",
     "generate-data": "node src/generator/index.js",
     "upload-data": "node upload-data.js",
-    "upload-data:dry-run": "node upload-data.js --dry-run",
-    "prepare": "husky install"
+    "upload-data:dry-run": "node upload-data.js --dry-run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,15 +48,8 @@
     "@testing-library/user-event": "^14.5.2",
     "chalk": "^5.4.1",
     "eslint-config-prettier": "^9.1.0",
-    "husky": "^9.1.7",
     "knuth-shuffle-seeded": "^1.0.6",
-    "lint-staged": "^15.2.11",
     "prettier": "^3.4.2",
     "seed-random": "^2.2.0"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,json,css,md}": [
-      "prettier --write"
-    ]
   }
 }

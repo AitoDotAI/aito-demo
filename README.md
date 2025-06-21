@@ -128,7 +128,6 @@ node src/generator/index.js --info
 
 - **ESLint**: Code linting with React best practices
 - **Prettier**: Consistent code formatting
-- **Husky**: Git hooks for quality gates
 - **Testing**: Jest and React Testing Library
 
 ## 📚 Documentation
