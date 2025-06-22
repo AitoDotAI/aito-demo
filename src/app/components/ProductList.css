@@ -1,16 +1,49 @@
 .ProductList {
   list-style: none;
-  padding: 0;
+  padding: var(--aito-spacing-md);
   width: 100%;
   min-height: 40px;
+  background-color: var(--aito-surface-light);
+  border-radius: var(--aito-radius);
+  border: 1px solid var(--aito-border);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--aito-spacing-md);
+}
+
+@media (max-width: 1000px) {
+  .ProductList {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .ProductList {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .ProductList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .ProductList {
+    grid-template-columns: 1fr;
+  }
 }
 
 .ProductList .ProductListItem {
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .ProductList__empty {
-  color: #777;
+  color: var(--aito-text-muted);
+  text-align: center;
+  padding: var(--aito-spacing-xl);
+  font-style: italic;
 }
 
 .fade-enter {

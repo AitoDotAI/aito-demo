@@ -28,32 +28,40 @@ class AnalyticsPage extends Component {
       field: 'user.tags',
       value: 'female', 
       results: [],
-      dropDownOpen: false
+      dropDownOpen: false,
+      valueDropdownOpen: false,
+      availableValues: []
     }
     
     this.debouncedFetchResults = _.debounce(this.fetchResults, 300).bind(this)
     this.debouncedFetchResults()
   }
 
+  componentDidMount() {
+    // Load initial available values for the default field
+    this.fetchAvailableValues(this.state.field)
+  }
+
   setField = (val) => {
     this.setState({
       field: val,
       dropDownOpen: false,
-      value: this.getDefaultFieldValue(val)
+      value: this.getDefaultFieldValue(val),
+      availableValues: []
     })
 
     if (!val) {
       this.setState({ field: null })
     } else {
+      this.fetchAvailableValues(val)
       this.debouncedFetchResults()
     }
   }
 
-  onValueChange = (e) => {
-    const val = e.target.value
-
+  setValue = (val) => {
     this.setState({
-      value: val
+      value: val,
+      valueDropdownOpen: false
     })
 
     if (!val) {
@@ -74,6 +82,22 @@ class AnalyticsPage extends Component {
 
   toggleDropDown = () => {
     this.setState({dropDownOpen: !this.state.dropDownOpen})
+  }
+
+  toggleValueDropdown = () => {
+    this.setState({valueDropdownOpen: !this.state.valueDropdownOpen})
+  }
+
+  fetchAvailableValues = (field) => {
+    // Get distinct values for the selected field using Aito query
+    return this.props.dataFetchers.getDistinctValues(field)
+      .then(values => {
+        this.setState({ availableValues: values })
+      })
+      .catch(err => {
+        console.error('Error fetching available values:', err)
+        this.setState({ availableValues: [] })
+      })
   }
 
   getFieldName = (fieldName) => {
@@ -103,40 +127,112 @@ class AnalyticsPage extends Component {
   }
 
   render() {
-    const items = _.map(this.state.results, item => {
-      const hit = item["value"]
-      return <li>{item["lift"].toFixed(1)}x {hit}</li>
-    })
+    const hasResults = this.state.results.length > 0
 
     return (
-      <div className="FaqPage">
-        <h4>Field:</h4>
-        <Dropdown className="FieldDropDown" 
-                  isOpen={this.state.dropDownOpen} 
-                  toggle={this.toggleDropDown} >
-          <DropdownToggle caret>{this.getFieldName(this.state.field)}</DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem onClick={() => this.setField('user.tags')}>User tag</DropdownItem>
-            <DropdownItem onClick={() => this.setField('user.id')}>User id</DropdownItem>
-            <DropdownItem onClick={() => this.setField('weekday')}>Weekday</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-        <h4>Value:</h4>
-        <Form>
-          <FormGroup>
-            <Input
-              value={this.state.value}
-              onChange={this.onValueChange}
-              type="text"
-              name="value"
-              id="value"
-              placeholder="Value"
-            />
-          </FormGroup>
-        </Form>
-        <h4>Preference:</h4>
-        <ul>{items}</ul>
+      <div className="AnalyticsPage">
+        <div className="AnalyticsPage__header">
+          <h1 className="AnalyticsPage__title">Data Analytics</h1>
+          <p className="AnalyticsPage__subtitle">
+            Explore statistical relationships in your data using AI-powered correlation analysis. Select a field and value to discover related patterns and preferences.
+          </p>
         </div>
+
+        <div className="AnalyticsPage__info">
+          <div className="AnalyticsPage__info-title">How it works</div>
+          Choose a data field (like user tags, user ID, or weekday) and specify a value to analyze. The system will show you what other data points are statistically related to your selection, along with their correlation strength.
+        </div>
+
+        <div className="AnalyticsPage__controls">
+          <h3 className="AnalyticsPage__controls-title">Analysis Parameters</h3>
+          
+          <div className="AnalyticsPage__control-row">
+            <div className="AnalyticsPage__control-group">
+              <label className="AnalyticsPage__control-label">Data Field</label>
+              <Dropdown 
+                isOpen={this.state.dropDownOpen} 
+                toggle={this.toggleDropDown}
+              >
+                <DropdownToggle caret>
+                  {this.getFieldName(this.state.field)}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={() => this.setField('user.tags')}>
+                    User Tag
+                  </DropdownItem>
+                  <DropdownItem onClick={() => this.setField('user.id')}>
+                    User ID
+                  </DropdownItem>
+                  <DropdownItem onClick={() => this.setField('weekday')}>
+                    Weekday
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+
+            <div className="AnalyticsPage__control-group">
+              <label className="AnalyticsPage__control-label">
+                Value to Analyze
+              </label>
+              <Dropdown 
+                isOpen={this.state.valueDropdownOpen} 
+                toggle={this.toggleValueDropdown}
+              >
+                <DropdownToggle caret>
+                  {this.state.value || 'Select value...'}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {this.state.availableValues.map((value, index) => (
+                    <DropdownItem key={index} onClick={() => this.setValue(value)}>
+                      {value}
+                    </DropdownItem>
+                  ))}
+                  {this.state.availableValues.length === 0 && (
+                    <DropdownItem disabled>
+                      Loading values...
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          </div>
+        </div>
+
+        <div className="AnalyticsPage__results">
+          <h3 className="AnalyticsPage__results-title">
+            Statistical Relationships
+          </h3>
+          
+          {hasResults ? (
+            <ul className="AnalyticsPage__results-list">
+              {_.map(this.state.results, (item, index) => {
+                const lift = item["lift"]
+                const value = item["value"]
+                const isPositive = lift > 1
+                const isNegative = lift < 1
+                
+                return (
+                  <li key={index} className="AnalyticsPage__results-item">
+                    <span className="AnalyticsPage__results-label">
+                      {value}
+                    </span>
+                    <span className={`AnalyticsPage__results-value ${
+                      isPositive ? 'AnalyticsPage__results-value--positive' : 
+                      isNegative ? 'AnalyticsPage__results-value--negative' : ''
+                    }`}>
+                      {lift.toFixed(1)}x
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <div className="AnalyticsPage__empty-state">
+              Enter a field and value to see statistical relationships
+            </div>
+          )}
+        </div>
+      </div>
     )
   }
 }

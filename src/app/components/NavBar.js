@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
-import logoImage from '../assets/logo.svg'
-import { FaShoppingCart, FaUserCircle } from 'react-icons/fa'
+import logoImage from '../assets/acme-logo.svg'
+import { FaShoppingCart, FaUserCircle, FaBars } from 'react-icons/fa'
 
 import './NavBar.css'
 
@@ -27,6 +27,7 @@ class NavBar extends Component {
 
     this.state = {
       dropdownOpen: false,
+      menuOpen: false,
     }
   }
 
@@ -34,9 +35,18 @@ class NavBar extends Component {
     this.setState({ dropdownOpen: !this.state.dropdownOpen })
   }
 
+  toggleMenu = () => {
+    this.setState({ menuOpen: !this.state.menuOpen })
+  }
+
   onUserSelected = (userId) => {
     this.props.onUserSelected(userId)
     this.props.actions.setPage('/')
+  }
+
+  onMenuItemClick = (page) => {
+    this.props.actions.setPage(page)
+    this.setState({ menuOpen: false })
   }
 
   render() {
@@ -44,23 +54,31 @@ class NavBar extends Component {
 
     return (
       <nav className="NavBar">
-        <img
-          className="NavBar__logo"
-          src={logoImage}
-          alt=""
-          onClick={() => props.actions.setPage('/')}
-        />
+        <div className="NavBar__left">
+          <Dropdown isOpen={this.state.menuOpen} toggle={this.toggleMenu}>
+            <DropdownToggle className="NavBar__hamburger" tag="button">
+              <FaBars />
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={() => this.onMenuItemClick('/')}>Grocery Store</DropdownItem>
+              <DropdownItem divider />
+              <DropdownItem onClick={() => this.onMenuItemClick('/admin')}>Admin View</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/product')}>Products</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/analytics')}>Analytics</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/invoicing')}>Invoicing</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/help')}>Help</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+          
+          <img
+            className="NavBar__logo"
+            src={logoImage}
+            alt=""
+            onClick={() => props.actions.setPage('/')}
+          />
+        </div>
 
         <ol className="NavBar__links">
-          <li className="NavBar__cart-link" onClick={() => props.actions.setPage('/cart')}>
-            <FaShoppingCart />
-            <span className="NavBar__cart-link-text">
-              {props.cart.length}
-              {' '}
-              ITEMS
-            </span>
-          </li>
-
           <li className="NavBar__profile-link">
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle tag="a">
@@ -74,16 +92,18 @@ class NavBar extends Component {
                 <DropdownItem onClick={() => this.onUserSelected('veronica')}>{getUserName('veronica')}</DropdownItem>
                 <DropdownItem onClick={() => this.onUserSelected('alice')}>{getUserName('alice')}</DropdownItem>
                 <DropdownItem onClick={() => this.onUserSelected(null)}>Unknown user</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem onClick={() => props.actions.setPage('/admin')}>Admin view</DropdownItem>
-                <DropdownItem onClick={() => props.actions.setPage('/product')}>Products</DropdownItem>
-                <DropdownItem onClick={() => props.actions.setPage('/analytics')}>Analytics</DropdownItem>
-                <DropdownItem onClick={() => props.actions.setPage('/invoicing')}>Invoicing</DropdownItem>
-                <DropdownItem onClick={() => props.actions.setPage('/help')}>Help</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </li>
-        </ol>
+          <li className="NavBar__cart-link" onClick={() => props.actions.setPage('/cart')}>
+            <FaShoppingCart />
+            <span className="NavBar__cart-link-text">
+              {props.cart.length}
+              {' '}
+              ITEMS
+            </span>
+          </li>
+      </ol>
       </nav>
     )
   }

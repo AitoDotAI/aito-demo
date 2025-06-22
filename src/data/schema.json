@@ -1,38 +1,177 @@
 {
   "schema": {
     "users": {
-      "type": "table",
+      "type":"table",
       "columns": {
-        "username": { "type": "String" }
+        "id"       : { "type" : "String" },
+        "tags"     : { "type" : "Text", "analyzer": "Whitespace" }
       }
     },
 
     "products": {
-      "type": "table",
+      "type":"table",
       "columns": {
         "id"          : { "type": "String" },
-        "name"        : { "type": "Text", "analyzer": "English" },
+        "name"        : { "type": "Text",  "analyzer": "English" },
         "category"    : { "type": "String" },
-        "price"       : { "type": "Decimal" },
-        "tags"        : { "type": "Text", "analyzer": "Whitespace" }
+        "price"       : { "type": "Decimal"},
+        "tags"        : { "type": "Text", "analyzer" : "Whitespace" },
+        "googleImpressions": { "type": "Int" },
+        "googleClicks": { "type": "Int" }
       }
     },
 
-    "sessions" : {
-      "type": "table",
+    "visits" : {
+      "type":"table",
       "columns": {
-         "id"     : { "type" : "String" },
-         "user"   : { "type" : "String", "link": "users.username" }
+        "id"         : { "type" : "String" },
+        "prev"       : { "type" : "String", "link":"this.id", "nullable": true },
+        "day"        : { "type" : "Int" },
+        "week"       : { "type" : "Int" },
+        "month"      : { "type" : "Int" },
+        "weekday"    : { "type" : "String" },
+        "user"       : { "type" : "String", "link":"users.id" },
+        "purchases"  : { "type" : "Text", "analyzer":"Whitespace" }
+      }
+    },
+
+    "contexts" : {
+      "type":"table",
+      "columns": {
+         "id"          : { "type" : "String" },
+         "type"        : { "type" : "String" },
+         "visit"       : { "type" : "String", "link":"visits.id" },
+         "day"         : { "type" : "Int" },
+         "week"        : { "type" : "Int" },
+         "month"       : { "type" : "Int" },
+         "weekday"     : { "type" : "String" },
+         "user"        : { "type" : "String", "link":"users.id" },
+         "basket"      : { "type" : "Text", "analyzer" : "Whitespace" },
+         "prevBasket"  : { "type" : "Text", "analyzer" : "Whitespace" },
+         "query"       : { "type" : "Text", "analyzer" : "English" },
+         "queryPhrase" : { "type" : "String" }
       }
     },
 
     "impressions" : {
+      "type":"table",
+      "columns": {
+        "context" : { "type": "String", "link":"contexts.id" },
+        "product"  : { "type" : "String", "link":"products.id" },
+        "purchase" : { "type" : "Boolean" }
+      }
+    },
+
+    "prompts": {
+      "type":"table",
+      "columns": {
+        "prompt"  : { "type" : "Text", "analyzer":"English" },
+        "type"  : { "type" : "String" },
+        "answer" : { "type" : "Int", "link":"answers.id", "nullable": true },
+        "sentiment" : { "type" : "String", "nullable": true },
+        "categories": { "type": "Text", "analyzer": { "type": "delimiter", "delimiter": "," }, "nullable": true },
+        "tags": { "type": "Text", "analyzer": { "type": "delimiter", "delimiter": "," }, "nullable": true },
+        "assignee": { "type": "String", "link": "employees.Name", "nullable": true },
+        "urgency": { "type" : "String", "nullable": true }
+      }
+    },
+
+    "answers": {
       "type": "table",
       "columns": {
-        "session"  : { "type": "String", "link": "sessions.id" },
-        "product"  : { "type": "String", "link": "products.id" },
-        "purchase"   : { "type": "Boolean" }
+        "id" : { "type": "Int" },
+        "answer"  : { "type" : "Text", "analyzer":"English" }
+      }
+    },
+    "employees": {
+      "type": "table",
+      "columns": {
+        "Name": { "type": "String" },
+        "Role": { "type": "String" },
+        "Department": { "type": "String" },
+        "Superior": { "type": "String", "nullable": true }
+      }
+    },
+    "glCodes": {
+      "type": "table",
+      "columns": {
+        "GLCode": { "type": "String" },
+        "Department": { "type": "String" },
+        "Name": { "type": "String" }
+      }
+    },
+    "invoices": {
+      "type": "table",
+      "columns": {
+        "InvoiceID": {
+          "type": "string"
+        },
+        "InvoiceDate": {
+          "type": "string"
+        },
+        "InvoiceNumber": {
+          "type": "string"
+        },
+        "SenderName": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "SenderAddress": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "ReceiverName": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "ReceiverAddress": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "ProductName": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "Description": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "AccountNumber": {
+          "type": "string"
+        },
+        "PaymentMethod": {
+          "type": "string"
+        },
+        "TotalAmount": {
+          "type": "decimal"
+        },
+        "VATAmount": {
+          "type": "decimal"
+        },
+        "PaymentDueDate": {
+          "type": "string"
+        },
+        "Processor": {
+          "type": "string",
+          "nullable": true,
+          "link": "employees.Name"
+        },
+        "Acceptor": {
+          "type": "string",
+          "nullable": true,
+          "link": "employees.Name"
+        },
+        "InvoiceType": {
+          "type": "string",
+          "nullable": true
+        },
+        "GLCode": {
+          "type": "string",
+          "nullable": true,
+          "link": "glCodes.GLCode"
+        }
       }
     }
   }
 }
+    

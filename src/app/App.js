@@ -19,12 +19,29 @@ import DataInspectPage from './pages/DataInspectPage'
 
 import './App.css'
 
+// Browser history instance for navigation
 const history = createBrowserHistory();
 
+/**
+ * Normalizes pathname by removing trailing slashes
+ * @param {string} pathname - URL pathname to normalize
+ * @returns {string} - Normalized pathname
+ */
 function getPath(pathname) {
   return _.trimEnd(pathname, '/')
 }
 
+/**
+ * Main application component for the Aito Grocery Store Demo
+ * Manages routing, user selection, shopping cart, and data fetching
+ * 
+ * Features:
+ * - User persona selection (Larry, Veronica, Alice)
+ * - Intelligent product search and recommendations
+ * - Shopping cart management
+ * - Analytics and admin interfaces
+ * - Real-time predictions and insights
+ */
 class App extends Component {
   constructor() {
     super()
@@ -38,8 +55,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // Listen for changes to the current location.
-    history.listen((location, action) => {
+    // Listen for changes to the current location (back/forward buttons, direct URL changes)
+    this.historyUnlisten = history.listen(({ location, action }) => {
       window.scrollTo(0, 0);
 
       const urlPath = getPath(location.pathname)
@@ -49,6 +66,18 @@ class App extends Component {
     })
   }
 
+  componentWillUnmount() {
+    // Clean up history listener
+    if (this.historyUnlisten) {
+      this.historyUnlisten()
+    }
+  }
+
+  /**
+   * Adds a product to the shopping cart, ensuring no duplicates
+   * @param {Object} product - Product object to add to cart
+   * @param {Function} cb - Optional callback function
+   */
   addItemToCart = (product, cb) => {
     const { state } = this
     const newCart = state.cart.concat([product])
@@ -57,6 +86,11 @@ class App extends Component {
     }, cb)
   }
 
+  /**
+   * Removes a product from the shopping cart by ID
+   * @param {string|number} productId - ID of product to remove
+   * @param {Function} cb - Optional callback function
+   */
   removeItemFromCart = (productId, cb) => {
     const { state } = this
     this.setState({
@@ -64,8 +98,23 @@ class App extends Component {
     }, cb)
   }
 
-  setPage(urlPath) {
+  /**
+   * Navigates to a specific page by updating both history and component state
+   * @param {string} urlPath - The path to navigate to
+   */
+  setPage = (urlPath) => {
+    const normalizedPath = getPath(urlPath)
+    
+    // Update browser history
     history.push(urlPath)
+    
+    // Force immediate state update to ensure UI responds
+    this.setState({
+      urlPath: normalizedPath
+    })
+    
+    // Scroll to top when navigating
+    window.scrollTo(0, 0)
   }
 
   getPage(urlPath) {
@@ -106,48 +155,61 @@ class App extends Component {
     const Page = this.getPage(state.urlPath)
 
     const dataFetchers = {
-      getTagSuggestions: (productName) => Promise.resolve(data.getTagSuggestions(productName)),
+      // Call async API functions directly (they already return promises)
+      getTagSuggestions: (productName) => data.getTagSuggestions(productName),
 
-      // Add user behavior
+      // Add user behavior for personalized recommendations
       getRecommendedProducts:
-        (currentShoppingBasket, count) => Promise.resolve(
-          data.getRecommendedProducts(state.selectedUserId, currentShoppingBasket, count)
-        ),
+        (currentShoppingBasket, count) => 
+          data.getRecommendedProducts(state.selectedUserId, currentShoppingBasket, count),
 
+      // Personalized product search with user context
       getProductSearchResults:
-        (searchValue) => Promise.resolve(
-          data.getProductSearchResults(state.selectedUserId, searchValue)
-        ),
+        (searchValue) => 
+          data.getProductSearchResults(state.selectedUserId, searchValue),
 
+      // Fetch multiple products by ID
       getProductsByIds: 
-        (ids) => Promise.resolve(data.getProductsByIds(ids)),
+        (ids) => data.getProductsByIds(ids),
 
+      // Personalized autocomplete suggestions
       getAutoComplete: 
-        (query) => Promise.resolve(data.getAutoComplete(state.selectedUserId, query)),
+        (query) => data.getAutoComplete(state.selectedUserId, query),
 
+      // Smart cart pre-filling based on user patterns
       getAutoFill: 
-        () => Promise.resolve(data.getAutoFill(state.selectedUserId)),
+        () => data.getAutoFill(state.selectedUserId),
 
+      // AI-powered prompt analysis
       prompt: 
-        (question) => Promise.resolve(data.prompt(question)),
+        (question) => data.prompt(question),
 
+      // Statistical relationship analysis
       relate: 
-        (field, value) => Promise.resolve(data.relate(field, value)),
+        (field, value) => data.relate(field, value),
 
+      // Invoice classification and routing
       predictInvoice: 
-        (input, output) => Promise.resolve(data.predictInvoice(input, output)),
+        (input, output) => data.predictInvoice(input, output),
 
+      // Product information retrieval
       getProductDetails: 
-        (productId) => Promise.resolve(data.getProductDetails(productId)),
+        (productId) => data.getProductDetails(productId),
       
       getAllProducts:
-        () => Promise.resolve(data.getAllProducts()),
+        () => data.getAllProducts(),
 
+      // Product analytics and statistics
       getProductStats:
-        (productId) => Promise.resolve(data.getProductStats(productId)),
+        (productId) => data.getProductStats(productId),
 
+      // Comprehensive product analytics
       getProductAnalytics:
-        (productId) => Promise.resolve(data.getProductAnalytics(productId)),
+        (productId) => data.getProductAnalytics(productId),
+
+      // Get distinct values for a field
+      getDistinctValues:
+        (field) => data.getDistinctValues(field),
 
     }
 

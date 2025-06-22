@@ -1,24 +1,322 @@
-.AdminPage {
+.ProductPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--aito-spacing-lg);
+}
 
+.ProductPage__header {
+  background-color: var(--aito-background);
+  padding: var(--aito-spacing-xl);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  border: 1px solid var(--aito-border);
+  margin-bottom: var(--aito-spacing-xl);
+  text-align: center;
+}
+
+.ProductPage__title {
+  color: var(--aito-text-primary);
+  margin-bottom: var(--aito-spacing-sm);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.ProductPage__subtitle {
+  color: var(--aito-text-secondary);
+  font-size: 1.1rem;
+  font-weight: 400;
+  max-width: 600px;
+  margin: 0 auto var(--aito-spacing-lg);
+  line-height: 1.6;
+}
+
+.ProductPage__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--aito-spacing-lg);
+}
+
+.ProductPage__counter {
+  color: var(--aito-text-secondary);
+  font-weight: 500;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  background-color: var(--aito-surface);
+  border-radius: var(--aito-radius-small);
+  border: 1px solid var(--aito-border);
 }
 
 .Button {
+  padding: var(--aito-spacing-sm) var(--aito-spacing-lg);
+  background-color: var(--aito-accent);
+  color: white;
+  border: none;
+  border-radius: var(--aito-radius-small);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aito-spacing-xs);
 }
 
-.TagsInput ul {
+.Button:hover {
+  background-color: #e55a2b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.25);
+}
+
+.Button:active {
+  transform: translateY(0);
+}
+
+.Button--secondary {
+  background-color: var(--aito-surface);
+  color: var(--aito-accent);
+  border: 1px solid var(--aito-accent);
+}
+
+.Button--secondary:hover {
+  background-color: var(--aito-accent);
+  color: white;
+}
+
+.ProductCard {
+  background-color: var(--aito-background);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  padding: var(--aito-spacing-xl);
+  margin-bottom: var(--aito-spacing-xl);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--aito-spacing-xl);
+}
+
+.ProductCard__content {
+  flex: 1;
+}
+
+.ProductCard__name {
+  color: var(--aito-text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--aito-spacing-md);
+}
+
+.ProductCard__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--aito-spacing-xs);
+  margin-bottom: var(--aito-spacing-md);
+}
+
+.Tag {
+  display: inline-block;
+  padding: var(--aito-spacing-xs) var(--aito-spacing-sm);
+  background-color: var(--aito-surface);
+  color: var(--aito-text-primary);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius-small);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.ProductCard__meta {
+  color: var(--aito-text-secondary);
+  font-size: 0.9rem;
+}
+
+.ProductCard__category {
+  font-weight: 600;
+}
+
+.ProductCard__image {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--aito-surface);
+  border-radius: var(--aito-radius);
+  border: 1px solid var(--aito-border);
+}
+
+.ProductCard__image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.MetricsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--aito-spacing-lg);
+  margin-bottom: var(--aito-spacing-xl);
+}
+
+.MetricCard {
+  background-color: var(--aito-background);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  padding: var(--aito-spacing-lg);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.MetricCard:hover {
+  box-shadow: var(--aito-shadow-hover);
+  border-color: var(--aito-accent);
+}
+
+.MetricCard--highlight {
+  border-color: var(--aito-accent);
+  background-color: rgba(255, 107, 53, 0.05);
+}
+
+.MetricCard__value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--aito-text-primary);
+  margin-bottom: var(--aito-spacing-xs);
+}
+
+.MetricCard--highlight .MetricCard__value {
+  color: var(--aito-accent);
+}
+
+.MetricCard__label {
+  color: var(--aito-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.AnalyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--aito-spacing-xl);
+  margin-bottom: var(--aito-spacing-xl);
+}
+
+.AnalyticsCard {
+  background-color: var(--aito-background);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  padding: var(--aito-spacing-xl);
+  transition: all 0.2s ease;
+}
+
+.AnalyticsCard:hover {
+  box-shadow: var(--aito-shadow-hover);
+}
+
+.AnalyticsCard__title {
+  color: var(--aito-text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--aito-spacing-lg);
+  padding-bottom: var(--aito-spacing-sm);
+  border-bottom: 2px solid var(--aito-accent);
+}
+
+.AnalyticsCard--full-width {
+  grid-column: 1 / -1;
+}
+
+.InsightsList {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: block;
-  margin-bottom: 10px;
 }
 
-.TagsInput li  {
-  display: inline-block;
-  padding: 5px 16px;
-  background: #34495e;
-  color: white;
-  text-align: center;
-  margin: 4px;
-  border-radius: 50px;
+.InsightsList__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--aito-spacing-sm) 0;
+  border-bottom: 1px solid var(--aito-border);
+}
+
+.InsightsList__item:last-child {
+  border-bottom: none;
+}
+
+.InsightsList__label {
+  color: var(--aito-text-primary);
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.InsightsList__value {
+  color: var(--aito-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.InsightsList__value--positive {
+  color: #28a745;
+}
+
+.InsightsList__value--negative {
+  color: #dc3545;
+}
+
+/* Chart customization */
+.recharts-cartesian-axis-tick-value {
+  fill: var(--aito-text-secondary);
+}
+
+.recharts-legend-item-text {
+  color: var(--aito-text-primary) !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .ProductPage {
+    padding: var(--aito-spacing-md);
+  }
+  
+  .ProductPage__navigation {
+    flex-direction: column;
+    gap: var(--aito-spacing-md);
+  }
+  
+  .ProductCard {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .ProductCard__image {
+    align-self: center;
+  }
+  
+  .MetricsRow {
+    grid-template-columns: 1fr;
+    gap: var(--aito-spacing-md);
+  }
+  
+  .AnalyticsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--aito-spacing-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .ProductPage__title {
+    font-size: 1.5rem;
+  }
+  
+  .ProductCard__name {
+    font-size: 1.25rem;
+  }
+  
+  .MetricCard__value {
+    font-size: 1.5rem;
+  }
 }

@@ -1,47 +1,120 @@
 .ProductSearch {
   width: 100%;
+  margin-bottom: var(--aito-spacing-lg);
+}
+
+.ProductSearch__search-container {
+  background-color: var(--aito-red);
+  padding: 0;
+  margin: 0 calc(-100vw / 2 + 50%);
+  margin-bottom: var(--aito-spacing-lg);
+  margin-top: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.ProductSearch__search-inner {
+  width: 100%;
+  max-width: 1200px;
+  padding: var(--aito-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--aito-spacing-sm);
+}
+
+.ProductSearch__search-label {
+  color: white;
+  font-weight: 550;
+  font-size: 1.0rem;
+  flex-shrink: 0;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-sm);
+}
+
+.ProductSearch__search-input-wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ProductSearch__search-icon {
+  position: absolute;
+  left: var(--aito-spacing-md);
+  color: var(--aito-text-muted);
+  z-index: 1;
+  font-size: 1rem;
 }
 
 .ProductSearch .ProductList {
-  margin-bottom: 80px;
+  margin-bottom: var(--aito-spacing-xl);
 }
 
 .ProductSearch__input {
   width: 100%;
-  padding: 10px 20px;
-  font-weight: 300;
-  font-size: 16px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  margin-bottom: 20px;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-lg);
+  padding-left: calc(var(--aito-spacing-lg) + var(--aito-spacing-lg));
+  font-weight: 400;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--aito-radius);
+  margin-bottom: 0;
+  background-color: white;
+  color: var(--aito-text-primary);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-shadow: none;
 }
 
-body {
-  font-family: Helvetica, sans-serif;
+.ProductSearch__input:focus {
+  outline: none;
+  background-color: white;
+  box-shadow: none;
+}
+
+.ProductSearch__input:hover {
+}
+
+.ProductSearch__input::placeholder {
+  color: var(--aito-text-muted);
+  font-style: italic;
 }
 
 .react-autosuggest__container {
   position: relative;
+  margin-bottom: 0;
 }
 
 .react-autosuggest__input {
   width: 100%;
-  height: 30px;
-  padding: 10px 20px;
-  font-family: Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 16px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
+  height: auto;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-lg);
+  padding-left: calc(var(--aito-spacing-lg) + var(--aito-spacing-lg));
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--aito-radius);
+  background-color: white;
+  color: var(--aito-text-primary);
+  transition: all 0.2s ease;
+  box-shadow: none;
+  flex: 1;
 }
 
+.react-autosuggest__input:focus,
 .react-autosuggest__input--focused {
   outline: none;
+  background-color: white;
+  box-shadow: none;
+}
+
+.react-autosuggest__input:hover {
 }
 
 .react-autosuggest__input--open {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  border-bottom-color: var(--aito-primary);
 }
 
 .react-autosuggest__suggestions-container {
@@ -51,16 +124,20 @@ body {
 .react-autosuggest__suggestions-container--open {
   display: block;
   position: absolute;
-  top: 51px;
+  top: 100%;
   width: 100%;
-  border: 1px solid #aaa;
-  background-color: #fff;
-  font-family: Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 16px;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  z-index: 2;
+  border: 1px solid var(--aito-primary);
+  border-top: none;
+  background-color: var(--aito-background);
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 0.875rem;
+  border-bottom-left-radius: var(--aito-radius);
+  border-bottom-right-radius: var(--aito-radius);
+  box-shadow: var(--aito-shadow);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .react-autosuggest__suggestions-list {
@@ -71,9 +148,56 @@ body {
 
 .react-autosuggest__suggestion {
   cursor: pointer;
-  padding: 10px 20px;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-lg);
+  color: var(--aito-text-primary);
+  border-bottom: 1px solid var(--aito-border);
+  transition: all 0.2s ease;
 }
 
+.react-autosuggest__suggestion:last-child {
+  border-bottom: none;
+}
+
+.react-autosuggest__suggestion:hover,
 .react-autosuggest__suggestion--highlighted {
-  background-color: #ddd;
+  background-color: var(--aito-surface);
+  color: var(--aito-primary);
+}
+
+/* Search results section */
+.ProductSearch__results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--aito-spacing-md);
+  padding-bottom: var(--aito-spacing-sm);
+  border-bottom: 1px solid var(--aito-border);
+}
+
+.ProductSearch__results-count {
+  color: var(--aito-text-secondary);
+  font-size: 0.875rem;
+}
+
+.ProductSearch__sort-options {
+  display: flex;
+  gap: var(--aito-spacing-sm);
+}
+
+.ProductSearch__sort-button {
+  padding: var(--aito-spacing-xs) var(--aito-spacing-sm);
+  background-color: transparent;
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius-small);
+  color: var(--aito-text-secondary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ProductSearch__sort-button:hover,
+.ProductSearch__sort-button--active {
+  background-color: var(--aito-primary);
+  color: white;
+  border-color: var(--aito-primary);
 }

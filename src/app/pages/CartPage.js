@@ -69,8 +69,10 @@ class CartPage extends Component {
 
         <Cart actions={this.props.actions} cart={cart} />
 
-        <Button color="primary" onClick={this.autoFill}>Autofill</Button>
-        <Button style={{float:'right'}} onClick={this.toggleModal} disabled={cart.length === 0} color="primary">Purchase</Button>
+        <div className="CartPage__actions">
+          <Button color="primary" onClick={this.autoFill}>Autofill</Button>
+          <Button onClick={this.toggleModal} disabled={cart.length === 0} color="primary">Purchase</Button>
+        </div>
 
         <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>This is a demo</ModalHeader>

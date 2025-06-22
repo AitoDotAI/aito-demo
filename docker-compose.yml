@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  aito-grocery-demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_AITO_URL: ${REACT_APP_AITO_URL:-https://aito-grocery-store.aito.app}
+        REACT_APP_AITO_API_KEY: ${REACT_APP_AITO_API_KEY:-demo-key}
+        REACT_APP_ENVIRONMENT: ${REACT_APP_ENVIRONMENT:-production}
+        REACT_APP_ANALYTICS_ID: ${REACT_APP_ANALYTICS_ID:-}
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.aito-grocery.rule=Host(`demo.aito.ai`)"
+      - "traefik.http.routers.aito-grocery.tls=true"
+      - "traefik.http.routers.aito-grocery.tls.certresolver=letsencrypt"
+    networks:
+      - web
+
+  # Optional: Traefik reverse proxy for production
+  traefik:
+    image: traefik:v2.10
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@aito.ai}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    networks:
+      - web
+    profiles:
+      - production
+
+networks:
+  web:
+    external: true
+
+volumes:
+  letsencrypt:

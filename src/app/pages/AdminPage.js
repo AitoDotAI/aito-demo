@@ -69,45 +69,90 @@ class AdminPage extends Component {
   }
 
   render() {
+    const hasTagSuggestions = this.state.tagSuggestions.length > 0
+    const isFormValid = this.state.productNameInputValue.trim() && this.state.tagsInputValue.trim()
+
     return (
       <div className="AdminPage">
-        <h3>Add new product</h3>
+        <div className="AdminPage__header">
+          <h1 className="AdminPage__title">Product Management</h1>
+          <p className="AdminPage__subtitle">
+            Add new products with AI-powered tag suggestions. Enter a product name to get intelligent tagging recommendations based on similar products.
+          </p>
+        </div>
 
-        <Form>
-          <FormGroup>
-            <Label for="productName">Product name</Label>
-            <Input
+        <div className="AdminPage__form-section">
+          <h3 className="AdminPage__form-title">Add New Product</h3>
+          
+          <div className="form-field">
+            <label className="form-field__label" htmlFor="productName">Product Name</label>
+            <input
+              className="form-field__input"
               value={this.state.productNameInputValue}
               onChange={this.onProductNameChange}
               type="text"
               name="productName"
               id="productName"
-              placeholder="Product name"
+              placeholder="Enter product name (e.g., Organic Milk, Fresh Bananas)"
             />
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label for="tags">Tags</Label>
+          <div className="form-field">
+            <label className="form-field__label" htmlFor="tags">Product Tags</label>
             <div className="TagsInput">
-              <ul>
-                {_.map(this.state.tagSuggestions, (suggestion, index) => {
-                  return <li onClick={() => this.onTagClick(index)} key={index}>{suggestion}</li>
-                })}
-              </ul>
+              {this.state.productNameInputValue && (
+                <div className="TagsInput__help-text">
+                  {hasTagSuggestions 
+                    ? "Click on suggested tags below to add them:" 
+                    : "AI tag suggestions will appear as you type..."}
+                </div>
+              )}
+              
+              <div className={`TagsInput__suggestions ${!hasTagSuggestions ? 'TagsInput__suggestions--empty' : ''}`}>
+                {hasTagSuggestions ? (
+                  _.map(this.state.tagSuggestions, (suggestion, index) => (
+                    <span 
+                      className="TagsInput__tag" 
+                      onClick={() => this.onTagClick(index)} 
+                      key={index}
+                    >
+                      {suggestion}
+                    </span>
+                  ))
+                ) : this.state.productNameInputValue ? (
+                  "No suggestions yet..."
+                ) : (
+                  "Type a product name to see AI tag suggestions"
+                )}
+              </div>
 
-              <Input
+              <input
+                className="form-field__input"
                 value={this.state.tagsInputValue}
                 onChange={this.onTagsInputChange}
                 type="text"
                 name="tags"
                 id="tags"
-                placeholder="Input tags or add suggestions above"
+                placeholder="Enter custom tags or click suggestions above"
               />
             </div>
-          </FormGroup>
+          </div>
 
-          <Button onClick={this.toggleModal} color="primary">Add product</Button>
-        </Form>
+          <button 
+            className="AdminPage__button" 
+            onClick={this.toggleModal}
+            disabled={!isFormValid}
+          >
+            Add Product
+          </button>
+
+          {!isFormValid && (
+            <div className="AdminPage__demo-info">
+              <div className="AdminPage__demo-info-title">Required Fields</div>
+              Please enter both a product name and tags to add the product.
+            </div>
+          )}
+        </div>
 
         <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>This is a demo</ModalHeader>
