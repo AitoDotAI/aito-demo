@@ -30,11 +30,21 @@ const isProduction = environment === 'production'
 const analyticsId = process.env.REACT_APP_ANALYTICS_ID
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN
 
+// OpenAI/Azure configuration
+const openaiConfig = {
+  apiKey: process.env.REACT_APP_OPENAI_MODEL_API_KEY,
+  baseURL: process.env.REACT_APP_OPENAI_MODEL_URL,
+  apiVersion: process.env.REACT_APP_OPENAI_MODEL_API_VERSION,
+  modelName: process.env.REACT_APP_OPENAI_MODEL_NAME,
+  deployment: process.env.REACT_APP_OPENAI_MODEL_DEPLOYMENT
+}
+
 const config = {
   aito: {
     url: aitoUrl,
     apiKey: aitoApiKey,
   },
+  openai: openaiConfig,
   environment,
   isDevelopment,
   isProduction,

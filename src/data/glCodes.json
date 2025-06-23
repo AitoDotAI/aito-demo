@@ -1,1 +1,52 @@
-[  {    "GLCode": "E001",    "Department": "IT & Infrastructure",    "Name": "ECommerce Consultation"  },  {    "GLCode": "E002",    "Department": "IT & Infrastructure",    "Name": "Cloud Services (AWS/GCP)"  },  {    "GLCode": "E003",    "Department": "IT & Infrastructure",    "Name": "IT Services"  },  {    "GLCode": "R001",    "Department": "Retail",    "Name": "Grocery Store Products"  },  {    "GLCode": "R002",    "Department": "Retail",    "Name": "Store Maintenance Services"  },  {    "GLCode": "F001",    "Department": "Finance",    "Name": "Accounting Services"  },  {    "GLCode": "F002",    "Department": "Finance",    "Name": "Office Supplies"  },  {    "GLCode": "HR001",    "Department": "HR",    "Name": "HR Services"  },  {    "GLCode": "R003",    "Department": "Retail",    "Name": "Inventory Restocking"  },  {    "GLCode": "E004",    "Department": "IT & Infrastructure",    "Name": "Software Subscriptions"  }]
+[
+    {
+        "GLCode": "E001",
+        "Department": "IT & Infrastructure",
+        "Name": "ECommerce Consultation"
+    },
+    {
+        "GLCode": "E002",
+        "Department": "IT & Infrastructure",
+        "Name": "Cloud Services (AWS/GCP)"
+    },
+    {
+        "GLCode": "E003",
+        "Department": "IT & Infrastructure",
+        "Name": "IT Services"
+    },
+    {
+        "GLCode": "R001",
+        "Department": "Retail",
+        "Name": "Grocery Store Products"
+    },
+    {
+        "GLCode": "R002",
+        "Department": "Retail",
+        "Name": "Store Maintenance Services"
+    },
+    {
+        "GLCode": "F001",
+        "Department": "Finance",
+        "Name": "Accounting Services"
+    },
+    {
+        "GLCode": "F002",
+        "Department": "Finance",
+        "Name": "Office Supplies"
+    },
+    {
+        "GLCode": "HR001",
+        "Department": "HR",
+        "Name": "HR Services"
+    },
+    {
+        "GLCode": "R003",
+        "Department": "Retail",
+        "Name": "Inventory Restocking"
+    },
+    {
+        "GLCode": "E004",
+        "Department": "IT & Infrastructure",
+        "Name": "Software Subscriptions"
+    }
+]

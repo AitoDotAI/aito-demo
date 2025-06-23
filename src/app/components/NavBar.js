@@ -61,12 +61,14 @@ class NavBar extends Component {
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem onClick={() => this.onMenuItemClick('/')}>Grocery Store</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/customer-chat')}>Shopping Assistant</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/help')}>Help</DropdownItem>
               <DropdownItem divider />
               <DropdownItem onClick={() => this.onMenuItemClick('/admin')}>Admin View</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/admin-chat')}>Admin Assistant</DropdownItem>
               <DropdownItem onClick={() => this.onMenuItemClick('/product')}>Products</DropdownItem>
               <DropdownItem onClick={() => this.onMenuItemClick('/analytics')}>Analytics</DropdownItem>
               <DropdownItem onClick={() => this.onMenuItemClick('/invoicing')}>Invoicing</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/help')}>Help</DropdownItem>
             </DropdownMenu>
           </Dropdown>
           

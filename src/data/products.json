@@ -1,337 +1,380 @@
-[{
-  "category": "100",
-  "googleClicks": 12,
-  "googleImpressions": 100,
-  "id": "2000818700008",
-  "name": "Pirkka banana",
-  "price": 0.166,
-  "tags": "fresh fruit pirkka"
-}, {
-  "category": "100",
-  "googleClicks": 11,
-  "googleImpressions": 100,
-  "id": "2000604700007",
-  "name": "Cucumber Finland",
-  "price": 0.9765,
-  "tags": "fresh vegetable"
-}, {
-  "category": "100",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6410405060457",
-  "name": "Pirkka bio cherry tomatoes 250g international 1lk",
-  "price": 1.29,
-  "tags": "fresh vegetable pirkka tomato"
-}, {
-  "category": "100",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "2000503600002",
-  "name": "Chiquita banana",
-  "price": 0.28054,
-  "tags": "fresh fruit"
-}, {
-  "category": "100",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6410405093677",
-  "name": "Pirkka iceberg salad Finland 100g 1st class",
-  "price": 1.29,
-  "tags": "fresh vegetable pirkka salad"
-}, {
-  "category": "101",
-  "googleClicks": 12,
-  "googleImpressions": 100,
-  "id": "6437002001454",
-  "name": "VAASAN Ruispalat 660g 12 pcs fullcorn rye bread",
-  "price": 1.69,
-  "tags": "gluten bread"
-}, {
-  "category": "101",
-  "googleClicks": 11,
-  "googleImpressions": 100,
-  "id": "6411402202208",
-  "name": "Fazer Puikula fullcorn rye bread 9 pcs/500g",
-  "price": 1.85,
-  "tags": "gluten bread"
-}, {
-  "category": "101",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6408180733260",
-  "name": "Vaasan Ruispalat thin sliced rye bread 6pcs/195g",
-  "price": 1.35,
-  "tags": "gluten bread"
-}, {
-  "category": "101",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6413467282508",
-  "name": "Fazer Puikula fullcorn rye bread 330g",
-  "price": 1.29,
-  "tags": "gluten bread"
-}, {
-  "category": "101",
-  "googleClicks": 8,
-  "googleImpressions": 100,
-  "id": "6413466080204",
-  "name": "Oululainen reissumies dark rye bread 4pcs/280g",
-  "price": 0.99,
-  "tags": "gluten bread"
-}, {
-  "category": "102",
-  "googleClicks": 12,
-  "googleImpressions": 100,
-  "id": "6409100050306",
-  "name": "HK Sininen Lenkki ® sausage 580 g",
-  "price": 2.49,
-  "tags": "meat food protein"
-}, {
-  "category": "102",
-  "googleClicks": 11,
-  "googleImpressions": 100,
-  "id": "6409100046286",
-  "name": "HK Amerikan bacon 170g",
-  "price": 1.95,
-  "tags": "meat food protein"
-}, {
-  "category": "102",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6410405205483",
-  "name": "Pirkka Finnish beef-pork minced meat 20% 400g",
-  "price": 2.79,
-  "tags": "meat food protein pirkka"
-}, {
-  "category": "102",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6407870070333",
-  "name": "Atria lauantaimakkara bread sausage 225g",
-  "price": 0.89,
-  "tags": "meat sausage with-bread"
-}, {
-  "category": "102",
-  "googleClicks": 8,
-  "googleImpressions": 100,
-  "id": "6407870071224",
-  "name": "Atria Gotler ham sausage 300g",
-  "price": 1.75,
-  "tags": "meat sausage with-bread"
-}, {
-  "category": "103",
-  "googleClicks": 12,
-  "googleImpressions": 100,
-  "id": "6406300009608",
-  "name": "Kivikylän Palvarin meatball 350g",
-  "price": 2.89,
-  "tags": "meat food protein"
-}, {
-  "category": "103",
-  "googleClicks": 11,
-  "googleImpressions": 100,
-  "id": "6412000030026",
-  "name": "Saarioinen Maksalaatikko liver casserole 400g",
-  "price": 1.99,
-  "tags": "meat food"
-}, {
-  "category": "103",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6410405098283",
-  "name": "Pirkka burgeri 100 g",
-  "price": 0.55,
-  "tags": "meat food pirkka"
-}, {
-  "category": "103",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6410400032855",
-  "name": "Pirkka spinach crepe 400g",
-  "price": 1.69,
-  "tags": "food protein pirkka"
-}, {
-  "category": "103",
-  "googleClicks": 8,
-  "googleImpressions": 100,
-  "id": "6409100024628",
-  "name": "Breadded chicke nuggets 200g",
-  "price": 1.49,
-  "tags": "meat food protein"
-}, {
-  "category": "104",
-  "googleClicks": 12,
-  "googleImpressions": 100,
-  "id": "6410405082657",
-  "name": "Pirkka Finnish semi-skimmed milk 1l",
-  "price": 0.81,
-  "tags": "lactose drink pirkka"
-}, {
-  "category": "104",
-  "googleClicks": 11,
-  "googleImpressions": 100,
-  "id": "6410405082626",
-  "name": "Pirkka Finnish nonfat milk 1l",
-  "price": 0.75,
-  "tags": "lactose drink pirkka"
-}, {
-  "category": "104",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6410405216120",
-  "name": "Pirkka lactose-free semi-skimmed milk drink 1l",
-  "price": 1.25,
-  "tags": "lactose-free drink pirkka"
-}, {
-  "category": "104",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6408430000128",
-  "name": "Valio semi-skimmed milk 1l",
-  "price": 0.99,
-  "tags": "lactose drink"
-}, {
-  "category": "104",
-  "googleClicks": 8,
-  "googleImpressions": 100,
-  "id": "6408430000258",
-  "name": "Valio eila™ Lactose-free semi-skimmed milk drink 1l",
-  "price": 1.95,
-  "tags": "lactose-free drink"
-}, {
-  "category": "106",
-  "googleClicks": 12,
-  "googleImpressions": 100,
-  "id": "6410405040817",
-  "name": "Pirkka sugar 1 kg",
-  "price": 0.69,
-  "tags": "sugar pirkka"
-}, {
-  "category": "107",
-  "googleClicks": 11,
-  "googleImpressions": 100,
-  "id": "6410400033524",
-  "name": "Pirkka frozen potato-onion mix 500g",
-  "price": 0.79,
-  "tags": "food carbohydrate pirkka"
-}, {
-  "category": "108",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6411300000494",
-  "name": "Juhla Mokka coffee 500g sj",
-  "price": 3.95,
-  "tags": "coffee"
-}, {
-  "category": "108",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6420101441542",
-  "name": "Kulta Katriina filter coffee 500g",
-  "price": 3.45,
-  "tags": "coffee"
-}, {
-  "category": "108",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6411300164653",
-  "name": "Juhla Mokka Dark Roast coffee 500g hj",
-  "price": 3.95,
-  "tags": "coffee"
-}, {
-  "category": "108",
-  "googleClicks": 8,
-  "googleImpressions": 100,
-  "id": "6415600501811",
-  "name": "Coca-Cola 1,5l soft drink",
-  "price": 2.49,
-  "tags": "drink soda"
-}, {
-  "category": "108",
-  "googleClicks": 7,
-  "googleImpressions": 100,
-  "id": "6410405181190",
-  "name": "Pirkka Costa Rica filter coffee 500g UTZ",
-  "price": 2.89,
-  "tags": "coffee pirkka"
-}, {
-  "category": "109",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6411401015090",
-  "name": "Fazer Sininen milk chocolate slab 200g",
-  "price": 2.19,
-  "tags": "candy lactose"
-}, {
-  "category": "109",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6420256014134",
-  "name": "Tupla Maxi chocolate bar 50g UTZ",
-  "price": 0.62,
-  "tags": "candy lactose"
-}, {
-  "category": "109",
-  "googleClicks": 8,
-  "googleImpressions": 100,
-  "id": "6416453015234",
-  "name": "Karl Fazer 200g Tyrkisk Peber chocolate",
-  "price": 2.45,
-  "tags": "candy"
-}, {
-  "category": "109",
-  "googleClicks": 7,
-  "googleImpressions": 100,
-  "id": "6411401019029",
-  "name": "Geisha chocolate bar 37g",
-  "price": 0.64,
-  "tags": "candy lactose"
-}, {
-  "category": "111",
-  "googleClicks": 11,
-  "googleImpressions": 100,
-  "id": "6413200330206",
-  "name": "Lotus Soft Embo 8 rll toilet paper",
-  "price": 3.35,
-  "tags": "toilet-paper"
-}, {
-  "category": "111",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6414880021620",
-  "name": "Ilta Sanomat weekend news",
-  "price": 2.3,
-  "tags": "news"
-}, {
-  "category": "111",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6410405207722",
-  "name": "Pirkka paper towel 4 rl",
-  "price": 1.95,
-  "tags": "paper-towels pirkka"
-}, {
-  "category": "115",
-  "googleClicks": 11,
-  "googleImpressions": 100,
-  "id": "6417700050725",
-  "name": "Myllyn Paras Macaroni 400g",
-  "price": 0.19,
-  "tags": "gluten food carbohydrate"
-}, {
-  "category": "115",
-  "googleClicks": 10,
-  "googleImpressions": 100,
-  "id": "6410402010318",
-  "name": "Pirkka tuna fish pieces in oil 200g/150g",
-  "price": 1.69,
-  "tags": "meat food protein pirkka"
-}, {
-  "category": "115",
-  "googleClicks": 9,
-  "googleImpressions": 100,
-  "id": "6416597113919",
-  "name": "Elovena oatmeal 1 kg",
-  "price": 1.39,
-  "tags": "gluten food porridge"
-}]
+[
+    {
+        "category": "100",
+        "googleClicks": 12,
+        "googleImpressions": 100,
+        "id": "2000818700008",
+        "name": "Pirkka banana",
+        "price": 0.166,
+        "tags": "fresh fruit pirkka"
+    },
+    {
+        "category": "100",
+        "googleClicks": 11,
+        "googleImpressions": 100,
+        "id": "2000604700007",
+        "name": "Cucumber Finland",
+        "price": 0.9765,
+        "tags": "fresh vegetable"
+    },
+    {
+        "category": "100",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6410405060457",
+        "name": "Pirkka bio cherry tomatoes 250g international 1lk",
+        "price": 1.29,
+        "tags": "fresh vegetable pirkka tomato"
+    },
+    {
+        "category": "100",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "2000503600002",
+        "name": "Chiquita banana",
+        "price": 0.28054,
+        "tags": "fresh fruit"
+    },
+    {
+        "category": "100",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6410405093677",
+        "name": "Pirkka iceberg salad Finland 100g 1st class",
+        "price": 1.29,
+        "tags": "fresh vegetable pirkka salad"
+    },
+    {
+        "category": "101",
+        "googleClicks": 12,
+        "googleImpressions": 100,
+        "id": "6437002001454",
+        "name": "VAASAN Ruispalat 660g 12 pcs fullcorn rye bread",
+        "price": 1.69,
+        "tags": "gluten bread"
+    },
+    {
+        "category": "101",
+        "googleClicks": 11,
+        "googleImpressions": 100,
+        "id": "6411402202208",
+        "name": "Fazer Puikula fullcorn rye bread 9 pcs/500g",
+        "price": 1.85,
+        "tags": "gluten bread"
+    },
+    {
+        "category": "101",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6408180733260",
+        "name": "Vaasan Ruispalat thin sliced rye bread 6pcs/195g",
+        "price": 1.35,
+        "tags": "gluten bread"
+    },
+    {
+        "category": "101",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6413467282508",
+        "name": "Fazer Puikula fullcorn rye bread 330g",
+        "price": 1.29,
+        "tags": "gluten bread"
+    },
+    {
+        "category": "101",
+        "googleClicks": 8,
+        "googleImpressions": 100,
+        "id": "6413466080204",
+        "name": "Oululainen reissumies dark rye bread 4pcs/280g",
+        "price": 0.99,
+        "tags": "gluten bread"
+    },
+    {
+        "category": "102",
+        "googleClicks": 12,
+        "googleImpressions": 100,
+        "id": "6409100050306",
+        "name": "HK Sininen Lenkki \u00ae sausage 580 g",
+        "price": 2.49,
+        "tags": "meat food protein"
+    },
+    {
+        "category": "102",
+        "googleClicks": 11,
+        "googleImpressions": 100,
+        "id": "6409100046286",
+        "name": "HK Amerikan bacon 170g",
+        "price": 1.95,
+        "tags": "meat food protein"
+    },
+    {
+        "category": "102",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6410405205483",
+        "name": "Pirkka Finnish beef-pork minced meat 20% 400g",
+        "price": 2.79,
+        "tags": "meat food protein pirkka"
+    },
+    {
+        "category": "102",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6407870070333",
+        "name": "Atria lauantaimakkara bread sausage 225g",
+        "price": 0.89,
+        "tags": "meat sausage with-bread"
+    },
+    {
+        "category": "102",
+        "googleClicks": 8,
+        "googleImpressions": 100,
+        "id": "6407870071224",
+        "name": "Atria Gotler ham sausage 300g",
+        "price": 1.75,
+        "tags": "meat sausage with-bread"
+    },
+    {
+        "category": "103",
+        "googleClicks": 12,
+        "googleImpressions": 100,
+        "id": "6406300009608",
+        "name": "Kivikyl\u00e4n Palvarin meatball 350g",
+        "price": 2.89,
+        "tags": "meat food protein"
+    },
+    {
+        "category": "103",
+        "googleClicks": 11,
+        "googleImpressions": 100,
+        "id": "6412000030026",
+        "name": "Saarioinen Maksalaatikko liver casserole 400g",
+        "price": 1.99,
+        "tags": "meat food"
+    },
+    {
+        "category": "103",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6410405098283",
+        "name": "Pirkka burgeri 100 g",
+        "price": 0.55,
+        "tags": "meat food pirkka"
+    },
+    {
+        "category": "103",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6410400032855",
+        "name": "Pirkka spinach crepe 400g",
+        "price": 1.69,
+        "tags": "food protein pirkka"
+    },
+    {
+        "category": "103",
+        "googleClicks": 8,
+        "googleImpressions": 100,
+        "id": "6409100024628",
+        "name": "Breadded chicke nuggets 200g",
+        "price": 1.49,
+        "tags": "meat food protein"
+    },
+    {
+        "category": "104",
+        "googleClicks": 12,
+        "googleImpressions": 100,
+        "id": "6410405082657",
+        "name": "Pirkka Finnish semi-skimmed milk 1l",
+        "price": 0.81,
+        "tags": "lactose drink pirkka"
+    },
+    {
+        "category": "104",
+        "googleClicks": 11,
+        "googleImpressions": 100,
+        "id": "6410405082626",
+        "name": "Pirkka Finnish nonfat milk 1l",
+        "price": 0.75,
+        "tags": "lactose drink pirkka"
+    },
+    {
+        "category": "104",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6410405216120",
+        "name": "Pirkka lactose-free semi-skimmed milk drink 1l",
+        "price": 1.25,
+        "tags": "lactose-free drink pirkka"
+    },
+    {
+        "category": "104",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6408430000128",
+        "name": "Valio semi-skimmed milk 1l",
+        "price": 0.99,
+        "tags": "lactose drink"
+    },
+    {
+        "category": "104",
+        "googleClicks": 8,
+        "googleImpressions": 100,
+        "id": "6408430000258",
+        "name": "Valio eila\u2122 Lactose-free semi-skimmed milk drink 1l",
+        "price": 1.95,
+        "tags": "lactose-free drink"
+    },
+    {
+        "category": "106",
+        "googleClicks": 12,
+        "googleImpressions": 100,
+        "id": "6410405040817",
+        "name": "Pirkka sugar 1 kg",
+        "price": 0.69,
+        "tags": "sugar pirkka"
+    },
+    {
+        "category": "107",
+        "googleClicks": 11,
+        "googleImpressions": 100,
+        "id": "6410400033524",
+        "name": "Pirkka frozen potato-onion mix 500g",
+        "price": 0.79,
+        "tags": "food carbohydrate pirkka"
+    },
+    {
+        "category": "108",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6411300000494",
+        "name": "Juhla Mokka coffee 500g sj",
+        "price": 3.95,
+        "tags": "coffee"
+    },
+    {
+        "category": "108",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6420101441542",
+        "name": "Kulta Katriina filter coffee 500g",
+        "price": 3.45,
+        "tags": "coffee"
+    },
+    {
+        "category": "108",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6411300164653",
+        "name": "Juhla Mokka Dark Roast coffee 500g hj",
+        "price": 3.95,
+        "tags": "coffee"
+    },
+    {
+        "category": "108",
+        "googleClicks": 8,
+        "googleImpressions": 100,
+        "id": "6415600501811",
+        "name": "Coca-Cola 1,5l soft drink",
+        "price": 2.49,
+        "tags": "drink soda"
+    },
+    {
+        "category": "108",
+        "googleClicks": 7,
+        "googleImpressions": 100,
+        "id": "6410405181190",
+        "name": "Pirkka Costa Rica filter coffee 500g UTZ",
+        "price": 2.89,
+        "tags": "coffee pirkka"
+    },
+    {
+        "category": "109",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6411401015090",
+        "name": "Fazer Sininen milk chocolate slab 200g",
+        "price": 2.19,
+        "tags": "candy lactose"
+    },
+    {
+        "category": "109",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6420256014134",
+        "name": "Tupla Maxi chocolate bar 50g UTZ",
+        "price": 0.62,
+        "tags": "candy lactose"
+    },
+    {
+        "category": "109",
+        "googleClicks": 8,
+        "googleImpressions": 100,
+        "id": "6416453015234",
+        "name": "Karl Fazer 200g Tyrkisk Peber chocolate",
+        "price": 2.45,
+        "tags": "candy"
+    },
+    {
+        "category": "109",
+        "googleClicks": 7,
+        "googleImpressions": 100,
+        "id": "6411401019029",
+        "name": "Geisha chocolate bar 37g",
+        "price": 0.64,
+        "tags": "candy lactose"
+    },
+    {
+        "category": "111",
+        "googleClicks": 11,
+        "googleImpressions": 100,
+        "id": "6413200330206",
+        "name": "Lotus Soft Embo 8 rll toilet paper",
+        "price": 3.35,
+        "tags": "toilet-paper"
+    },
+    {
+        "category": "111",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6414880021620",
+        "name": "Ilta Sanomat weekend news",
+        "price": 2.3,
+        "tags": "news"
+    },
+    {
+        "category": "111",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6410405207722",
+        "name": "Pirkka paper towel 4 rl",
+        "price": 1.95,
+        "tags": "paper-towels pirkka"
+    },
+    {
+        "category": "115",
+        "googleClicks": 11,
+        "googleImpressions": 100,
+        "id": "6417700050725",
+        "name": "Myllyn Paras Macaroni 400g",
+        "price": 0.19,
+        "tags": "gluten food carbohydrate"
+    },
+    {
+        "category": "115",
+        "googleClicks": 10,
+        "googleImpressions": 100,
+        "id": "6410402010318",
+        "name": "Pirkka tuna fish pieces in oil 200g/150g",
+        "price": 1.69,
+        "tags": "meat food protein pirkka"
+    },
+    {
+        "category": "115",
+        "googleClicks": 9,
+        "googleImpressions": 100,
+        "id": "6416597113919",
+        "name": "Elovena oatmeal 1 kg",
+        "price": 1.39,
+        "tags": "gluten food porridge"
+    }
+]
