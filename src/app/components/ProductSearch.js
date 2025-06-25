@@ -110,7 +110,7 @@ class ProductSearch extends Component {
       <div className="ProductSearch">
         <div className="ProductSearch__search-container">
           <div className="ProductSearch__search-inner">
-            <span className="ProductSearch__search-label">Products</span>
+            <span className="ProductSearch__search-label">Search:</span>
             <div className="ProductSearch__search-input-wrapper">
               <FaSearch className="ProductSearch__search-icon" />
               <Autosuggest

@@ -1,1 +1,62 @@
-[  {    "Name": "John Doe",    "Role": "CEO",    "Department": "Executive",    "Superior": null  },  {    "Name": "Jane Smith",    "Role": "CFO",    "Department": "Finance",    "Superior": "John Doe"  },  {    "Name": "Alice Johnson",    "Role": "COO",    "Department": "Operations",    "Superior": "John Doe"  },  {    "Name": "Bob Brown",    "Role": "CTO",    "Department": "IT & Infrastructure",    "Superior": "John Doe"  },  {    "Name": "Carol White",    "Role": "IT Manager",    "Department": "IT & Infrastructure",    "Superior": "Bob Brown"  },  {    "Name": "David Green",    "Role": "Store Manager",    "Department": "Retail",    "Superior": "Alice Johnson"  },  {    "Name": "Emily Davis",    "Role": "Finance Manager",    "Department": "Finance",    "Superior": "Jane Smith"  },  {    "Name": "Frank Wilson",    "Role": "Operations Manager",    "Department": "Operations",    "Superior": "Alice Johnson"  },  {    "Name": "Bob Smith",    "Role": "Support Manager",    "Department": "Support",    "Superior": "Frank Wilson"  },  {    "Name": "Evelyn Carter",    "Role": "IT Manager",    "Department": "IT & Infrastructure",    "Superior": "Bob Brown"  }]
+[
+    {
+        "Name": "John Doe",
+        "Role": "CEO",
+        "Department": "Executive",
+        "Superior": null
+    },
+    {
+        "Name": "Jane Smith",
+        "Role": "CFO",
+        "Department": "Finance",
+        "Superior": "John Doe"
+    },
+    {
+        "Name": "Alice Johnson",
+        "Role": "COO",
+        "Department": "Operations",
+        "Superior": "John Doe"
+    },
+    {
+        "Name": "Bob Brown",
+        "Role": "CTO",
+        "Department": "IT & Infrastructure",
+        "Superior": "John Doe"
+    },
+    {
+        "Name": "Carol White",
+        "Role": "IT Manager",
+        "Department": "IT & Infrastructure",
+        "Superior": "Bob Brown"
+    },
+    {
+        "Name": "David Green",
+        "Role": "Store Manager",
+        "Department": "Retail",
+        "Superior": "Alice Johnson"
+    },
+    {
+        "Name": "Emily Davis",
+        "Role": "Finance Manager",
+        "Department": "Finance",
+        "Superior": "Jane Smith"
+    },
+    {
+        "Name": "Frank Wilson",
+        "Role": "Operations Manager",
+        "Department": "Operations",
+        "Superior": "Alice Johnson"
+    },
+    {
+        "Name": "Bob Smith",
+        "Role": "Support Manager",
+        "Department": "Support",
+        "Superior": "Frank Wilson"
+    },
+    {
+        "Name": "Evelyn Carter",
+        "Role": "IT Manager",
+        "Department": "IT & Infrastructure",
+        "Superior": "Bob Brown"
+    }
+]

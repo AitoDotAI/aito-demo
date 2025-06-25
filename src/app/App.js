@@ -16,6 +16,8 @@ import HelpPage from './pages/HelpPage'
 import CartPage from './pages/CartPage'
 import ProductPage from './pages/ProductPage'
 import DataInspectPage from './pages/DataInspectPage'
+import CustomerChatPage from './pages/CustomerChatPage'
+import AdminChatPage from './pages/AdminChatPage'
 
 import './App.css'
 
@@ -126,6 +128,10 @@ class App extends Component {
         return CartPage
       case '/admin':
         return AdminPage
+      case '/admin-chat':
+        return AdminChatPage
+      case '/customer-chat':
+        return CustomerChatPage
       case '/help':
         return HelpPage
       case '/data':

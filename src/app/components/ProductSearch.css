@@ -4,7 +4,7 @@
 }
 
 .ProductSearch__search-container {
-  background-color: var(--aito-red);
+  background-color: var(--aito-accent);
   padding: 0;
   margin: 0 calc(-100vw / 2 + 50%);
   margin-bottom: var(--aito-spacing-lg);
