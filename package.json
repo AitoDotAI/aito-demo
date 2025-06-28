@@ -41,7 +41,9 @@
     "screenshots:marketing": "node scripts/screenshot-generator.js landingPage highResMarketing mobileViews",
     "screenshots:tutorials": "node scripts/screenshot-generator.js searchFeatures recommendations invoiceProcessing chatInterface",
     "screenshots:docs": "node scripts/screenshot-generator.js adminDashboard",
-    "test:screenshots": "npx playwright test tests/screenshots.spec.js"
+    "test:screenshots": "npx playwright test tests/screenshots.spec.js",
+    "screenshots:all": "node scripts/screenshot-all-features.js",
+    "screenshots:placeholders": "node scripts/create-placeholder-screenshots.js"
   },
   "eslintConfig": {
     "extends": "react-app"
