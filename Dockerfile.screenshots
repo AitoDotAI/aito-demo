@@ -1,0 +1,46 @@
+# Dockerfile for screenshot generation with Playwright on Ubuntu
+FROM ubuntu:22.04
+
+# Avoid interactive prompts during build
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
+# Create app directory
+WORKDIR /app
+
+# Copy package files first for better caching
+COPY package*.json ./
+
+# Install npm dependencies
+RUN npm ci --only=production --ignore-scripts
+
+# Install Playwright with system dependencies
+RUN npx playwright install --with-deps
+
+# Copy application files
+COPY . .
+
+# Install all npm dependencies (including dev dependencies for screenshot scripts)
+RUN npm ci
+
+# Create screenshots directory with proper permissions
+RUN mkdir -p docs/screenshots/features && chmod 777 docs/screenshots
+
+# Expose port for development server
+EXPOSE 3000
+
+# Default command - can be overridden
+CMD ["npm", "run", "screenshots:all"]
