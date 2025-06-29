@@ -74,7 +74,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 
 4. **💡 Autocomplete** - Intelligent search suggestions with user context
    
-   ![Autocomplete](docs/screenshots/features/autocomplete-suggestions.png)
+   ![Autocomplete](docs/screenshots/features/autocomplete-full.png)
    
    *Context-aware search completion*
 

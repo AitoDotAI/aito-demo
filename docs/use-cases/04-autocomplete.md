@@ -1,6 +1,6 @@
 # Intelligent Search Autocomplete
 
-![Autocomplete in Action](../screenshots/features/autocomplete-suggestions.png)
+![Autocomplete in Action](../screenshots/features/autocomplete-full.png)
 
 *Intelligent autocomplete providing contextual search suggestions as you type*
 
