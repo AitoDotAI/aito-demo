@@ -15,6 +15,8 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap'
+import HelpButton from '../components/HelpButton'
+import { HELP_CONTENT } from '../constants/helpContent'
 
 import './AnalyticsPage.css'
 
@@ -132,7 +134,15 @@ class AnalyticsPage extends Component {
     return (
       <div className="AnalyticsPage">
         <div className="AnalyticsPage__header">
-          <h1 className="AnalyticsPage__title">Data Analytics</h1>
+          <h1 className="AnalyticsPage__title">
+            Data Analytics
+            <HelpButton 
+              feature="Data Analytics"
+              {...HELP_CONTENT['Data Analytics']}
+              size="md"
+              className="ml-3"
+            />
+          </h1>
           <p className="AnalyticsPage__subtitle">
             Explore statistical relationships in your data using AI-powered correlation analysis. Select a field and value to discover related patterns and preferences.
           </p>

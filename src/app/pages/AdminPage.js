@@ -11,6 +11,8 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap'
+import HelpButton from '../components/HelpButton'
+import { HELP_CONTENT } from '../constants/helpContent'
 
 import './AdminPage.css'
 
@@ -98,7 +100,15 @@ class AdminPage extends Component {
           </div>
 
           <div className="form-field">
-            <label className="form-field__label" htmlFor="tags">Product Tags</label>
+            <label className="form-field__label" htmlFor="tags">
+              Product Tags
+              <HelpButton 
+                feature="Tag Prediction"
+                {...HELP_CONTENT['Tag Prediction']}
+                size="sm"
+                className="ml-2"
+              />
+            </label>
             <div className="TagsInput">
               {this.state.productNameInputValue && (
                 <div className="TagsInput__help-text">
