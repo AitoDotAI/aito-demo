@@ -82,7 +82,7 @@ Navigate to the main page and try searching:
    - "Add milk to my cart"
 3. Watch the AI assistant search products and manage your cart through conversation
 
-![Shopping Assistant](../screenshots/features/shopping-assistant-response.svg)
+![Shopping Assistant](../screenshots/features/shopping-assistant.png)
 
 ## Step 3: Understand the Technology
 
@@ -126,7 +126,7 @@ const searchResults = await axios.post('https://aito-instance.aito.app/api/v1/_q
    - "Analyze product performance by category"
 3. Get instant insights through natural conversation
 
-![Admin Assistant](../screenshots/features/admin-assistant-interface.svg)
+![Admin Assistant](../screenshots/features/admin-assistant.png)
 
 ### 4.2 Analytics Dashboard
 
@@ -137,7 +137,7 @@ Visit `/analytics` to see:
 - Prediction confidence scores
 - Interactive charts and heatmaps
 
-![Analytics Dashboard](../screenshots/features/analytics-dashboard.svg)
+![Analytics Dashboard](../screenshots/features/analytics-dashboard.png)
 
 ### 4.3 Invoice Processing
 
@@ -148,7 +148,7 @@ Explore document automation:
 3. Watch automatic GL code assignment
 4. Observe approval workflow routing
 
-![Invoice Processing](../screenshots/features/invoice-processing-detail.svg)
+![Invoice Processing](../screenshots/features/invoice-automation.png)
 
 ### 4.4 Natural Language Processing
 
@@ -158,7 +158,7 @@ Try the prompt interface:
 2. Enter customer feedback: "The checkout process was confusing"
 3. See automatic sentiment analysis and categorization
 
-![NLP Processing](../screenshots/features/nlp-processing-result.svg)
+![NLP Processing](../screenshots/features/nlp-processing.png)
 
 ## Step 5: Customize and Experiment
 

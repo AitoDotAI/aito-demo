@@ -9,7 +9,7 @@
 
 This demo showcases 11 real-world use cases of machine learning in e-commerce, from personalized search to AI-powered assistants—all powered by Aito.ai's unique predictive database approach.
 
-![Aito Grocery Store Demo](docs/screenshots/features/landing-page.svg)
+![Aito Grocery Store Demo](docs/screenshots/features/landing-page.png)
 
 *Experience intelligent e-commerce with personalized AI assistants*
 
@@ -84,7 +84,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 
 6. **🗣️ NLP Processing** - Natural language understanding for customer feedback
    
-   ![NLP Processing](docs/screenshots/features/nlp-processing-result.svg)
+   ![NLP Processing](docs/screenshots/features/nlp-processing.png)
    
    *Automatic sentiment analysis and categorization*
 
@@ -96,13 +96,13 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 
 8. **📄 Invoice Processing** - Automated document field extraction and routing
    
-   ![Invoice Automation](docs/screenshots/features/invoice-processing-detail.svg)
+   ![Invoice Automation](docs/screenshots/features/invoice-automation.png)
    
    *Automatic GL code assignment and approval routing*
 
 9. **📊 Behavioral Analytics** - User behavior insights and predictive metrics
    
-   ![Analytics Dashboard](docs/screenshots/features/analytics-dashboard.svg)
+   ![Analytics Dashboard](docs/screenshots/features/analytics-dashboard.png)
    
    *Comprehensive analytics with purchase patterns and trends*
 
@@ -114,7 +114,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
     - Personalized shopping guidance based on user preferences
     - Order tracking and support inquiries
     
-    ![Shopping Assistant](docs/screenshots/features/shopping-assistant-response.svg)
+    ![Shopping Assistant](docs/screenshots/features/shopping-assistant.png)
     
     *AI assistant helping customers find products through natural conversation*
 
@@ -124,7 +124,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
     - Automated report generation
     - Inventory and sales trend analysis
     
-    ![Admin Assistant](docs/screenshots/features/admin-assistant-interface.svg)
+    ![Admin Assistant](docs/screenshots/features/admin-assistant.png)
     
     *Business intelligence through conversational AI*
 

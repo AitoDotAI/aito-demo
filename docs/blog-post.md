@@ -39,7 +39,7 @@ Our demo application showcases 11 real-world use cases:
 10. **Shopping Assistant** - AI-powered customer chat interface
 11. **Admin Assistant** - Business intelligence through conversation
 
-![Demo Overview](screenshots/features/landing-page.svg)
+![Demo Overview](screenshots/features/landing-page.png)
 
 *The complete demo interface showcasing all AI-powered features*
 
@@ -250,7 +250,7 @@ Beyond traditional search and recommendations, we've integrated AI assistants th
 
 ### Shopping Assistant: Your Personal Shopping Companion
 
-![Shopping Assistant](screenshots/features/shopping-assistant-response.svg)
+![Shopping Assistant](screenshots/features/shopping-assistant.png)
 
 *The shopping assistant helping a customer find gluten-free products*
 
@@ -281,7 +281,7 @@ return formatAssistantResponse(glutenFreeOptions);
 
 ### Admin Assistant: Business Intelligence Through Conversation
 
-![Admin Assistant](screenshots/features/admin-assistant-interface.svg)
+![Admin Assistant](screenshots/features/admin-assistant.png)
 
 *Admin assistant providing business insights through natural conversation*
 
