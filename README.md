@@ -56,7 +56,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 
 1. **🔍 Smart Search** - Personalized product discovery based on user behavior
    
-   ![Smart Search Example](docs/screenshots/features/main-app-interface.png)
+   ![Smart Search Example](docs/screenshots/features/search-milk-results.png)
    
    *Search results personalized for health-conscious users*
 
@@ -68,17 +68,21 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 
 3. **🏷️ Tag Prediction** - Automatic product categorization and tagging
    
-   ![Tag Suggestions](docs/screenshots/features/admin-assistant.png)
+   ![Tag Suggestions](docs/screenshots/features/tag-prediction.png)
    
    *ML-powered tag suggestions for new products*
 
 4. **💡 Autocomplete** - Intelligent search suggestions with user context
    
-   ![Autocomplete](docs/screenshots/features/main-app-interface.png)
+   ![Autocomplete](docs/screenshots/features/autocomplete-suggestions.png)
    
    *Context-aware search completion*
 
 5. **📝 Autofill** - Predictive form completion for faster checkout
+   
+   ![Autofill Cart](docs/screenshots/features/autofill-cart.png)
+   
+   *Smart cart pre-filling based on user shopping patterns*
 
 ### Advanced AI Capabilities
 
@@ -136,7 +140,7 @@ The demo includes three distinct user personas with different shopping behaviors
 - **Veronica** 🥗 - Health-conscious consumer (organic, low-sodium preferences)  
 - **Alice** 🛒 - General shopper (balanced preferences across categories)
 
-![Search Personalization](docs/screenshots/features/main-app-interface.png)
+![Search Personalization](docs/screenshots/features/search-milk-results.png)
 
 *Larry's search for "milk" shows only lactose-free options*
 
