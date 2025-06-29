@@ -1,5 +1,9 @@
 # Personalized Product Recommendations
 
+![Personalized Recommendations](../screenshots/features/main-app-interface.png)
+
+*Personalized product recommendations adapting to user preferences and cart contents*
+
 ## Overview
 
 The recommendation system showcases Aito.ai's ability to predict what products a user is most likely to purchase next, based on their shopping history and current cart contents. This creates a dynamic, context-aware shopping experience.

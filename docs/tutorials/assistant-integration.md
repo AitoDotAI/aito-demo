@@ -1,5 +1,13 @@
 # AI Assistant Integration with Aito.ai
 
+![Shopping Assistant Interface](../screenshots/features/shopping-assistant.png)
+
+*Shopping Assistant providing personalized help and product recommendations*
+
+![Admin Assistant Interface](../screenshots/features/admin-assistant.png)
+
+*Admin Assistant delivering business intelligence and analytics through conversation*
+
 This tutorial demonstrates how the Aito Grocery Store Demo integrates AI-powered assistants with Aito.ai's predictive database to create intelligent, context-aware conversational interfaces.
 
 ## Overview

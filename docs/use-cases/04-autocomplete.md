@@ -1,5 +1,9 @@
 # Intelligent Search Autocomplete
 
+![Autocomplete in Action](../screenshots/features/autocomplete-suggestions.png)
+
+*Intelligent autocomplete providing contextual search suggestions as you type*
+
 ## Overview
 
 Intelligent autocomplete transforms the search experience by predicting what users want to type based on their behavior patterns and context. Unlike basic prefix matching, this system understands user intent and personalizes suggestions for faster, more accurate searches.

@@ -1,5 +1,9 @@
 # Automatic Tag Prediction
 
+![Tag Prediction Interface](../screenshots/features/tag-prediction.png)
+
+*AI-powered tag suggestion interface for automatic product categorization*
+
 ## Overview
 
 Tag prediction demonstrates how Aito.ai can automatically categorize and label products based on their names and descriptions. This feature dramatically reduces manual catalog management work while improving consistency and discoverability.

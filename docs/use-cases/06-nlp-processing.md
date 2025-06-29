@@ -1,5 +1,9 @@
 # Natural Language Processing and Classification
 
+![NLP Processing Interface](../screenshots/features/nlp-processing.png)
+
+*Natural language processing showing automatic sentiment analysis and text classification*
+
 ## Overview
 
 The NLP processing feature showcases Aito.ai's ability to understand and classify natural language text. This powerful capability enables automatic categorization of customer feedback, support tickets, and user queries without complex preprocessing or model training.
