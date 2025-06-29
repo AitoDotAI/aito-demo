@@ -48,7 +48,7 @@ The demo includes three distinct user personas, each with different shopping beh
 - **Veronica** 🥗 - Health-conscious consumer  
 - **Alice** 🛒 - General shopper
 
-![User Personas](../screenshots/features/smart-search-milk-larry.svg)
+![User Personas](../screenshots/features/main-app-interface.png)
 
 **Try this**: Switch between users using the dropdown in the top navigation and observe how search results and recommendations change.
 
@@ -60,7 +60,7 @@ Navigate to the main page and try searching:
 2. **Search for "milk" as Veronica**: See organic and low-fat options prioritized
 3. **Search for "snacks" as different users**: Observe personalized results
 
-![Smart Search Results](../screenshots/features/smart-search-milk-veronica.svg)
+![Smart Search Results](../screenshots/features/main-app-interface.png)
 
 ### 2.3 Personalized Recommendations
 
@@ -69,7 +69,7 @@ Navigate to the main page and try searching:
 3. Items already in your cart are never recommended
 4. Switch users and see how recommendations change
 
-![Dynamic Recommendations](../screenshots/features/recommendations-dynamic.svg)
+![Dynamic Recommendations](../screenshots/features/main-app-interface.png)
 
 ### 2.4 AI Shopping Assistant
 

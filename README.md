@@ -56,25 +56,25 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 
 1. **🔍 Smart Search** - Personalized product discovery based on user behavior
    
-   ![Smart Search Example](docs/screenshots/features/smart-search-milk-veronica.svg)
+   ![Smart Search Example](docs/screenshots/features/main-app-interface.png)
    
    *Search results personalized for health-conscious users*
 
 2. **🎯 Recommendations** - Dynamic product suggestions that exclude cart items
    
-   ![Dynamic Recommendations](docs/screenshots/features/recommendations-dynamic.svg)
+   ![Dynamic Recommendations](docs/screenshots/features/main-app-interface.png)
    
    *Real-time recommendations that adapt to shopping cart contents*
 
 3. **🏷️ Tag Prediction** - Automatic product categorization and tagging
    
-   ![Tag Suggestions](docs/screenshots/features/tag-prediction-suggestions.svg)
+   ![Tag Suggestions](docs/screenshots/features/admin-assistant.png)
    
    *ML-powered tag suggestions for new products*
 
 4. **💡 Autocomplete** - Intelligent search suggestions with user context
    
-   ![Autocomplete](docs/screenshots/features/autocomplete-suggestions.svg)
+   ![Autocomplete](docs/screenshots/features/main-app-interface.png)
    
    *Context-aware search completion*
 
@@ -90,7 +90,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 
 7. **🔗 Relationship Analysis** - Discover hidden patterns in product data
    
-   ![Product Relationships](docs/screenshots/features/product-relationships.svg)
+   ![Product Relationships](docs/screenshots/features/product-analytics.png)
    
    *Statistical correlation discovery between products*
 
@@ -136,7 +136,7 @@ The demo includes three distinct user personas with different shopping behaviors
 - **Veronica** 🥗 - Health-conscious consumer (organic, low-sodium preferences)  
 - **Alice** 🛒 - General shopper (balanced preferences across categories)
 
-![Search Personalization](docs/screenshots/features/smart-search-milk-larry.svg)
+![Search Personalization](docs/screenshots/features/main-app-interface.png)
 
 *Larry's search for "milk" shows only lactose-free options*
 
@@ -235,7 +235,7 @@ node src/generator/index.js --info
 - [Advanced Query Patterns](docs/tutorials/advanced-queries.md)
 - [Customization Guide](docs/tutorials/customization.md)
 
-![Mobile Experience](docs/screenshots/features/mobile-app-interface.svg)
+![Mobile Experience](docs/screenshots/features/mobile-landing.png)
 
 *Fully responsive design with mobile-optimized AI assistants*
 
@@ -249,7 +249,7 @@ node src/generator/index.js --info
 - **Assistant Engagement**: 65% of users interact with chat assistants
 - **Query Resolution**: 78% of customer queries resolved without human intervention
 
-![Analytics Heatmap](docs/screenshots/features/analytics-heatmap.svg)
+![Analytics Heatmap](docs/screenshots/features/analytics-dashboard.png)
 
 *Real-time analytics dashboard showing purchase patterns*
 

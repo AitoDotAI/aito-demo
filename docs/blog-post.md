@@ -81,7 +81,7 @@ const smartSearch = {
 
 ### Real-World Impact
 
-![Smart Search Personalization](screenshots/features/smart-search-milk-larry.svg)
+![Smart Search Personalization](screenshots/features/main-app-interface.png)
 
 *Larry's search for "milk" shows only lactose-free options*
 
