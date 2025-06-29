@@ -43,6 +43,7 @@
     "screenshots:docs": "node scripts/screenshot-generator.js adminDashboard",
     "test:screenshots": "npx playwright test tests/screenshots.spec.js",
     "screenshots:all": "node scripts/screenshot-all-features.js",
+    "screenshots:ai": "node scripts/screenshot-ai-features.js",
     "screenshots:placeholders": "node scripts/create-placeholder-screenshots.js",
     "screenshots:docker": "./scripts/docker-screenshots.sh"
   },

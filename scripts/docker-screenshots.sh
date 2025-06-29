@@ -82,7 +82,7 @@ run_screenshots() {
     docker run --rm \
         --name ${CONTAINER_NAME} \
         -v "$(pwd)/docs/screenshots:${APP_DIR}/docs/screenshots" \
-        -p 3000:3000 \
+        -p 3001:3000 \
         ${DOCKER_IMAGE} \
         bash -c "
             echo 'Starting development server...'
@@ -103,7 +103,14 @@ run_screenshots() {
             done
             
             echo 'Generating screenshots...'
-            ${command}
+            if [ \"\${command}\" = \"npm run screenshots:all\" ]; then
+                node scripts/screenshot-ai-features.js
+            else
+                \${command}
+            fi
+            
+            echo 'Generated files:'
+            ls -la docs/screenshots/features/*.png 2>/dev/null || echo 'No PNG files generated'
             
             echo 'Screenshots generated!'
             echo 'Stopping development server...'

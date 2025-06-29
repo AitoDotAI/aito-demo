@@ -48,11 +48,16 @@ const takeScreenshot = async (page, name, options = {}) => {
   const filename = suffix ? `${name}-${suffix}.png` : `${name}.png`;
   const screenshotPath = path.join(screenshotDir, filename);
   
-  await page.screenshot({
+  const screenshotOptions = {
     path: screenshotPath,
-    fullPage,
-    clip
-  });
+    fullPage
+  };
+  
+  if (clip) {
+    screenshotOptions.clip = clip;
+  }
+  
+  await page.screenshot(screenshotOptions);
 
   console.log(`✓ Screenshot saved: ${screenshotPath}`);
   return screenshotPath;
@@ -86,15 +91,35 @@ async function captureAllFeatures() {
     await waitForApp(page);
     await takeScreenshot(page, 'landing-page', { directory: 'features', fullPage: true });
 
-    // Enter the demo
-    await page.click('text=Try the Demo');
-    await waitForApp(page);
+    // Navigate to main app - try demo button if exists, otherwise go directly
+    try {
+      await page.waitForSelector('text=Try the Demo', { timeout: 3000 });
+      await page.click('text=Try the Demo');
+      await waitForApp(page);
+    } catch (error) {
+      console.log('No demo button found, navigating directly to main app...');
+      await page.goto(`${CONFIG.baseUrl}/`);
+      await waitForApp(page);
+    }
 
     // 2. Smart Search Feature
     console.log('\n📸 2. Smart Search (Personalized)');
+    
+    // Ensure we're on the main page with user selector
+    try {
+      await page.waitForSelector('select', { timeout: 5000 });
+    } catch (error) {
+      console.log('User selector not found, we might already be in the app');
+    }
+    
     for (const user of CONFIG.users) {
-      await page.selectOption('select', user.name);
-      await page.waitForTimeout(1000);
+      try {
+        await page.selectOption('select', user.name);
+        await page.waitForTimeout(1000);
+      } catch (error) {
+        console.log(`Skipping user ${user.name} - selector not available`);
+        continue;
+      }
       
       // Search for milk - shows different results per user
       await page.fill('input[placeholder*="Search"]', 'milk');
@@ -137,7 +162,7 @@ async function captureAllFeatures() {
 
     // 5. Shopping Assistant
     console.log('\n📸 5. Shopping Assistant (Customer Chat)');
-    await page.click('a[href*="customer-chat"]');
+    await page.goto(`${CONFIG.baseUrl}/customer-chat`);
     await waitForApp(page);
     await takeScreenshot(page, 'shopping-assistant-interface', { directory: 'features' });
     
@@ -156,7 +181,7 @@ async function captureAllFeatures() {
 
     // 6. Admin Assistant
     console.log('\n📸 6. Admin Assistant (Business Intelligence)');
-    await page.click('a[href*="admin-chat"]');
+    await page.goto(`${CONFIG.baseUrl}/admin-chat`);
     await waitForApp(page);
     await takeScreenshot(page, 'admin-assistant-interface', { directory: 'features' });
     
@@ -170,7 +195,7 @@ async function captureAllFeatures() {
 
     // 7. Invoice Processing
     console.log('\n📸 7. Invoice Automation');
-    await page.click('a[href*="invoicing"]');
+    await page.goto(`${CONFIG.baseUrl}/invoicing`);
     await waitForApp(page);
     await takeScreenshot(page, 'invoice-processing-list', { directory: 'features', fullPage: true });
     
@@ -184,7 +209,7 @@ async function captureAllFeatures() {
 
     // 8. Analytics Dashboard
     console.log('\n📸 8. Analytics & Insights');
-    await page.click('a[href*="analytics"]');
+    await page.goto(`${CONFIG.baseUrl}/analytics`);
     await waitForApp(page);
     await takeScreenshot(page, 'analytics-dashboard', { directory: 'features', fullPage: true });
     
@@ -205,7 +230,7 @@ async function captureAllFeatures() {
 
     // 9. NLP Processing (Prompts)
     console.log('\n📸 9. NLP Processing');
-    await page.click('a[href*="help"]');
+    await page.goto(`${CONFIG.baseUrl}/help`);
     await waitForApp(page);
     
     // Show prompt analysis
@@ -226,7 +251,7 @@ async function captureAllFeatures() {
 
     // 10. Product Page with Relationship Analysis
     console.log('\n📸 10. Product Analytics & Relationships');
-    await page.click('a[href*="product"]');
+    await page.goto(`${CONFIG.baseUrl}/product`);
     await waitForApp(page);
     await takeScreenshot(page, 'product-analytics-page', { directory: 'features', fullPage: true });
     
@@ -254,7 +279,7 @@ async function captureAllFeatures() {
 
     // 12. Cart Management
     console.log('\n📸 12. Cart & Checkout');
-    await page.click('a[href*="cart"]');
+    await page.goto(`${CONFIG.baseUrl}/cart`);
     await waitForApp(page);
     await takeScreenshot(page, 'cart-management', { directory: 'features' });
 
