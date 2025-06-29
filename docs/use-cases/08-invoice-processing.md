@@ -169,12 +169,12 @@ The invoice processing leverages multiple data tables:
 - Automatic coding for utility bills
 - Bulk processing capabilities
 
-## Performance Metrics
+## Performance Benefits
 
-- **Processing Speed**: 95% faster than manual processing
-- **Accuracy**: 94% correct GL code assignment
-- **Automation Rate**: 78% of invoices processed without human intervention
-- **Error Reduction**: 85% fewer coding errors
+- **Processing Speed**: Dramatically faster than manual processing
+- **Accuracy**: High accuracy in GL code assignment
+- **Automation Rate**: Majority of invoices processed without human intervention
+- **Error Reduction**: Significant reduction in coding errors
 
 ## Implementation Example
 
@@ -227,12 +227,12 @@ const InvoiceProcessor = ({ invoiceData }) => {
 ## Business Value
 
 ### Efficiency Gains
-- **Time Savings**: 95% reduction in processing time
-- **Cost Reduction**: 60% lower processing costs
+- **Time Savings**: Substantial reduction in processing time
+- **Cost Reduction**: Significant reduction in processing costs
 - **Resource Optimization**: Staff focus on exceptions only
 
 ### Accuracy Improvements
-- **Error Reduction**: 85% fewer classification errors
+- **Error Reduction**: Major reduction in classification errors
 - **Consistency**: Standardized coding across departments
 - **Audit Trail**: Complete processing history
 

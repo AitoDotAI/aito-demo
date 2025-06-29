@@ -112,12 +112,12 @@ The autofill feature leverages purchase history data:
 - Suggests seasonal and trending products
 - Provides broad category coverage
 
-## Performance Metrics
+## Performance Benefits
 
-- **Prediction Accuracy**: 78% of suggested items are purchased
-- **Time Savings**: 65% reduction in shopping time
-- **User Satisfaction**: 82% find suggestions relevant
-- **Discovery Rate**: 23% of users try new suggested products
+- **Prediction Accuracy**: High rate of suggested items are purchased
+- **Time Savings**: Significant reduction in shopping time
+- **User Satisfaction**: Strong user satisfaction with suggestion relevance
+- **Discovery Rate**: Notable portion of users try new suggested products
 
 ## Implementation Example
 
@@ -149,7 +149,7 @@ const AutofillButton = ({ userId, onItemsAdded }) => {
 ### Customer Benefits
 - **Convenience**: One-click shopping for routine purchases
 - **Discovery**: Find new products aligned with preferences
-- **Time Savings**: Reduce shopping time by up to 65%
+- **Time Savings**: Substantially reduce shopping time
 
 ### Business Benefits
 - **Increased Sales**: Higher average order values

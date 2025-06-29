@@ -401,22 +401,22 @@ const handleIncomingText = async (req, res) => {
 ## Performance and Scaling
 
 ### Response Time Optimization
-- **Average Processing**: <150ms per text
-- **Batch Processing**: 1000 texts in <30 seconds
-- **Concurrent Requests**: Up to 100 simultaneous classifications
+- **Average Processing**: Fast processing per text analysis
+- **Batch Processing**: Efficient handling of large text volumes
+- **Concurrent Requests**: High-capacity simultaneous classifications
 - **Caching**: Intelligent caching for repeated text patterns
 
-### Accuracy Metrics
-- **Sentiment Analysis**: 91% accuracy across domains
-- **Category Classification**: 87% precision, 89% recall
-- **Intent Recognition**: 85% success rate
-- **Language Detection**: 96% accuracy for 20+ languages
+### Accuracy Benefits
+- **Sentiment Analysis**: High accuracy across domains
+- **Category Classification**: Strong precision and recall performance
+- **Intent Recognition**: Excellent success rate in understanding intent
+- **Language Detection**: Very high accuracy across multiple languages
 
 ### Business Impact
-- **Support Efficiency**: 60% reduction in manual ticket routing
-- **Response Time**: 75% faster initial response to customer issues
-- **Satisfaction**: 4.1/5 customer rating for automated responses
-- **Cost Savings**: $200k annually in support operations
+- **Support Efficiency**: Major reduction in manual ticket routing
+- **Response Time**: Significantly faster initial response to customer issues
+- **Satisfaction**: High customer rating for automated responses
+- **Cost Savings**: Substantial annual savings in support operations
 
 ## Best Practices
 

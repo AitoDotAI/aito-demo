@@ -146,12 +146,12 @@ Correlations found:
 - Sortable results table
 - Export capabilities
 
-## Performance Metrics
+## Performance Benefits
 
-- **Query Speed**: Sub-second response for most analyses
-- **Data Coverage**: Analyzes 90,000+ data points
-- **Insight Discovery**: 95% of queries reveal significant correlations
-- **User Engagement**: Average 12 minutes per analytics session
+- **Query Speed**: Fast, responsive analysis for real-time exploration
+- **Data Coverage**: Analyzes comprehensive datasets with extensive data points
+- **Insight Discovery**: High success rate in revealing significant correlations
+- **User Engagement**: Extended user engagement during analytics sessions
 
 ## Implementation Example
 

@@ -127,18 +127,18 @@ const processRecommendations = (hits) => {
 
 ## Business Impact
 
-### Metrics
+### Performance Benefits
 
-- **Click-Through Rate**: 35% on recommended products
-- **Conversion Rate**: 18% purchase rate from recommendations  
-- **Average Order Value**: 22% increase when recommendations used
-- **Customer Satisfaction**: 4.2/5 rating on recommendation relevance
+- **Click-Through Rate**: High engagement on recommended products
+- **Conversion Rate**: Strong purchase rate from recommendations  
+- **Average Order Value**: Notable increase when recommendations used
+- **Customer Satisfaction**: High rating on recommendation relevance
 
 ### Revenue Impact
 
-- **Cross-selling**: 40% of recommendations are from different categories
-- **Discovery**: 60% of recommended products are new to the user
-- **Repeat Purchases**: 25% higher retention rate for users who engage with recommendations
+- **Cross-selling**: Many recommendations span different categories
+- **Discovery**: Majority of recommended products are new to users
+- **Repeat Purchases**: Higher retention rate for users who engage with recommendations
 
 ## Advanced Features
 

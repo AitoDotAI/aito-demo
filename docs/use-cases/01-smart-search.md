@@ -117,12 +117,12 @@ The search leverages three main data tables:
 - Benefits from popularity-based ranking
 - Discovers trending products
 
-## Performance Metrics
+## Performance Benefits
 
-- **Response Time**: < 200ms average
-- **Relevance**: 85% user satisfaction on result quality
-- **Personalization Lift**: 40% improvement over basic search
-- **Discovery**: 25% increase in new product exploration
+- **Response Time**: Fast, sub-second response times
+- **Relevance**: High user satisfaction on result quality
+- **Personalization**: Substantial improvement over basic search
+- **Discovery**: Notable increase in new product exploration
 
 ## Implementation Example
 

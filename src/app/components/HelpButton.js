@@ -69,21 +69,21 @@ const HelpButton = ({
               {feature === 'Smart Search' && (
                 <>
                   <li>Personalized results based on user behavior</li>
-                  <li>85% user satisfaction on result quality</li>
-                  <li>40% improvement over basic search</li>
+                  <li>Significantly higher user satisfaction on result quality</li>
+                  <li>Substantial improvement over basic keyword search</li>
                 </>
               )}
               {feature === 'Recommendations' && (
                 <>
                   <li>Dynamic suggestions that exclude cart items</li>
-                  <li>35% click-through rate vs 12% industry average</li>
-                  <li>22% increase in average order value</li>
+                  <li>High click-through rate significantly above industry average</li>
+                  <li>Meaningful increase in average order value</li>
                 </>
               )}
               {feature === 'Tag Prediction' && (
                 <>
                   <li>Automatic product categorization</li>
-                  <li>80% faster than manual catalog management</li>
+                  <li>Significantly faster than manual catalog management</li>
                   <li>Consistent and accurate tagging</li>
                 </>
               )}
