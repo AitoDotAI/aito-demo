@@ -11,6 +11,8 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap'
+import HelpButton from '../components/HelpButton'
+import { HELP_CONTENT } from '../constants/helpContent'
 
 import './ProductPage.css'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
@@ -116,7 +118,15 @@ class ProductPage extends Component {
     return (
       <div className="ProductPage">
         <div className="ProductPage__header">
-          <h1 className="ProductPage__title">Product Analytics</h1>
+          <h1 className="ProductPage__title">
+            Product Analytics
+            <HelpButton 
+              feature="Product Analytics"
+              {...HELP_CONTENT['Product Analytics']}
+              size="md"
+              className="ml-3"
+            />
+          </h1>
           <p className="ProductPage__subtitle">
             AI-powered insights and performance metrics for individual products. Navigate through products to see detailed analytics and trends.
           </p>

@@ -1,5 +1,9 @@
 # Smart Search with Personalization
 
+![Smart Search Example](../screenshots/features/search-milk-results.png)
+
+*Smart search in action: "milk" query showing personalized lactose-free results for Larry*
+
 ## Overview
 
 The smart search feature demonstrates how Aito.ai's predictive database can transform basic text search into an intelligent, personalized experience. Unlike traditional keyword matching, this implementation considers user behavior patterns to deliver more relevant results.
@@ -113,12 +117,12 @@ The search leverages three main data tables:
 - Benefits from popularity-based ranking
 - Discovers trending products
 
-## Performance Metrics
+## Performance Benefits
 
-- **Response Time**: < 200ms average
-- **Relevance**: 85% user satisfaction on result quality
-- **Personalization Lift**: 40% improvement over basic search
-- **Discovery**: 25% increase in new product exploration
+- **Response Time**: Fast, sub-second response times
+- **Relevance**: High user satisfaction on result quality
+- **Personalization**: Substantial improvement over basic search
+- **Discovery**: Notable increase in new product exploration
 
 ## Implementation Example
 

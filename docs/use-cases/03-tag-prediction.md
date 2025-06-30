@@ -1,5 +1,9 @@
 # Automatic Tag Prediction
 
+![Tag Prediction Interface](../screenshots/features/tag-prediction.png)
+
+*AI-powered tag suggestion interface for automatic product categorization*
+
 ## Overview
 
 Tag prediction demonstrates how Aito.ai can automatically categorize and label products based on their names and descriptions. This feature dramatically reduces manual catalog management work while improving consistency and discoverability.
@@ -13,8 +17,8 @@ Tag prediction demonstrates how Aito.ai can automatically categorize and label p
 - **Maintenance burden**: New products require constant attention
 
 ### Business Impact
-- 70% of e-commerce time spent on catalog management
-- 30% of products have missing or incorrect tags
+- Significant e-commerce resources spent on catalog management
+- Many products have missing or incorrect tags
 - Poor search results due to inconsistent tagging
 - Lost sales from undiscoverable products
 
@@ -179,23 +183,23 @@ const contextualPrediction = {
 - **Support Tickets**: Issue type, priority, skills needed
 - **Emails**: Topic, sentiment, action required
 
-## Performance Metrics
+## Performance Benefits
 
 ### Accuracy
-- **Precision**: 92% for high-confidence predictions (>0.85)
-- **Recall**: 87% coverage of relevant tags
-- **F1 Score**: 0.89 overall performance
+- **Precision**: High accuracy for confident predictions
+- **Recall**: Strong coverage of relevant tags
+- **Overall Performance**: Excellent prediction quality
 
 ### Efficiency
-- **Processing Speed**: 1000 products/minute
-- **API Response**: <100ms per prediction
-- **Batch Processing**: 10,000 products in <2 minutes
+- **Processing Speed**: Fast batch processing capabilities
+- **API Response**: Sub-second response times per prediction
+- **Batch Processing**: Efficient handling of large product catalogs
 
 ### Business Impact
-- **Time Saved**: 70% reduction in tagging time
-- **Consistency**: 95% tag consistency (vs 60% manual)
-- **Discoverability**: 40% improvement in search success
-- **Sales Impact**: 15% increase from better product discovery
+- **Time Saved**: Significant reduction in manual tagging time
+- **Consistency**: Much higher tag consistency vs manual processes
+- **Discoverability**: Notable improvement in search success
+- **Sales Impact**: Meaningful increase from better product discovery
 
 ## Best Practices
 

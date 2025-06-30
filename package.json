@@ -36,7 +36,16 @@
     "format:check": "prettier --check src/**/*.{js,jsx,json,css,md}",
     "generate-data": "node src/generator/index.js",
     "upload-data": "node upload-data.js",
-    "upload-data:dry-run": "node upload-data.js --dry-run"
+    "upload-data:dry-run": "node upload-data.js --dry-run",
+    "screenshots": "node scripts/screenshot-generator.js",
+    "screenshots:marketing": "node scripts/screenshot-generator.js landingPage highResMarketing mobileViews",
+    "screenshots:tutorials": "node scripts/screenshot-generator.js searchFeatures recommendations invoiceProcessing chatInterface",
+    "screenshots:docs": "node scripts/screenshot-generator.js adminDashboard",
+    "test:screenshots": "npx playwright test tests/screenshots.spec.js",
+    "screenshots:all": "node scripts/screenshot-all-features.js",
+    "screenshots:ai": "node scripts/screenshot-ai-features.js",
+    "screenshots:placeholders": "node scripts/create-placeholder-screenshots.js",
+    "screenshots:docker": "./scripts/docker-screenshots.sh"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,6 +58,7 @@
   ],
   "devDependencies": {
     "@aitodotai/json-stringify-pretty-compact": "^1.3.0",
+    "@playwright/test": "^1.53.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",

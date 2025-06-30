@@ -48,6 +48,8 @@ The demo includes three distinct user personas, each with different shopping beh
 - **Veronica** 🥗 - Health-conscious consumer  
 - **Alice** 🛒 - General shopper
 
+![User Personas](../screenshots/features/main-app-interface.png)
+
 **Try this**: Switch between users using the dropdown in the top navigation and observe how search results and recommendations change.
 
 ### 2.2 Smart Search
@@ -58,12 +60,29 @@ Navigate to the main page and try searching:
 2. **Search for "milk" as Veronica**: See organic and low-fat options prioritized
 3. **Search for "snacks" as different users**: Observe personalized results
 
+![Smart Search Results](../screenshots/features/main-app-interface.png)
+
 ### 2.3 Personalized Recommendations
 
 1. Add some products to your cart
 2. Notice how recommendations update automatically
 3. Items already in your cart are never recommended
 4. Switch users and see how recommendations change
+
+![Dynamic Recommendations](../screenshots/features/main-app-interface.png)
+
+### 2.4 AI Shopping Assistant
+
+**New Feature**: Try the shopping assistant:
+
+1. Navigate to the **Customer Chat** page
+2. Ask natural language questions like:
+   - "I need gluten-free bread options"
+   - "What organic vegetables do you have?"
+   - "Add milk to my cart"
+3. Watch the AI assistant search products and manage your cart through conversation
+
+![Shopping Assistant](../screenshots/features/shopping-assistant.png)
 
 ## Step 3: Understand the Technology
 
@@ -96,29 +115,50 @@ const searchResults = await axios.post('https://aito-instance.aito.app/api/v1/_q
 
 ## Step 4: Explore Advanced Features
 
-### 4.1 Admin Page
+### 4.1 Admin Assistant
 
-Visit `/admin` to explore advanced AI capabilities:
+**New Feature**: Try the AI-powered admin assistant:
 
-- **Tag Prediction**: Automatically suggest product tags
-- **Invoice Processing**: Predict document fields
-- **Relationship Analysis**: Discover data patterns
+1. Navigate to **Admin Chat** page
+2. Ask business intelligence questions like:
+   - "What are our top selling products this week?"
+   - "Show me customer behavior trends"
+   - "Analyze product performance by category"
+3. Get instant insights through natural conversation
 
-### 4.2 Analytics Page
+![Admin Assistant](../screenshots/features/admin-assistant.png)
+
+### 4.2 Analytics Dashboard
 
 Visit `/analytics` to see:
 
 - User behavior insights
 - Product performance metrics
 - Prediction confidence scores
+- Interactive charts and heatmaps
 
-### 4.3 Natural Language Processing
+![Analytics Dashboard](../screenshots/features/analytics-dashboard.png)
+
+### 4.3 Invoice Processing
+
+Explore document automation:
+
+1. Go to **Invoice Processing** page
+2. See ML-powered field extraction
+3. Watch automatic GL code assignment
+4. Observe approval workflow routing
+
+![Invoice Processing](../screenshots/features/invoice-automation.png)
+
+### 4.4 Natural Language Processing
 
 Try the prompt interface:
 
-1. Go to the admin page
+1. Go to the help page
 2. Enter customer feedback: "The checkout process was confusing"
 3. See automatic sentiment analysis and categorization
+
+![NLP Processing](../screenshots/features/nlp-processing.png)
 
 ## Step 5: Customize and Experiment
 
@@ -171,6 +211,11 @@ npm test              # Run test suite
 npm run lint          # Check code quality
 npm run format        # Format code
 npm run generate-data # Regenerate synthetic data
+
+# Screenshot Generation
+npm run screenshots:all       # Generate all feature screenshots
+npm run screenshots:marketing # Marketing screenshots
+npm run screenshots:tutorials # Tutorial screenshots
 ```
 
 ### 6.2 Project Structure
@@ -183,8 +228,15 @@ src/
 │   └── predictions.js # ML prediction services
 ├── app/
 │   ├── components/    # React components
+│   │   ├── Chat.js   # Reusable chat interface
+│   │   └── ChatWidget.js # Chat widget component
 │   ├── pages/        # Application pages
+│   │   ├── CustomerChatPage.js # Shopping assistant
+│   │   └── AdminChatPage.js    # Admin assistant
 │   └── data/         # Data layer
+├── services/         # Service layer
+│   ├── openai.js     # OpenAI integration
+│   └── chatTools/    # Assistant tool implementations
 ├── constants/        # Application constants
 ├── data/            # Product catalog and schemas
 └── config.js        # Environment configuration
@@ -212,6 +264,7 @@ Edit `.env`:
 ```bash
 REACT_APP_AITO_URL=https://your-instance.aito.app
 REACT_APP_AITO_API_KEY=your-api-key
+REACT_APP_OPENAI_API_KEY=your-openai-key  # For AI assistants
 REACT_APP_ENVIRONMENT=development
 ```
 
@@ -250,9 +303,10 @@ Follow [Aito.ai documentation](https://aito.ai/docs) to:
 
 Now that you have the demo running, explore these advanced topics:
 
-1. **[Advanced Query Patterns](./advanced-queries.md)** - Learn complex Aito queries
-2. **[Customization Guide](./customization.md)** - Adapt the demo for your domain
-3. **[Use Case Deep Dives](../use-cases/)** - Understand each feature in detail
+1. **[Assistant Integration Tutorial](./assistant-integration.md)** - Learn how AI assistants work with Aito.ai
+2. **[Advanced Query Patterns](./advanced-queries.md)** - Learn complex Aito queries
+3. **[Customization Guide](./customization.md)** - Adapt the demo for your domain
+4. **[Use Case Deep Dives](../use-cases/)** - Understand each feature in detail
 
 ## Need Help?
 

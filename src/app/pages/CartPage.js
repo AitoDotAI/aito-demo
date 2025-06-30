@@ -8,6 +8,8 @@ import {
 } from 'reactstrap';
 import { FaChevronLeft } from 'react-icons/fa'
 import Cart from '../components/Cart'
+import HelpButton from '../components/HelpButton'
+import { HELP_CONTENT } from '../constants/helpContent'
 
 import './CartPage.css'
 
@@ -70,7 +72,15 @@ class CartPage extends Component {
         <Cart actions={this.props.actions} cart={cart} />
 
         <div className="CartPage__actions">
-          <Button color="primary" onClick={this.autoFill}>Autofill</Button>
+          <div className="d-flex align-items-center">
+            <Button color="primary" onClick={this.autoFill}>Autofill</Button>
+            <HelpButton 
+              feature="Autofill"
+              {...HELP_CONTENT['Autofill']}
+              size="sm"
+              className="ml-2"
+            />
+          </div>
           <Button onClick={this.toggleModal} disabled={cart.length === 0} color="primary">Purchase</Button>
         </div>
 

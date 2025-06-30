@@ -3,6 +3,8 @@ import _ from 'lodash'
 import ProductList from './ProductList'
 import Autosuggest from 'react-autosuggest'
 import { FaSearch } from 'react-icons/fa'
+import HelpButton from './HelpButton'
+import { HELP_CONTENT } from '../constants/helpContent'
 
 import './ProductSearch.css'
 
@@ -110,7 +112,15 @@ class ProductSearch extends Component {
       <div className="ProductSearch">
         <div className="ProductSearch__search-container">
           <div className="ProductSearch__search-inner">
-            <span className="ProductSearch__search-label">Search:</span>
+            <span className="ProductSearch__search-label">
+              Search:
+              <HelpButton 
+                feature="Smart Search"
+                {...HELP_CONTENT['Smart Search']}
+                size="sm"
+                className="ml-1"
+              />
+            </span>
             <div className="ProductSearch__search-input-wrapper">
               <FaSearch className="ProductSearch__search-icon" />
               <Autosuggest
