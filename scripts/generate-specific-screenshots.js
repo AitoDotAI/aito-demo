@@ -62,19 +62,20 @@ async function generateSpecificScreenshots() {
   const page = await context.newPage();
 
   try {
-    console.log('📸 1. Generating tag prediction screenshot with "rye bread"...');
+    console.log('📸 1. Generating tag prediction screenshot with "rye bread" on /products page...');
     
-    await page.goto(CONFIG.baseUrl);
+    // Navigate to products page for tag prediction
+    await page.goto(`${CONFIG.baseUrl}/products`);
     await waitForApp(page);
 
-    // Try to find tag prediction area - check multiple possible locations
+    // Find tag prediction input on products page
     const tagPredictionSelectors = [
-      '[data-testid="tag-prediction"]',
-      '.tag-prediction',
       'input[placeholder*="product"]',
       'input[placeholder*="name"]',
       'input[placeholder*="Product name"]',
-      '.product-input'
+      '[data-testid="tag-prediction-input"]',
+      '.product-input',
+      'input[type="text"]'
     ];
 
     let foundTagInput = false;
@@ -89,6 +90,7 @@ async function generateSpecificScreenshots() {
           'button:has-text("Predict")',
           'button:has-text("Get Tags")',
           'button:has-text("Suggest")',
+          'button:has-text("Generate")',
           '[data-testid="predict-button"]'
         ];
         
@@ -133,12 +135,17 @@ async function generateSpecificScreenshots() {
     
     await takeScreenshot(page, 'autofill-cart.png');
     
-    console.log('📸 3. Generating NLP processing screenshot with payment question...');
+    console.log('📸 3. Generating NLP processing screenshot with payment question on /help page...');
     
-    // Look for NLP input area
+    // Navigate to help page for NLP processing
+    await page.goto(`${CONFIG.baseUrl}/help`);
+    await waitForApp(page);
+
+    // Look for NLP input area on help page
     const nlpSelectors = [
       'textarea[placeholder*="question"]',
       'textarea[placeholder*="feedback"]',
+      'textarea[placeholder*="message"]',
       'input[placeholder*="question"]',
       'input[placeholder*="feedback"]',
       '[data-testid="nlp-input"]',
@@ -161,6 +168,7 @@ async function generateSpecificScreenshots() {
           'button:has-text("Analyze")',
           'button:has-text("Submit")',
           'button:has-text("Send")',
+          'button:has-text("Ask")',
           '[data-testid="nlp-process"]'
         ];
         
@@ -180,14 +188,44 @@ async function generateSpecificScreenshots() {
     
     await takeScreenshot(page, 'nlp-processing.png');
     
+    console.log('📸 4. Generating invoice automation screenshot with "Load Sample Invoice" clicked...');
+    
+    // Navigate to invoicing page
+    await page.goto(`${CONFIG.baseUrl}/invoicing`);
+    await waitForApp(page);
+
+    // Look for "Load Sample Invoice" button
+    const invoiceButtonSelectors = [
+      'button:has-text("Load Sample Invoice")',
+      'button:has-text("Load Sample")',
+      'button:has-text("Sample Invoice")',
+      '[data-testid="load-sample-invoice"]',
+      '.load-sample-btn'
+    ];
+
+    let foundInvoiceButton = false;
+    for (const selector of invoiceButtonSelectors) {
+      const element = page.locator(selector).first();
+      if (await element.isVisible()) {
+        await element.scrollIntoViewIfNeeded();
+        await element.click();
+        await page.waitForTimeout(2000);
+        foundInvoiceButton = true;
+        break;
+      }
+    }
+    
+    await takeScreenshot(page, 'invoice-automation.png');
+    
     console.log('✅ Specific screenshot generation completed!');
     console.log(`📁 Screenshots saved to: ${CONFIG.screenshotDir}`);
     
     // Summary
     console.log('\n📋 Summary:');
-    console.log(`✓ Tag prediction: ${foundTagInput ? 'Found input, added "rye bread"' : 'Input field not found, screenshot taken anyway'}`);
+    console.log(`✓ Tag prediction (/products): ${foundTagInput ? 'Found input, added "rye bread"' : 'Input field not found, screenshot taken anyway'}`);
     console.log(`✓ Autofill: ${foundAutofill ? 'Found button, clicked it' : 'Button not found, screenshot taken anyway'}`);
-    console.log(`✓ NLP processing: ${foundNlpInput ? 'Found input, added payment question' : 'Input field not found, screenshot taken anyway'}`);
+    console.log(`✓ NLP processing (/help): ${foundNlpInput ? 'Found input, added payment question' : 'Input field not found, screenshot taken anyway'}`);
+    console.log(`✓ Invoice automation (/invoicing): ${foundInvoiceButton ? 'Found button, clicked "Load Sample Invoice"' : 'Button not found, screenshot taken anyway'}`);
     
   } catch (error) {
     console.error('❌ Error generating screenshots:', error);
@@ -205,10 +243,11 @@ if (require.main === module) {
     console.log(`
 📸 Specific Screenshot Generator
 
-This script generates the three specific screenshots with custom content:
-1. tag-prediction.png - with "rye bread" text
+This script generates the four specific screenshots with custom content:
+1. tag-prediction.png - with "rye bread" text on /products page
 2. autofill-cart.png - with autofill button clicked  
-3. nlp-processing.png - with "Which payment methods do you provide?" text
+3. nlp-processing.png - with "Which payment methods do you provide?" text on /help page
+4. invoice-automation.png - with "Load Sample Invoice" button clicked on /invoicing page
 
 Usage: node scripts/generate-specific-screenshots.js
 

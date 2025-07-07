@@ -116,7 +116,7 @@ function checkSpecificRequirements() {
   const requirements = [
     {
       file: 'features/tag-prediction.png',
-      description: 'Should show "rye bread" in input field'
+      description: 'Should show "rye bread" in input field on /products page'
     },
     {
       file: 'features/autofill-cart.png', 
@@ -124,7 +124,11 @@ function checkSpecificRequirements() {
     },
     {
       file: 'features/nlp-processing.png',
-      description: 'Should show "Which payment methods do you provide?" text'
+      description: 'Should show "Which payment methods do you provide?" text on /help page'
+    },
+    {
+      file: 'features/invoice-automation.png',
+      description: 'Should show loaded sample invoice after clicking "Load Sample Invoice" on /invoicing page'
     }
   ];
   
