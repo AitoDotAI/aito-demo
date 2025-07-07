@@ -5,7 +5,7 @@ Thank you for your interest in contributing to the Aito Grocery Store Demo! This
 ## 🚀 Quick Start
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/grocery-store-demo.git`
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/aito-demo.git`
 3. Install dependencies: `npm install`
 4. Create a feature branch: `git checkout -b feature/your-feature-name`
 5. Make your changes
@@ -17,7 +17,7 @@ Thank you for your interest in contributing to the Aito Grocery Store Demo! This
 ### Reporting Bugs
 
 Before submitting a bug report:
-- Check if the issue already exists in [GitHub Issues](https://github.com/aito-ai/grocery-store-demo/issues)
+- Check if the issue already exists in [GitHub Issues](https://github.com/AitoDotAI/aito-demo/issues)
 - Ensure you're using the latest version
 - Test with different user personas (Larry, Veronica, Alice)
 
@@ -59,8 +59,8 @@ We welcome feature suggestions! Please:
 
 ```bash
 # Clone and setup
-git clone https://github.com/aito-ai/grocery-store-demo.git
-cd grocery-store-demo
+git clone https://github.com/AitoDotAI/aito-demo.git
+cd aito-demo
 npm install
 
 # Copy environment file
@@ -348,8 +348,8 @@ Contributors will be:
 
 ## 📞 Getting Help
 
-- **Questions**: Use [GitHub Discussions](https://github.com/aito-ai/grocery-store-demo/discussions)
-- **Bugs**: Create [GitHub Issues](https://github.com/aito-ai/grocery-store-demo/issues)
+- **Questions**: Use [GitHub Discussions](https://github.com/AitoDotAI/aito-demo/discussions)
+- **Bugs**: Create [GitHub Issues](https://github.com/AitoDotAI/aito-demo/issues)
 - **Chat**: Join our [Discord community](https://discord.gg/aito-ai)
 - **Email**: Contact us at opensource@aito.ai
 

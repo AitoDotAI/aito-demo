@@ -23,8 +23,8 @@ This demo showcases 11 real-world use cases of machine learning in e-commerce, f
 
 ```bash
 # Clone the repository
-git clone https://github.com/aito-ai/grocery-store-demo.git
-cd grocery-store-demo
+git clone https://github.com/AitoDotAI/aito-demo.git
+cd aito-demo
 
 # Install dependencies  
 npm install
@@ -355,13 +355,13 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE.txt](LI
 - **Live Demo**: https://aito-grocery-demo.netlify.app
 - **Aito.ai Platform**: https://aito.ai
 - **API Documentation**: https://aito.ai/docs/api
-- **Community**: https://github.com/aito-ai/grocery-store-demo/discussions
+- **Community**: https://github.com/AitoDotAI/aito-demo/discussions
 
 ## 🆘 Support
 
 - **Documentation**: [docs/](docs/)
-- **Issues**: [GitHub Issues](https://github.com/aito-ai/grocery-store-demo/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/aito-ai/grocery-store-demo/discussions)
+- **Issues**: [GitHub Issues](https://github.com/AitoDotAI/aito-demo/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/AitoDotAI/aito-demo/discussions)
 - **Email**: support@aito.ai
 
 ---

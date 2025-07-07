@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-I replaced months of ML pipeline development with SQL-like queries that return predictions instead of data. No model training, no MLOps, just queries. [Live demo](https://aito-grocery-demo.netlify.app) (no signup required) | [Source code](https://github.com/aito-ai/grocery-store-demo)
+I replaced months of ML pipeline development with SQL-like queries that return predictions instead of data. No model training, no MLOps, just queries. [Live demo](https://aito-grocery-demo.netlify.app) (no signup required) | [Source code](https://github.com/AitoDotAI/aito-demo)
 
 ## The Problem That Started This
 
@@ -520,13 +520,13 @@ Use the same predictive models across web, mobile, and in-store experiences.
 ## Try It Yourself
 
 1. **Live Demo**: https://aito-grocery-demo.netlify.app (no signup)
-2. **Source Code**: https://github.com/aito-ai/grocery-store-demo (MIT licensed)
+2. **Source Code**: https://github.com/AitoDotAI/aito-demo (MIT licensed)
 3. **Documentation**: [Complete use case guides](use-cases/) | [Project README](../README.md)
 
 ### Quick Start
 ```bash
-git clone https://github.com/aito-ai/grocery-store-demo.git
-cd grocery-store-demo
+git clone https://github.com/AitoDotAI/aito-demo.git
+cd aito-demo
 npm install
 cp .env.example .env  # Includes working demo credentials
 npm start

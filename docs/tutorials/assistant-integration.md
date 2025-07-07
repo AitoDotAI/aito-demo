@@ -405,7 +405,7 @@ REACT_APP_TEMPERATURE=0.7
 
 - [Aito.ai API Documentation](https://aito.ai/docs/api)
 - [OpenAI Function Calling](https://platform.openai.com/docs/guides/function-calling)
-- [Demo Source Code](https://github.com/aito-ai/grocery-store-demo)
+- [Demo Source Code](https://github.com/AitoDotAI/aito-demo)
 
 ---
 

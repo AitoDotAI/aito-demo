@@ -83,7 +83,7 @@ const HeroSection = () => {
           <Button 
             color="primary" 
             size="lg"
-            href="https://github.com/aito-ai/grocery-store-demo"
+            href="https://github.com/AitoDotAI/aito-demo"
             target="_blank"
             rel="noopener noreferrer"
           >
