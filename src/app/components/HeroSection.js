@@ -4,7 +4,7 @@ import { FaGithub, FaExternalLinkAlt, FaRocket, FaTimes } from 'react-icons/fa';
 import './HeroSection.css';
 
 const HeroSection = () => {
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
 
   // Check if user has previously dismissed the banner
   useEffect(() => {
