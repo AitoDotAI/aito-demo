@@ -55,30 +55,35 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 ### Core E-commerce Intelligence
 
 1. **🔍 Smart Search** - Personalized product discovery based on user behavior
+   - [📖 Use Case Guide](docs/use-cases/01-smart-search.md) | [💻 Implementation](src/01-search.js)
    
    ![Smart Search Example](docs/screenshots/features/search-milk-results.png)
    
    *Search results personalized for health-conscious users*
 
 2. **🎯 Recommendations** - Dynamic product suggestions that exclude cart items
+   - [📖 Use Case Guide](docs/use-cases/02-recommendations.md) | [💻 Implementation](src/02-recommend.js)
    
    ![Dynamic Recommendations](docs/screenshots/features/main-app-interface.png)
    
    *Real-time recommendations that adapt to shopping cart contents*
 
 3. **🏷️ Tag Prediction** - Automatic product categorization and tagging
+   - [📖 Use Case Guide](docs/use-cases/03-tag-prediction.md) | [💻 Implementation](src/03-get-tag-suggestions.js)
    
    ![Tag Suggestions](docs/screenshots/features/tag-prediction.png)
    
    *ML-powered tag suggestions for new products*
 
 4. **💡 Autocomplete** - Intelligent search suggestions with user context
+   - [📖 Use Case Guide](docs/use-cases/04-autocomplete.md) | [💻 Implementation](src/04-autocomplete.js)
    
    ![Autocomplete](docs/screenshots/features/autocomplete-full.png)
    
    *Context-aware search completion*
 
 5. **📝 Autofill** - Predictive form completion for faster checkout
+   - [📖 Use Case Guide](docs/use-cases/05-autofill.md) | [💻 Implementation](src/05-autofill.js)
    
    ![Autofill Cart](docs/screenshots/features/autofill-cart.png)
    
@@ -87,24 +92,28 @@ REACT_APP_AITO_API_KEY=your-api-key-here
 ### Advanced AI Capabilities
 
 6. **🗣️ NLP Processing** - Natural language understanding for customer feedback
+   - [📖 Use Case Guide](docs/use-cases/06-nlp-processing.md) | [💻 Implementation](src/06-prompt.js)
    
    ![NLP Processing](docs/screenshots/features/nlp-processing.png)
    
    *Automatic sentiment analysis and categorization*
 
 7. **🔗 Relationship Analysis** - Discover hidden patterns in product data
+   - [📖 Use Case Guide](docs/use-cases/07-data-analytics.md) | [💻 Implementation](src/07-relate.js)
    
    ![Product Relationships](docs/screenshots/features/product-analytics.png)
    
    *Statistical correlation discovery between products*
 
 8. **📄 Invoice Processing** - Automated document field extraction and routing
+   - [📖 Use Case Guide](docs/use-cases/08-invoice-processing.md) | [💻 Implementation](src/08-predict-invoice.js)
    
    ![Invoice Automation](docs/screenshots/features/invoice-automation.png)
    
    *Automatic GL code assignment and approval routing*
 
 9. **📊 Behavioral Analytics** - User behavior insights and predictive metrics
+   - [📖 Use Case Guide](docs/use-cases/09-product-analytics.md) | [💻 Implementation](src/09-product.js)
    
    ![Analytics Dashboard](docs/screenshots/features/analytics-dashboard.png)
    
@@ -117,6 +126,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
     - Cart management through conversation
     - Personalized shopping guidance based on user preferences
     - Order tracking and support inquiries
+    - [📖 Integration Guide](docs/tutorials/assistant-integration.md) | [💻 Implementation](src/services/chatTools/customerTools.js)
     
     ![Shopping Assistant](docs/screenshots/features/shopping-assistant.png)
     
@@ -127,6 +137,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
     - Natural language queries for business metrics
     - Automated report generation
     - Inventory and sales trend analysis
+    - [📖 Integration Guide](docs/tutorials/assistant-integration.md) | [💻 Implementation](src/services/chatTools/adminTools.js)
     
     ![Admin Assistant](docs/screenshots/features/admin-assistant.png)
     
