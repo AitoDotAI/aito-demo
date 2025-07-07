@@ -227,6 +227,84 @@ const screenshotGenerators = {
     }
   },
 
+  async tagPrediction(page) {
+    console.log('📸 Capturing tag prediction screenshots...');
+    
+    await page.goto(CONFIG.baseUrl);
+    await waitForApp(page);
+
+    // Navigate to Tag Prediction if there's a dedicated page, otherwise work from main page
+    const tagPredictionSection = page.locator('[data-testid="tag-prediction"], .tag-prediction').first();
+    
+    // Find input field for product name and enter "rye bread"
+    const productInput = page.locator('input[placeholder*="product"], input[placeholder*="name"], .product-input').first();
+    if (await productInput.isVisible()) {
+      await productInput.fill('rye bread');
+      await page.waitForTimeout(1000);
+      
+      // Trigger prediction if there's a button
+      const predictButton = page.locator('button:has-text("Predict"), button:has-text("Get Tags"), [data-testid="predict-button"]').first();
+      if (await predictButton.isVisible()) {
+        await predictButton.click();
+        await page.waitForTimeout(2000);
+      }
+      
+      await takeScreenshot(page, 'tag-prediction', {
+        directory: 'features',
+        fullPage: false
+      });
+    }
+  },
+
+  async autofillFeature(page) {
+    console.log('📸 Capturing autofill feature screenshots...');
+    
+    await page.goto(CONFIG.baseUrl);
+    await waitForApp(page);
+
+    // Find autofill section and button
+    const autofillButton = page.locator('button:has-text("Autofill"), button:has-text("Auto-fill"), [data-testid="autofill-button"]').first();
+    if (await autofillButton.isVisible()) {
+      await autofillButton.scrollIntoViewIfNeeded();
+      
+      // Click the autofill button
+      await autofillButton.click();
+      await page.waitForTimeout(2000);
+      
+      await takeScreenshot(page, 'autofill-cart', {
+        directory: 'features',
+        fullPage: false
+      });
+    }
+  },
+
+  async nlpProcessing(page) {
+    console.log('📸 Capturing NLP processing screenshots...');
+    
+    await page.goto(CONFIG.baseUrl);
+    await waitForApp(page);
+
+    // Find NLP input field
+    const nlpInput = page.locator('textarea, input[placeholder*="question"], input[placeholder*="feedback"], .nlp-input').first();
+    if (await nlpInput.isVisible()) {
+      await nlpInput.scrollIntoViewIfNeeded();
+      await nlpInput.fill('Which payment methods do you provide?');
+      await page.waitForTimeout(1000);
+      
+      // Trigger NLP processing if there's a button
+      const processButton = page.locator('button:has-text("Process"), button:has-text("Analyze"), button:has-text("Submit"), [data-testid="nlp-process"]').first();
+      if (await processButton.isVisible()) {
+        await processButton.click();
+        await page.waitForTimeout(2000);
+      }
+      
+      await takeScreenshot(page, 'nlp-processing', {
+        directory: 'features',
+        fullPage: false
+      });
+    }
+  },
+
   async mobileViews(page) {
     console.log('📸 Capturing mobile view screenshots...');
     
@@ -352,6 +430,9 @@ Available types:
   landingPage       - Landing page marketing screenshots
   searchFeatures    - Search functionality tutorials
   recommendations   - Recommendation system screenshots
+  tagPrediction     - Tag prediction with "rye bread" example
+  autofillFeature   - Autofill feature with button clicked
+  nlpProcessing     - NLP processing with payment question
   invoiceProcessing - Invoice processing workflow
   chatInterface     - Customer chat interface
   adminDashboard    - Admin analytics dashboard

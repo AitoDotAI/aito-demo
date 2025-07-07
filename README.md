@@ -160,7 +160,6 @@ The demo includes three distinct user personas with different shopping behaviors
 ### Tech Stack
 - **Frontend**: React 18, Reactstrap, Recharts
 - **API Integration**: Axios with Aito.ai REST API
-- **Data Generation**: Node.js synthetic data generator
 - **Styling**: Bootstrap 5, Custom CSS
 
 ### Project Structure
@@ -186,7 +185,6 @@ src/
 │       └── adminTools.js    # Admin assistant tools
 ├── constants/         # Application constants
 ├── data/             # Product catalog and schemas
-├── generator/        # Synthetic data generation
 └── config.js         # Environment configuration
 ```
 
@@ -208,20 +206,9 @@ npm run screenshots           # Generate all screenshots
 npm run screenshots:all       # Comprehensive feature screenshots
 npm run screenshots:marketing # Marketing and landing page screenshots
 npm run screenshots:tutorials # Tutorial and documentation screenshots
+npm run screenshots:specific  # Generate updated screenshots with custom content
 ```
 
-### Data Generation
-
-The demo includes a sophisticated data generator that creates realistic user behavior:
-
-```bash
-# Generate all data
-npm run generate-data
-
-# Generate specific data types
-node src/generator/index.js --only-weekly-schedules
-node src/generator/index.js --info
-```
 
 ### Code Quality
 
@@ -378,8 +365,6 @@ by moving over the functionality to Aito. The aim is to show how easy it is to i
 
 For the scope of this exercise, there is only a limited data set with 42 products available.
 The analytics data has been generated automatically, by simulating a few months of "life".
-See [Data generator](#data-generator) for more. If you want to regenerate the data, see
-[Running generator](#running-generator).
 
 The low number of products is intentional to restrict the scope and
 make the examples easy to understand. Applying machine learning to such a
