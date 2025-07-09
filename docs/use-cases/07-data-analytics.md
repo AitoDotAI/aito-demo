@@ -76,25 +76,37 @@ The analytics feature works across all data tables:
 ```json
 {
   "impressions": {
-    "session": "string",
-    "product": "string", 
-    "purchase": "boolean",
-    "context": {
-      "user": "string",
-      "weekday": "string",
-      "timestamp": "datetime"
+    "type": "table",
+    "columns": {
+      "session": { "type": "String", "link": "sessions.id" },
+      "product": { "type": "String", "link": "products.id" },
+      "purchase": { "type": "Boolean" },
+      "context": {
+        "type": "Object",
+        "schema": {
+          "user": { "type": "String" },
+          "weekday": { "type": "String" },
+          "timestamp": { "type": "DateTime" }
+        }
+      }
     }
   },
   "users": {
-    "id": "string",
-    "tags": ["young", "male", "club-member"],
-    "demographics": "object"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "tags": { "type": "Array", "items": { "type": "String" } },
+      "demographics": { "type": "Object" }
+    }
   },
   "products": {
-    "id": "string",
-    "name": "string",
-    "category": "string",
-    "tags": "array"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "name": { "type": "String" },
+      "category": { "type": "String" },
+      "tags": { "type": "Array", "items": { "type": "String" } }
+    }
   }
 }
 ```
@@ -146,12 +158,12 @@ Correlations found:
 - Sortable results table
 - Export capabilities
 
-## Performance Benefits
+## Technical Benefits
 
-- **Query Speed**: Fast, responsive analysis for real-time exploration
-- **Data Coverage**: Analyzes comprehensive datasets with extensive data points
-- **Insight Discovery**: High success rate in revealing significant correlations
-- **User Engagement**: Extended user engagement during analytics sessions
+- **Real-time Analysis**: Interactive exploration of data relationships
+- **Statistical Rigor**: Uses lift scores to identify significant correlations
+- **API Integration**: Single endpoint for all correlation analysis
+- **Flexible Queries**: Analyze any field against any value
 
 ## Implementation Example
 

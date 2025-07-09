@@ -42,11 +42,11 @@ No training. No deployment. Just queries.
 
 Here's the [live demo](https://aito-grocery-demo.netlify.app) - try it yourself (no signup needed). Switch between users to see personalization in action.
 
-### Performance Metrics
-- **Query latency**: <200ms (p95)
+### Technical Benefits
 - **No cold starts**: Predictions computed on-demand
-- **Accuracy**: 85%+ on search relevance
-- **Setup time**: 2 hours (vs 2 months traditionally)
+- **No model training**: Uses existing data directly
+- **Rapid development**: Hours instead of months
+- **SQL-like syntax**: Familiar query interface
 
 ### The Features (With Actual Code)
 
@@ -93,12 +93,12 @@ const smartSearch = {
 **Larry (Lactose-Intolerant Customer):**
 - Traditional search: Shows all milk products
 - Smart search: Prioritizes lactose-free alternatives
-- Result: 85% reduction in irrelevant results
+- Result: Personalized results based on purchase history
 
 **Veronica (Health-Conscious Shopper):**
 - Traditional search: Generic milk listing
 - Smart search: Emphasizes organic, low-fat options  
-- Result: 60% higher click-through rate
+- Result: User-specific ranking based on preferences
 
 ## Use Case 2: Dynamic Recommendations
 
@@ -127,10 +127,10 @@ const dynamicRecommendations = {
 }
 ```
 
-### Business Results
-- **35% click-through rate** on recommendations
-- **22% increase** in average order value
-- **40% cross-selling** success rate
+### Technical Results
+- Dynamic recommendations based on user context
+- Real-time personalization without model training
+- Excludes cart items automatically
 
 ## Use Case 3: Automated Content Creation
 
@@ -150,7 +150,7 @@ const tagPrediction = {
 // Results: ['organic', 'chocolate', 'dark', 'cocoa', 'healthy', 'premium']
 ```
 
-This reduces catalog management time by **70%** while improving tag consistency.
+This automates tag suggestion while maintaining consistency across products.
 
 ## Advanced Use Cases: Beyond E-commerce
 
@@ -170,10 +170,10 @@ const invoiceAutomation = {
 }
 ```
 
-**Business Impact:**
-- **80% automation** rate for invoice processing
-- **65% reduction** in processing time
-- **95% accuracy** in field prediction
+**Technical Implementation:**
+- Automatic field prediction based on vendor patterns
+- Routing logic based on historical approvals
+- Explainable predictions with confidence scores
 
 ### Customer Feedback Analysis
 
@@ -203,23 +203,39 @@ The beauty of Aito.ai is in its simplicity. Our entire grocery store runs on jus
 
 ```json
 {
-  "users": {
-    "username": "string"
-  },
-  "products": {
-    "id": "string",
-    "name": "text",
-    "tags": "text", 
-    "price": "decimal"
-  },
-  "sessions": {
-    "id": "string",
-    "user": "string"
-  },
-  "impressions": {
-    "session": "string",
-    "product": "string", 
-    "purchase": "boolean"
+  "schema": {
+    "users": {
+      "type": "table",
+      "columns": {
+        "id": { "type": "String" },
+        "tags": { "type": "Text", "analyzer": "Whitespace" }
+      }
+    },
+    "products": {
+      "type": "table",
+      "columns": {
+        "id": { "type": "String" },
+        "name": { "type": "Text", "analyzer": "English" },
+        "tags": { "type": "Text", "analyzer": "Whitespace" },
+        "price": { "type": "Decimal" }
+      }
+    },
+    "contexts": {
+      "type": "table",
+      "columns": {
+        "id": { "type": "String" },
+        "user": { "type": "String", "link": "users.id" },
+        "query": { "type": "Text", "analyzer": "English" }
+      }
+    },
+    "impressions": {
+      "type": "table",
+      "columns": {
+        "context": { "type": "String", "link": "contexts.id" },
+        "product": { "type": "String", "link": "products.id" },
+        "purchase": { "type": "Boolean" }
+      }
+    }
   }
 }
 ```
@@ -352,39 +368,29 @@ const response = await openai.chat.completions.create({
 });
 ```
 
-### Measurable Impact
+### Technical Implementation Benefits
 
-**Customer Engagement:**
-- 65% of users interact with chat assistants
-- 40% increase in session duration
-- 25% higher cart conversion rates
+**Customer Interface:**
+- Natural language queries converted to Aito.ai calls
+- Context-aware responses with user preferences
+- Real-time cart management and search
 
-**Operational Efficiency:**
-- 78% of customer queries resolved without human intervention
-- 60% reduction in support ticket volume
-- Real-time business insights without manual report generation
+**Operational Features:**
+- Automated query routing to appropriate Aito.ai endpoints
+- Conversational business intelligence
+- No manual report generation required
 
-## Performance Benchmarks
+## Technical Comparison
 
-### Query Performance
-```bash
-# Tested with Apache Bench on production instance
-ab -n 1000 -c 10 https://aito-grocery-demo.api.aito.ai/api/v1/_query
+### Development Speed
+- **Aito.ai**: Query-based ML, no training pipeline
+- **Traditional ML**: Feature engineering, model training, deployment
+- **Elasticsearch**: Index configuration, relevance tuning
 
-Results:
-- Requests per second: 487.23
-- Time per request: 20.524 ms (mean)
-- 95th percentile: 45ms
-- 99th percentile: 112ms
-```
-
-### Accuracy vs Traditional Approaches
-| Metric | Aito.ai | Elasticsearch | Custom ML |
-|--------|---------|---------------|----------|
-| Search relevance | 85% | 62% | 83% |
-| Setup time | 2 hours | 1 day | 2 months |
-| Maintenance | None | Index updates | Model retraining |
-| Cost/month | $99 | $500+ | $5000+ |
+### Maintenance Requirements
+- **Aito.ai**: No model retraining, automatic updates
+- **Traditional ML**: Regular retraining, drift monitoring
+- **Elasticsearch**: Index management, performance tuning
 
 ## Real-World Implementation Tips
 
@@ -444,27 +450,26 @@ const safeRecommendations = async (userId, cartItems) => {
 - **Instant results**: Change query, see new predictions immediately
 - **Explainable**: Every prediction comes with reasoning
 
-### Real Cost Comparison
+### Development Approach Comparison
 ```
 Traditional ML Pipeline:
-- 2 ML Engineers (6 months): $180k
-- Infrastructure setup: $50k
-- Ongoing maintenance: $100k/year
-Total Year 1: $330k
+- ML engineers for feature engineering
+- Model training and validation
+- Deployment and monitoring infrastructure
+- Ongoing model maintenance
 
 Aito.ai Implementation:
-- 1 Developer (1 week): $3k
-- Monthly subscription: $99/month
-Total Year 1: $4.2k
-
-Savings: 98.7%
+- Standard web developers
+- Query-based predictions
+- Managed service infrastructure
+- No model maintenance required
 ```
 
-### Limitations (Being Honest)
+### Technical Limitations
+- Designed for structured/tabular data
 - Not suitable for computer vision or complex NLP
-- Requires structured data (tables with relationships)
-- Limited to ~1M rows for real-time queries
-- No custom model architectures
+- Query-time computation may have latency considerations
+- No custom model architectures or deep learning
 
 ## Getting Started: Your First Aito.ai Project
 

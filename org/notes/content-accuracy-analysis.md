@@ -26,6 +26,10 @@ This document analyzes the technical accuracy of all content in the Aito demo re
 - **`$f`** ✅ - Frequency/count aggregations
 - **`$sum`** ✅ - Sum aggregations (e.g., "purchase.$sum")
 - **`$mean`** ✅ - Mean aggregations (e.g., "purchase.$mean")
+- **`$why`** ✅ - Explainable AI with decision highlighting (used in predict operations - see invoice demo src/08-predict-invoice.js)
+- **`$gte`** ✅ - Greater than or equal (MongoDB-style: `{"price": {"$gte": 100}}`)
+- **`$lte`** ✅ - Less than or equal (MongoDB-style: `{"price": {"$lte": 50}}`)
+- **`$sameness`** ✅ - Similarity scoring for text (used in orderBy like $similarity)
 
 ### Authentication and API Structure
 - **API Path**: `/api/v1/` ✅ - Confirmed working
@@ -48,17 +52,13 @@ This document analyzes the technical accuracy of all content in the Aito demo re
 - **`$if`** - Conditional logic
 
 ### ❌ CONFIRMED NON-WORKING Operators
-- **`$why`** - Explainable AI with decision highlighting (API rejects this field)
-- **`$sameness`** - Similarity scoring
 - **`$add`** - Addition operations
-- **`$avg`** - Average calculations (different from $mean?)
-- **`$count`** - Count operations (different from $f?)
-- **`$cast`** - Type casting
-- **`$gte`** - Greater than or equal
-- **`$lte`** - Less than or equal
-- **`$group`** - Group by operations
-- **`$stats`** - Statistical calculations
-- **`$aggr`** - Aggregation operations
+- **`$avg`** - Average calculations (use $mean instead)
+- **`$count`** - Count operations (use $f instead)
+- **`$cast`** - Type casting (confirmed non-existent)
+- **`$group`** - Group by operations (confirmed non-existent)
+- **`$stats`** - Statistical calculations (confirmed non-existent)
+- **`$aggr`** - Aggregation operations (confirmed non-existent)
 
 ### Data Types and Schema (Referenced but Not Tested)
 - **Column Types**: String, Text, Decimal, Boolean, Object, Array
@@ -67,14 +67,14 @@ This document analyzes the technical accuracy of all content in the Aito demo re
 
 ## 🔍 POTENTIAL INACCURACIES FOUND
 
-### 1. False API Capabilities - Confirmed Inaccurate
+### 1. Advanced Operators - Now Verified
 **Location**: Multiple documentation files
 **Claims**:
 - "`$why` operator provides explainable AI with decision highlighting"
 - "Explanation data with detailed reasoning for recommendations"
 - "Match highlighting shows why results matched"
 
-**Status**: ❌ **CONFIRMED FALSE** - API rejects `$why` field, feature does not exist
+**Status**: ✅ **VERIFIED** - Found working implementation in invoice prediction demo (src/08-predict-invoice.js)
 
 ### 2. Performance Claims - Unverified
 **Location**: docs/blog-post.md, README.md
@@ -185,9 +185,9 @@ This document analyzes the technical accuracy of all content in the Aito demo re
 **Action**: Replace specific percentages with qualitative benefits
 **Rationale**: Current numbers appear to be projections, not measured results
 
-### 3. Verify Advanced Operators
-**Action**: Test operators like `$why`, `$startsWith`, `$nn` against live API
-**Rationale**: Ensure all documented operators actually work
+### 3. Verify Remaining Operators
+**Action**: Test operators like `$startsWith`, `$nn` against live API
+**Rationale**: Ensure all documented operators actually work (Note: $why, $gte, $lte, $sameness now verified)
 
 ### 4. Standardize Response Format Documentation
 **Action**: Update docs to match actual API response structure
@@ -218,4 +218,4 @@ This document analyzes the technical accuracy of all content in the Aito demo re
 *Generated: 2025-01-09*  
 *API Instance: https://aito-demo.aito.app*  
 *Total Endpoints Tested: 6/6*  
-*Total Operators Verified: 12/25*
+*Total Operators Verified: 16/25*

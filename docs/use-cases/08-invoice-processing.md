@@ -103,27 +103,36 @@ The invoice processing leverages multiple data tables:
 ```json
 {
   "invoices": {
-    "id": "string",
-    "vendor": "string",
-    "amount": "decimal",
-    "description": "text",
-    "glCode": "string",
-    "processor": "string",
-    "requiresApproval": "boolean",
-    "processedDate": "datetime"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "vendor": { "type": "String" },
+      "amount": { "type": "Decimal" },
+      "description": { "type": "Text", "analyzer": "English" },
+      "glCode": { "type": "String", "link": "glCodes.code" },
+      "processor": { "type": "String", "link": "employees.id" },
+      "requiresApproval": { "type": "Boolean" },
+      "processedDate": { "type": "DateTime" }
+    }
   },
   "glCodes": {
-    "code": "string",
-    "name": "string", 
-    "category": "string",
-    "department": "string"
+    "type": "table",
+    "columns": {
+      "code": { "type": "String" },
+      "name": { "type": "String" },
+      "category": { "type": "String" },
+      "department": { "type": "String" }
+    }
   },
   "employees": {
-    "id": "string",
-    "name": "string",
-    "department": "string",
-    "approvalLimit": "decimal",
-    "role": "string"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "name": { "type": "String" },
+      "department": { "type": "String" },
+      "approvalLimit": { "type": "Decimal" },
+      "role": { "type": "String" }
+    }
   }
 }
 ```
@@ -169,12 +178,12 @@ The invoice processing leverages multiple data tables:
 - Automatic coding for utility bills
 - Bulk processing capabilities
 
-## Performance Benefits
+## Technical Benefits
 
-- **Processing Speed**: Dramatically faster than manual processing
-- **Accuracy**: High accuracy in GL code assignment
-- **Automation Rate**: Majority of invoices processed without human intervention
-- **Error Reduction**: Significant reduction in coding errors
+- **Automated Classification**: Predicts GL codes based on invoice content
+- **Confidence Scoring**: Each prediction includes probability score
+- **Explainable AI**: Shows which factors influenced predictions
+- **Workflow Integration**: Automatically routes to appropriate approvers
 
 ## Implementation Example
 

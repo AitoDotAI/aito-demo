@@ -98,29 +98,41 @@ The analytics engine leverages comprehensive product data:
 ```json
 {
   "impressions": {
-    "session": "string",
-    "product": "string",
-    "purchase": "boolean", 
-    "timestamp": "datetime",
-    "context": {
-      "user": "string",
-      "weekday": "string",
-      "hour": "integer"
+    "type": "table",
+    "columns": {
+      "session": { "type": "String", "link": "sessions.id" },
+      "product": { "type": "String", "link": "products.id" },
+      "purchase": { "type": "Boolean" },
+      "timestamp": { "type": "DateTime" },
+      "context": {
+        "type": "Object",
+        "schema": {
+          "user": { "type": "String" },
+          "weekday": { "type": "String" },
+          "hour": { "type": "Integer" }
+        }
+      }
     }
   },
   "products": {
-    "id": "string",
-    "name": "string",
-    "category": "string",
-    "price": "decimal",
-    "tags": "array",
-    "ga_clicks": "integer",
-    "ga_impressions": "integer"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "name": { "type": "String" },
+      "category": { "type": "String" },
+      "price": { "type": "Decimal" },
+      "tags": { "type": "Array", "items": { "type": "String" } },
+      "ga_clicks": { "type": "Integer" },
+      "ga_impressions": { "type": "Integer" }
+    }
   },
   "users": {
-    "id": "string", 
-    "tags": ["young", "male", "club-member"],
-    "demographics": "object"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "tags": { "type": "Array", "items": { "type": "String" } },
+      "demographics": { "type": "Object" }
+    }
   }
 }
 ```
@@ -194,12 +206,12 @@ marketPosition: {
 - **Engagement Score**: Multi-factor user interaction metric
 - **Growth Velocity**: Rate of performance improvement
 
-## Performance Benefits
+## Technical Benefits
 
-- **Analysis Speed**: Fast, comprehensive product analysis
-- **Data Freshness**: Near real-time updates for current insights
-- **Accuracy**: High prediction accuracy for sales forecasting
-- **Coverage**: Extensive analysis across multiple product metrics
+- **Comprehensive Analysis**: Multiple analytics queries in single batch request
+- **Real-time Insights**: Uses current data for up-to-date analysis
+- **Statistical Rigor**: Correlation analysis with lift scores
+- **Flexible Metrics**: Configurable analysis across different dimensions
 
 ## Implementation Example
 
