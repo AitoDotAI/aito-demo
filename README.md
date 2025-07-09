@@ -82,7 +82,7 @@ REACT_APP_AITO_API_KEY=your-api-key-here
    
    *Context-aware search completion*
 
-5. **📝 Autofill** - Predictive form completion for faster checkout
+5. **📝 Autofill** - Predictive shopping cart setup for faster checkout
    - [📖 Use Case Guide](docs/use-cases/05-autofill.md) | [💻 Implementation](src/05-autofill.js)
    
    ![Autofill Cart](docs/screenshots/features/autofill-cart.png)
