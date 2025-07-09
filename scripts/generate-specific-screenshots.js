@@ -15,7 +15,7 @@ const fs = require('fs');
 const CONFIG = {
   baseUrl: 'http://localhost:3000',
   screenshotDir: './docs/screenshots/features',
-  viewport: { width: 1280, height: 720 },
+  viewport: { width: 1280, height: 900 },
   waitTime: 2000
 };
 
@@ -32,11 +32,16 @@ const takeScreenshot = async (page, filename, options = {}) => {
   ensureDir(CONFIG.screenshotDir);
   const screenshotPath = path.join(CONFIG.screenshotDir, filename);
   
-  await page.screenshot({
+  const screenshotOptions = {
     path: screenshotPath,
-    fullPage,
-    clip
-  });
+    fullPage
+  };
+  
+  if (clip) {
+    screenshotOptions.clip = clip;
+  }
+  
+  await page.screenshot(screenshotOptions);
 
   console.log(`✓ Screenshot saved: ${screenshotPath}`);
   return screenshotPath;
@@ -65,7 +70,7 @@ async function generateSpecificScreenshots() {
     console.log('📸 1. Generating tag prediction screenshot with "rye bread" on /products page...');
     
     // Navigate to products page for tag prediction
-    await page.goto(`${CONFIG.baseUrl}/products`);
+    await page.goto(`${CONFIG.baseUrl}/admin`);
     await waitForApp(page);
 
     // Find tag prediction input on products page
@@ -110,6 +115,10 @@ async function generateSpecificScreenshots() {
     
     await takeScreenshot(page, 'tag-prediction.png');
     
+    // Navigate to cart page for autofill
+    await page.goto(`${CONFIG.baseUrl}/cart`);
+    await waitForApp(page);
+
     console.log('📸 2. Generating autofill screenshot with button clicked...');
     
     // Look for autofill button
