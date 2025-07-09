@@ -153,29 +153,37 @@ const screenshotGenerators = {
   async invoiceProcessing(page) {
     console.log('📸 Capturing invoice processing screenshots...');
     
-    await page.goto(CONFIG.baseUrl);
-    await page.click('text=Try the Demo');
+    // Navigate directly to invoicing page
+    await page.goto(`${CONFIG.baseUrl}/invoicing`);
     await waitForApp(page);
 
-    // Navigate to Invoice Processing
-    const invoiceLink = page.locator('text=Invoice Processing, a[href*="invoice"]').first();
-    if (await invoiceLink.isVisible()) {
-      await invoiceLink.click();
-      await waitForApp(page);
+    // Look for and click "Load Sample Invoice" button
+    const loadSampleButtons = [
+      'button:has-text("Load Sample Invoice")',
+      'button:has-text("Load Sample")',
+      'button:has-text("Sample Invoice")',
+      '[data-testid="load-sample-invoice"]',
+      '.load-sample-btn'
+    ];
 
-      await takeScreenshot(page, 'invoice-processing-full', {
-        directory: 'tutorials',
-        fullPage: true
-      });
-
-      // Invoice list
-      const invoiceList = page.locator('.invoice-list, .invoices-table').first();
-      if (await invoiceList.isVisible()) {
-        await takeScreenshot(page, 'invoice-list', {
-          directory: 'tutorials'
-        });
+    for (const selector of loadSampleButtons) {
+      const button = page.locator(selector).first();
+      if (await button.isVisible()) {
+        await button.click();
+        await page.waitForTimeout(2000);
+        break;
       }
     }
+
+    await takeScreenshot(page, 'invoice-automation', {
+      directory: 'features',
+      fullPage: false
+    });
+
+    await takeScreenshot(page, 'invoice-processing-full', {
+      directory: 'tutorials',
+      fullPage: true
+    });
   },
 
   async chatInterface(page) {
@@ -223,6 +231,83 @@ const screenshotGenerators = {
       await takeScreenshot(page, 'admin-dashboard-full', {
         directory: 'tutorials',
         fullPage: true
+      });
+    }
+  },
+
+  async tagPrediction(page) {
+    console.log('📸 Capturing tag prediction screenshots...');
+    
+    // Navigate to products page for tag prediction
+    await page.goto(`${CONFIG.baseUrl}/products`);
+    await waitForApp(page);
+    
+    // Find input field for product name and enter "rye bread"
+    const productInput = page.locator('input[placeholder*="product"], input[placeholder*="name"], .product-input').first();
+    if (await productInput.isVisible()) {
+      await productInput.fill('rye bread');
+      await page.waitForTimeout(1000);
+      
+      // Trigger prediction if there's a button
+      const predictButton = page.locator('button:has-text("Predict"), button:has-text("Get Tags"), [data-testid="predict-button"]').first();
+      if (await predictButton.isVisible()) {
+        await predictButton.click();
+        await page.waitForTimeout(2000);
+      }
+      
+      await takeScreenshot(page, 'tag-prediction', {
+        directory: 'features',
+        fullPage: false
+      });
+    }
+  },
+
+  async autofillFeature(page) {
+    console.log('📸 Capturing autofill feature screenshots...');
+    
+    await page.goto(CONFIG.baseUrl);
+    await waitForApp(page);
+
+    // Find autofill section and button
+    const autofillButton = page.locator('button:has-text("Autofill"), button:has-text("Auto-fill"), [data-testid="autofill-button"]').first();
+    if (await autofillButton.isVisible()) {
+      await autofillButton.scrollIntoViewIfNeeded();
+      
+      // Click the autofill button
+      await autofillButton.click();
+      await page.waitForTimeout(2000);
+      
+      await takeScreenshot(page, 'autofill-cart', {
+        directory: 'features',
+        fullPage: false
+      });
+    }
+  },
+
+  async nlpProcessing(page) {
+    console.log('📸 Capturing NLP processing screenshots...');
+    
+    // Navigate to help page for NLP processing
+    await page.goto(`${CONFIG.baseUrl}/help`);
+    await waitForApp(page);
+
+    // Find NLP input field on help page
+    const nlpInput = page.locator('textarea, input[placeholder*="question"], input[placeholder*="feedback"], .nlp-input').first();
+    if (await nlpInput.isVisible()) {
+      await nlpInput.scrollIntoViewIfNeeded();
+      await nlpInput.fill('Which payment methods do you provide?');
+      await page.waitForTimeout(1000);
+      
+      // Trigger NLP processing if there's a button
+      const processButton = page.locator('button:has-text("Process"), button:has-text("Analyze"), button:has-text("Submit"), [data-testid="nlp-process"]').first();
+      if (await processButton.isVisible()) {
+        await processButton.click();
+        await page.waitForTimeout(2000);
+      }
+      
+      await takeScreenshot(page, 'nlp-processing', {
+        directory: 'features',
+        fullPage: false
       });
     }
   },
@@ -352,6 +437,9 @@ Available types:
   landingPage       - Landing page marketing screenshots
   searchFeatures    - Search functionality tutorials
   recommendations   - Recommendation system screenshots
+  tagPrediction     - Tag prediction with "rye bread" on /products page
+  autofillFeature   - Autofill feature with button clicked
+  nlpProcessing     - NLP processing with payment question on /help page
   invoiceProcessing - Invoice processing workflow
   chatInterface     - Customer chat interface
   adminDashboard    - Admin analytics dashboard

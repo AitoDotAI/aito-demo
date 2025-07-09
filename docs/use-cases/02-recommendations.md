@@ -125,20 +125,20 @@ const processRecommendations = (hits) => {
 }
 ```
 
-## Business Impact
+## Technical Implementation
 
-### Performance Benefits
+### Key Features
 
-- **Click-Through Rate**: High engagement on recommended products
-- **Conversion Rate**: Strong purchase rate from recommendations  
-- **Average Order Value**: Notable increase when recommendations used
-- **Customer Satisfaction**: High rating on recommendation relevance
+- **Goal Optimization**: Recommendations optimize for purchase likelihood
+- **Dynamic Exclusion**: Automatically excludes cart items
+- **Context Awareness**: Considers user history and current session
+- **Confidence Scoring**: Each recommendation includes probability score
 
-### Revenue Impact
+### Business Logic
 
-- **Cross-selling**: Many recommendations span different categories
-- **Discovery**: Majority of recommended products are new to users
-- **Repeat Purchases**: Higher retention rate for users who engage with recommendations
+- **Cross-category**: Recommendations span different product categories
+- **Discovery**: Surfaces products user hasn't seen before
+- **Personalization**: Adapts to individual user preferences
 
 ## Advanced Features
 

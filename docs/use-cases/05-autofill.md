@@ -74,21 +74,30 @@ The autofill feature leverages purchase history data:
 ```json
 {
   "impressions": {
-    "session": "string",
-    "product": "string",
-    "purchase": "boolean",
-    "timestamp": "datetime"
+    "type": "table",
+    "columns": {
+      "session": { "type": "String", "link": "sessions.id" },
+      "product": { "type": "String", "link": "products.id" },
+      "purchase": { "type": "Boolean" },
+      "timestamp": { "type": "DateTime" }
+    }
   },
   "products": {
-    "id": "string",
-    "name": "string",
-    "category": "string",
-    "price": "decimal"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "name": { "type": "String" },
+      "category": { "type": "String" },
+      "price": { "type": "Decimal" }
+    }
   },
   "sessions": {
-    "id": "string",
-    "user": "string",
-    "timestamp": "datetime"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "user": { "type": "String", "link": "users.username" },
+      "timestamp": { "type": "DateTime" }
+    }
   }
 }
 ```
@@ -112,12 +121,12 @@ The autofill feature leverages purchase history data:
 - Suggests seasonal and trending products
 - Provides broad category coverage
 
-## Performance Benefits
+## Technical Benefits
 
-- **Prediction Accuracy**: High rate of suggested items are purchased
-- **Time Savings**: Significant reduction in shopping time
-- **User Satisfaction**: Strong user satisfaction with suggestion relevance
-- **Discovery Rate**: Notable portion of users try new suggested products
+- **Behavioral Learning**: Adapts to user's shopping patterns over time
+- **Context Awareness**: Considers current cart and session data
+- **Confidence Scoring**: Each suggestion includes probability score
+- **Personalization**: Unique suggestions for each user profile
 
 ## Implementation Example
 

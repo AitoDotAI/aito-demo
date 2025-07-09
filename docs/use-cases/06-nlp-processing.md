@@ -398,25 +398,25 @@ const handleIncomingText = async (req, res) => {
 }
 ```
 
-## Performance and Scaling
+## Technical Implementation
 
-### Response Time Optimization
-- **Average Processing**: Fast processing per text analysis
+### Processing Features
+- **Single API Call**: All text analysis in one request
 - **Batch Processing**: Efficient handling of large text volumes
-- **Concurrent Requests**: High-capacity simultaneous classifications
-- **Caching**: Intelligent caching for repeated text patterns
+- **Concurrent Processing**: Handles multiple requests simultaneously
+- **Structured Output**: Returns JSON with confidence scores
 
-### Accuracy Benefits
-- **Sentiment Analysis**: High accuracy across domains
-- **Category Classification**: Strong precision and recall performance
-- **Intent Recognition**: Excellent success rate in understanding intent
-- **Language Detection**: Very high accuracy across multiple languages
+### Prediction Capabilities
+- **Multi-class Classification**: Sentiment, category, intent prediction
+- **Confidence Scoring**: Each prediction includes probability score
+- **Context Awareness**: Considers text content and patterns
+- **Flexible Schema**: Adaptable to different text analysis needs
 
-### Business Impact
-- **Support Efficiency**: Major reduction in manual ticket routing
-- **Response Time**: Significantly faster initial response to customer issues
-- **Satisfaction**: High customer rating for automated responses
-- **Cost Savings**: Substantial annual savings in support operations
+### Integration Benefits
+- **Automated Routing**: Reduces manual ticket classification
+- **Real-time Analysis**: Immediate text processing and classification
+- **Scalable Architecture**: Handles varying text processing loads
+- **API Integration**: Easy to integrate with existing systems
 
 ## Best Practices
 

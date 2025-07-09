@@ -82,11 +82,13 @@ run_screenshots() {
     docker run --rm \
         --name ${CONTAINER_NAME} \
         -v "$(pwd)/docs/screenshots:${APP_DIR}/docs/screenshots" \
+        -v "$(pwd)/tests:${APP_DIR}/tests" \
+        -v "$(pwd)/playwright.config.js:${APP_DIR}/playwright.config.js" \
         -p 3001:3000 \
         ${DOCKER_IMAGE} \
         bash -c "
             echo 'Starting development server...'
-            npm start > server.log 2>&1 &
+            npm start > /dev/null 2>&1 &
             
             echo 'Waiting for server to start...'
             for i in {1..30}; do
@@ -96,21 +98,22 @@ run_screenshots() {
                 fi
                 if [ \$i -eq 30 ]; then
                     echo 'Server failed to start'
-                    cat server.log
                     exit 1
                 fi
                 sleep 2
             done
             
-            echo 'Generating screenshots...'
+            echo 'Generating screenshots with Playwright...'
             if [ \"\${command}\" = \"npm run screenshots:all\" ]; then
-                node scripts/screenshot-ai-features.js
+                npx playwright test tests/screenshots.spec.js --project=chromium
+            elif [ \"\${command}\" = \"npm run screenshots:specific\" ]; then
+                npx playwright test tests/screenshots.spec.js --project=chromium --grep 'Specific Feature Screenshots'
             else
-                \${command}
+                npx playwright test tests/screenshots.spec.js --project=chromium
             fi
             
             echo 'Generated files:'
-            ls -la docs/screenshots/features/*.png 2>/dev/null || echo 'No PNG files generated'
+            find docs/screenshots -name '*.png' -type f -exec ls -la {} \; 2>/dev/null || echo 'No PNG files generated'
             
             echo 'Screenshots generated!'
             echo 'Stopping development server...'
@@ -132,6 +135,9 @@ case "${1:-all}" in
     "docs")
         run_screenshots "npm run screenshots:docs"
         ;;
+    "specific")
+        run_screenshots "npm run screenshots:specific"
+        ;;
     "placeholders")
         run_screenshots "npm run screenshots:placeholders"
         ;;
@@ -146,6 +152,7 @@ case "${1:-all}" in
         echo "  marketing    Generate marketing screenshots only"
         echo "  tutorials    Generate tutorial screenshots only"  
         echo "  docs         Generate documentation screenshots only"
+        echo "  specific     Generate specific feature screenshots with custom content"
         echo "  placeholders Generate placeholder screenshots only"
         echo "  test         Run Playwright screenshot tests"
         echo "  help         Show this help message"

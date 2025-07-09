@@ -119,6 +119,7 @@ class ProductSearch extends Component {
                 {...HELP_CONTENT['Smart Search']}
                 size="sm"
                 className="ml-1"
+                invertColors={true}
               />
             </span>
             <div className="ProductSearch__search-input-wrapper">

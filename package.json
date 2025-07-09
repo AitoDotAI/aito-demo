@@ -38,13 +38,15 @@
     "upload-data": "node upload-data.js",
     "upload-data:dry-run": "node upload-data.js --dry-run",
     "screenshots": "node scripts/screenshot-generator.js",
-    "screenshots:marketing": "node scripts/screenshot-generator.js landingPage highResMarketing mobileViews",
-    "screenshots:tutorials": "node scripts/screenshot-generator.js searchFeatures recommendations invoiceProcessing chatInterface",
+    "screenshots:marketing": "npx playwright test tests/screenshots.spec.js --project=chromium --grep='Landing Page Screenshots|High-res Marketing Screenshots|Mobile Screenshots'",
+    "screenshots:tutorials": "npx playwright test tests/screenshots.spec.js --project=chromium --grep='Search Feature Screenshots|Recommendations Screenshots|Product Page Screenshots|Invoice Processing Screenshots|Chat Interface Screenshots|Admin Dashboard Screenshots|Comprehensive Use Case Screenshots'",
     "screenshots:docs": "node scripts/screenshot-generator.js adminDashboard",
     "test:screenshots": "npx playwright test tests/screenshots.spec.js",
-    "screenshots:all": "node scripts/screenshot-all-features.js",
+    "screenshots:all": "npx playwright test tests/screenshots.spec.js --project=chromium",
     "screenshots:ai": "node scripts/screenshot-ai-features.js",
     "screenshots:placeholders": "node scripts/create-placeholder-screenshots.js",
+    "screenshots:specific": "npx playwright test tests/screenshots.spec.js --project=chromium --grep 'Specific Feature Screenshots'",
+    "screenshots:verify": "node scripts/verify-screenshots.js",
     "screenshots:docker": "./scripts/docker-screenshots.sh"
   },
   "eslintConfig": {

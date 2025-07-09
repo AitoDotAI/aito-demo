@@ -18,8 +18,8 @@ Before you begin, ensure you have:
 ### 1.1 Clone the Repository
 
 ```bash
-git clone https://github.com/aito-ai/grocery-store-demo.git
-cd grocery-store-demo
+git clone https://github.com/AitoDotAI/aito-demo.git
+cd aito-demo
 ```
 
 ### 1.2 Install Dependencies
@@ -311,8 +311,8 @@ Now that you have the demo running, explore these advanced topics:
 ## Need Help?
 
 - **Documentation**: Browse the [complete documentation](../README.md)
-- **Issues**: Report problems on [GitHub Issues](https://github.com/aito-ai/grocery-store-demo/issues)
-- **Community**: Join discussions on [GitHub Discussions](https://github.com/aito-ai/grocery-store-demo/discussions)
+- **Issues**: Report problems on [GitHub Issues](https://github.com/AitoDotAI/aito-demo/issues)
+- **Community**: Join discussions on [GitHub Discussions](https://github.com/AitoDotAI/aito-demo/discussions)
 - **Support**: Email support@aito.ai for technical assistance
 
 ## What's Next?

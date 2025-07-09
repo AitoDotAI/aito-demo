@@ -81,19 +81,28 @@ The search leverages three main data tables:
 ```json
 {
   "impressions": {
-    "session": "string", // Link to sessions table
-    "product": "string", // Link to products table  
-    "purchase": "boolean" // Did user buy this item?
+    "type": "table",
+    "columns": {
+      "session": { "type": "String", "link": "sessions.id" },
+      "product": { "type": "String", "link": "products.id" },
+      "purchase": { "type": "Boolean" }
+    }
   },
   "products": {
-    "id": "string",
-    "name": "text", // Full-text searchable
-    "tags": "text", // Searchable product attributes
-    "price": "decimal"
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "name": { "type": "Text", "analyzer": "English" },
+      "tags": { "type": "Text", "analyzer": "Whitespace" },
+      "price": { "type": "Decimal" }
+    }
   },
   "sessions": {
-    "id": "string",
-    "user": "string" // Link to users table
+    "type": "table",
+    "columns": {
+      "id": { "type": "String" },
+      "user": { "type": "String", "link": "users.username" }
+    }
   }
 }
 ```
@@ -117,12 +126,12 @@ The search leverages three main data tables:
 - Benefits from popularity-based ranking
 - Discovers trending products
 
-## Performance Benefits
+## Technical Benefits
 
-- **Response Time**: Fast, sub-second response times
-- **Relevance**: High user satisfaction on result quality
-- **Personalization**: Substantial improvement over basic search
-- **Discovery**: Notable increase in new product exploration
+- **Personalization**: Results adapt to user purchase history
+- **Relevance**: Combines text similarity with behavioral data
+- **Implementation**: Single API call with scoring logic
+- **Discovery**: Surfaces products aligned with user preferences
 
 ## Implementation Example
 
@@ -135,8 +144,8 @@ const searchProducts = async (userId, query) => {
     const results = await getProductSearchResults(userId, query)
     return results.map(product => ({
       ...product,
-      relevanceScore: product.$p, // Aito confidence score
-      reasons: product.$matches // Why this matched
+      // Results include: name, id, tags, price, $matches
+      highlights: product["$matches"] || [] // Match highlights
     }))
   } catch (error) {
     console.error('Search failed:', error)

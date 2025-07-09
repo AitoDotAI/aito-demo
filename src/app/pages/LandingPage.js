@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ProductSearch from '../components/ProductSearch'
 import RecommendedProducts from '../components/RecommendedProducts'
 import ChatWidget from '../components/ChatWidget'
+import HeroSection from '../components/HeroSection'
 
 import './LandingPage.css'
 
@@ -101,6 +102,8 @@ class LandingPage extends Component {
   render() {
     return (
       <div className="LandingPage">
+        <HeroSection />
+        
         <ProductSearch
           selectedUserId={this.props.selectedUserId}
           cart={this.props.appState.cart}

@@ -183,23 +183,22 @@ const contextualPrediction = {
 - **Support Tickets**: Issue type, priority, skills needed
 - **Emails**: Topic, sentiment, action required
 
-## Performance Benefits
+## Technical Benefits
 
-### Accuracy
-- **Precision**: High accuracy for confident predictions
-- **Recall**: Strong coverage of relevant tags
-- **Overall Performance**: Excellent prediction quality
+### Prediction Quality
+- **Confidence Scoring**: Each prediction includes probability score
+- **Multiple Suggestions**: Returns ranked list of relevant tags
+- **Context Awareness**: Considers product name, category, and existing tags
 
-### Efficiency
-- **Processing Speed**: Fast batch processing capabilities
-- **API Response**: Sub-second response times per prediction
+### Implementation
 - **Batch Processing**: Efficient handling of large product catalogs
+- **API Integration**: Single endpoint for all prediction needs
+- **Flexible Thresholds**: Configurable confidence levels
 
-### Business Impact
-- **Time Saved**: Significant reduction in manual tagging time
-- **Consistency**: Much higher tag consistency vs manual processes
-- **Discoverability**: Notable improvement in search success
-- **Sales Impact**: Meaningful increase from better product discovery
+### Operational Impact
+- **Automation**: Reduces manual tagging effort
+- **Consistency**: Standardizes tag vocabulary across products
+- **Discoverability**: Improves product search and categorization
 
 ## Best Practices
 

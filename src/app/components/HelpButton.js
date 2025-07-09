@@ -12,7 +12,8 @@ const HelpButton = ({
   useCaseLink, 
   technicalDetails = null,
   size = 'sm',
-  className = ''
+  className = '',
+  invertColors = false
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -36,7 +37,13 @@ const HelpButton = ({
           fontSize: size === 'sm' ? '1.1rem' : '1.3rem',
           verticalAlign: 'middle',
           lineHeight: 1,
-          color: '#FF6B35',
+          color: invertColors ? 'white' : '#FF6B35',
+          backgroundColor: invertColors ? '#FF6B35' : 'transparent',
+          width: invertColors ? '1.5rem' : 'auto',
+          height: invertColors ? '1.5rem' : 'auto',
+          display: invertColors ? 'inline-flex' : 'inline',
+          alignItems: invertColors ? 'center' : 'normal',
+          justifyContent: invertColors ? 'center' : 'normal',
           position: 'relative',
           top: '-0.1rem'
         }}
