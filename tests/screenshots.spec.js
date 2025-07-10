@@ -800,7 +800,7 @@ test.describe('Aito Grocery Store Screenshots', () => {
     
     // 9. Product Analytics
     try {
-      await page.goto(`${APP_URL}/products`);
+      await page.goto(`${APP_URL}/product`);
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(WAIT_TIME);
       
