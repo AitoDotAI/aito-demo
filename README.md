@@ -26,11 +26,26 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 ![Smart Search](docs/screenshots/features/search-milk-results.png)
 ```javascript
 // Personalized search combining text similarity + purchase probability
-orderBy: {
-  $multiply: [
-    '$similarity',                                    // Text relevance
-    { $p: { $context: { purchase: true } } }         // Purchase likelihood
-  ]
+{
+  from: 'impressions',
+  where: {
+    product: {
+      $or: [
+        { tags: { $match: 'milk' } },
+        { name: { $match: 'milk' } }
+      ]
+    },
+    'context.user': 'larry'
+  },
+  get: 'product',
+  orderBy: {
+    $multiply: [
+      '$similarity',                                  // Text relevance
+      { $p: { $context: { purchase: true } } }       // Purchase likelihood
+    ]
+  },
+  select: ['name', 'id', 'tags', 'price', '$matches'],
+  limit: 5
 }
 ```
 [→ Implementation](src/01-search.js) | [Use case guide](docs/use-cases/01-smart-search.md)
