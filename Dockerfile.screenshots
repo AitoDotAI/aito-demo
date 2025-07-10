@@ -24,17 +24,14 @@ WORKDIR /app
 # Copy package files first for better caching
 COPY package*.json ./
 
-# Install npm dependencies
-RUN npm ci --only=production --ignore-scripts
-
-# Install Playwright with system dependencies
-RUN npx playwright install --with-deps
-
 # Copy application files
 COPY . .
 
 # Install all npm dependencies (including dev dependencies for screenshot scripts)
 RUN npm ci
+
+# Install Playwright with system dependencies
+RUN npx playwright install --with-deps
 
 # Create screenshots directory with proper permissions
 RUN mkdir -p docs/screenshots/features && chmod 777 docs/screenshots
