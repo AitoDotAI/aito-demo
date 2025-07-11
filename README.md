@@ -81,12 +81,16 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 ### 4. 💡 Intelligent Autocomplete
 ![Autocomplete](docs/screenshots/features/autocomplete-full.png)
 ```javascript
-// Context-aware search suggestions
+// Context-aware search suggestions ordered by probability
 {
   from: 'contexts',
-  where: { user: userId },
+  where: { 
+    queryPhrase: { $startsWith: inputText },
+    user: userId 
+  },
   get: 'queryPhrase',
-  where: { queryPhrase: { $startsWith: inputText } }
+  orderBy: '$p',                                      // Most likely completions first
+  select: ['$p', '$value']
 }
 ```
 [→ Implementation](src/04-autocomplete.js) | [Use case guide](docs/use-cases/04-autocomplete.md)
