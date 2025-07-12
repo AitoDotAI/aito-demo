@@ -109,11 +109,11 @@ run_screenshots() {
             
             echo 'Generating screenshots with Playwright...'
             if [ \"\${command}\" = \"npm run screenshots:all\" ]; then
-                npx playwright test tests/screenshots.spec.js --project=chromium
+                npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium
             elif [ \"\${command}\" = \"npm run screenshots:specific\" ]; then
-                npx playwright test tests/screenshots.spec.js --project=chromium --grep 'Specific Feature Screenshots'
+                npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium --grep 'Specific Feature Screenshots'
             else
-                npx playwright test tests/screenshots.spec.js --project=chromium
+                npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium
             fi
             
             echo 'Generated files:'
@@ -146,7 +146,7 @@ case "${1:-all}" in
         run_screenshots "npm run screenshots:placeholders"
         ;;
     "test")
-        run_screenshots "npx playwright test tests/screenshots.spec.js"
+        run_screenshots "npx playwright test scripts/screenshot/screenshots.spec.js"
         ;;
     "help"|"-h"|"--help")
         echo "Usage: $0 [COMMAND]"

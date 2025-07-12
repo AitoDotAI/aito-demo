@@ -269,7 +269,7 @@ node scripts/screenshot-all-features.js
 node scripts/screenshot-generator.js
 
 # Playwright test suite
-npx playwright test tests/screenshots.spec.js
+npx playwright test scripts/screenshot/screenshots.spec.js
 \`\`\`
 
 ## 🔧 Troubleshooting
