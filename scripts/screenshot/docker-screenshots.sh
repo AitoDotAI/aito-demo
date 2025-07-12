@@ -43,10 +43,14 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Check if we're in the right directory
-if [ ! -f "package.json" ] || [ ! -f "Dockerfile.screenshots" ]; then
+if [ ! -f "package.json" ]; then
     print_error "Please run this script from the aito-demo root directory"
     exit 1
 fi
+
+# Get the script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DOCKERFILE_PATH="${SCRIPT_DIR}/Dockerfile.screenshots"
 
 print_status "Starting Docker-based screenshot generation..."
 
@@ -58,7 +62,7 @@ fi
 
 # Build Docker image
 echo -e "\n${BLUE}📦 Building Docker image...${NC}"
-if docker build -f Dockerfile.screenshots -t ${DOCKER_IMAGE} .; then
+if docker build -f "${DOCKERFILE_PATH}" -t ${DOCKER_IMAGE} .; then
     print_status "Docker image built successfully"
 else
     print_error "Failed to build Docker image"

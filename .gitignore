@@ -70,3 +70,16 @@ pids
 
 # Optional REPL history
 .node_repl_history
+
+# Generated content and test artifacts
+server.log
+playwright-report/
+test-results/
+.last-run.json
+*.backup
+
+# Design files (not needed for demo)
+docs/design/
+
+# Temporary screenshot generation
+screenshots-temp/
