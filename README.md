@@ -55,11 +55,15 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 ```javascript
 // Goal-oriented recommendations that exclude cart items
 {
+  from: 'impressions',
+  where: {
+    'context.user': userId,                               // Personalization
+    'product.id': { $and: cartItems.map(item => ({ $not: item.id })) }
+  },
   recommend: 'product',
   goal: { purchase: true },
-  where: {
-    'product.id': { $and: cartItems.map(item => ({ $not: item.id })) }
-  }
+  select: ['name', 'id', 'tags', 'price'],
+  limit: 5
 }
 ```
 [→ Implementation](src/02-recommend.js) | [Use case guide](docs/use-cases/02-recommendations.md)
@@ -72,8 +76,10 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
   from: 'products',
   where: { name: 'Organic Dark Chocolate 70%' },
   predict: 'tags',
+  exclusiveness: false,                                   // Multiple tags allowed
   limit: 10
 }
+// Filter: hit.$p > 0.5, Extract: hit.feature
 // Returns: ['organic', 'chocolate', 'dark', 'healthy', 'premium']
 ```
 [→ Implementation](src/03-get-tag-suggestions.js) | [Use case guide](docs/use-cases/03-tag-prediction.md)
@@ -100,11 +106,13 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 ```javascript
 // Predict likely purchases based on user behavior
 {
-  from: 'impressions',
-  where: { 'context.user': userId },
-  recommend: 'product',
-  goal: { purchase: true }
+  from: 'visits',
+  where: { user: userId },
+  predict: 'purchases',
+  exclusiveness: false,                                   // Multiple products
+  select: ['$p', '$value']
 }
+// Filter results: hit.$p >= 0.4 (40%+ confidence)
 ```
 [→ Implementation](src/05-autofill.js) | [Use case guide](docs/use-cases/05-autofill.md)
 
@@ -150,13 +158,21 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 ### 9. 📈 Product Analytics Dashboard
 ![Product Analytics](docs/screenshots/features/product-analytics-page.png)
 ```javascript
-// Comprehensive product analysis in one batch request
-{
-  from: 'impressions',
-  where: { 'product.id': productId },
-  get: 'context.week',
-  select: ['$value', '$f', { $sum: { $context: 'purchase' } }]
-}
+// Comprehensive product analysis in batch request
+[
+  { // Product correlations
+    from: 'impressions',
+    where: { purchase: true },
+    relate: { product: productId },
+    select: ['lift', 'related']
+  },
+  { // User demographics analysis  
+    from: 'visits',
+    where: { purchases: { $has: productId } },
+    relate: 'user.tags',
+    select: ['lift', 'related']
+  }
+]
 ```
 [→ Implementation](src/09-product.js) | [Use case guide](docs/use-cases/09-product-analytics.md)
 
