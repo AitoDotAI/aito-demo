@@ -5,8 +5,8 @@
 
 import { getProductAnalytics } from '../../09-product';
 import { getDistinctValues } from '../../10-get-distinct-values';
-import { getProductSearchResults } from '../../01-search';
-import { getTagSuggestions } from '../../03-get-tag-suggestions';
+import { getProductSearchResults } from '../../03-search';
+import { getTagSuggestions } from '../../04-get-tag-suggestions';
 import { prompt } from '../../06-prompt';
 import { relate } from '../../07-relate';
 import { predictInvoice } from '../../08-predict-invoice';

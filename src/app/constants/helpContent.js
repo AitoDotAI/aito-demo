@@ -9,28 +9,28 @@ export const HELP_CONTENT = {
     title: 'Smart Search with Personalization',
     description: 'Intelligent product search that learns from user behavior to deliver personalized, relevant results. Unlike traditional keyword matching, this system considers your shopping history and preferences to show products you\'re most likely to purchase.',
     technicalDetails: 'Uses Aito.ai\'s _query endpoint with behavioral data. Combines text similarity with purchase probability scoring using the $multiply operator on $similarity and $p values.',
-    useCaseLink: `${GITHUB_BASE}/01-smart-search.md`
+    useCaseLink: `${GITHUB_BASE}/03-smart-search.md`
   },
   
   'Recommendations': {
     title: 'Personalized Product Recommendations',
     description: 'Dynamic product suggestions that adapt to your shopping cart and personal preferences. The system automatically excludes items already in your cart and suggests complementary products you\'re likely to enjoy.',
     technicalDetails: 'Leverages Aito.ai\'s _recommend endpoint with goal optimization. Uses behavioral data from the impressions table to predict purchase likelihood while filtering out cart contents.',
-    useCaseLink: `${GITHUB_BASE}/02-recommendations.md`
+    useCaseLink: `${GITHUB_BASE}/01-recommendations.md`
   },
   
   'Tag Prediction': {
     title: 'Automatic Tag Prediction',
     description: 'AI-powered product categorization that automatically suggests relevant tags for new products. This feature dramatically reduces manual catalog management while ensuring consistent and comprehensive product labeling.',
     technicalDetails: 'Uses Aito.ai\'s _predict endpoint to analyze product names and descriptions. Learns from existing product-tag relationships to suggest appropriate categories with confidence scores.',
-    useCaseLink: `${GITHUB_BASE}/03-tag-prediction.md`
+    useCaseLink: `${GITHUB_BASE}/04-tag-prediction.md`
   },
   
   'Autocomplete': {
     title: 'Intelligent Search Autocomplete',
     description: 'Context-aware search suggestions that predict what you\'re looking for as you type. Goes beyond simple prefix matching to understand user intent and provide relevant product suggestions.',
     technicalDetails: 'Combines prefix matching with behavioral analysis using Aito.ai queries. Analyzes user search patterns and product interactions to rank suggestions by relevance and likelihood.',
-    useCaseLink: `${GITHUB_BASE}/04-autocomplete.md`
+    useCaseLink: `${GITHUB_BASE}/02-autocomplete.md`
   },
   
   'Autofill': {

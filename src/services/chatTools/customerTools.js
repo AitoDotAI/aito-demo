@@ -3,9 +3,9 @@
  * Provides tools for customer-facing AI assistant
  */
 
-import { getProductSearchResults } from '../../01-search';
-import { getRecommendedProducts } from '../../02-recommend';
-import { getAutoComplete } from '../../04-autocomplete';
+import { getRecommendedProducts } from '../../01-recommend';
+import { getAutoComplete } from '../../02-autocomplete';
+import { getProductSearchResults } from '../../03-search';
 import { getAutoFill, getProductsByIds } from '../../05-autofill';
 import { prompt } from '../../06-prompt';
 

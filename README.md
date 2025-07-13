@@ -22,155 +22,146 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 
 ## What I Built
 
-### 1. 🔍 Smart Search with Personalization
-![Smart Search](docs/screenshots/features/search-milk-results.png)
-```javascript
-// Personalized search combining text similarity + purchase probability
+### 1. 🎯 Dynamic Recommendations
+![Recommendations](docs/screenshots/features/main-app-interface.png)
+```json
 {
-  from: 'impressions',
-  where: {
-    product: {
-      $or: [
-        { tags: { $match: 'milk' } },
-        { name: { $match: 'milk' } }
+  "from": "impressions",
+  "where": {
+    "context.user": "larry",
+    "product.id": { "$and": [{ "$not": "10" }, { "$not": "15" }] }
+  },
+  "recommend": "product",
+  "goal": { "purchase": true },
+  "select": ["name", "id", "tags", "price"],
+  "limit": 5
+}
+```
+[→ Implementation](src/01-recommend.js) | [Use case guide](docs/use-cases/01-recommendations.md)
+
+### 2. 💡 Intelligent Autocomplete
+![Autocomplete](docs/screenshots/features/autocomplete-full.png)
+```json
+{
+  "from": "contexts",
+  "where": { 
+    "queryPhrase": { "$startsWith": "mil" },
+    "user": "larry" 
+  },
+  "get": "queryPhrase",
+  "orderBy": "$p",
+  "select": ["$p", "$value"]
+}
+```
+[→ Implementation](src/02-autocomplete.js) | [Use case guide](docs/use-cases/02-autocomplete.md)
+
+### 3. 🔍 Smart Search with Personalization
+![Smart Search](docs/screenshots/features/search-milk-results.png)
+```json
+{
+  "from": "impressions",
+  "where": {
+    "product": {
+      "$or": [
+        { "tags": { "$match": "milk" } },
+        { "name": { "$match": "milk" } }
       ]
     },
-    'context.user': 'larry'
+    "context.user": "larry"
   },
-  get: 'product',
-  orderBy: {
-    $multiply: [
-      '$similarity',                                  // Text relevance
-      { $p: { $context: { purchase: true } } }       // Purchase likelihood
+  "get": "product",
+  "orderBy": {
+    "$multiply": [
+      "$similarity",
+      { "$p": { "$context": { "purchase": true } } }
     ]
   },
-  select: ['name', 'id', 'tags', 'price', '$matches'],
-  limit: 5
+  "select": ["name", "id", "tags", "price", "$matches"],
+  "limit": 5
 }
 ```
-[→ Implementation](src/01-search.js) | [Use case guide](docs/use-cases/01-smart-search.md)
+[→ Implementation](src/03-search.js) | [Use case guide](docs/use-cases/03-smart-search.md)
 
-### 2. 🎯 Dynamic Recommendations
-![Recommendations](docs/screenshots/features/main-app-interface.png)
-```javascript
-// Goal-oriented recommendations that exclude cart items
-{
-  from: 'impressions',
-  where: {
-    'context.user': userId,                               // Personalization
-    'product.id': { $and: cartItems.map(item => ({ $not: item.id })) }
-  },
-  recommend: 'product',
-  goal: { purchase: true },
-  select: ['name', 'id', 'tags', 'price'],
-  limit: 5
-}
-```
-[→ Implementation](src/02-recommend.js) | [Use case guide](docs/use-cases/02-recommendations.md)
-
-### 3. 🏷️ Automated Tag Prediction
+### 4. 🏷️ Automated Tag Prediction
 ![Tag Prediction](docs/screenshots/features/tag-prediction.png)
-```javascript
-// Auto-generate product tags with confidence scores
+```json
 {
-  from: 'products',
-  where: { name: 'Organic Dark Chocolate 70%' },
-  predict: 'tags',
-  exclusiveness: false,                                   // Multiple tags allowed
-  limit: 10
+  "from": "products",
+  "where": { "name": "Rye bread" },
+  "predict": "tags",
+  "exclusiveness": false,
+  "limit": 10
 }
+```
 // Filter: hit.$p > 0.5, Extract: hit.feature
 // Returns: ['organic', 'chocolate', 'dark', 'healthy', 'premium']
-```
-[→ Implementation](src/03-get-tag-suggestions.js) | [Use case guide](docs/use-cases/03-tag-prediction.md)
-
-### 4. 💡 Intelligent Autocomplete
-![Autocomplete](docs/screenshots/features/autocomplete-full.png)
-```javascript
-// Context-aware search suggestions ordered by probability
-{
-  from: 'contexts',
-  where: { 
-    queryPhrase: { $startsWith: inputText },
-    user: userId 
-  },
-  get: 'queryPhrase',
-  orderBy: '$p',                                      // Most likely completions first
-  select: ['$p', '$value']
-}
-```
-[→ Implementation](src/04-autocomplete.js) | [Use case guide](docs/use-cases/04-autocomplete.md)
+[→ Implementation](src/04-get-tag-suggestions.js) | [Use case guide](docs/use-cases/04-tag-prediction.md)
 
 ### 5. 📝 Smart Cart Autofill
 ![Autofill](docs/screenshots/features/autofill-cart.png)
-```javascript
-// Predict likely purchases based on user behavior
+```json
 {
-  from: 'visits',
-  where: { user: userId },
-  predict: 'purchases',
-  exclusiveness: false,                                   // Multiple products
-  select: ['$p', '$value']
+  "from": "visits",
+  "where": { "user": "larry" },
+  "predict": "purchases",
+  "exclusiveness": false,
+  "select": ["$p", "$value"]
 }
-// Filter results: hit.$p >= 0.4 (40%+ confidence)
 ```
+// Filter results: hit.$p >= 0.4 (40%+ confidence)
 [→ Implementation](src/05-autofill.js) | [Use case guide](docs/use-cases/05-autofill.md)
 
 ### 6. 🗣️ NLP Text Classification
 ![NLP Processing](docs/screenshots/features/nlp-processing.png)
-```javascript
-// Classify customer feedback sentiment and category
+```json
 {
-  from: 'prompts',
-  where: { prompt: 'The checkout process was confusing' },
-  predict: ['sentiment', 'category', 'urgency']
+  "from": "prompts",
+  "where": { "prompt": "Which payment methods do you provide?" },
+  "predict": "answer"
 }
-// Returns: sentiment: 'negative', category: 'user_experience'
 ```
+// Returns: sentiment: 'negative', category: 'user_experience'
 [→ Implementation](src/06-prompt.js) | [Use case guide](docs/use-cases/06-nlp-processing.md)
 
 ### 7. 📊 Statistical Relationship Discovery
 ![Data Analytics](docs/screenshots/features/analytics-dashboard.png)
-```javascript
-// Find correlations between user demographics and purchases
+```json
 {
-  from: 'visits',
-  where: { 'user.tags': 'club-member' },
-  relate: 'purchases'
+  "from": "visits",
+  "where": { "user.tags": "club-member" },
+  "relate": "purchases"
 }
-// Returns: lift scores showing what club members buy more
 ```
+// Returns: lift scores showing what club members buy more
 [→ Implementation](src/07-relate.js) | [Use case guide](docs/use-cases/07-data-analytics.md)
 
 ### 8. 📄 Automated Invoice Processing
-![Invoice Processing](docs/screenshots/features/invoice-processing.png)
-```javascript
-// Predict GL codes and approvers with explanations
+![Invoice Processing](docs/screenshots/features/invoice-automation.png)
+```json
 {
-  from: 'invoices',
-  where: { vendor: 'Tech Solutions Inc', amount: 2500 },
-  predict: ['GLCode', 'Processor', 'Approver'],
-  select: ['$p', { $why: { highlight: true } }]
+  "from": "invoices",
+  "where": { "Description": "AWS Cloud" },
+  "predict": "Processor",
+  "select": ["$p", "Name", "Role", { "$why": { "highlight": true } }]
 }
 ```
 [→ Implementation](src/08-predict-invoice.js) | [Use case guide](docs/use-cases/08-invoice-processing.md)
 
 ### 9. 📈 Product Analytics Dashboard
 ![Product Analytics](docs/screenshots/features/product-analytics-page.png)
-```javascript
-// Comprehensive product analysis in batch request
+```json
 [
-  { // Product correlations
-    from: 'impressions',
-    where: { purchase: true },
-    relate: { product: productId },
-    select: ['lift', 'related']
+  {
+    "from": "impressions",
+    "where": { "purchase": true },
+    "relate": { "product": "42" },
+    "select": ["lift", "related"]
   },
-  { // User demographics analysis  
-    from: 'visits',
-    where: { purchases: { $has: productId } },
-    relate: 'user.tags',
-    select: ['lift', 'related']
+  {
+    "from": "visits",
+    "where": { "purchases": { "$has": "42" } },
+    "relate": "user.tags",
+    "select": ["lift", "related"]
   }
 ]
 ```
@@ -178,32 +169,30 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 
 ### 10. 🤖 AI Shopping Assistant
 ![Shopping Assistant](docs/screenshots/features/shopping-assistant.png)
-```javascript
-// Natural language interface powered by Aito queries
-// "Find gluten-free bread under $5"
+```json
 {
-  from: 'impressions',
-  where: {
-    'product.tags': { $match: 'gluten-free bread' },
-    'product.price': { $lte: 5 }
+  "from": "impressions",
+  "where": {
+    "product.tags": { "$match": "gluten-free bread" },
+    "product.price": { "$lte": 5 }
   },
-  orderBy: { $p: { $context: { purchase: true } } }
+  "orderBy": { "$p": { "$context": { "purchase": true } } }
 }
 ```
+// "Find gluten-free bread under $5"
 [→ Implementation](src/services/chatTools/customerTools.js) | [Use case guide](docs/tutorials/assistant-integration.md)
 
 ### 11. 🔧 Admin Business Intelligence
 ![Admin Assistant](docs/screenshots/features/admin-assistant.png)
-```javascript
-// Conversational business analytics
-// "What are our top selling products this week?"
+```json
 {
-  from: 'impressions',
-  where: { purchase: true, 'context.week': currentWeek },
-  get: { $group: 'product.name', $stats: { sales: { $count: true } } },
-  orderBy: { sales: -1 }
+  "from": "impressions",
+  "where": { "purchase": true, "context.week": "2024-03" },
+  "get": { "$group": "product.name", "$stats": { "sales": { "$count": true } } },
+  "orderBy": { "sales": -1 }
 }
 ```
+// "What are our top selling products this week?"
 [→ Implementation](src/services/chatTools/adminTools.js) | [Use case guide](docs/tutorials/assistant-integration.md)
 
 ## 🚀 Quick Start
