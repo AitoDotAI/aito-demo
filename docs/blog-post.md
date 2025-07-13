@@ -1,4 +1,4 @@
-# Show HN: I Built 9 ML Features for E-commerce in One Weekend Using Aito.ai
+# Show HN: I Built 11 ML Features for E-commerce in One Weekend Using Aito.ai
 
 ## TL;DR
 
@@ -38,7 +38,7 @@ SELECT * FROM products WHERE name LIKE '%milk%'
 
 No training. No deployment. Just queries.
 
-## What I Built: 9 Working ML Features
+## What I Built: 11 Working ML Features
 
 Here's the [live demo](https://aito-grocery-demo.netlify.app) - try it yourself (no signup needed). Switch between users to see personalization in action.
 
