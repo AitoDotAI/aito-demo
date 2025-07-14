@@ -110,10 +110,17 @@ run_screenshots() {
             echo 'Generating screenshots with Playwright...'
             if [ \"\${command}\" = \"npm run screenshots:all\" ]; then
                 npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium
+                echo 'Generating dedicated NLP screenshots...'
+                node scripts/screenshot/nlp-specific-screenshots.js
             elif [ \"\${command}\" = \"npm run screenshots:specific\" ]; then
                 npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium --grep 'Specific Feature Screenshots'
+            elif [ \"\${command}\" = \"node scripts/screenshot/nlp-specific-screenshots.js\" ]; then
+                echo 'Generating dedicated NLP screenshots only...'
+                node scripts/screenshot/nlp-specific-screenshots.js
             else
                 npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium
+                echo 'Generating dedicated NLP screenshots...'
+                node scripts/screenshot/nlp-specific-screenshots.js
             fi
             
             echo 'Generated files:'
@@ -148,6 +155,9 @@ case "${1:-all}" in
     "test")
         run_screenshots "npx playwright test scripts/screenshot/screenshots.spec.js"
         ;;
+    "nlp")
+        run_screenshots "node scripts/screenshot/nlp-specific-screenshots.js"
+        ;;
     "help"|"-h"|"--help")
         echo "Usage: $0 [COMMAND]"
         echo ""
@@ -159,6 +169,7 @@ case "${1:-all}" in
         echo "  specific     Generate specific feature screenshots with custom content"
         echo "  placeholders Generate placeholder screenshots only"
         echo "  test         Run Playwright screenshot tests"
+        echo "  nlp          Generate NLP processing screenshots only"
         echo "  help         Show this help message"
         echo ""
         echo "Examples:"
