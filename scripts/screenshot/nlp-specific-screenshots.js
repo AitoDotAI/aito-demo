@@ -30,15 +30,13 @@ async function generateNLPScreenshots() {
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
     
-    // Find the input element
-    const input = page.locator('textarea, input[type="text"]').first();
-    const processButton = page.locator('button:has-text("Process"), button:has-text("Analyze"), button[type="submit"]').first();
+    // Find the input element (help page uses Input component)
+    const input = page.locator('input[type="text"], input:not([type])').first();
     
-    // Check if elements exist
+    // Check if input exists
     const inputVisible = await input.isVisible();
-    const buttonVisible = await processButton.isVisible();
     
-    console.log(`Input visible: ${inputVisible}, Button visible: ${buttonVisible}`);
+    console.log(`Help page input visible: ${inputVisible}`);
     
     if (!inputVisible) {
       console.log('❌ Input element not found on /help page');
@@ -55,6 +53,8 @@ async function generateNLPScreenshots() {
       return;
     }
     
+    console.log('ℹ️ Note: Help page uses auto-submit (no button needed) - results appear after typing');
+    
     // Scenario 1: App keeps crashing
     console.log('📱 Testing scenario 1: App keeps crashing');
     await input.fill('App keeps crashing');
@@ -66,58 +66,55 @@ async function generateNLPScreenshots() {
     });
     console.log('✅ Generated: nlp-processing-crash-query.png');
     
-    if (buttonVisible) {
-      await processButton.click();
-      console.log('⏳ Waiting for crash analysis results...');
-      
-      // Wait for results to appear - multiple strategies
-      let resultsLoaded = false;
-      
-      // Strategy 1: Wait for common result selectors
+    // Wait for auto-results to appear (no button click needed)
+    console.log('⏳ Waiting for crash analysis results to auto-load...');
+    
+    // Wait for help page specific result elements
+    let resultsLoaded = false;
+    
+    // Strategy 1: Wait for help page result container
+    try {
+      await page.waitForSelector('.HelpPage__result, .HelpPage__metadata', { timeout: 8000 });
+      console.log('✅ Help page results appeared');
+      resultsLoaded = true;
+    } catch (e) {
+      console.log('⚠️ Help page result container not found, trying other strategies...');
+    }
+    
+    // Strategy 2: Wait for specific sentiment/category content
+    if (!resultsLoaded) {
       try {
-        await page.waitForSelector('.result, .analysis, .prediction, .sentiment, .category, [data-testid*="result"], .answer', { timeout: 5000 });
-        console.log('✅ Result elements appeared');
+        await page.waitForFunction(() => {
+          const body = document.body.textContent || '';
+          return body.includes('Detected Sentiment') || body.includes('Category') || 
+                 body.includes('feedback') || body.includes('Send Feedback') ||
+                 body.includes('negative') || body.includes('positive');
+        }, { timeout: 5000 });
+        console.log('✅ Results detected by content analysis');
         resultsLoaded = true;
       } catch (e) {
-        console.log('⚠️ No result elements found, trying other strategies...');
+        console.log('⚠️ Content analysis timeout, proceeding anyway...');
       }
-      
-      // Strategy 2: Wait for page content to change (indicating results loaded)
-      if (!resultsLoaded) {
-        try {
-          await page.waitForFunction(() => {
-            const body = document.body.textContent || '';
-            return body.includes('sentiment') || body.includes('category') || 
-                   body.includes('confidence') || body.includes('score') ||
-                   body.includes('negative') || body.includes('positive') ||
-                   body.includes('product') || body.includes('request');
-          }, { timeout: 5000 });
-          console.log('✅ Results detected by content analysis');
-          resultsLoaded = true;
-        } catch (e) {
-          console.log('⚠️ Content analysis timeout, proceeding anyway...');
-        }
-      }
-      
-      // Additional wait for animations and rendering
-      await page.waitForTimeout(resultsLoaded ? 2000 : 5000);
-      
-      // Debug: Show what content is on the page
-      const pageContent = await page.textContent('body');
-      console.log(`📝 Page content sample: ${pageContent.slice(0, 200)}...`);
-      
-      // Expand viewport to capture more content
-      await page.setViewportSize({ width: 1280, height: 900 });
-      
-      await page.screenshot({
-        path: path.join(SCREENSHOT_DIR, 'nlp-processing-crash-result.png'),
-        fullPage: true  // Changed to capture entire page
-      });
-      console.log('✅ Generated: nlp-processing-crash-result.png');
-      
-      // Reset viewport
-      await page.setViewportSize({ width: 1280, height: 720 });
     }
+    
+    // Additional wait for animations and rendering
+    await page.waitForTimeout(resultsLoaded ? 2000 : 3000);
+    
+    // Debug: Show what content is on the page
+    const pageContent = await page.textContent('body');
+    console.log(`📝 Page content sample: ${pageContent.slice(0, 300)}...`);
+    
+    // Expand viewport to capture more content
+    await page.setViewportSize({ width: 1280, height: 900 });
+    
+    await page.screenshot({
+      path: path.join(SCREENSHOT_DIR, 'nlp-processing-crash-result.png'),
+      fullPage: true
+    });
+    console.log('✅ Generated: nlp-processing-crash-result.png');
+    
+    // Reset viewport
+    await page.setViewportSize({ width: 1280, height: 720 });
     
     // Clear and prepare for next scenario
     await input.clear();
@@ -134,58 +131,55 @@ async function generateNLPScreenshots() {
     });
     console.log('✅ Generated: nlp-processing-bananas-query.png');
     
-    if (buttonVisible) {
-      await processButton.click();
-      console.log('⏳ Waiting for bananas request analysis results...');
-      
-      // Wait for results to appear - multiple strategies
-      let resultsLoaded = false;
-      
-      // Strategy 1: Wait for common result selectors
-      try {
-        await page.waitForSelector('.result, .analysis, .prediction, .sentiment, .category, [data-testid*="result"], .answer', { timeout: 5000 });
-        console.log('✅ Result elements appeared');
-        resultsLoaded = true;
-      } catch (e) {
-        console.log('⚠️ No result elements found, trying other strategies...');
-      }
-      
-      // Strategy 2: Wait for page content to change (indicating results loaded)
-      if (!resultsLoaded) {
-        try {
-          await page.waitForFunction(() => {
-            const body = document.body.textContent || '';
-            return body.includes('sentiment') || body.includes('category') || 
-                   body.includes('confidence') || body.includes('score') ||
-                   body.includes('negative') || body.includes('positive') ||
-                   body.includes('product') || body.includes('request');
-          }, { timeout: 5000 });
-          console.log('✅ Results detected by content analysis');
-          resultsLoaded = true;
-        } catch (e) {
-          console.log('⚠️ Content analysis timeout, proceeding anyway...');
-        }
-      }
-      
-      // Additional wait for animations and rendering
-      await page.waitForTimeout(resultsLoaded ? 2000 : 5000);
-      
-      // Debug: Show what content is on the page
-      const pageContent = await page.textContent('body');
-      console.log(`📝 Page content sample: ${pageContent.slice(0, 200)}...`);
-      
-      // Expand viewport to capture more content
-      await page.setViewportSize({ width: 1280, height: 900 });
-      
-      await page.screenshot({
-        path: path.join(SCREENSHOT_DIR, 'nlp-processing-bananas-result.png'),
-        fullPage: true  // Changed to capture entire page
-      });
-      console.log('✅ Generated: nlp-processing-bananas-result.png');
-      
-      // Reset viewport
-      await page.setViewportSize({ width: 1280, height: 720 });
+    // Wait for auto-results to appear (no button click needed)
+    console.log('⏳ Waiting for bananas request analysis results to auto-load...');
+    
+    // Wait for help page specific result elements
+    let resultsLoaded2 = false;
+    
+    // Strategy 1: Wait for help page result container
+    try {
+      await page.waitForSelector('.HelpPage__result, .HelpPage__metadata', { timeout: 8000 });
+      console.log('✅ Help page results appeared');
+      resultsLoaded2 = true;
+    } catch (e) {
+      console.log('⚠️ Help page result container not found, trying other strategies...');
     }
+    
+    // Strategy 2: Wait for specific content
+    if (!resultsLoaded2) {
+      try {
+        await page.waitForFunction(() => {
+          const body = document.body.textContent || '';
+          return body.includes('Question & Answer') || body.includes('Send Feedback') || 
+                 body.includes('Category') || body.includes('Detected Sentiment') ||
+                 body.includes('product') || body.includes('request');
+        }, { timeout: 5000 });
+        console.log('✅ Results detected by content analysis');
+        resultsLoaded2 = true;
+      } catch (e) {
+        console.log('⚠️ Content analysis timeout, proceeding anyway...');
+      }
+    }
+    
+    // Additional wait for animations and rendering
+    await page.waitForTimeout(resultsLoaded2 ? 2000 : 3000);
+    
+    // Debug: Show what content is on the page
+    const pageContent2 = await page.textContent('body');
+    console.log(`📝 Page content sample: ${pageContent2.slice(0, 300)}...`);
+    
+    // Expand viewport to capture more content
+    await page.setViewportSize({ width: 1280, height: 900 });
+    
+    await page.screenshot({
+      path: path.join(SCREENSHOT_DIR, 'nlp-processing-bananas-result.png'),
+      fullPage: true
+    });
+    console.log('✅ Generated: nlp-processing-bananas-result.png');
+    
+    // Reset viewport
+    await page.setViewportSize({ width: 1280, height: 720 });
     
     console.log('🎉 NLP screenshot generation completed successfully!');
     
