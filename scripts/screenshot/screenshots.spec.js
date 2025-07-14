@@ -875,7 +875,7 @@ test.describe('Aito Grocery Store Screenshots', () => {
       });
       
       // Scenario 1: App crashing issue
-      const nlpInput = page.locator('textarea, input[type="text"]').first();
+      const nlpInput = page.locator('input[type="text"], input:not([type])').first();
       if (await nlpInput.isVisible()) {
         await nlpInput.fill('App keeps crashing');
         await page.waitForTimeout(1000);
@@ -885,23 +885,19 @@ test.describe('Aito Grocery Store Screenshots', () => {
           fullPage: false
         });
         
-        const processBtn = page.locator('button:has-text("Process"), button:has-text("Analyze")').first();
-        if (await processBtn.isVisible()) {
-          await processBtn.click();
-          
-          // Wait for results to appear
-          try {
-            await page.waitForSelector('.result, .analysis, .prediction, .sentiment, .category, .answer', { timeout: 8000 });
-            await page.waitForTimeout(2000);
-          } catch (e) {
-            await page.waitForTimeout(5000);
-          }
-          
-          await takeScreenshot(page, 'nlp-processing-crash-result', {
-            directory: 'features',
-            fullPage: true
-          });
+        // Wait for auto-results (no button click needed)
+        try {
+          await page.waitForSelector('.HelpPage__result, .HelpPage__metadata', { timeout: 8000 });
+          await page.waitForTimeout(2000);
+        } catch (e) {
+          await page.waitForTimeout(5000);
         }
+        
+        await takeScreenshot(page, 'nlp-processing-crash-result', {
+          directory: 'features',
+          fullPage: true
+        });
+      }
         
         // Clear input for next scenario
         await nlpInput.clear();
@@ -918,23 +914,18 @@ test.describe('Aito Grocery Store Screenshots', () => {
           fullPage: false
         });
         
-        const processBtn = page.locator('button:has-text("Process"), button:has-text("Analyze")').first();
-        if (await processBtn.isVisible()) {
-          await processBtn.click();
-          
-          // Wait for results to appear
-          try {
-            await page.waitForSelector('.result, .analysis, .prediction, .sentiment, .category, .answer', { timeout: 8000 });
-            await page.waitForTimeout(2000);
-          } catch (e) {
-            await page.waitForTimeout(5000);
-          }
-          
-          await takeScreenshot(page, 'nlp-processing-bananas-result', {
-            directory: 'features',
-            fullPage: true
-          });
+        // Wait for auto-results (no button click needed)
+        try {
+          await page.waitForSelector('.HelpPage__result, .HelpPage__metadata', { timeout: 8000 });
+          await page.waitForTimeout(2000);
+        } catch (e) {
+          await page.waitForTimeout(5000);
         }
+        
+        await takeScreenshot(page, 'nlp-processing-bananas-result', {
+          directory: 'features',
+          fullPage: true
+        });
       }
       
       // Original scenario for general result
@@ -943,23 +934,18 @@ test.describe('Aito Grocery Store Screenshots', () => {
         await nlpInput.fill('I am very disappointed with my recent order');
         await page.waitForTimeout(1000);
         
-        const processBtn = page.locator('button:has-text("Process"), button:has-text("Analyze")').first();
-        if (await processBtn.isVisible()) {
-          await processBtn.click();
-          
-          // Wait for results to appear
-          try {
-            await page.waitForSelector('.result, .analysis, .prediction, .sentiment, .category, .answer', { timeout: 8000 });
-            await page.waitForTimeout(2000);
-          } catch (e) {
-            await page.waitForTimeout(5000);
-          }
-          
-          await takeScreenshot(page, 'nlp-processing-result', {
-            directory: 'features',
-            fullPage: true
-          });
+        // Wait for auto-results (no button click needed)
+        try {
+          await page.waitForSelector('.HelpPage__result, .HelpPage__metadata', { timeout: 8000 });
+          await page.waitForTimeout(2000);
+        } catch (e) {
+          await page.waitForTimeout(5000);
         }
+        
+        await takeScreenshot(page, 'nlp-processing-result', {
+          directory: 'features',
+          fullPage: true
+        });
       }
       
     } catch (error) {
