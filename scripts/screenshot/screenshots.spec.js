@@ -888,11 +888,18 @@ test.describe('Aito Grocery Store Screenshots', () => {
         const processBtn = page.locator('button:has-text("Process"), button:has-text("Analyze")').first();
         if (await processBtn.isVisible()) {
           await processBtn.click();
-          await page.waitForTimeout(3000);
+          
+          // Wait for results to appear
+          try {
+            await page.waitForSelector('.result, .analysis, .prediction, .sentiment, .category, .answer', { timeout: 8000 });
+            await page.waitForTimeout(2000);
+          } catch (e) {
+            await page.waitForTimeout(5000);
+          }
           
           await takeScreenshot(page, 'nlp-processing-crash-result', {
             directory: 'features',
-            fullPage: false
+            fullPage: true
           });
         }
         
@@ -914,11 +921,18 @@ test.describe('Aito Grocery Store Screenshots', () => {
         const processBtn = page.locator('button:has-text("Process"), button:has-text("Analyze")').first();
         if (await processBtn.isVisible()) {
           await processBtn.click();
-          await page.waitForTimeout(3000);
+          
+          // Wait for results to appear
+          try {
+            await page.waitForSelector('.result, .analysis, .prediction, .sentiment, .category, .answer', { timeout: 8000 });
+            await page.waitForTimeout(2000);
+          } catch (e) {
+            await page.waitForTimeout(5000);
+          }
           
           await takeScreenshot(page, 'nlp-processing-bananas-result', {
             directory: 'features',
-            fullPage: false
+            fullPage: true
           });
         }
       }
@@ -932,11 +946,18 @@ test.describe('Aito Grocery Store Screenshots', () => {
         const processBtn = page.locator('button:has-text("Process"), button:has-text("Analyze")').first();
         if (await processBtn.isVisible()) {
           await processBtn.click();
-          await page.waitForTimeout(3000);
+          
+          // Wait for results to appear
+          try {
+            await page.waitForSelector('.result, .analysis, .prediction, .sentiment, .category, .answer', { timeout: 8000 });
+            await page.waitForTimeout(2000);
+          } catch (e) {
+            await page.waitForTimeout(5000);
+          }
           
           await takeScreenshot(page, 'nlp-processing-result', {
             directory: 'features',
-            fullPage: false
+            fullPage: true
           });
         }
       }
