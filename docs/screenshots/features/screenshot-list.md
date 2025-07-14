@@ -27,7 +27,11 @@ This document lists all the screenshots that can be generated using the automate
 
 ### 7. NLP Processing
 - `nlp-processing-input.png` - Customer feedback input form
-- `nlp-processing-result.png` - Sentiment analysis and categorization results
+- `nlp-processing-crash-query.png` - App crash issue query example
+- `nlp-processing-crash-result.png` - App crash issue analysis results
+- `nlp-processing-bananas-query.png` - Product request query example
+- `nlp-processing-bananas-result.png` - Product request analysis results
+- `nlp-processing-result.png` - General sentiment analysis and categorization results
 
 ### 8. Analytics & Insights
 - `analytics-dashboard.png` - Full analytics dashboard view
