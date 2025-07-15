@@ -279,10 +279,10 @@ const InvoiceProcessor = ({ invoiceData }) => {
 - **GDPR**: Data retention and deletion policies
 - **Industry Standards**: Adherence to accounting best practices
 
-## Next Steps
+## Technical Limitations
 
-1. **OCR Enhancement**: Improve handwritten text recognition
-2. **Multi-Language Support**: Process invoices in multiple languages
-3. **Advanced Analytics**: Spend analysis and vendor performance metrics
-4. **Mobile App**: Full-featured mobile processing application
-5. **API Expansion**: Enhanced integration capabilities
+1. **Data Input Requirements**: Relies on structured invoice data, not OCR
+2. **Language Constraints**: Works best with consistent language in invoice fields
+3. **Training Data Dependency**: Requires sufficient historical invoice examples
+4. **Confidence Thresholds**: May need manual review for uncertain predictions
+5. **Integration Complexity**: Requires custom development for enterprise systems
