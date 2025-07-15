@@ -13,7 +13,7 @@ export { getRecommendedProducts } from './recommendations'
 export { getTagSuggestions, predictInvoice } from './predictions'
 
 // Import remaining API functions from existing modules
-export { getAutoComplete } from '../04-autocomplete'
+export { getAutoComplete } from '../02-autocomplete'
 export { getProductsByIds, getAutoFill } from '../05-autofill'
 export { prompt } from '../06-prompt'
 export { relate } from '../07-relate'

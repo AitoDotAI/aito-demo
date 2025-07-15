@@ -7,52 +7,59 @@ This document lists all the screenshots that can be generated using the automate
 ### 1. Landing Page
 - `landing-page.png` - Main landing page with hero section and feature overview
 
-### 2. Smart Search (Personalized)
+### 2. Personalized Recommendations
+- `recommendations-veronica.png` - Recommendation section for health-conscious user
+- `recommendations-dynamic.png` - Dynamic recommendations excluding cart items
+
+### 3. Intelligent Autocomplete
+- `autocomplete-suggestions.png` - Smart autocomplete dropdown with context-aware suggestions
+
+### 4. Smart Search (Personalized)
 - `smart-search-milk-larry.png` - Larry's search results (lactose-free focus)
 - `smart-search-milk-veronica.png` - Veronica's search results (health-conscious)
 - `smart-search-milk-alice.png` - Alice's search results (general preferences)
 
-### 3. Personalized Recommendations
-- `recommendations-veronica.png` - Recommendation section for health-conscious user
-- `recommendations-dynamic.png` - Dynamic recommendations excluding cart items
+### 5. Tag Prediction
+- `tag-prediction-suggestions.png` - ML-powered tag suggestions for new products
 
-### 4. Intelligent Autocomplete
-- `autocomplete-suggestions.png` - Smart autocomplete dropdown with context-aware suggestions
+### 6. Smart Cart Autofill
+- `autofill-cart.png` - Smart cart filling features
 
-### 5. Shopping Assistant (Customer Chat)
-- `shopping-assistant-interface.png` - Initial chat interface
-- `shopping-assistant-query.png` - User typing a query
-- `shopping-assistant-response.png` - AI assistant providing product recommendations
-
-### 6. Admin Assistant (Business Intelligence)
-- `admin-assistant-interface.png` - Admin chat dashboard
-- `admin-assistant-query.png` - Business query being typed
-- `admin-assistant-analytics.png` - Analytics response with charts
-
-### 7. Invoice Automation
-- `invoice-processing-list.png` - List of invoices with ML-powered classification
-- `invoice-processing-detail.png` - Individual invoice with predicted GL codes
+### 7. NLP Processing
+- `nlp-processing-input.png` - Customer feedback input form
+- `nlp-processing-crash-query.png` - App crash issue query example
+- `nlp-processing-crash-result.png` - App crash issue analysis results
+- `nlp-processing-bananas-query.png` - Product request query example
+- `nlp-processing-bananas-result.png` - Product request analysis results
+- `nlp-processing-result.png` - General sentiment analysis and categorization results
 
 ### 8. Analytics & Insights
 - `analytics-dashboard.png` - Full analytics dashboard view
 - `analytics-heatmap.png` - Purchase pattern heatmap
 - `analytics-trends.png` - Sales and behavior trend charts
 
-### 9. NLP Processing
-- `nlp-processing-input.png` - Customer feedback input form
-- `nlp-processing-result.png` - Sentiment analysis and categorization results
+### 9. Invoice Automation
+- `invoice-processing-list.png` - List of invoices with ML-powered classification
+- `invoice-processing-detail.png` - Individual invoice with predicted GL codes
 
 ### 10. Product Analytics & Relationships
 - `product-analytics-page.png` - Full product analytics page
 - `product-relationships.png` - Product relationship analysis and correlations
 
-### 11. Tag Prediction
-- `tag-prediction-suggestions.png` - ML-powered tag suggestions for new products
+### 11. Shopping Assistant (Customer Chat)
+- `shopping-assistant-interface.png` - Initial chat interface
+- `shopping-assistant-query.png` - User typing a query
+- `shopping-assistant-response.png` - AI assistant providing product recommendations
 
-### 12. Cart Management
+### 12. Admin Assistant (Business Intelligence)
+- `admin-assistant-interface.png` - Admin chat dashboard
+- `admin-assistant-query.png` - Business query being typed
+- `admin-assistant-analytics.png` - Analytics response with charts
+
+### 13. Cart Management
 - `cart-management.png` - Shopping cart with smart features
 
-### 13. Mobile Responsive Views
+### 14. Mobile Responsive Views
 - `mobile-landing.png` - Mobile landing page
 - `mobile-app-interface.png` - Mobile app interface
 - `mobile-chat-widget.png` - Mobile chat widget

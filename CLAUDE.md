@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## About This Project
 
-A comprehensive React-based demonstration of Aito.ai's predictive database capabilities through an intelligent grocery store application. This project showcases 9 real-world ML use cases in e-commerce, from personalized search to automated document processing.
+A comprehensive React-based demonstration of Aito.ai's predictive database capabilities through an intelligent grocery store application. This project showcases 11 real-world ML use cases in e-commerce, from personalized search to automated document processing.
 
 ## Commands
 
@@ -43,10 +43,10 @@ npm run upload-data:dry-run   # Test upload process without actual upload
 ## Architecture Overview
 
 ### High-Level Structure
-This is a single-page React application that demonstrates 9 different Aito.ai use cases through a cohesive grocery store interface. The architecture emphasizes educational value while maintaining production-ready code quality.
+This is a single-page React application that demonstrates 11 different Aito.ai use cases through a cohesive grocery store interface. The architecture emphasizes educational value while maintaining production-ready code quality.
 
 **Key Design Principles:**
-- Each Aito.ai feature is isolated in numbered files (01-search.js through 09-product.js)
+- Each Aito.ai feature is isolated in numbered files (01-recommend.js through 09-product.js)
 - All API interactions are abstracted through a `dataFetchers` object passed down as props
 - Components are designed for both functionality and educational clarity
 - Three distinct user personas (Larry, Veronica, Alice) demonstrate personalization
@@ -70,12 +70,12 @@ This is a single-page React application that demonstrates 9 different Aito.ai us
 The application showcases these core Aito.ai capabilities:
 
 **Search & Discovery:**
-- `01-search.js` - Personalized search with `$match`, `$similarity`, and purchase probability ranking
-- `04-autocomplete.js` - Smart query completion using `$startsWith` and user patterns
+- `03-search.js` - Personalized search with `$match`, `$similarity`, and purchase probability ranking
+- `02-autocomplete.js` - Smart query completion using `$startsWith` and user patterns
 
 **Machine Learning:**
-- `02-recommend.js` - Goal-oriented recommendations using `_recommend` endpoint
-- `03-get-tag-suggestions.js` - Classification using `_predict` with confidence thresholds
+- `01-recommend.js` - Goal-oriented recommendations using `_recommend` endpoint
+- `04-get-tag-suggestions.js` - Classification using `_predict` with confidence thresholds
 - `05-autofill.js` - Predictive user behavior analysis
 
 **Advanced Analytics:**

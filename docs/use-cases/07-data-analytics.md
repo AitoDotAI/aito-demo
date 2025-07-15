@@ -233,14 +233,14 @@ const AnalyticsExplorer = () => {
 - Effect size reporting
 
 ### Scalability
-- Handles datasets with millions of records
-- Real-time analysis capabilities
-- Distributed processing architecture
+- Performance depends on dataset size and complexity
+- Query response times increase with data volume
+- API rate limits may affect large-scale analysis
 
-## Next Steps
+## Technical Limitations
 
-1. **Predictive Analytics**: Forecast future trends based on correlations
-2. **Automated Insights**: AI-generated explanations of findings
-3. **Comparative Analysis**: Multi-period and A/B testing capabilities
-4. **Advanced Visualizations**: Heat maps and network diagrams
-5. **Natural Language Queries**: Ask questions in plain English
+1. **Correlation vs Causation**: Results show relationships, not causal links
+2. **Sample Size Requirements**: Small datasets may produce unreliable correlations
+3. **Temporal Dependencies**: Analysis is point-in-time, not time-series aware
+4. **Categorical Limitations**: Works best with well-defined categorical data
+5. **Interpretation Overhead**: Requires domain expertise to understand results

@@ -1,8 +1,20 @@
 # Natural Language Processing and Classification
 
-![NLP Processing Interface](../screenshots/features/nlp-processing.png)
+The NLP processing feature demonstrates Aito.ai's ability to intelligently classify and route three distinct types of user requests: **questions**, **feedback**, and **tickets**. Each type triggers different processing workflows and UI responses.
 
-*Natural language processing showing automatic sentiment analysis and text classification*
+## Three Request Types in Action
+
+### 1. Question Processing - FAQ Matching
+![Question Processing](../screenshots/features/nlp-processing.png)
+*Question type detection: Shows FAQ-style answer matching for common inquiries*
+
+### 2. Feedback Processing - Sentiment Analysis  
+![Feedback Processing](../screenshots/features/nlp-processing-crash-result.png)
+*Feedback type detection: Displays sentiment analysis, category classification, and metadata for customer feedback*
+
+### 3. Ticket Processing - Automated Routing
+![Ticket Processing](../screenshots/features/nlp-processing-bananas-result.png)
+*Ticket type detection: Shows predicted assignee, category, and priority for support requests*
 
 ## Overview
 
@@ -52,8 +64,12 @@ export function prompt(question) {
 
 ## Multi-Type Text Classification
 
+The system automatically detects the request type and applies the appropriate processing workflow:
+
 ### 1. Question Answering System
 For customer questions, find the most relevant existing answer:
+
+**Example**: "How do I return a product?" → Shows FAQ-style answer
 
 ```javascript
 const handleQuestion = (question) => {
@@ -78,6 +94,8 @@ const handleQuestion = (question) => {
 
 ### 2. Feedback Sentiment Analysis
 Automatically analyze customer feedback across multiple dimensions:
+
+**Example**: "App keeps crashing" → Detected as feedback, shows sentiment analysis and categorization
 
 ```javascript
 const analyzeFeedback = async (feedbackText) => {
@@ -105,6 +123,8 @@ const analyzeFeedback = async (feedbackText) => {
 
 ### 3. Support Ticket Routing
 Automatically route support tickets to the right team:
+
+**Example**: "Could you provide more bananas?" → Detected as ticket, shows predicted assignee, category, and priority
 
 ```javascript
 const routeSupportTicket = async (ticketText) => {
@@ -152,6 +172,16 @@ const routeSupportTicket = async (ticketText) => {
   }
 }
 ```
+
+## Request Type Classification
+
+The system intelligently routes user input to one of three processing workflows:
+
+| Request Type | Example Input | UI Response | Key Features |
+|--------------|---------------|-------------|--------------|
+| **Question** | "How do I return a product?" | FAQ answer display | • Answer matching<br>• Similarity scoring<br>• Knowledge base lookup |
+| **Feedback** | "App keeps crashing" | Sentiment analysis panel | • Sentiment classification<br>• Category detection<br>• Feedback routing |
+| **Ticket** | "Could you provide more bananas?" | Assignment prediction | • Assignee recommendation<br>• Priority scoring<br>• Department routing |
 
 ## Real-World Examples
 
@@ -219,20 +249,26 @@ closest_match: {
 ## Advanced Features
 
 ### 1. Multi-Language Support
+For multi-language support, structure your data with separate fields for each language:
+
 ```javascript
-const multiLanguageNLP = async (text, language = 'auto') => {
-  const detectedLanguage = language === 'auto' 
-    ? await detectLanguage(text)
-    : language
-    
+// Data structure for multi-language prompts
+{
+  "prompt.en": "How do I return a product?",
+  "prompt.de": "Wie kann ich ein Produkt zurückgeben?",
+  "prompt.fr": "Comment puis-je retourner un produit?",
+  "type": "question",
+  "category": "returns"
+}
+
+// Query based on detected language
+const queryInLanguage = async (text, targetLanguage) => {
   return axios.post(`${aitoUrl}/api/v1/_predict`, {
     from: 'prompts',
     where: {
-      prompt: text,
-      language: detectedLanguage
+      [`prompt.${targetLanguage}`]: text
     },
-    predict: ['type', 'sentiment', 'category'],
-    select: ['feature', '$p', 'translations']
+    predict: ['type', 'sentiment', 'category']
   })
 }
 ```
@@ -464,12 +500,12 @@ const improveClassification = async (textId, prediction, actualClassification) =
 }
 ```
 
-## Future Enhancements
+## Technical Limitations
 
-1. **Multimodal Analysis**: Process text + images + voice
-2. **Real-time Learning**: Instant adaptation to new patterns
-3. **Cross-Domain Transfer**: Apply learnings across different text types
-4. **Emotional Intelligence**: Detect complex emotional states
-5. **Conversational Context**: Maintain context across multi-turn conversations
+1. **Language Detection**: Requires manual language specification or external detection
+2. **Context Windows**: Each query is independent - no conversation memory
+3. **Training Data**: Performance depends on quality and quantity of training examples
+4. **Confidence Thresholds**: Require manual tuning based on use case requirements
+5. **Real-time Processing**: No learning from new interactions without retraining
 
-This NLP processing system demonstrates how Aito.ai makes sophisticated text understanding accessible without the traditional complexity of NLP pipelines, enabling businesses to automatically process and understand customer communications at scale.
+This NLP processing system demonstrates how Aito.ai handles text classification through predictive queries, providing a simpler alternative to traditional NLP pipelines for structured text processing tasks.

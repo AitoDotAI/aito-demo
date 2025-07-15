@@ -128,32 +128,8 @@ const processWithReview = async (product) => {
 
 ## Advanced Features
 
-### 1. Hierarchical Tagging
-Support for category hierarchies:
-```javascript
-const hierarchicalTags = {
-  "food": ["organic", "processed", "fresh"],
-  "organic": ["certified-organic", "natural"],
-  "dairy": ["milk", "cheese", "yogurt"],
-  "milk": ["whole", "low-fat", "lactose-free"]
-}
-```
-
-### 2. Multi-Language Support
-```javascript
-const multiLangPrediction = {
-  from: 'products',
-  where: {
-    name: productName,
-    language: userLanguage
-  },
-  predict: 'tags',
-  select: ['feature', '$p', 'translations']
-}
-```
-
-### 3. Context-Aware Suggestions
-Consider product category and brand:
+### 1. Context-Aware Suggestions
+Consider product category and brand in predictions:
 ```javascript
 const contextualPrediction = {
   from: 'products',
@@ -163,6 +139,36 @@ const contextualPrediction = {
     brand: productBrand
   },
   predict: 'tags'
+}
+```
+
+### 2. Batch Processing Optimization
+Process multiple products efficiently:
+```javascript
+const batchTagPrediction = async (products) => {
+  // Process in smaller batches to avoid API limits
+  const batchSize = 10
+  const results = []
+  
+  for (let i = 0; i < products.length; i += batchSize) {
+    const batch = products.slice(i, i + batchSize)
+    const batchResults = await Promise.all(
+      batch.map(product => getTagSuggestions(product.name))
+    )
+    results.push(...batchResults)
+  }
+  
+  return results
+}
+```
+
+### 3. Quality Control Workflows
+Implement confidence-based review processes:
+```javascript
+const qualityControl = {
+  autoApprove: (confidence) => confidence > 0.85,
+  flagForReview: (confidence) => confidence > 0.5 && confidence <= 0.85,
+  reject: (confidence) => confidence <= 0.5
 }
 ```
 
@@ -303,14 +309,14 @@ const bulkImportWithTags = async (csvFile) => {
 }
 ```
 
-## Future Enhancements
+## Technical Limitations
 
-1. **Visual Tag Prediction**: Analyze product images for visual attributes
-2. **Dynamic Tag Ontology**: Automatically discover new tag categories
-3. **Personalized Tags**: User-specific tag suggestions based on search behavior
-4. **Real-time Learning**: Instant model updates from user feedback
-5. **Cross-catalog Intelligence**: Learn from similar products across categories
+1. **Training Data Dependency**: Quality depends on existing product-tag relationships
+2. **Cold Start Problem**: New product categories may have poor predictions initially
+3. **Tag Vocabulary Control**: No automatic prevention of tag proliferation
+4. **Context Limitations**: Cannot understand complex product relationships
+5. **Language Constraints**: Works best with consistent language in product names
 
 ## Conclusion
 
-Automatic tag prediction transforms catalog management from a manual chore into an intelligent, scalable process. By leveraging existing data patterns, Aito.ai provides accurate, consistent tagging that improves product discoverability and drives sales growth.
+Automatic tag prediction provides a practical approach to catalog management by leveraging existing product-tag relationships. The system works best when combined with human review workflows and proper training data curation.

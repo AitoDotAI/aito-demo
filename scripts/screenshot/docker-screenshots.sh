@@ -43,10 +43,14 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Check if we're in the right directory
-if [ ! -f "package.json" ] || [ ! -f "Dockerfile.screenshots" ]; then
+if [ ! -f "package.json" ]; then
     print_error "Please run this script from the aito-demo root directory"
     exit 1
 fi
+
+# Get the script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DOCKERFILE_PATH="${SCRIPT_DIR}/Dockerfile.screenshots"
 
 print_status "Starting Docker-based screenshot generation..."
 
@@ -58,7 +62,7 @@ fi
 
 # Build Docker image
 echo -e "\n${BLUE}📦 Building Docker image...${NC}"
-if docker build -f Dockerfile.screenshots -t ${DOCKER_IMAGE} .; then
+if docker build -f "${DOCKERFILE_PATH}" -t ${DOCKER_IMAGE} .; then
     print_status "Docker image built successfully"
 else
     print_error "Failed to build Docker image"
@@ -105,11 +109,18 @@ run_screenshots() {
             
             echo 'Generating screenshots with Playwright...'
             if [ \"\${command}\" = \"npm run screenshots:all\" ]; then
-                npx playwright test tests/screenshots.spec.js --project=chromium
+                npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium
+                echo 'Generating dedicated NLP screenshots...'
+                node scripts/screenshot/nlp-specific-screenshots.js
             elif [ \"\${command}\" = \"npm run screenshots:specific\" ]; then
-                npx playwright test tests/screenshots.spec.js --project=chromium --grep 'Specific Feature Screenshots'
+                npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium --grep 'Specific Feature Screenshots'
+            elif [ \"\${command}\" = \"node scripts/screenshot/nlp-specific-screenshots.js\" ]; then
+                echo 'Generating dedicated NLP screenshots only...'
+                node scripts/screenshot/nlp-specific-screenshots.js
             else
-                npx playwright test tests/screenshots.spec.js --project=chromium
+                npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium
+                echo 'Generating dedicated NLP screenshots...'
+                node scripts/screenshot/nlp-specific-screenshots.js
             fi
             
             echo 'Generated files:'
@@ -142,7 +153,10 @@ case "${1:-all}" in
         run_screenshots "npm run screenshots:placeholders"
         ;;
     "test")
-        run_screenshots "npx playwright test tests/screenshots.spec.js"
+        run_screenshots "npx playwright test scripts/screenshot/screenshots.spec.js"
+        ;;
+    "nlp")
+        run_screenshots "node scripts/screenshot/nlp-specific-screenshots.js"
         ;;
     "help"|"-h"|"--help")
         echo "Usage: $0 [COMMAND]"
@@ -155,6 +169,7 @@ case "${1:-all}" in
         echo "  specific     Generate specific feature screenshots with custom content"
         echo "  placeholders Generate placeholder screenshots only"
         echo "  test         Run Playwright screenshot tests"
+        echo "  nlp          Generate NLP processing screenshots only"
         echo "  help         Show this help message"
         echo ""
         echo "Examples:"

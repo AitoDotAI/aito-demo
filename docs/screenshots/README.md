@@ -47,6 +47,7 @@ screenshots/
 
 Screenshots are automatically generated using Playwright. Use these commands:
 
+### Local Generation (requires browser dependencies)
 ```bash
 # Generate all screenshots
 npm run screenshots
@@ -62,6 +63,26 @@ npm run screenshots -- searchFeatures recommendations
 # Run Playwright tests with screenshot generation
 npm run test:screenshots
 ```
+
+### Docker Generation (recommended for systems with missing dependencies)
+```bash
+# Generate all screenshots using Docker
+bash scripts/docker-screenshots.sh all
+
+# Generate specific categories with Docker
+bash scripts/docker-screenshots.sh marketing
+bash scripts/docker-screenshots.sh tutorials
+bash scripts/docker-screenshots.sh specific
+
+# See all Docker options
+bash scripts/docker-screenshots.sh help
+```
+
+**Docker Method Benefits:**
+- ✅ Works on any system with Docker installed
+- ✅ No need to install browser dependencies locally
+- ✅ Consistent results across different environments
+- ✅ Automatically handles all Playwright dependencies
 
 ## Manual Screenshots
 
@@ -123,11 +144,31 @@ Use relative paths when referencing:
 2. **Timing Issues**: Increase wait times in the generator script
 3. **Missing Elements**: Check that UI elements exist and are visible
 4. **Permission Errors**: Ensure write permissions for the screenshots directory
+5. **Browser Dependencies Missing**: Use Docker method instead of local generation
 
 ### Dependencies
+
+#### Local Generation
 - Playwright browsers must be installed (`npx playwright install`)
+- System dependencies installed (`npx playwright install-deps`)
 - Development server must be running on port 3000
 - Sufficient disk space for image files
+
+#### Docker Generation (Recommended)
+- Docker installed and running
+- Sufficient disk space for Docker image and screenshots
+- No other dependencies required
+
+### Missing Browser Dependencies Solution
+If you encounter errors like "Host system is missing dependencies to run browsers":
+
+```bash
+# Option 1: Install missing dependencies (may require sudo)
+npx playwright install-deps
+
+# Option 2: Use Docker instead (recommended)
+bash scripts/docker-screenshots.sh all
+```
 
 ---
 
