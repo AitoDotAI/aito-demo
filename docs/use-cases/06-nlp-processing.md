@@ -249,20 +249,26 @@ closest_match: {
 ## Advanced Features
 
 ### 1. Multi-Language Support
+For multi-language support, structure your data with separate fields for each language:
+
 ```javascript
-const multiLanguageNLP = async (text, language = 'auto') => {
-  const detectedLanguage = language === 'auto' 
-    ? await detectLanguage(text)
-    : language
-    
+// Data structure for multi-language prompts
+{
+  "prompt.en": "How do I return a product?",
+  "prompt.de": "Wie kann ich ein Produkt zurückgeben?",
+  "prompt.fr": "Comment puis-je retourner un produit?",
+  "type": "question",
+  "category": "returns"
+}
+
+// Query based on detected language
+const queryInLanguage = async (text, targetLanguage) => {
   return axios.post(`${aitoUrl}/api/v1/_predict`, {
     from: 'prompts',
     where: {
-      prompt: text,
-      language: detectedLanguage
+      [`prompt.${targetLanguage}`]: text
     },
-    predict: ['type', 'sentiment', 'category'],
-    select: ['feature', '$p', 'translations']
+    predict: ['type', 'sentiment', 'category']
   })
 }
 ```
@@ -494,12 +500,12 @@ const improveClassification = async (textId, prediction, actualClassification) =
 }
 ```
 
-## Future Enhancements
+## Technical Limitations
 
-1. **Multimodal Analysis**: Process text + images + voice
-2. **Real-time Learning**: Instant adaptation to new patterns
-3. **Cross-Domain Transfer**: Apply learnings across different text types
-4. **Emotional Intelligence**: Detect complex emotional states
-5. **Conversational Context**: Maintain context across multi-turn conversations
+1. **Language Detection**: Requires manual language specification or external detection
+2. **Context Windows**: Each query is independent - no conversation memory
+3. **Training Data**: Performance depends on quality and quantity of training examples
+4. **Confidence Thresholds**: Require manual tuning based on use case requirements
+5. **Real-time Processing**: No learning from new interactions without retraining
 
-This NLP processing system demonstrates how Aito.ai makes sophisticated text understanding accessible without the traditional complexity of NLP pipelines, enabling businesses to automatically process and understand customer communications at scale.
+This NLP processing system demonstrates how Aito.ai handles text classification through predictive queries, providing a simpler alternative to traditional NLP pipelines for structured text processing tasks.
