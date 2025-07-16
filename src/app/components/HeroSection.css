@@ -153,11 +153,13 @@
 .HeroSection__cta .btn-primary {
   background-color: #FF6B35;
   border-color: #FF6B35;
+  color: white !important;
 }
 
 .HeroSection__cta .btn-primary:hover {
   background-color: #E85A2A;
   border-color: #E85A2A;
+  color: white !important;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(255, 107, 53, 0.2);
 }
@@ -237,6 +239,36 @@
   text-decoration: underline;
 }
 
+.HeroSection__technical {
+  background: #f8f9fa;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.HeroSection__technical h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #495057;
+}
+
+.HeroSection__technical ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.5rem;
+}
+
+.HeroSection__technical ul li {
+  color: #6c757d;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .HeroSection__title {
@@ -273,5 +305,9 @@
     top: 0.5rem;
     right: 0.5rem;
     padding: 0.25rem;
+  }
+
+  .HeroSection__technical ul {
+    grid-template-columns: 1fr;
   }
 }
