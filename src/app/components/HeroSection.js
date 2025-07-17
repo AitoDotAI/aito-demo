@@ -28,7 +28,7 @@ const HeroSection = () => {
     return (
       <div className="HeroSection__minimized">
         <div className="HeroSection__minimizedContent">
-          <span>🚀 ML Features Without the ML Pipeline - Built in one weekend</span>
+          <span>🚀 Predictive Database Demo - 11 Real ML Features with Query-Based Inference</span>
           <Button 
             size="sm" 
             color="link" 
@@ -53,29 +53,29 @@ const HeroSection = () => {
       </button>
       <div className="HeroSection__container">
         <h1 className="HeroSection__title">
-          ML Features Without the ML Pipeline
+          Aito.ai Predictive Database Demo
         </h1>
         <p className="HeroSection__subtitle">
-          Built 9 working ML features in one weekend using predictive queries instead of model training. 
-          <span className="HeroSection__metrics"> Sub-200ms predictions. No MLOps required.</span>
+          11 production-ready ML features demonstrating predictive database capabilities. Query-based inference without model training or MLOps infrastructure.
+          <span className="HeroSection__metrics"> Real-time predictions via SQL-like queries.</span>
         </p>
         
         <div className="HeroSection__stats">
           <div className="HeroSection__stat">
-            <span className="HeroSection__statValue">85%</span>
-            <span className="HeroSection__statLabel">Search Relevance</span>
+            <span className="HeroSection__statValue">0.92</span>
+            <span className="HeroSection__statLabel">Demo Confidence</span>
           </div>
           <div className="HeroSection__stat">
-            <span className="HeroSection__statValue">&lt;200ms</span>
-            <span className="HeroSection__statLabel">Query Time</span>
+            <span className="HeroSection__statValue">20-50ms</span>
+            <span className="HeroSection__statLabel">API Response</span>
           </div>
           <div className="HeroSection__stat">
-            <span className="HeroSection__statValue">2 hours</span>
-            <span className="HeroSection__statLabel">Setup Time</span>
+            <span className="HeroSection__statValue">90K+</span>
+            <span className="HeroSection__statLabel">Demo Records</span>
           </div>
           <div className="HeroSection__stat">
-            <span className="HeroSection__statValue">$0</span>
-            <span className="HeroSection__statLabel">Training Cost</span>
+            <span className="HeroSection__statValue">Zero</span>
+            <span className="HeroSection__statLabel">Training Steps</span>
           </div>
         </div>
 
@@ -87,35 +87,54 @@ const HeroSection = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaGithub /> View Source Code
+            <FaGithub /> Explore Implementation
           </Button>
           <Button 
             color="secondary" 
             size="lg"
-            href="/docs/blog-post.md"
+            href="https://aito.ai/docs"
             target="_blank"
+            rel="noopener noreferrer"
           >
-            <FaExternalLinkAlt /> Read Technical Post
+            <FaExternalLinkAlt /> API Documentation
+          </Button>
+          <Button 
+            color="secondary" 
+            size="lg"
+            href="https://aito.ai/blog/could-predictive-database-queries-replace-machine-learning-models/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaExternalLinkAlt /> The Predictive Database
           </Button>
         </div>
 
         <div className="HeroSection__demo-note">
-          <FaRocket /> Try the live demo below - no signup required. Switch users to see personalization in action.
+          <FaRocket /> Live demonstration with real data. Switch users to observe personalization differences.
         </div>
 
         <div className="HeroSection__features">
-          <h3>What's Implemented:</h3>
+          <h3>Technical Implementation:</h3>
           <ul className="HeroSection__featureList">
-            <li>✓ Personalized search that learns from behavior</li>
-            <li>✓ Dynamic recommendations excluding cart items</li>
-            <li>✓ NLP classification without training data</li>
-            <li>✓ Statistical correlation discovery</li>
-            <li>✓ Document field extraction & routing</li>
-            <li>✓ AI assistants with predictive tools</li>
+            <li>✓ Query-based search ranking with $similarity and $p operators</li>
+            <li>✓ Goal-oriented recommendations using _recommend endpoint</li>
+            <li>✓ Text classification via _predict without training data</li>
+            <li>✓ Statistical correlation discovery with _relate queries</li>
+            <li>✓ Multi-field prediction for document routing workflows</li>
+            <li>✓ Contextual AI tools with real-time inference APIs</li>
           </ul>
+          <div className="HeroSection__technical">
+            <h4>Architecture Details:</h4>
+            <ul>
+              <li>• 90,087 impression records in demo (platform scales to 10M+ samples)</li>
+              <li>• 11 interconnected tables with relational links</li>
+              <li>• 6 core API endpoints: _query, _predict, _recommend, _relate, _batch, _aggregate</li>
+              <li>• Live queries against shared demo instance (20-50ms API response time)</li>
+            </ul>
+          </div>
           <p className="HeroSection__techNote">
-            All powered by SQL-like queries that return predictions instead of data. 
-            <a href="/docs/use-cases/01-smart-search.md" target="_blank"> See implementation →</a>
+            Predictive database approach: SQL-like queries return ML predictions instead of raw data.
+            <a href="https://github.com/AitoDotAI/aito-demo#what-i-built" target="_blank"> View code examples →</a>
           </p>
         </div>
       </div>

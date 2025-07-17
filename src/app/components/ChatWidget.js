@@ -217,22 +217,22 @@ class ChatWidget extends Component {
                   {messages.length <= 2 && (
                     <div className="chat-widget-quick-actions">
                       <button 
-                        onClick={() => this.handleQuickAction('Show me today\'s deals')}
+                        onClick={() => this.handleQuickAction('Prefill my cart with predicted items')}
                         className="chat-widget-quick-btn"
                       >
-                        Today's Deals
+                        Smart Cart Fill
                       </button>
                       <button 
-                        onClick={() => this.handleQuickAction('I need help finding products')}
+                        onClick={() => this.handleQuickAction('Give me personalized recommendations')}
+                        className="chat-widget-quick-btn"
+                      >
+                        Recommendations
+                      </button>
+                      <button 
+                        onClick={() => this.handleQuickAction('Help me search for products')}
                         className="chat-widget-quick-btn"
                       >
                         Product Search
-                      </button>
-                      <button 
-                        onClick={() => this.handleQuickAction('What are your delivery options?')}
-                        className="chat-widget-quick-btn"
-                      >
-                        Delivery Info
                       </button>
                     </div>
                   )}

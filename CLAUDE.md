@@ -162,7 +162,8 @@ The application showcases these core Aito.ai capabilities:
 ### Deployment Configuration
 
 **Multi-platform deployment ready:**
-- **Netlify** (primary) - `netlify.toml` with performance optimizations and API proxies
+- **Azure Web Apps** (primary) - Currently deployed at https://aito-demo.azurewebsites.net/
+- **Netlify** - `netlify.toml` with performance optimizations and API proxies
 - **Vercel** - `vercel.json` with serverless configuration  
 - **Docker** - Multi-stage builds with nginx, health checks, and security best practices
 - **Traditional hosting** - nginx configuration included
