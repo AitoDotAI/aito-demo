@@ -4,7 +4,7 @@ Aito.ai is a predictive database, that provides real time predictions, recommend
 
 The Aito.ai demo highlights 11 production-ready ML features that can be build extremely quickly using the predictive database capabilities. Each live feature comes with screenshots, code samples and tutorials. 
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://aito-grocery-demo.netlify.app) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt) [![Powered by Aito.ai](https://img.shields.io/badge/Powered%20by-Aito.ai-orange)](https://aito.ai)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://aito-demo.azurewebsites.net/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt) [![Powered by Aito.ai](https://img.shields.io/badge/Powered%20by-Aito.ai-orange)](https://aito.ai)
 
 ## Try It Now
 
