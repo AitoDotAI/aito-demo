@@ -4,6 +4,8 @@
 
 *Personalized product recommendations adapting to user preferences and cart contents*
 
+**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/)** - Experience personalized recommendations in action. Switch between users to see how recommendations change based on different shopping patterns.
+
 ## Overview
 
 The recommendation system showcases Aito.ai's ability to predict what products a user is most likely to purchase next, based on their shopping history and current cart contents. This creates a dynamic, context-aware shopping experience.

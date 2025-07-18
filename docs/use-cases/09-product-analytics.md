@@ -1,8 +1,10 @@
 # AI-Powered Product Analytics
 
-![Product Analytics](../screenshots/features/product-analytics.png)
+![Product Analytics](../screenshots/features/product-analytics-page.png)
 
 *Product analytics in action: Comprehensive performance insights with interactive visualizations*
+
+**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/product)** - Explore comprehensive product analytics with real-time insights, sales trends, and customer segmentation data.
 
 ## Overview
 

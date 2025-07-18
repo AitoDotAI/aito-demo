@@ -2,6 +2,8 @@
 
 The NLP processing feature demonstrates Aito.ai's ability to intelligently classify and route three distinct types of user requests: **questions**, **feedback**, and **tickets**. Each type triggers different processing workflows and UI responses.
 
+**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/help)** - Test the NLP classification by typing questions, feedback, or requests. Try "App keeps crashing" or "Could you provide more bananas?" to see different response types.
+
 ## Three Request Types in Action
 
 ### 1. Question Processing - FAQ Matching
