@@ -119,7 +119,9 @@ app.post('/api/chat/completions', async (req, res) => {
       id: completion.id,
       model: completion.model,
       usage: completion.usage,
-      finishReason: completion.choices[0]?.finish_reason
+      finishReason: completion.choices[0]?.finish_reason,
+      hasToolCalls: !!(completion.choices[0]?.message?.tool_calls?.length),
+      toolCallCount: completion.choices[0]?.message?.tool_calls?.length || 0
     });
 
     res.json(completion);
