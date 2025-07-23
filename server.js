@@ -2,6 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const OpenAI = require('openai');
+const path = require('path');
+
+// Import shared tools
+const { 
+  CUSTOMER_TOOLS, 
+  executeCustomerTool, 
+  CUSTOMER_SYSTEM_PROMPT 
+} = require('./shared/tools/customerTools.cjs');
 
 // Load environment variables
 dotenv.config();
@@ -146,6 +154,199 @@ app.post('/api/chat/completions', async (req, res) => {
 });
 
 /**
+ * Secure Customer Assistant endpoint
+ * Handles customer chat with tool execution server-side
+ */
+app.post('/api/assistant/customer', async (req, res) => {
+  try {
+    if (!openai) {
+      return res.status(500).json({
+        error: 'Azure OpenAI client not properly configured'
+      });
+    }
+
+    const { message, context = {} } = req.body;
+    
+    if (!message) {
+      return res.status(400).json({
+        error: 'Message is required'
+      });
+    }
+
+    // Basic rate limiting - in production, use Redis or proper rate limiter
+    const clientIP = req.ip || req.connection.remoteAddress;
+    console.log(`Customer assistant request from ${clientIP}: "${message.substring(0, 50)}..." for user: ${context.userId || 'guest'}`);
+
+    // Build conversation with system prompt and user message
+    const messages = [
+      {
+        role: 'system',
+        content: `${CUSTOMER_SYSTEM_PROMPT}
+
+        Current customer context:
+        - User ID: ${context.userId || 'guest'}
+        - Cart items: ${context.cartItems?.length || 0} items
+        - Current page: ${context.currentPage || 'unknown'}
+        - Timestamp: ${new Date().toISOString()}`
+      },
+      {
+        role: 'user',
+        content: message
+      }
+    ];
+
+    // First OpenAI call with tools
+    const completion = await openai.chat.completions.create({
+      model: AZURE_CONFIG.deploymentName,
+      messages,
+      tools: CUSTOMER_TOOLS,
+      tool_choice: 'auto',
+      temperature: 0.7,
+      max_tokens: 1000
+    });
+
+    const assistantMessage = completion.choices[0]?.message;
+    let finalResponse = assistantMessage?.content || '';
+
+    // Handle tool calls if present
+    if (assistantMessage?.tool_calls) {
+      console.log(`Executing ${assistantMessage.tool_calls.length} tool(s) for ${context.userId || 'guest'}`);
+      
+      // Add assistant message with tool calls to conversation
+      messages.push(assistantMessage);
+
+      // Execute each tool call
+      for (const toolCall of assistantMessage.tool_calls) {
+        try {
+          const toolResult = await executeCustomerTool(
+            toolCall.function.name,
+            JSON.parse(toolCall.function.arguments),
+            context.userId || 'guest',
+            context.cartItems || []
+          );
+
+          // Add tool result to conversation
+          messages.push({
+            role: 'tool',
+            tool_call_id: toolCall.id,
+            content: JSON.stringify(toolResult)
+          });
+        } catch (toolError) {
+          console.error(`Tool execution error for ${toolCall.function.name}:`, toolError);
+          messages.push({
+            role: 'tool',
+            tool_call_id: toolCall.id,
+            content: JSON.stringify({
+              success: false,
+              message: 'I encountered an error while processing your request. Please try again.'
+            })
+          });
+        }
+      }
+
+      // Get final response from OpenAI after tool execution
+      const finalCompletion = await openai.chat.completions.create({
+        model: AZURE_CONFIG.deploymentName,
+        messages,
+        temperature: 0.7,
+        max_tokens: 1000
+      });
+
+      finalResponse = finalCompletion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
+    }
+
+    console.log(`Customer assistant response generated for ${clientIP}`);
+
+    res.json({
+      response: finalResponse,
+      usage: completion.usage,
+      context: context,
+      toolsUsed: assistantMessage?.tool_calls?.map(tc => tc.function.name) || []
+    });
+
+  } catch (error) {
+    console.error('Customer assistant error:', error);
+    res.status(500).json({
+      error: 'Failed to process customer request',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * Secure Admin Assistant endpoint  
+ * Handles admin chat with analytics and business intelligence
+ */
+app.post('/api/assistant/admin', async (req, res) => {
+  try {
+    if (!openai) {
+      return res.status(500).json({
+        error: 'Azure OpenAI client not properly configured'
+      });
+    }
+
+    const { message, context = {} } = req.body;
+    
+    if (!message) {
+      return res.status(400).json({
+        error: 'Message is required'
+      });
+    }
+
+    // Basic rate limiting - in production, use Redis or proper rate limiter
+    const clientIP = req.ip || req.connection.remoteAddress;
+    console.log(`Admin assistant request from ${clientIP}: "${message.substring(0, 50)}..."`);
+
+    const messages = [
+      {
+        role: 'system',
+        content: `You are an AI assistant for grocery store administrators and managers. 
+        
+        Admin context:
+        - Request from: ${clientIP}
+        - Timestamp: ${new Date().toISOString()}
+        
+        You can help with:
+        - Business analytics and reporting
+        - Inventory management insights
+        - Customer behavior analysis
+        - Performance metrics
+        - Administrative tasks
+        
+        Please provide data-driven insights and actionable recommendations.
+        Focus on metrics, trends, and business optimization opportunities.`
+      },
+      {
+        role: 'user',
+        content: message
+      }
+    ];
+
+    const completion = await openai.chat.completions.create({
+      model: AZURE_CONFIG.deploymentName,
+      messages,
+      temperature: 0.7,
+      max_tokens: 1000
+    });
+
+    console.log(`Admin assistant response generated for ${clientIP}`);
+
+    res.json({
+      response: completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.',
+      usage: completion.usage,
+      context: context
+    });
+
+  } catch (error) {
+    console.error('Admin assistant error:', error);
+    res.status(500).json({
+      error: 'Failed to process admin request',
+      message: error.message
+    });
+  }
+});
+
+/**
  * Get available models endpoint (for debugging)
  */
 app.get('/api/models', async (req, res) => {
@@ -175,6 +376,8 @@ app.listen(PORT, () => {
   console.log(`🚀 Chat backend server running on port ${PORT}`);
   console.log(`📍 Health check: http://localhost:${PORT}/health`);
   console.log(`🤖 Chat endpoint: http://localhost:${PORT}/api/chat/completions`);
+  console.log(`🛒 Customer assistant: http://localhost:${PORT}/api/assistant/customer`);
+  console.log(`👨‍💼 Admin assistant: http://localhost:${PORT}/api/assistant/admin`);
   console.log(`📊 Models endpoint: http://localhost:${PORT}/api/models`);
   
   // Log configuration (without sensitive data)
