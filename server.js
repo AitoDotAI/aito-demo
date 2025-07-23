@@ -165,7 +165,7 @@ app.post('/api/assistant/customer', async (req, res) => {
       });
     }
 
-    const { message, context = {} } = req.body;
+    const { message, context = {}, conversationHistory = [] } = req.body;
     
     if (!message) {
       return res.status(400).json({
@@ -177,7 +177,7 @@ app.post('/api/assistant/customer', async (req, res) => {
     const clientIP = req.ip || req.connection.remoteAddress;
     console.log(`Customer assistant request from ${clientIP}: "${message.substring(0, 50)}..." for user: ${context.userId || 'guest'}`);
 
-    // Build conversation with system prompt and user message
+    // Build conversation with system prompt, history, and new user message
     const messages = [
       {
         role: 'system',
@@ -189,6 +189,8 @@ app.post('/api/assistant/customer', async (req, res) => {
         - Current page: ${context.currentPage || 'unknown'}
         - Timestamp: ${new Date().toISOString()}`
       },
+      // Add conversation history (excluding system messages to avoid duplication)
+      ...conversationHistory.filter(msg => msg.role !== 'system'),
       {
         role: 'user',
         content: message
@@ -257,10 +259,24 @@ app.post('/api/assistant/customer', async (req, res) => {
 
     console.log(`Customer assistant response generated for ${clientIP}`);
 
+    // Build the complete conversation history to return
+    const updatedHistory = [
+      ...conversationHistory.filter(msg => msg.role !== 'system'),
+      {
+        role: 'user',
+        content: message
+      },
+      {
+        role: 'assistant',
+        content: finalResponse
+      }
+    ];
+
     res.json({
       response: finalResponse,
       usage: completion.usage,
       context: context,
+      conversationHistory: updatedHistory,
       toolsUsed: assistantMessage?.tool_calls?.map(tc => tc.function.name) || []
     });
 

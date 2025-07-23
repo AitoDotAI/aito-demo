@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Card, CardBody, Badge, Alert } from 'reactstrap';
 import { FaComments, FaShoppingCart, FaUser } from 'react-icons/fa';
 
-import Chat from '../components/Chat';
+import AssistantChat from '../components/AssistantChat';
 import assistantClient from '../../services/assistantClient';
 
 import './CustomerChatPage.css';
@@ -25,7 +25,17 @@ class CustomerChatPage extends Component {
         ...context
       };
       
-      const result = await assistantClient.sendCustomerMessage(message, fullContext);
+      // Pass conversation history if provided
+      const requestData = {
+        message,
+        context: fullContext
+      };
+      
+      if (context.conversationHistory) {
+        requestData.conversationHistory = context.conversationHistory;
+      }
+      
+      const result = await assistantClient.sendCustomerMessage(requestData.message, requestData.context, requestData.conversationHistory);
       
       // Handle cart operations from tool responses if needed
       if (result.toolsUsed && result.toolsUsed.includes('add_to_cart')) {
@@ -285,7 +295,7 @@ class CustomerChatPage extends Component {
                 <Col lg={8}>
                   <Card className="chat-card">
                     <CardBody className="chat-body">
-                      <Chat
+                      <AssistantChat
                         key={chatKey}
                         ref="chat"
                         chatType="customer"

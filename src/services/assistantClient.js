@@ -12,9 +12,10 @@ class AssistantClient {
    * Send a message to the customer assistant
    * @param {string} message - User message
    * @param {object} context - User context (userId, cartItems, etc.)
+   * @param {Array} conversationHistory - Previous conversation messages
    * @returns {Promise<object>} Assistant response
    */
-  async sendCustomerMessage(message, context = {}) {
+  async sendCustomerMessage(message, context = {}, conversationHistory = []) {
     try {
       const response = await fetch(`${BACKEND_URL}/api/assistant/customer`, {
         method: 'POST',
@@ -23,7 +24,8 @@ class AssistantClient {
         },
         body: JSON.stringify({
           message,
-          context
+          context,
+          conversationHistory
         })
       });
 

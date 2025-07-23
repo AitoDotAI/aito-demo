@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Card, CardBody, Badge, Alert } from 'reactstrap';
 import { FaChartLine, FaUsers, FaBoxes, FaHeadset, FaCog } from 'react-icons/fa';
 
-import Chat from '../components/Chat';
+import AssistantChat from '../components/AssistantChat';
 import assistantClient from '../../services/assistantClient';
 
 import './AdminChatPage.css';
@@ -200,7 +200,7 @@ class AdminChatPage extends Component {
                 <Col lg={8}>
                   <Card className="chat-card">
                     <CardBody className="chat-body">
-                      <Chat
+                      <AssistantChat
                         key={chatKey}
                         ref="chat"
                         chatType="admin"

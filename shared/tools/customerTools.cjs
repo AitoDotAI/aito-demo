@@ -242,6 +242,60 @@ const CUSTOMER_TOOLS = [
   {
     type: 'function',
     function: {
+      name: 'add_to_cart',
+      description: 'Add one or more products to the user\'s shopping cart. Use this when the user wants to add specific items.',
+      parameters: {
+        type: 'object',
+        properties: {
+          productIds: {
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            description: 'Array of product IDs to add to cart'
+          },
+          productNames: {
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            description: 'Array of product names to add to cart (alternative to IDs)'
+          }
+        },
+        required: []
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'remove_from_cart',
+      description: 'Remove products from the user\'s shopping cart.',
+      parameters: {
+        type: 'object',
+        properties: {
+          productIds: {
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            description: 'Array of product IDs to remove from cart'
+          },
+          productNames: {
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            description: 'Array of product names to remove from cart (alternative to IDs)'
+          }
+        },
+        required: []
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
       name: 'get_recommendations',
       description: 'Get personalized product recommendations based on user shopping history and current cart.',
       parameters: {
@@ -324,6 +378,56 @@ const CUSTOMER_TOOLS = [
 ];
 
 /**
+ * Add products to cart
+ */
+function addToCart(productIds = [], productNames = []) {
+  // Mock implementation - in a real app this would update the database
+  // For now, return the products that would be added
+  const products = [];
+  
+  // Handle product IDs
+  productIds.forEach(id => {
+    // Mock product lookup
+    const product = {
+      id: id,
+      name: `Product ${id}`,
+      price: Math.floor(Math.random() * 10) + 1
+    };
+    products.push(product);
+  });
+  
+  // Handle product names
+  productNames.forEach(name => {
+    const product = {
+      id: `prod_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      name: name,
+      price: Math.floor(Math.random() * 10) + 1
+    };
+    products.push(product);
+  });
+  
+  return {
+    success: true,
+    products: products,
+    message: `Added ${products.length} item(s) to your cart: ${products.map(p => p.name).join(', ')}`
+  };
+}
+
+/**
+ * Remove products from cart
+ */
+function removeFromCart(productIds = [], productNames = []) {
+  // Mock implementation
+  const removedItems = [...productIds, ...productNames];
+  
+  return {
+    success: true,
+    removedItems: removedItems,
+    message: `Removed ${removedItems.length} item(s) from your cart`
+  };
+}
+
+/**
  * Execute a tool function call
  */
 async function executeCustomerTool(toolName, parameters, userId, currentCart = []) {
@@ -347,6 +451,12 @@ async function executeCustomerTool(toolName, parameters, userId, currentCart = [
     
     case 'get_general_help':
       return getGeneralHelp(parameters.topic);
+    
+    case 'add_to_cart':
+      return addToCart(parameters.productIds, parameters.productNames);
+    
+    case 'remove_from_cart':
+      return removeFromCart(parameters.productIds, parameters.productNames);
     
     default:
       return {
@@ -398,5 +508,7 @@ module.exports = {
   getSmartCartSuggestions,
   getSearchSuggestions,
   analyzePrompt,
-  getGeneralHelp
+  getGeneralHelp,
+  addToCart,
+  removeFromCart
 };
