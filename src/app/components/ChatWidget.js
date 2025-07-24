@@ -94,8 +94,8 @@ class ChatWidget extends Component {
         currentPage: window.location.pathname
       };
 
-      // Send message to assistant
-      const result = await assistantClient.sendCustomerMessage(userMessage, context);
+      // Send message to assistant with conversation history
+      const result = await assistantClient.sendCustomerMessage(userMessage, context, this.state.messages);
 
       if (result.success) {
         // Add assistant response to conversation
