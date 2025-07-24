@@ -72,6 +72,12 @@ class AssistantChat extends Component {
 
       const result = await this.props.sendMessage(userMessage, context);
       
+      // Handle cart operations if any were returned
+      if (result.cartOperations && result.cartOperations.length > 0) {
+        // The sendMessage prop from CustomerChatPage should handle cart ops
+        console.log('Cart operations performed:', result.cartOperations);
+      }
+      
       // Add assistant response
       this.setState(prevState => ({
         messages: [...prevState.messages, { 

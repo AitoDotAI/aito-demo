@@ -122,6 +122,7 @@ class LandingPage extends Component {
           userId={this.props.selectedUserId}
           currentCart={this.props.appState.cart || []}
           dataFetchers={this.props.dataFetchers}
+          actions={this.props.actions}
           onCartOperation={this.handleCartOperation}
         />
       </div>

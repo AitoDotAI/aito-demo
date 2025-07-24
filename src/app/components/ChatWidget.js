@@ -98,6 +98,21 @@ class ChatWidget extends Component {
       const result = await assistantClient.sendCustomerMessage(userMessage, context, this.state.messages);
 
       if (result.success) {
+        // Handle cart operations if any
+        if (result.cartOperations && result.cartOperations.length > 0 && this.props.actions) {
+          result.cartOperations.forEach(operation => {
+            if (operation.type === 'add' && operation.products) {
+              operation.products.forEach(product => {
+                this.props.actions.addItemToCart(product);
+              });
+            } else if (operation.type === 'remove' && operation.productIds) {
+              operation.productIds.forEach(productId => {
+                this.props.actions.removeItemFromCart(productId);
+              });
+            }
+          });
+        }
+        
         // Add assistant response to conversation
         this.setState(prevState => ({
           messages: [...prevState.messages, { role: 'assistant', content: result.response }],

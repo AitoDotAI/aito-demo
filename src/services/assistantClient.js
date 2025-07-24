@@ -39,7 +39,9 @@ class AssistantClient {
         success: true,
         response: data.response,
         usage: data.usage,
-        context: data.context
+        context: data.context,
+        cartOperations: data.cartOperations || [],
+        toolsUsed: data.toolsUsed || []
       };
     } catch (error) {
       console.error('Customer assistant error:', error);
@@ -80,7 +82,9 @@ class AssistantClient {
         success: true,
         response: data.response,
         usage: data.usage,
-        context: data.context
+        context: data.context,
+        cartOperations: data.cartOperations || [],
+        toolsUsed: data.toolsUsed || []
       };
     } catch (error) {
       console.error('Admin assistant error:', error);

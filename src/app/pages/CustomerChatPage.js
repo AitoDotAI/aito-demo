@@ -37,11 +37,38 @@ class CustomerChatPage extends Component {
       
       const result = await assistantClient.sendCustomerMessage(requestData.message, requestData.context, requestData.conversationHistory);
       
-      // Handle cart operations from tool responses if needed
-      if (result.toolsUsed && result.toolsUsed.includes('add_to_cart')) {
-        // The server-side tools now handle these operations
-        // We just need to sync any state changes
-        console.log('Cart operation completed via assistant:', result.toolsUsed);
+      // Handle cart operations from tool responses
+      if (result.cartOperations && result.cartOperations.length > 0) {
+        const { actions, dataFetchers } = this.props;
+        
+        for (const operation of result.cartOperations) {
+          if (operation.type === 'add' && operation.products) {
+            // Add each product to cart
+            for (const product of operation.products) {
+              if (product && product.id) {
+                // Fetch full product details if needed
+                try {
+                  const fullProducts = await dataFetchers.getProductsByIds([product.id]);
+                  if (fullProducts && fullProducts.length > 0) {
+                    actions.addItemToCart(fullProducts[0]);
+                  } else {
+                    // Use the product data from server if full fetch fails
+                    actions.addItemToCart(product);
+                  }
+                } catch (error) {
+                  console.error('Error fetching product details:', error);
+                  // Fallback to using server product data
+                  actions.addItemToCart(product);
+                }
+              }
+            }
+          } else if (operation.type === 'remove' && operation.productIds) {
+            // Remove products from cart
+            for (const productId of operation.productIds) {
+              actions.removeItemFromCart(productId);
+            }
+          }
+        }
       }
       
       return result;

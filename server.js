@@ -210,6 +210,9 @@ app.post('/api/assistant/customer', async (req, res) => {
     const assistantMessage = completion.choices[0]?.message;
     let finalResponse = assistantMessage?.content || '';
 
+    // Track cart operations for frontend state sync
+    const cartOperations = [];
+
     // Handle tool calls if present
     if (assistantMessage?.tool_calls) {
       console.log(`Executing ${assistantMessage.tool_calls.length} tool(s) for ${context.userId || 'guest'}`);
@@ -226,6 +229,19 @@ app.post('/api/assistant/customer', async (req, res) => {
             context.userId || 'guest',
             context.cartItems || []
           );
+
+          // Track cart operations for frontend sync
+          if (toolCall.function.name === 'add_to_cart' && toolResult.success) {
+            cartOperations.push({
+              type: 'add',
+              products: toolResult.products
+            });
+          } else if (toolCall.function.name === 'remove_from_cart' && toolResult.success) {
+            cartOperations.push({
+              type: 'remove',
+              productIds: toolResult.removedItems
+            });
+          }
 
           // Add tool result to conversation
           messages.push({
@@ -277,7 +293,8 @@ app.post('/api/assistant/customer', async (req, res) => {
       usage: completion.usage,
       context: context,
       conversationHistory: updatedHistory,
-      toolsUsed: assistantMessage?.tool_calls?.map(tc => tc.function.name) || []
+      toolsUsed: assistantMessage?.tool_calls?.map(tc => tc.function.name) || [],
+      cartOperations: cartOperations
     });
 
   } catch (error) {

@@ -91,18 +91,23 @@ async function getSmartCartSuggestions(userId) {
   try {
     const predictions = {
       'larry': [
-        { id: '2000818700008', name: 'Pirkka banana', price: 1.50, tags: 'fresh fruit' },
-        { id: '6410405082657', name: 'Lactose-free milk 1l', price: 1.60, tags: 'dairy lactose-free' },
+        { id: '2000818700008', name: 'Pirkka banana', price: 0.26, tags: 'fresh fruit' },
+        { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95, tags: 'dairy milk lactose-free' },
         { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95, tags: 'baking' }
       ],
       'veronica': [
-        { id: '6410711140014', name: 'Organic tomatoes', price: 3.20, tags: 'organic vegetables' },
-        { id: '6410405029411', name: 'Organic milk 1l', price: 1.80, tags: 'organic dairy' },
-        { id: '6410405029145', name: 'Organic bread', price: 2.40, tags: 'organic bakery' }
+        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29, tags: 'vegetables salad' },
+        { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99, tags: 'vegetables tomatoes' },
+        { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95, tags: 'dairy milk' }
+      ],
+      'alice': [
+        { id: '2000818700008', name: 'Pirkka banana', price: 0.26, tags: 'fresh fruit' },
+        { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45, tags: 'coffee beverages' },
+        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29, tags: 'vegetables salad' }
       ]
     };
 
-    const userPredictions = predictions[userId] || predictions['larry'];
+    const userPredictions = predictions[userId] || predictions['alice'];
     
     return {
       success: true,
@@ -381,29 +386,37 @@ const CUSTOMER_TOOLS = [
  * Add products to cart
  */
 function addToCart(productIds = [], productNames = []) {
-  // Mock implementation - in a real app this would update the database
-  // For now, return the products that would be added
+  // Mock implementation - return actual product data that matches the frontend products
   const products = [];
+  
+  // Map of real product IDs to product info
+  const productCatalog = {
+    '2000818700008': { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
+    '6410405082657': { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
+    '6410405040817': { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
+    '6410405025659': { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
+    '6411401029097': { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99 },
+    '6410405218018': { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95 },
+    '6411300000494': { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 }
+  };
   
   // Handle product IDs
   productIds.forEach(id => {
-    // Mock product lookup
-    const product = {
-      id: id,
-      name: `Product ${id}`,
-      price: Math.floor(Math.random() * 10) + 1
-    };
-    products.push(product);
+    const product = productCatalog[id];
+    if (product) {
+      products.push(product);
+    }
   });
   
-  // Handle product names
+  // Handle product names - try to find matching products
   productNames.forEach(name => {
-    const product = {
-      id: `prod_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      name: name,
-      price: Math.floor(Math.random() * 10) + 1
-    };
-    products.push(product);
+    const lowerName = name.toLowerCase();
+    const matchedProduct = Object.values(productCatalog).find(p => 
+      p.name.toLowerCase().includes(lowerName)
+    );
+    if (matchedProduct) {
+      products.push(matchedProduct);
+    }
   });
   
   return {
