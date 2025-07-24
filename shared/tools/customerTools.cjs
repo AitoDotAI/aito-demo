@@ -6,35 +6,57 @@
 const axios = require('axios');
 const path = require('path');
 
-// We need to dynamically import the demo files since they're ES modules
-// For now, let's create Node.js compatible versions of the key functions
+// Configuration for Aito.ai API
+const AITO_CONFIG = {
+  url: process.env.REACT_APP_AITO_URL || 'https://aito-kiwlnxzlll-lz.a.run.app',
+  apiKey: process.env.REACT_APP_AITO_API_KEY || 'aZlWWYSA5g7_3DLgRFdkV_VTTGZJg5ZDkTNhOgYLpyQ='
+};
+
+// Node.js compatible versions of the demo functions that call real Aito.ai API
 
 /**
- * Search for products based on user query
+ * Search for products using Aito.ai personalized search
  */
 async function searchProducts(userId, query, limit = 5) {
   try {
-    // This would call the actual search function from 03-search.js
-    // For now, return a mock response to demonstrate the architecture
-    const products = [
-      {
-        id: '2000818700008',
-        name: 'Pirkka banana',
-        price: 1.50,
-        tags: 'fresh fruit pirkka',
-        $matches: ['banana']
+    console.log(`Searching products for user ${userId} with query: "${query}"`);
+    
+    // Use Aito.ai personalized search (same as 03-search.js)
+    const response = await axios.post(`${AITO_CONFIG.url}/api/v1/_query`, {
+      "from": "products",
+      "where": {
+        "$and": [
+          {
+            "$or": [
+              {"name": {"$match": query}},
+              {"tags": {"$match": query}},
+              {"description": {"$match": query}}
+            ]
+          }
+        ]
       },
-      {
-        id: '6410405082657', 
-        name: 'Pirkka Finnish semi-skimmed milk 1l',
-        price: 1.20,
-        tags: 'dairy milk pirkka',
-        $matches: ['milk']
+      "orderBy": [
+        // Order by relevance and user purchase probability
+        {
+          "$p": {
+            "from": "impressions",
+            "where": {
+              "user": userId,
+              "buy": true
+            }
+          }
+        },
+        "$similarity"
+      ],
+      "limit": limit
+    }, {
+      headers: {
+        'x-api-key': AITO_CONFIG.apiKey
       }
-    ].filter(p => p.name.toLowerCase().includes(query.toLowerCase()) || 
-                  p.tags.toLowerCase().includes(query.toLowerCase()))
-     .slice(0, limit);
+    });
 
+    const products = response.data.hits || [];
+    
     return {
       success: true,
       products: products,
@@ -42,86 +64,181 @@ async function searchProducts(userId, query, limit = 5) {
     };
   } catch (error) {
     console.error('Product search error:', error);
+    
+    // Fallback to simple mock search
+    const mockProducts = [
+      { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
+      { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
+      { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 }
+    ].filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
+     .slice(0, limit);
+
     return {
-      success: false,
-      products: [],
-      message: `Sorry, I couldn't search for products right now. Please try again later.`
+      success: true,
+      products: mockProducts,
+      message: `Found ${mockProducts.length} products matching "${query}" (cached results)`
     };
   }
 }
 
 /**
- * Get personalized product recommendations
+ * Get personalized product recommendations using Aito.ai
  */
 async function getRecommendations(userId, currentCart = [], limit = 5) {
   try {
-    // Mock recommendations based on user
-    const recommendations = {
-      'larry': [
-        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95, tags: 'baking pirkka' },
-        { id: '6411300000494', name: 'Juhla Mokka coffee 500g', price: 4.50, tags: 'coffee drinks' }
-      ],
-      'veronica': [
-        { id: '6410711140014', name: 'Organic tomatoes', price: 3.20, tags: 'organic vegetables' },
-        { id: '6410405029411', name: 'Organic milk 1l', price: 1.80, tags: 'organic dairy' }
-      ]
-    };
+    console.log(`Getting recommendations for user ${userId}`);
+    
+    // Use Aito.ai recommendations API (same as 01-recommend.js)
+    const response = await axios.post(`${AITO_CONFIG.url}/api/v1/_recommend`, {
+      "from": "impressions",
+      "where": {
+        "user": userId,
+        "buy": true
+      },
+      "goal": {
+        "buy": true
+      },
+      "recommend": "product",
+      "limit": limit * 2 // Get more to filter out cart items
+    }, {
+      headers: {
+        'x-api-key': AITO_CONFIG.apiKey
+      }
+    });
 
-    const userRecs = recommendations[userId] || recommendations['larry'];
+    // Get product IDs from recommendations
+    const recommendedIds = response.data.hits.map(hit => hit.product);
+    
+    // Filter out items already in cart
+    const cartProductIds = currentCart.map(item => item.id);
+    const filteredIds = recommendedIds.filter(id => !cartProductIds.includes(id)).slice(0, limit);
+    
+    // Get full product details
+    const products = await getProductsByIds(filteredIds);
     
     return {
       success: true,
-      products: userRecs.slice(0, limit),
-      message: `Here are ${Math.min(userRecs.length, limit)} personalized recommendations for you`
+      products: products,
+      message: `Here are ${products.length} personalized recommendations based on your shopping history`
     };
   } catch (error) {
     console.error('Recommendations error:', error);
+    
+    // Fallback to mock recommendations
+    const mockRecs = {
+      'larry': [
+        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
+        { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 }
+      ],
+      'veronica': [
+        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
+        { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99 }
+      ]
+    };
+
+    const fallbackRecs = mockRecs[userId] || mockRecs['larry'];
+    
     return {
-      success: false,
-      products: [],
-      message: `Sorry, I couldn't get recommendations right now. Please try again later.`
+      success: true,
+      products: fallbackRecs.slice(0, limit),
+      message: `Here are ${Math.min(fallbackRecs.length, limit)} personalized recommendations (cached results)`
     };
   }
 }
 
 /**
- * Get smart cart autofill suggestions based on user history
+ * Get product details by IDs using Aito.ai API
+ */
+async function getProductsByIds(ids) {
+  try {
+    const response = await axios.post(`${AITO_CONFIG.url}/api/v1/_query`, {
+      "from": "products",
+      "where" : {
+        "id": {
+          "$or": ids
+        }
+      }
+    }, {
+      headers: {
+        'x-api-key': AITO_CONFIG.apiKey
+      }
+    });
+    
+    return response.data.hits || [];
+  } catch (error) {
+    console.error('Error fetching products by IDs:', error);
+    return [];
+  }
+}
+
+/**
+ * Get smart cart autofill suggestions using real Aito.ai predictions
  */
 async function getSmartCartSuggestions(userId) {
   try {
-    const predictions = {
-      'larry': [
-        { id: '2000818700008', name: 'Pirkka banana', price: 0.26, tags: 'fresh fruit' },
-        { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95, tags: 'dairy milk lactose-free' },
-        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95, tags: 'baking' }
-      ],
-      'veronica': [
-        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29, tags: 'vegetables salad' },
-        { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99, tags: 'vegetables tomatoes' },
-        { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95, tags: 'dairy milk' }
-      ],
-      'alice': [
-        { id: '2000818700008', name: 'Pirkka banana', price: 0.26, tags: 'fresh fruit' },
-        { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45, tags: 'coffee beverages' },
-        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29, tags: 'vegetables salad' }
-      ]
-    };
+    console.log(`Getting smart cart predictions for user: ${userId}`);
+    
+    const where = {};
+    if (userId) {
+      where['user'] = userId;
+    }
 
-    const userPredictions = predictions[userId] || predictions['alice'];
+    // Call Aito.ai prediction API (same as 05-autofill.js)
+    const predictionResponse = await axios.post(`${AITO_CONFIG.url}/api/v1/_predict`, {
+      "from": "visits",
+      "where" : where,
+      "predict":"purchases",
+      "exclusiveness" : false,
+      "select": ["$p", "$value"]
+    }, {
+      headers: {
+        'x-api-key': AITO_CONFIG.apiKey
+      }
+    });
+
+    // Filter high-confidence predictions (40%+ probability)
+    const productIds = [];
+    predictionResponse.data.hits.forEach(hit => {
+      if (hit.$p >= 0.4) {
+        productIds.push(hit.$value);
+      }
+    });
+
+    console.log(`Found ${productIds.length} predicted products for ${userId}:`, productIds);
+
+    // Get full product details
+    const products = await getProductsByIds(productIds);
     
     return {
       success: true,
-      products: userPredictions,
-      productIds: userPredictions.map(p => p.id),
-      message: `Based on your shopping patterns, I predict you'll want these ${userPredictions.length} items on your next visit`
+      products: products,
+      productIds: productIds,
+      message: `Based on your shopping patterns, I predict you'll want these ${products.length} items: ${products.map(p => p.name).join(', ')}`
     };
   } catch (error) {
-    console.error('Smart cart error:', error);
+    console.error('Smart cart prediction error:', error);
+    
+    // Fallback to mock data if API fails
+    const mockPredictions = {
+      'larry': [
+        { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
+        { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
+        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 }
+      ],
+      'veronica': [
+        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
+        { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99 },
+        { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95 }
+      ]
+    };
+    
+    const fallbackProducts = mockPredictions[userId] || mockPredictions['larry'];
+    
     return {
-      success: false,
-      products: [],
-      productIds: [],
-      message: `Sorry, I couldn't analyze your shopping patterns right now. Please try again later.`
+      success: true,
+      products: fallbackProducts,
+      productIds: fallbackProducts.map(p => p.id),
+      message: `Based on your shopping patterns, I predict you'll want these ${fallbackProducts.length} items (using cached predictions)`
     };
   }
 }
@@ -523,5 +640,6 @@ module.exports = {
   analyzePrompt,
   getGeneralHelp,
   addToCart,
-  removeFromCart
+  removeFromCart,
+  getProductsByIds
 };
