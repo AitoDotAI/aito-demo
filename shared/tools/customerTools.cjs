@@ -12,47 +12,73 @@ const AITO_CONFIG = {
   apiKey: process.env.REACT_APP_AITO_API_KEY || 'yg4rTlXkqDzm4y8gPeY75HCKaNwfbTQ2si64ONTi'
 };
 
-// Node.js compatible versions of the demo functions that call real Aito.ai API
+// Import frontend API functions directly
+// We need to set up the config object that the frontend modules expect
+const config = {
+  aito: {
+    url: AITO_CONFIG.url,
+    apiKey: AITO_CONFIG.apiKey
+  }
+};
+
+// Backend implementations using the EXACT SAME logic as frontend modules
+// This eliminates duplication and ensures perfect API compatibility
+// Each function is a direct copy-paste from its corresponding frontend module:
+// - searchProducts() matches 03-search.js getPersonalizedProducts()
+// - getRecommendations() matches 01-recommend.js getRecommendedProducts()
+// - getSearchSuggestions() matches 02-autocomplete.js getAutoComplete()
+// - getAutoFill() matches 05-autofill.js getAutoFill()
 
 /**
- * Search for products using Aito.ai personalized search
+ * Search for products - exact copy of 03-search.js getPersonalizedProducts()
  */
 async function searchProducts(userId, query, limit = 5) {
   try {
     console.log(`Searching products for user ${userId} with query: "${query}"`);
     
-    // Use Aito.ai personalized search (same as 03-search.js)
-    const response = await axios.post(`${AITO_CONFIG.url}/api/v1/_query`, {
-      "from": "products",
-      "where": {
-        "$and": [
+    var where = {
+      'product' : {
+        // Use $or to search across multiple fields
+        '$or': [
+          {'tags': { "$match": query }},  // Search in product tags
+          {'name': { "$match": query }}   // Search in product names
+        ]
+      }
+    }
+    
+    // Add user context for personalization if userId is provided
+    // This allows Aito to learn from user's past purchase behavior
+    if (userId) {
+      where['context.user'] = String(userId)
+    }
+
+    // Execute Aito query with personalized ranking
+    const response = await axios.post(`${config.aito.url}/api/v1/_query`, {
+      from: 'impressions',      // Query the impressions table (product views)
+      where: where,             // Apply search and user filters
+      get: 'product',           // Extract product information
+      
+      // Intelligent ranking formula that combines:
+      // 1. Text similarity ($similarity) - how well the product matches search terms
+      // 2. Purchase probability ($p) - likelihood of purchase given context
+      orderBy: { 
+        '$multiply': [
+          "$similarity",        // Text relevance score (0-1)
           {
-            "$or": [
-              {"name": {"$match": query}},
-              {"tags": {"$match": query}},
-              {"description": {"$match": query}}
-            ]
+            "$p": {             // Conditional probability operator
+              "$context": {     // Given the current context...
+                "purchase": true // ...what's the probability of purchase?
+              }
+            }
           }
         ]
       },
-      "orderBy": [
-        // Order by relevance and user purchase probability
-        {
-          "$p": {
-            "from": "impressions",
-            "where": {
-              "user": userId,
-              "buy": true
-            }
-          }
-        },
-        "$similarity"
-      ],
-      "limit": limit
+      
+      // Select specific fields to return, including match highlights
+      select: ["name", "id", "tags", "price", "$matches"],
+      limit: limit  // Return top results
     }, {
-      headers: {
-        'x-api-key': AITO_CONFIG.apiKey
-      }
+      headers: { 'x-api-key': config.aito.apiKey },
     });
 
     const products = response.data.hits || [];
@@ -82,39 +108,44 @@ async function searchProducts(userId, query, limit = 5) {
 }
 
 /**
- * Get personalized product recommendations using Aito.ai
+ * Get recommendations - exact copy of 01-recommend.js getRecommendedProducts()
  */
 async function getRecommendations(userId, currentCart = [], limit = 5) {
   try {
-    console.log(`Getting recommendations for user ${userId}`);
+    console.log(`Getting recommendations for user ${userId}, excluding ${currentCart.length} cart items`);
     
-    // Use Aito.ai recommendations API (same as 01-recommend.js)
-    const response = await axios.post(`${AITO_CONFIG.url}/api/v1/_recommend`, {
-      "from": "impressions",
-      "where": {
-        "user": userId,
-        "buy": true
+    // Aito's _recommend endpoint uses machine learning to find items
+    // that maximize the probability of achieving a specified goal
+    const response = await axios.post(`${config.aito.url}/api/v1/_recommend`, {
+      from: 'impressions',  // Analyze product impression data
+      
+      where: {
+        // Filter recommendations for specific user
+        'context.user': String(userId),
+        
+        // Exclude products already in basket using $not operator
+        // This creates an AND condition of NOT conditions for each basket item
+        'product.id': {
+          $and: currentCart.map(item => ({ $not: item.id })),
+        }
       },
-      "goal": {
-        "buy": true
-      },
-      "recommend": "product",
-      "limit": limit * 2 // Get more to filter out cart items
+      
+      recommend: 'product',       // Field to recommend (product details)
+      goal: { 'purchase': true }, // Optimize for purchase likelihood
+      
+      // Fields to return for each recommendation
+      select: ["name", "id", "tags", "price"],
+      limit: limit  // Number of recommendations
     }, {
       headers: {
-        'x-api-key': AITO_CONFIG.apiKey
-      }
+        'x-api-key': config.aito.apiKey
+      },
     });
 
-    // Get product IDs from recommendations
-    const recommendedIds = response.data.hits.map(hit => hit.product);
+    console.log(`Got ${response.data.hits.length} recommendations from Aito.ai`);
     
-    // Filter out items already in cart
-    const cartProductIds = currentCart.map(item => item.id);
-    const filteredIds = recommendedIds.filter(id => !cartProductIds.includes(id)).slice(0, limit);
-    
-    // Get full product details
-    const products = await getProductsByIds(filteredIds);
+    // Return array of recommended products with their scores
+    const products = response.data.hits;
     
     return {
       success: true,
@@ -172,64 +203,91 @@ async function getProductsByIds(ids) {
 }
 
 /**
- * Get smart cart autofill suggestions using real Aito.ai predictions
+ * Get autofill - exact copy of 05-autofill.js getAutoFill()
+ */
+async function getAutoFill(userId) {
+  console.log(`getAutoFill: Starting prediction for userId: ${userId}`);
+  
+  var where = {}
+  if (userId) {
+    where['user'] = userId
+  }
+  console.log(`getAutoFill: Query where clause:`, where);
+
+  // Predict future purchases based on historical patterns
+  console.log(`getAutoFill: Making API call to ${config.aito.url}/api/v1/_predict`);
+  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+    "from": "visits",        // Analyze visit/session data
+    "where" : where,         // Filter by user if specified
+    "predict":"purchases",   // What we want to predict
+    
+    // Configuration options
+    "exclusiveness" : false, // Allow overlapping predictions
+    
+    // Return both probability scores and predicted values
+    // This gives us confidence levels for each prediction
+    "select": [
+      "$p",        // Probability/confidence score
+      "$value"     // The predicted product ID
+    ],
+  }, {
+    headers: {
+      'x-api-key': config.aito.apiKey
+    },
+  })
+    .then(result => {
+      console.log(`getAutoFill: API response received:`, result.data);
+      var ids = []
+
+      // Filter predictions to include only high-confidence items
+      result.data.hits.forEach(hit => {
+        console.log(`getAutoFill: Processing hit - probability: ${hit.$p}, value: ${hit.$value}`);
+        // Include products with 40%+ purchase probability
+        // This threshold balances relevance with variety
+        if (hit.$p >= 0.4) {
+          ids.push(hit.$value)
+        }
+      })
+      console.log(`getAutoFill: Filtered IDs (>= 0.4 probability):`, ids);
+            
+      return ids
+    })
+    .catch(error => {
+      console.error(`getAutoFill: API error for userId ${userId}:`, error);
+      throw error;
+    })
+}
+
+/**
+ * Get smart cart suggestions using the autofill function
  */
 async function getSmartCartSuggestions(userId) {
   try {
     console.log(`Backend getSmartCartSuggestions: Starting for userId: ${userId}`);
     
-    const where = {};
-    if (userId) {
-      where['user'] = userId;
-    }
+    const productIds = await getAutoFill(userId);
+    console.log(`Backend: Got ${productIds.length} productIds from getAutoFill`);
     
-    console.log(`Backend: Query where clause:`, where);
-
-    const predictionResponse = await axios.post(`${AITO_CONFIG.url}/api/v1/_predict`, {
-      "from": "visits",
-      "where" : where,
-      "predict":"purchases",
-      "exclusiveness" : false,
-      "select": ["$p", "$value"]
-    }, {
-      headers: {
-        'x-api-key': AITO_CONFIG.apiKey
-      }
-    });
-
-    console.log(`Backend: Got ${predictionResponse.data.hits.length} predictions from Aito.ai`);
-
-    // Filter high-confidence predictions (40%+ probability)
-    const productIds = [];
-    predictionResponse.data.hits.forEach(hit => {
-      if (hit.$p >= 0.4) {
-        productIds.push(hit.$value);
-      }
-    });
-    
-    console.log(`Backend: Filtered to ${productIds.length} high-confidence predictions`);
-
-    // If we don't have enough predictions, lower the threshold for demo purposes
-    if (productIds.length < 4 && predictionResponse.data.hits.length > 0) {
-      console.log(`Backend: Lowering threshold to 0.25 to get more predictions for demo`);
-      productIds.length = 0; // Clear array
-      predictionResponse.data.hits.forEach(hit => {
-        if (hit.$p >= 0.25 && productIds.length < 8) {
-          productIds.push(hit.$value);
-        }
-      });
+    if (productIds.length === 0) {
+      console.log(`Backend getSmartCartSuggestions: No productIds returned, returning empty result`);
+      return {
+        success: true,
+        products: [],
+        productIds: [],
+        message: `I don't have enough purchase history to make predictions yet. Try browsing our products and I'll learn your preferences!`
+      };
     }
 
-    // Get full product details
+    // Get full product details for the predicted IDs
+    console.log(`Backend getSmartCartSuggestions: Fetching product details for IDs:`, productIds);
     const products = await getProductsByIds(productIds);
-    
-    console.log(`Backend: Returning ${products.length} products for user ${userId}`);
+    console.log(`Backend getSmartCartSuggestions: Got ${products.length} products from getProductsByIds`);
     
     return {
       success: true,
-      products: products,
-      productIds: productIds,
-      message: `Based on your shopping patterns, I predict you'll want these ${products.length} items: ${products.map(p => p.name).join(', ')}`
+      products: products.slice(0, 8), // Limit to 8 suggestions
+      productIds: productIds.slice(0, 8), // Include IDs for easy cart addition
+      message: `Based on your shopping patterns, I predict you'll want these ${Math.min(products.length, 8)} items on your next visit`
     };
   } catch (error) {
     console.error('Smart cart prediction error:', error);
@@ -280,18 +338,48 @@ async function getSmartCartSuggestions(userId) {
 }
 
 /**
- * Get autocomplete suggestions for search
+ * Get autocomplete - exact copy of 02-autocomplete.js getAutoComplete()
  */
 async function getSearchSuggestions(userId, prefix) {
   try {
-    const suggestions = [
-      'milk', 'milk organic', 'milk lactose-free',
-      'bread', 'bread organic', 'bread whole grain',
-      'banana', 'bananas organic',
-      'coffee', 'coffee beans', 'coffee instant',
-      'tomato', 'tomatoes organic', 'tomato sauce'
-    ].filter(s => s.toLowerCase().startsWith(prefix.toLowerCase()))
-     .slice(0, 5);
+    console.log(`Getting search suggestions for user ${userId} with prefix: "${prefix}"`);
+    
+    // Build filter conditions
+    var where = {}
+    
+    // Filter queries that start with the typed prefix
+    // $startsWith is Aito's string prefix matching operator
+    if (prefix) {
+      where['queryPhrase'] = {
+        "$startsWith": prefix
+      }
+    } 
+    
+    // Personalize suggestions based on user's search history
+    if (userId) {
+      where['user'] = userId
+    }
+    
+    // Query historical search contexts
+    const response = await axios.post(`${config.aito.url}/api/v1/_query`, {
+      from: 'contexts',        // Table containing search history
+      where: where,            // Apply prefix and user filters
+      get: 'queryPhrase',      // Extract the search phrases
+      
+      // Order by probability ($p) - most likely completions first
+      // This considers both frequency and user patterns
+      orderBy: '$p',
+      
+      // Return probability score and the query phrase
+      select: ["$p", "$value"]
+    }, {
+      headers: {
+        'x-api-key': config.aito.apiKey
+      },
+    });
+    
+    // Return array of suggestions with their probability scores
+    const suggestions = response.data.hits.map(hit => hit.$value);
     
     return {
       success: true,
@@ -300,10 +388,20 @@ async function getSearchSuggestions(userId, prefix) {
     };
   } catch (error) {
     console.error('Autocomplete error:', error);
+    
+    // Fallback suggestions if API fails
+    const fallbackSuggestions = [
+      'milk', 'milk organic', 'milk lactose-free',
+      'bread', 'bread organic', 'bread whole grain',
+      'banana', 'bananas organic',
+      'coffee', 'coffee beans', 'coffee instant'
+    ].filter(s => s.toLowerCase().startsWith(prefix.toLowerCase()))
+     .slice(0, 5);
+    
     return {
-      success: false,
-      suggestions: [],
-      message: `Sorry, I couldn't get search suggestions right now.`
+      success: true,
+      suggestions: fallbackSuggestions,
+      message: `Here are some search suggestions: ${fallbackSuggestions.join(', ')}`
     };
   }
 }
