@@ -40,6 +40,7 @@ class AssistantClient {
         response: data.response,
         usage: data.usage,
         context: data.context,
+        conversationHistory: data.conversationHistory || [],
         cartOperations: data.cartOperations || [],
         toolsUsed: data.toolsUsed || []
       };

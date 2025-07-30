@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        REACT_APP_AITO_URL: ${REACT_APP_AITO_URL:-https://aito-grocery-store.aito.app}
+        REACT_APP_AITO_URL: ${REACT_APP_AITO_URL:-https://aito-demo.aito.app}
         REACT_APP_AITO_API_KEY: ${REACT_APP_AITO_API_KEY:-demo-key}
         REACT_APP_ENVIRONMENT: ${REACT_APP_ENVIRONMENT:-production}
         REACT_APP_ANALYTICS_ID: ${REACT_APP_ANALYTICS_ID:-}

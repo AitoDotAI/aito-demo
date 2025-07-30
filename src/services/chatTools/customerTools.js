@@ -82,9 +82,13 @@ async function getSearchSuggestions(userId, prefix) {
  */
 async function getSmartCartSuggestions(userId) {
   try {
+    console.log(`Frontend getSmartCartSuggestions: Starting for userId: ${userId}`);
+    
     const productIds = await getAutoFill(userId);
+    console.log(`Frontend getSmartCartSuggestions: Got ${productIds.length} productIds from getAutoFill`);
     
     if (productIds.length === 0) {
+      console.log(`Frontend getSmartCartSuggestions: No productIds returned, returning empty result`);
       return {
         success: true,
         products: [],
@@ -94,7 +98,9 @@ async function getSmartCartSuggestions(userId) {
     }
 
     // Get full product details for the predicted IDs
+    console.log(`Frontend getSmartCartSuggestions: Fetching product details for IDs:`, productIds);
     const products = await getProductsByIds(productIds);
+    console.log(`Frontend getSmartCartSuggestions: Got ${products.length} products from getProductsByIds`);
     
     return {
       success: true,
@@ -508,9 +514,10 @@ Special instructions:
 
 Cart management instructions:
 - When customers ask to "prefill" or "fill my cart", use get_smart_cart_predictions first
-- If the customer agrees to add predicted items, add them one by one using add_to_cart with productId
-- For each product added, briefly mention what it is
+- After getting predictions, add each product individually using add_to_cart with productId
+- For each predicted product, call add_to_cart with the specific productId from the predictions
 - Always show a summary of what was added to the cart
+- If the customer confirms they want the predicted items, add them one by one
 
 Cart management phrases to watch for:
 - "Add [product] to my cart", "I want to buy [product]", "Put [product] in my basket"

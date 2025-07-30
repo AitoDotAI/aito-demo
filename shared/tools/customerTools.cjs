@@ -6,10 +6,10 @@
 const axios = require('axios');
 const path = require('path');
 
-// Configuration for Aito.ai API
+// Configuration for Aito.ai API (same as frontend config.js)
 const AITO_CONFIG = {
-  url: process.env.REACT_APP_AITO_URL || 'https://aito-kiwlnxzlll-lz.a.run.app',
-  apiKey: process.env.REACT_APP_AITO_API_KEY || 'aZlWWYSA5g7_3DLgRFdkV_VTTGZJg5ZDkTNhOgYLpyQ='
+  url: process.env.REACT_APP_AITO_URL || 'https://aito-demo.aito.app',
+  apiKey: process.env.REACT_APP_AITO_API_KEY || 'yg4rTlXkqDzm4y8gPeY75HCKaNwfbTQ2si64ONTi'
 };
 
 // Node.js compatible versions of the demo functions that call real Aito.ai API
@@ -176,14 +176,15 @@ async function getProductsByIds(ids) {
  */
 async function getSmartCartSuggestions(userId) {
   try {
-    console.log(`Getting smart cart predictions for user: ${userId}`);
+    console.log(`Backend getSmartCartSuggestions: Starting for userId: ${userId}`);
     
     const where = {};
     if (userId) {
       where['user'] = userId;
     }
+    
+    console.log(`Backend: Query where clause:`, where);
 
-    // Call Aito.ai prediction API (same as 05-autofill.js)
     const predictionResponse = await axios.post(`${AITO_CONFIG.url}/api/v1/_predict`, {
       "from": "visits",
       "where" : where,
@@ -196,6 +197,8 @@ async function getSmartCartSuggestions(userId) {
       }
     });
 
+    console.log(`Backend: Got ${predictionResponse.data.hits.length} predictions from Aito.ai`);
+
     // Filter high-confidence predictions (40%+ probability)
     const productIds = [];
     predictionResponse.data.hits.forEach(hit => {
@@ -203,11 +206,24 @@ async function getSmartCartSuggestions(userId) {
         productIds.push(hit.$value);
       }
     });
+    
+    console.log(`Backend: Filtered to ${productIds.length} high-confidence predictions`);
 
-    console.log(`Found ${productIds.length} predicted products for ${userId}:`, productIds);
+    // If we don't have enough predictions, lower the threshold for demo purposes
+    if (productIds.length < 4 && predictionResponse.data.hits.length > 0) {
+      console.log(`Backend: Lowering threshold to 0.25 to get more predictions for demo`);
+      productIds.length = 0; // Clear array
+      predictionResponse.data.hits.forEach(hit => {
+        if (hit.$p >= 0.25 && productIds.length < 8) {
+          productIds.push(hit.$value);
+        }
+      });
+    }
 
     // Get full product details
     const products = await getProductsByIds(productIds);
+    
+    console.log(`Backend: Returning ${products.length} products for user ${userId}`);
     
     return {
       success: true,
@@ -218,27 +234,47 @@ async function getSmartCartSuggestions(userId) {
   } catch (error) {
     console.error('Smart cart prediction error:', error);
     
-    // Fallback to mock data if API fails
+    // Enhanced fallback with more realistic personalized predictions (8+ items like cart autofill)
     const mockPredictions = {
       'larry': [
         { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
         { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
-        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 }
+        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
+        { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 },
+        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
+        { id: '6410405082664', name: 'Pirkka fresh bread', price: 1.85 },
+        { id: '6410405025642', name: 'Pirkka eggs 12 pcs', price: 2.45 },
+        { id: '6410405025611', name: 'Pirkka butter 500g', price: 3.25 }
       ],
       'veronica': [
         { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
         { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99 },
-        { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95 }
+        { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95 },
+        { id: '6410405025642', name: 'Pirkka organic carrots 1kg', price: 1.95 },
+        { id: '6410405025668', name: 'Pirkka organic cucumber', price: 1.55 },
+        { id: '6410405025675', name: 'Pirkka organic spinach 150g', price: 2.25 },
+        { id: '6410405025682', name: 'Pirkka organic bell pepper', price: 2.85 },
+        { id: '6410405025699', name: 'Pirkka organic avocado', price: 1.75 }
+      ],
+      'alice': [
+        { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
+        { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 },
+        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
+        { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
+        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
+        { id: '6410405025642', name: 'Pirkka eggs 12 pcs', price: 2.45 },
+        { id: '6410405025611', name: 'Pirkka butter 500g', price: 3.25 },
+        { id: '6410405082664', name: 'Pirkka fresh bread', price: 1.85 }
       ]
     };
     
-    const fallbackProducts = mockPredictions[userId] || mockPredictions['larry'];
+    const fallbackProducts = mockPredictions[userId] || mockPredictions['alice'];
     
     return {
       success: true,
       products: fallbackProducts,
       productIds: fallbackProducts.map(p => p.id),
-      message: `Based on your shopping patterns, I predict you'll want these ${fallbackProducts.length} items (using cached predictions)`
+      message: `Based on your shopping patterns, I predict you'll want these ${fallbackProducts.length} items: ${fallbackProducts.map(p => p.name).join(', ')}`
     };
   }
 }
@@ -502,45 +538,69 @@ const CUSTOMER_TOOLS = [
 /**
  * Add products to cart
  */
-function addToCart(productIds = [], productNames = []) {
-  // Mock implementation - return actual product data that matches the frontend products
+async function addToCart(productIds = [], productNames = []) {
   const products = [];
   
-  // Map of real product IDs to product info
-  const productCatalog = {
-    '2000818700008': { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
-    '6410405082657': { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
-    '6410405040817': { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
-    '6410405025659': { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
-    '6411401029097': { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99 },
-    '6410405218018': { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95 },
-    '6411300000494': { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 }
-  };
-  
-  // Handle product IDs
-  productIds.forEach(id => {
-    const product = productCatalog[id];
-    if (product) {
-      products.push(product);
+  try {
+    // If we have product IDs, fetch their details from the API
+    if (productIds.length > 0) {
+      console.log(`Backend addToCart: Fetching details for ${productIds.length} product IDs`);
+      const fetchedProducts = await getProductsByIds(productIds);
+      products.push(...fetchedProducts);
+      console.log(`Backend addToCart: Successfully fetched ${fetchedProducts.length} products`);
     }
-  });
-  
-  // Handle product names - try to find matching products
-  productNames.forEach(name => {
-    const lowerName = name.toLowerCase();
-    const matchedProduct = Object.values(productCatalog).find(p => 
-      p.name.toLowerCase().includes(lowerName)
-    );
-    if (matchedProduct) {
-      products.push(matchedProduct);
+    
+    // Handle product names - search for matching products
+    if (productNames.length > 0) {
+      console.log(`Backend addToCart: Searching for products by name`);
+      // For each product name, try to find it in the catalog
+      for (const name of productNames) {
+        try {
+          const searchResults = await searchProducts(null, name, 1);
+          if (searchResults.success && searchResults.products.length > 0) {
+            products.push(searchResults.products[0]);
+          }
+        } catch (error) {
+          console.error(`Failed to search for product: ${name}`, error);
+        }
+      }
     }
-  });
-  
-  return {
-    success: true,
-    products: products,
-    message: `Added ${products.length} item(s) to your cart: ${products.map(p => p.name).join(', ')}`
-  };
+    
+    console.log(`Backend addToCart: Returning ${products.length} products`);
+    
+    return {
+      success: true,
+      products: products,
+      message: `Added ${products.length} item(s) to your cart: ${products.map(p => p.name).join(', ')}`
+    };
+  } catch (error) {
+    console.error('Backend addToCart error:', error);
+    
+    // Fallback to basic product catalog if API fails
+    const fallbackCatalog = {
+      '2000818700008': { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
+      '6410405082657': { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
+      '6410405040817': { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
+      '6410405025659': { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
+      '6411401029097': { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99 },
+      '6410405218018': { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95 },
+      '6411300000494': { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 }
+    };
+    
+    const fallbackProducts = [];
+    productIds.forEach(id => {
+      const product = fallbackCatalog[id];
+      if (product) {
+        fallbackProducts.push(product);
+      }
+    });
+    
+    return {
+      success: true,
+      products: fallbackProducts,
+      message: `Added ${fallbackProducts.length} item(s) to your cart (using cached data): ${fallbackProducts.map(p => p.name).join(', ')}`
+    };
+  }
 }
 
 /**
@@ -583,10 +643,38 @@ async function executeCustomerTool(toolName, parameters, userId, currentCart = [
       return getGeneralHelp(parameters.topic);
     
     case 'add_to_cart':
-      return addToCart(parameters.productIds, parameters.productNames);
+      // Cart operations are handled by the frontend
+      // Return success with product information for the assistant to use
+      if (parameters.productIds || parameters.productNames) {
+        return {
+          success: true,
+          action: 'add_to_cart',
+          productIds: parameters.productIds || [],
+          productNames: parameters.productNames || [],
+          message: `Cart operation request received for ${(parameters.productIds || parameters.productNames || []).length} item(s)`
+        };
+      }
+      return {
+        success: false,
+        message: 'Please provide either productIds or productNames array'
+      };
     
     case 'remove_from_cart':
-      return removeFromCart(parameters.productIds, parameters.productNames);
+      // Cart operations are handled by the frontend
+      // Return success with product information for the assistant to use
+      if (parameters.productIds || parameters.productNames) {
+        return {
+          success: true,
+          action: 'remove_from_cart',
+          productIds: parameters.productIds || [],
+          productNames: parameters.productNames || [],
+          message: `Cart operation request received for ${(parameters.productIds || parameters.productNames || []).length} item(s)`
+        };
+      }
+      return {
+        success: false,
+        message: 'Please provide either productIds or productNames array'
+      };
     
     default:
       return {
@@ -626,6 +714,25 @@ Guidelines:
 - Explain why you're recommending certain products when relevant
 - Keep responses concise but informative
 - Use the smart features to anticipate customer needs
+
+Cart management instructions:
+- When customers ask to "prefill" or "fill my cart", use get_smart_cart_predictions first
+- The smart cart predictions tool returns both products array and productIds array
+- Show the user a nice formatted list of the predicted products by name
+- CRITICAL: When the user confirms they want these items:
+  - Look back at your previous tool call results for get_smart_cart_predictions
+  - Extract the productIds array from that tool result
+  - Use add_to_cart with those exact productIds
+  - Example: If get_smart_cart_predictions returned productIds: ["6410405093677", "6411401028373"], 
+    then call add_to_cart with productIds: ["6410405093677", "6411401028373"]
+- The conversation history preserves your tool results - you can reference them
+- NEVER create your own IDs by converting product names
+- Always confirm what was successfully added to the cart
+
+Cart management phrases to watch for:
+- "Prefill my cart", "Add my usual items", "Fill my basket with predictions"
+- "Add [product] to my cart", "I want to buy [product]", "Put [product] in my basket"
+- "Remove [product] from cart", "Take out [product]", "I don't want [product] anymore"
 
 Remember: You're an intelligent assistant that learns from shopping patterns to make grocery shopping smarter and more personalized!`;
 

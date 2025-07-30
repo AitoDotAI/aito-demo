@@ -79,14 +79,24 @@ class AssistantChat extends Component {
       }
       
       // Add assistant response
-      this.setState(prevState => ({
-        messages: [...prevState.messages, { 
-          role: 'assistant', 
-          content: result.response || 'I apologize, but I was unable to generate a response.' 
-        }],
-        isLoading: false,
-        error: result.success === false ? result.error : null
-      }));
+      // Use the enhanced conversation history from server if available
+      if (result.conversationHistory) {
+        this.setState({
+          messages: result.conversationHistory,
+          isLoading: false,
+          error: result.success === false ? result.error : null
+        });
+      } else {
+        // Fallback: Add assistant response to conversation
+        this.setState(prevState => ({
+          messages: [...prevState.messages, { 
+            role: 'assistant', 
+            content: result.response || 'I apologize, but I was unable to generate a response.' 
+          }],
+          isLoading: false,
+          error: result.success === false ? result.error : null
+        }));
+      }
     } catch (error) {
       console.error('Message handling error:', error);
       this.setState(prevState => ({

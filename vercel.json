@@ -19,7 +19,7 @@
     },
     {
       "src": "/api/(.*)",
-      "dest": "https://aito-grocery-store.aito.app/api/$1"
+      "dest": "https://aito-demo.aito.app/api/$1"
     },
     {
       "src": "/(.*)",

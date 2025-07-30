@@ -113,21 +113,37 @@ class ChatWidget extends Component {
           });
         }
         
-        // Add assistant response to conversation
-        this.setState(prevState => ({
-          messages: [...prevState.messages, { role: 'assistant', content: result.response }],
-          isLoading: false
-        }));
+        // Use the enhanced conversation history from server if available
+        if (result.conversationHistory) {
+          this.setState({
+            messages: result.conversationHistory,
+            isLoading: false
+          });
+        } else {
+          // Fallback: Add assistant response to conversation
+          this.setState(prevState => ({
+            messages: [...prevState.messages, { role: 'assistant', content: result.response }],
+            isLoading: false
+          }));
+        }
       } else {
-        // Handle error
-        this.setState(prevState => ({
-          messages: [...prevState.messages, { 
-            role: 'assistant', 
-            content: result.response || 'I apologize, but I encountered an error. Please try again.' 
-          }],
-          isLoading: false,
-          error: result.error
-        }));
+        // Handle error - use server conversation history if available, otherwise add error message
+        if (result.conversationHistory) {
+          this.setState({
+            messages: result.conversationHistory,
+            isLoading: false,
+            error: result.error
+          });
+        } else {
+          this.setState(prevState => ({
+            messages: [...prevState.messages, { 
+              role: 'assistant', 
+              content: result.response || 'I apologize, but I encountered an error. Please try again.' 
+            }],
+            isLoading: false,
+            error: result.error
+          }));
+        }
       }
     } catch (error) {
       console.error('ChatWidget sendMessage error:', error);

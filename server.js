@@ -188,14 +188,42 @@ app.post('/api/assistant/customer', async (req, res) => {
         - Cart items: ${context.cartItems?.length || 0} items
         - Current page: ${context.currentPage || 'unknown'}
         - Timestamp: ${new Date().toISOString()}`
-      },
-      // Add conversation history (excluding system messages to avoid duplication)
-      ...conversationHistory.filter(msg => msg.role !== 'system'),
-      {
-        role: 'user',
-        content: message
       }
     ];
+    
+    // Process conversation history to include tool information
+    for (const msg of conversationHistory.filter(msg => msg.role !== 'system')) {
+      if (msg.role === 'assistant' && msg.tool_calls && msg.tool_results) {
+        // Add the assistant message with tool calls
+        messages.push({
+          role: 'assistant',
+          content: msg.content,
+          tool_calls: msg.tool_calls
+        });
+        
+        // Add tool results as separate messages
+        for (let i = 0; i < msg.tool_calls.length; i++) {
+          const toolCall = msg.tool_calls[i];
+          const toolResult = msg.tool_results.find(r => r.tool_name === toolCall.function.name);
+          if (toolResult) {
+            messages.push({
+              role: 'tool',
+              tool_call_id: toolCall.id,
+              content: JSON.stringify(toolResult.result)
+            });
+          }
+        }
+      } else {
+        // Regular user/assistant messages
+        messages.push(msg);
+      }
+    }
+    
+    // Add the new user message
+    messages.push({
+      role: 'user',
+      content: message
+    });
 
     // First OpenAI call with tools
     const completion = await openai.chat.completions.create({
@@ -232,15 +260,61 @@ app.post('/api/assistant/customer', async (req, res) => {
 
           // Track cart operations for frontend sync
           if (toolCall.function.name === 'add_to_cart' && toolResult.success) {
-            cartOperations.push({
-              type: 'add',
-              products: toolResult.products
-            });
+            // For add_to_cart, we need to get the actual product data
+            const args = JSON.parse(toolCall.function.arguments);
+            const productIdsToAdd = args.productIds || [];
+            
+            if (productIdsToAdd.length > 0) {
+              const productsToAdd = [];
+              
+              // Check if we just called get_smart_cart_predictions
+              const prevToolCalls = messages.filter(m => m.role === 'tool').slice(-5); // Check last 5 tool responses
+              let smartCartProducts = [];
+              
+              for (const toolMsg of prevToolCalls) {
+                try {
+                  const toolData = JSON.parse(toolMsg.content);
+                  if (toolData.products && Array.isArray(toolData.products)) {
+                    smartCartProducts = toolData.products;
+                    break;
+                  }
+                } catch (e) {
+                  // Continue if parsing fails
+                }
+              }
+              
+              // Map each product ID to its full product data
+              for (const productId of productIdsToAdd) {
+                let product = smartCartProducts.find(p => p.id === productId);
+                
+                if (!product) {
+                  // Fallback: create minimal product object
+                  product = {
+                    id: productId,
+                    name: 'Product',
+                    price: 0
+                  };
+                }
+                
+                productsToAdd.push(product);
+              }
+              
+              if (productsToAdd.length > 0) {
+                cartOperations.push({
+                  type: 'add',
+                  products: productsToAdd
+                });
+              }
+            }
           } else if (toolCall.function.name === 'remove_from_cart' && toolResult.success) {
-            cartOperations.push({
-              type: 'remove',
-              productIds: toolResult.removedItems
-            });
+            const args = JSON.parse(toolCall.function.arguments);
+            const productIdsToRemove = args.productIds || args.productNames || [];
+            if (productIdsToRemove.length > 0) {
+              cartOperations.push({
+                type: 'remove',
+                productIds: productIdsToRemove
+              });
+            }
           }
 
           // Add tool result to conversation
@@ -284,7 +358,24 @@ app.post('/api/assistant/customer', async (req, res) => {
       },
       {
         role: 'assistant',
-        content: finalResponse
+        content: finalResponse,
+        // Include tool calls and their results in the history
+        tool_calls: assistantMessage?.tool_calls,
+        // Store the actual tool results for reference
+        tool_results: assistantMessage?.tool_calls ? 
+          await Promise.all(assistantMessage.tool_calls.map(async (tc) => {
+            try {
+              const result = JSON.parse(messages.find(m => 
+                m.role === 'tool' && m.tool_call_id === tc.id
+              )?.content || '{}');
+              return {
+                tool_name: tc.function.name,
+                result: result
+              };
+            } catch (e) {
+              return null;
+            }
+          })).then(results => results.filter(r => r !== null)) : []
       }
     ];
 
