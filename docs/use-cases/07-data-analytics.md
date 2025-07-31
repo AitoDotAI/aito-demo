@@ -4,6 +4,8 @@
 
 *Data analytics in action: Exploring correlations between user demographics and product preferences*
 
+**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/analytics)** - Explore statistical relationships by selecting different fields and values. See how user demographics correlate with product preferences.
+
 ## Overview
 
 The data analytics feature showcases Aito.ai's ability to discover hidden relationships and statistical correlations in complex datasets. By selecting any field and value, users can explore what factors are statistically related, uncovering insights that would be difficult to find through traditional analysis.

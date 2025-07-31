@@ -4,6 +4,8 @@
 
 *Autofill in action: One-click cart filling based on user's shopping patterns*
 
+**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/cart)** - Test the predictive autofill feature in the shopping cart. Click the "Smart Cart Fill" button to see personalized product suggestions based on shopping patterns.
+
 ## Overview
 
 The autofill feature demonstrates how Aito.ai can predict and automatically populate a shopping cart based on user behavior patterns. This time-saving feature learns from shopping history to suggest likely purchases, making routine shopping faster and more convenient.

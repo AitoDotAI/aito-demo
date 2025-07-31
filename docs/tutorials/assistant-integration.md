@@ -4,9 +4,13 @@
 
 *Shopping Assistant providing personalized help and product recommendations*
 
+**[🚀 Try Customer Assistant](https://aito-demo.azurewebsites.net/customer-chat)** - Experience the AI-powered shopping assistant that helps with product search, recommendations, and cart management.
+
 ![Admin Assistant Interface](../screenshots/features/admin-assistant.png)
 
 *Admin Assistant delivering business intelligence and analytics through conversation*
+
+**[🚀 Try Admin Assistant](https://aito-demo.azurewebsites.net/admin-chat)** - Test the admin assistant for business intelligence, analytics, and operational insights.
 
 This tutorial demonstrates how the Aito Grocery Store Demo integrates AI-powered assistants with Aito.ai's predictive database to create intelligent, context-aware conversational interfaces.
 
