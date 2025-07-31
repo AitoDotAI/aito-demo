@@ -4,6 +4,8 @@
 
 *Smart search in action: "milk" query showing personalized lactose-free results for Larry*
 
+**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/)** - Search for products like "milk" or "bread" and see how results are personalized based on the selected user's preferences.
+
 ## Overview
 
 The smart search feature demonstrates how Aito.ai's predictive database can transform basic text search into an intelligent, personalized experience. Unlike traditional keyword matching, this implementation considers user behavior patterns to deliver more relevant results.

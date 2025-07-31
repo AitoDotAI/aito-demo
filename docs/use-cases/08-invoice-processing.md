@@ -4,6 +4,8 @@
 
 *Invoice processing in action: Automatic GL code assignment and approval routing*
 
+**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/invoicing)** - Experience AI-powered invoice processing. Select different invoices to see automatic GL code assignment and approval routing predictions.
+
 ## Overview
 
 The invoice processing feature demonstrates how Aito.ai can transform manual document processing into an intelligent, automated workflow. By analyzing invoice content, the system automatically assigns GL codes, routes for appropriate approval, and extracts key fields with high accuracy.

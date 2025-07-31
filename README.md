@@ -37,7 +37,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
   "limit": 5
 }
 ```
-[→ Implementation](src/01-recommend.js) | [Use case guide](docs/use-cases/01-recommendations.md)
+[→ Implementation](src/01-recommend.js) | [Use case guide](docs/use-cases/01-recommendations.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/)
 
 ### 2. 💡 Intelligent Autocomplete
 ![Autocomplete](docs/screenshots/features/autocomplete-full.png)
@@ -53,7 +53,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
   "select": ["$p", "$value"]
 }
 ```
-[→ Implementation](src/02-autocomplete.js) | [Use case guide](docs/use-cases/02-autocomplete.md)
+[→ Implementation](src/02-autocomplete.js) | [Use case guide](docs/use-cases/02-autocomplete.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/)
 
 ### 3. 🔍 Smart Search with Personalization
 ![Smart Search](docs/screenshots/features/search-milk-results.png)
@@ -80,7 +80,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
   "limit": 5
 }
 ```
-[→ Implementation](src/03-search.js) | [Use case guide](docs/use-cases/03-smart-search.md)
+[→ Implementation](src/03-search.js) | [Use case guide](docs/use-cases/03-smart-search.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/)
 
 ### 4. 🏷️ Automated Tag Prediction
 ![Tag Prediction](docs/screenshots/features/tag-prediction.png)
@@ -95,7 +95,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 ```
 // Filter: hit.$p > 0.5, Extract: hit.feature
 // Returns: ['organic', 'chocolate', 'dark', 'healthy', 'premium']
-[→ Implementation](src/04-get-tag-suggestions.js) | [Use case guide](docs/use-cases/04-tag-prediction.md)
+[→ Implementation](src/04-get-tag-suggestions.js) | [Use case guide](docs/use-cases/04-tag-prediction.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/admin)
 
 ### 5. 📝 Smart Cart Autofill
 ![Autofill](docs/screenshots/features/autofill-cart.png)
@@ -109,7 +109,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 }
 ```
 // Filter results: hit.$p >= 0.4 (40%+ confidence)
-[→ Implementation](src/05-autofill.js) | [Use case guide](docs/use-cases/05-autofill.md)
+[→ Implementation](src/05-autofill.js) | [Use case guide](docs/use-cases/05-autofill.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/cart)
 
 ### 6. 🗣️ NLP Text Classification
 ![NLP Processing](docs/screenshots/features/nlp-processing.png)
@@ -121,7 +121,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 }
 ```
 // Returns: sentiment: 'negative', category: 'user_experience'
-[→ Implementation](src/06-prompt.js) | [Use case guide](docs/use-cases/06-nlp-processing.md)
+[→ Implementation](src/06-prompt.js) | [Use case guide](docs/use-cases/06-nlp-processing.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/help)
 
 ### 7. 📊 Statistical Relationship Discovery
 ![Data Analytics](docs/screenshots/features/analytics-dashboard.png)
@@ -133,7 +133,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 }
 ```
 // Returns: lift scores showing what club members buy more
-[→ Implementation](src/07-relate.js) | [Use case guide](docs/use-cases/07-data-analytics.md)
+[→ Implementation](src/07-relate.js) | [Use case guide](docs/use-cases/07-data-analytics.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/analytics)
 
 ### 8. 📄 Automated Invoice Processing
 ![Invoice Processing](docs/screenshots/features/invoice-automation.png)
@@ -145,7 +145,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
   "select": ["$p", "Name", "Role", { "$why": { "highlight": true } }]
 }
 ```
-[→ Implementation](src/08-predict-invoice.js) | [Use case guide](docs/use-cases/08-invoice-processing.md)
+[→ Implementation](src/08-predict-invoice.js) | [Use case guide](docs/use-cases/08-invoice-processing.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/invoicing)
 
 ### 9. 📈 Product Analytics Dashboard
 ![Product Analytics](docs/screenshots/features/product-analytics-page.png)
@@ -165,7 +165,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
   }
 ]
 ```
-[→ Implementation](src/09-product.js) | [Use case guide](docs/use-cases/09-product-analytics.md)
+[→ Implementation](src/09-product.js) | [Use case guide](docs/use-cases/09-product-analytics.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/product)
 
 ### 10. 🤖 AI Shopping Assistant
 ![Shopping Assistant](docs/screenshots/features/shopping-assistant.png)
@@ -180,7 +180,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 }
 ```
 // "Find gluten-free bread under $5"
-[→ Implementation](src/services/chatTools/customerTools.js) | [Use case guide](docs/tutorials/assistant-integration.md)
+[→ Implementation](src/services/chatTools/customerTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/customer-chat)
 
 ### 11. 🔧 Admin Business Intelligence
 ![Admin Assistant](docs/screenshots/features/admin-assistant.png)
@@ -193,7 +193,7 @@ curl -X POST https://aito-demo.aito.app/api/v1/_predict \
 }
 ```
 // "What are our top selling products this week?"
-[→ Implementation](src/services/chatTools/adminTools.js) | [Use case guide](docs/tutorials/assistant-integration.md)
+[→ Implementation](src/services/chatTools/adminTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/admin-chat)
 
 ## 🚀 Quick Start
 
