@@ -73,25 +73,49 @@ class ChatCore extends Component {
       const assistantMessage = response.choices[0].message;
       let finalMessages = [...updatedMessages, assistantMessage];
 
-      // Handle tool calls
+      // Handle tool calls with loop protection
       if (assistantMessage.tool_calls && assistantMessage.tool_calls.length > 0) {
+        console.log('Processing tool calls:', assistantMessage.tool_calls.map(tc => tc.function.name));
+        
         const toolResults = await this.executeTools(
           assistantMessage.tool_calls, 
           userId, 
           currentCart
         );
         
+        console.log('Tool execution completed, getting final response...');
         finalMessages = [...finalMessages, ...toolResults.messages];
         
         // Get final response with proper context
         const finalContextMessages = this.buildValidMessageContext(finalMessages);
         
+        // Add a system message to guide the AI to provide a final response
+        const finalContextWithInstruction = [
+          ...finalContextMessages,
+          {
+            role: 'system',
+            content: 'Based on the tool execution results above, provide a helpful response to the user. Do not call any more tools - just explain the results in a conversational way.'
+          }
+        ];
+        
+        // Request final response without tools to prevent infinite loops
         const finalResponse = await createChatCompletion(
-          finalContextMessages,
-          tools
+          finalContextWithInstruction,
+          [] // Empty tools array forces a text response
         );
         
-        finalMessages.push(finalResponse.choices[0].message);
+        const finalAssistantMessage = finalResponse.choices[0].message;
+        
+        // Safety check: If we still get tool calls, create a fallback message
+        if (finalAssistantMessage.tool_calls && finalAssistantMessage.tool_calls.length > 0) {
+          console.warn('AI returned tool calls after tool execution - creating fallback response');
+          finalMessages.push({
+            role: 'assistant',
+            content: this.createFallbackResponse(toolResults.messages)
+          });
+        } else {
+          finalMessages.push(finalAssistantMessage);
+        }
       }
 
       this.setState({ 
@@ -143,6 +167,46 @@ class ChatCore extends Component {
     return { messages: toolMessages };
   };
 
+  createFallbackResponse = (toolMessages) => {
+    // Create a human-readable response based on tool execution results
+    if (!toolMessages || toolMessages.length === 0) {
+      return "I've completed the requested action.";
+    }
+    
+    try {
+      // Parse the tool results and create a summary
+      const results = toolMessages.map(msg => {
+        try {
+          return JSON.parse(msg.content);
+        } catch {
+          return { message: msg.content };
+        }
+      });
+      
+      // Build response based on tool results
+      let response = "I've completed your request. ";
+      
+      results.forEach(result => {
+        if (result.message) {
+          response += result.message + " ";
+        }
+        
+        if (result.products && result.products.length > 0) {
+          response += `I found ${result.products.length} products. `;
+        }
+        
+        if (result.suggestions && result.suggestions.length > 0) {
+          response += `Here are ${result.suggestions.length} suggestions. `;
+        }
+      });
+      
+      return response.trim();
+    } catch (error) {
+      console.error('Error creating fallback response:', error);
+      return "I've completed the requested action. Please let me know if you need anything else.";
+    }
+  };
+
   buildValidMessageContext = (messages) => {
     const validMessages = [];
     
@@ -186,12 +250,21 @@ class ChatCore extends Component {
       // Skip tool messages here as they're handled above
     }
     
-    // Keep system message and recent context (last 15 messages)
-    const systemMessage = validMessages.find(m => m.role === 'system');
+    // Keep system messages and recent context (last 15 messages)
+    const systemMessages = validMessages.filter(m => m.role === 'system');
     const nonSystemMessages = validMessages.filter(m => m.role !== 'system');
-    const recentMessages = nonSystemMessages.slice(-14); // Leave room for system message
+    const recentMessages = nonSystemMessages.slice(-14); // Leave room for system messages
     
-    return systemMessage ? [systemMessage, ...recentMessages] : recentMessages;
+    // Always include the original system message first, then any additional system messages
+    const originalSystemMessage = systemMessages.find(m => !m.content.includes('tool execution results'));
+    const additionalSystemMessages = systemMessages.filter(m => m.content.includes('tool execution results'));
+    
+    const result = [];
+    if (originalSystemMessage) result.push(originalSystemMessage);
+    result.push(...recentMessages);
+    result.push(...additionalSystemMessages); // Add instruction messages at the end
+    
+    return result;
   };
 
   clearChat = () => {

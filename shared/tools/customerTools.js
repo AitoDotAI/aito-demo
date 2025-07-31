@@ -1,13 +1,17 @@
 /**
- * Customer Chat Tools
+ * Customer Chat Tools - Shared Module
  * Provides tools for customer-facing AI assistant
+ * 
+ * This module is designed to work in both browser and Node.js environments
+ * while keeping the core Aito.ai demo files (src/01-09) unchanged.
  */
 
-import { getRecommendedProducts } from '../../01-recommend';
-import { getAutoComplete } from '../../02-autocomplete';
-import { getProductSearchResults } from '../../03-search';
-import { getAutoFill, getProductsByIds } from '../../05-autofill';
-import { prompt } from '../../06-prompt';
+// Import the numbered demo functions - these remain as clean examples
+import { getRecommendedProducts } from '../../src/01-recommend.js';
+import { getAutoComplete } from '../../src/02-autocomplete.js';
+import { getProductSearchResults } from '../../src/03-search.js';
+import { getAutoFill, getProductsByIds } from '../../src/05-autofill.js';
+import { prompt } from '../../src/06-prompt.js';
 
 /**
  * Search for products based on user query
@@ -82,13 +86,9 @@ async function getSearchSuggestions(userId, prefix) {
  */
 async function getSmartCartSuggestions(userId) {
   try {
-    console.log(`Frontend getSmartCartSuggestions: Starting for userId: ${userId}`);
-    
     const productIds = await getAutoFill(userId);
-    console.log(`Frontend getSmartCartSuggestions: Got ${productIds.length} productIds from getAutoFill`);
     
     if (productIds.length === 0) {
-      console.log(`Frontend getSmartCartSuggestions: No productIds returned, returning empty result`);
       return {
         success: true,
         products: [],
@@ -98,9 +98,7 @@ async function getSmartCartSuggestions(userId) {
     }
 
     // Get full product details for the predicted IDs
-    console.log(`Frontend getSmartCartSuggestions: Fetching product details for IDs:`, productIds);
     const products = await getProductsByIds(productIds);
-    console.log(`Frontend getSmartCartSuggestions: Got ${products.length} products from getProductsByIds`);
     
     return {
       success: true,
@@ -420,49 +418,56 @@ export const CUSTOMER_TOOLS = [
 ];
 
 /**
+ * Tool execution functions mapping
+ */
+export const customerToolFunctions = {
+  search_products: searchProducts,
+  get_recommendations: getRecommendations,
+  get_search_suggestions: getSearchSuggestions,
+  get_shopping_list_suggestions: getShoppingListSuggestions,
+  get_smart_cart_predictions: getSmartCartSuggestions,
+  analyze_customer_message: analyzePrompt,
+  get_general_help: getGeneralHelp,
+  // Note: add_to_cart and remove_from_cart are handled by the frontend
+};
+
+/**
  * Execute a tool function call
  */
 export async function executeCustomerTool(toolName, parameters, userId, currentCart = []) {
   console.log(`Executing customer tool: ${toolName} for user: ${userId}`, parameters);
   
-  switch (toolName) {
-    case 'search_products':
-      return await searchProducts(userId, parameters.query, parameters.limit);
-    
-    case 'get_recommendations':
-      return await getRecommendations(userId, currentCart, parameters.limit);
-    
-    case 'get_search_suggestions':
-      return await getSearchSuggestions(userId, parameters.prefix);
-    
-    case 'get_shopping_list_suggestions':
-      return await getShoppingListSuggestions(userId);
-    
-    case 'get_smart_cart_predictions':
-      console.log(`Getting smart cart predictions for user: ${userId}`);
-      const smartCartResult = await getSmartCartSuggestions(userId);
-      console.log(`Smart cart result:`, smartCartResult);
-      return smartCartResult;
-    
-    case 'analyze_customer_message':
-      return await analyzePrompt(parameters.message);
-    
-    case 'get_general_help':
-      return getGeneralHelp(parameters.topic);
-    
-    case 'add_to_cart':
-    case 'remove_from_cart':
-      // These are handled by the CustomerChatPage component
+  const toolFunction = customerToolFunctions[toolName];
+  
+  if (!toolFunction) {
+    if (toolName === 'add_to_cart' || toolName === 'remove_from_cart') {
+      // These are handled by the frontend component
       return {
         success: false,
         message: `Cart operations should be handled by the page component`
       };
+    }
     
-    default:
-      return {
-        success: false,
-        message: `Unknown tool: ${toolName}`
-      };
+    return {
+      success: false,
+      message: `Unknown tool: ${toolName}`
+    };
+  }
+  
+  // Execute the tool with appropriate parameters
+  if (toolName === 'get_recommendations') {
+    return await toolFunction(userId, currentCart, parameters.limit);
+  } else if (toolName === 'search_products') {
+    return await toolFunction(userId, parameters.query, parameters.limit);
+  } else if (toolName === 'get_search_suggestions') {
+    return await toolFunction(userId, parameters.prefix);
+  } else if (toolName === 'analyze_customer_message') {
+    return await toolFunction(parameters.message);
+  } else if (toolName === 'get_general_help') {
+    return toolFunction(parameters.topic);
+  } else {
+    // For tools that only need userId
+    return await toolFunction(userId);
   }
 }
 
@@ -514,10 +519,9 @@ Special instructions:
 
 Cart management instructions:
 - When customers ask to "prefill" or "fill my cart", use get_smart_cart_predictions first
-- After getting predictions, add each product individually using add_to_cart with productId
-- For each predicted product, call add_to_cart with the specific productId from the predictions
+- If the customer agrees to add predicted items, add them one by one using add_to_cart with productId
+- For each product added, briefly mention what it is
 - Always show a summary of what was added to the cart
-- If the customer confirms they want the predicted items, add them one by one
 
 Cart management phrases to watch for:
 - "Add [product] to my cart", "I want to buy [product]", "Put [product] in my basket"

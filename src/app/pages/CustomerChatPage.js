@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Card, CardBody, Badge, Alert } from 'reactstrap';
 import { FaComments, FaShoppingCart, FaUser } from 'react-icons/fa';
 
-import Chat from '../components/Chat';
-import { CUSTOMER_TOOLS, executeCustomerTool, CUSTOMER_SYSTEM_PROMPT } from '../../services/chatTools/customerTools';
+import AssistantChat from '../components/AssistantChat';
+import assistantClient from '../../services/assistantClient';
 
 import './CustomerChatPage.css';
 
@@ -16,13 +16,70 @@ class CustomerChatPage extends Component {
     };
   }
 
-  executeToolFunction = async (toolName, parameters, userId, currentCart) => {
-    // Handle cart operations directly in the page component
-    if (toolName === 'add_to_cart' || toolName === 'remove_from_cart') {
-      return await this.handleCartOperation(toolName, parameters, userId, currentCart);
+  sendChatMessage = async (message, context = {}) => {
+    try {
+      const fullContext = {
+        userId: context.userId || this.props.selectedUserId || 'larry',
+        cartItems: context.cartItems || this.props.appState?.cart || [],
+        currentPage: '/customer-chat',
+        ...context
+      };
+      
+      // Pass conversation history if provided
+      const requestData = {
+        message,
+        context: fullContext
+      };
+      
+      if (context.conversationHistory) {
+        requestData.conversationHistory = context.conversationHistory;
+      }
+      
+      const result = await assistantClient.sendCustomerMessage(requestData.message, requestData.context, requestData.conversationHistory);
+      
+      // Handle cart operations from tool responses
+      if (result.cartOperations && result.cartOperations.length > 0) {
+        const { actions, dataFetchers } = this.props;
+        
+        for (const operation of result.cartOperations) {
+          if (operation.type === 'add' && operation.products) {
+            // Add each product to cart
+            for (const product of operation.products) {
+              if (product && product.id) {
+                // Fetch full product details if needed
+                try {
+                  const fullProducts = await dataFetchers.getProductsByIds([product.id]);
+                  if (fullProducts && fullProducts.length > 0) {
+                    actions.addItemToCart(fullProducts[0]);
+                  } else {
+                    // Use the product data from server if full fetch fails
+                    actions.addItemToCart(product);
+                  }
+                } catch (error) {
+                  console.error('Error fetching product details:', error);
+                  // Fallback to using server product data
+                  actions.addItemToCart(product);
+                }
+              }
+            }
+          } else if (operation.type === 'remove' && operation.productIds) {
+            // Remove products from cart
+            for (const productId of operation.productIds) {
+              actions.removeItemFromCart(productId);
+            }
+          }
+        }
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Chat message error:', error);
+      return {
+        success: false,
+        response: 'I apologize, but I encountered an error. Please try again.',
+        error: error.message
+      };
     }
-    
-    return await executeCustomerTool(toolName, parameters, userId, currentCart);
   };
 
   handleCartOperation = async (toolName, parameters, userId, currentCart) => {
@@ -234,25 +291,25 @@ class CustomerChatPage extends Component {
                       <div className="quick-actions">
                         <button 
                           className="quick-action-btn"
-                          onClick={() => this.refs.chat?.sendMessage('Show me my personalized recommendations')}
+                          onClick={() => this.refs.chat?.handleMessage('Show me my personalized recommendations')}
                         >
                           AI Recommendations
                         </button>
                         <button 
                           className="quick-action-btn"
-                          onClick={() => this.refs.chat?.sendMessage('Predict what I\'ll want to buy today')}
+                          onClick={() => this.refs.chat?.handleMessage('Predict what I\'ll want to buy today')}
                         >
                           Smart Cart Predictions
                         </button>
                         <button 
                           className="quick-action-btn"
-                          onClick={() => this.refs.chat?.sendMessage('Help me build a smart shopping list')}
+                          onClick={() => this.refs.chat?.handleMessage('Help me build a smart shopping list')}
                         >
                           Smart Shopping List
                         </button>
                         <button 
                           className="quick-action-btn"
-                          onClick={() => this.refs.chat?.sendMessage('Add some organic milk to my cart')}
+                          onClick={() => this.refs.chat?.handleMessage('Add some organic milk to my cart')}
                         >
                           Try Cart Management
                         </button>
@@ -265,13 +322,11 @@ class CustomerChatPage extends Component {
                 <Col lg={8}>
                   <Card className="chat-card">
                     <CardBody className="chat-body">
-                      <Chat
+                      <AssistantChat
                         key={chatKey}
                         ref="chat"
                         chatType="customer"
-                        systemPrompt={CUSTOMER_SYSTEM_PROMPT}
-                        tools={CUSTOMER_TOOLS}
-                        executeToolFunction={this.executeToolFunction}
+                        sendMessage={this.sendChatMessage}
                         userId={currentUserId}
                         currentCart={currentCart}
                         dataFetchers={dataFetchers}

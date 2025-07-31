@@ -31,7 +31,7 @@
 # API proxy to avoid CORS issues
 [[proxies]]
   from = "/api/*"
-  to = "https://aito-grocery-store.aito.app/api/:splat"
+  to = "https://aito-demo.aito.app/api/:splat"
   status = 200
   force = true
   headers = {X-From = "Netlify"}

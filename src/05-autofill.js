@@ -41,14 +41,16 @@ export function getProductsByIds(ids) {
  * @returns {Promise<Array>} Array of product IDs likely to be purchased
  */
 export function getAutoFill(userId) {
+  console.log(`getAutoFill: Starting prediction for userId: ${userId}`);
+  
   var where = {}
   if (userId) {
     where['user'] = userId
   }
-
-
+  console.log(`getAutoFill: Query where clause:`, where);
 
   // Predict future purchases based on historical patterns
+  console.log(`getAutoFill: Making API call to ${config.aito.url}/api/v1/_predict`);
   return axios.post(`${config.aito.url}/api/v1/_predict`, {
     "from": "visits",        // Analyze visit/session data
     "where" : where,         // Filter by user if specified
@@ -65,16 +67,24 @@ export function getAutoFill(userId) {
     },
   })
     .then(result => {
+      console.log(`getAutoFill: API response received:`, result.data);
       var ids = []
 
       // Filter predictions to include only high-confidence items
       result.data.hits.forEach(hit => {
+        console.log(`getAutoFill: Processing hit - probability: ${hit.$p}, value: ${hit.$value}`);
         // Include products with 40%+ purchase probability
         // This threshold balances relevance with variety
         if (hit.$p >= 0.4) {
           ids.push(hit.$value)
         }
       })
+      console.log(`getAutoFill: Filtered IDs (>= 0.4 probability):`, ids);
+            
       return ids
+    })
+    .catch(error => {
+      console.error(`getAutoFill: API error for userId ${userId}:`, error);
+      throw error;
     })
 }

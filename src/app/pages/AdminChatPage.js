@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Card, CardBody, Badge, Alert } from 'reactstrap';
 import { FaChartLine, FaUsers, FaBoxes, FaHeadset, FaCog } from 'react-icons/fa';
 
-import Chat from '../components/Chat';
-import { ADMIN_TOOLS, executeAdminTool, ADMIN_SYSTEM_PROMPT } from '../../services/chatTools/adminTools';
+import AssistantChat from '../components/AssistantChat';
+import assistantClient from '../../services/assistantClient';
 
 import './AdminChatPage.css';
 
@@ -22,8 +22,25 @@ class AdminChatPage extends Component {
     };
   }
 
-  executeToolFunction = async (toolName, parameters) => {
-    return await executeAdminTool(toolName, parameters);
+  sendChatMessage = async (message, context = {}) => {
+    try {
+      const fullContext = {
+        userType: 'admin',
+        currentPage: '/admin-chat',
+        timestamp: new Date().toISOString(),
+        ...context
+      };
+      
+      const result = await assistantClient.sendAdminMessage(message, fullContext);
+      return result;
+    } catch (error) {
+      console.error('Admin chat message error:', error);
+      return {
+        success: false,
+        response: 'I apologize, but I encountered an error. Please try again.',
+        error: error.message
+      };
+    }
   };
 
   resetChat = () => {
@@ -110,7 +127,7 @@ class AdminChatPage extends Component {
                       <div className="admin-actions">
                         <button 
                           className="admin-action-btn analytics"
-                          onClick={() => this.refs.chat?.sendMessage('Show me user analytics for this week')}
+                          onClick={() => this.refs.chat?.handleMessage('Show me user analytics for this week')}
                         >
                           <FaUsers />
                           User Analytics
@@ -118,7 +135,7 @@ class AdminChatPage extends Component {
                         
                         <button 
                           className="admin-action-btn inventory"
-                          onClick={() => this.refs.chat?.sendMessage('What is our current inventory status?')}
+                          onClick={() => this.refs.chat?.handleMessage('What is our current inventory status?')}
                         >
                           <FaBoxes />
                           Inventory Status
@@ -126,7 +143,7 @@ class AdminChatPage extends Component {
                         
                         <button 
                           className="admin-action-btn performance"
-                          onClick={() => this.refs.chat?.sendMessage('Show me product performance analytics')}
+                          onClick={() => this.refs.chat?.handleMessage('Show me product performance analytics')}
                         >
                           <FaChartLine />
                           Product Performance
@@ -134,7 +151,7 @@ class AdminChatPage extends Component {
                         
                         <button 
                           className="admin-action-btn support"
-                          onClick={() => this.refs.chat?.sendMessage('Give me customer support insights')}
+                          onClick={() => this.refs.chat?.handleMessage('Give me customer support insights')}
                         >
                           <FaHeadset />
                           Support Dashboard
@@ -142,7 +159,7 @@ class AdminChatPage extends Component {
                         
                         <button 
                           className="admin-action-btn reports"
-                          onClick={() => this.refs.chat?.sendMessage('Generate a business overview report')}
+                          onClick={() => this.refs.chat?.handleMessage('Generate a business overview report')}
                         >
                           <FaCog />
                           Business Reports
@@ -183,13 +200,11 @@ class AdminChatPage extends Component {
                 <Col lg={8}>
                   <Card className="chat-card">
                     <CardBody className="chat-body">
-                      <Chat
+                      <AssistantChat
                         key={chatKey}
                         ref="chat"
                         chatType="admin"
-                        systemPrompt={ADMIN_SYSTEM_PROMPT}
-                        tools={ADMIN_TOOLS}
-                        executeToolFunction={this.executeToolFunction}
+                        sendMessage={this.sendChatMessage}
                         userId="admin"
                         currentCart={[]}
                       />

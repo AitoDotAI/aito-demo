@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Badge } from 'reactstrap';
 import { FaComments, FaTimes, FaPaperPlane, FaRobot } from 'react-icons/fa';
-import ChatCore from './ChatCore';
-import { CUSTOMER_TOOLS, executeCustomerTool, CUSTOMER_SYSTEM_PROMPT } from '../../services/chatTools/customerTools';
+import assistantClient from '../../services/assistantClient';
 import './ChatWidget.css';
 
 class ChatWidget extends Component {
@@ -12,11 +11,19 @@ class ChatWidget extends Component {
     this.state = {
       isOpen: false,
       inputValue: '',
-      unreadCount: 0
+      unreadCount: 0,
+      messages: [
+        {
+          role: 'assistant',
+          content: "Hi! 👋 I'm your shopping assistant. How can I help you today?"
+        }
+      ],
+      isLoading: false,
+      error: null,
+      isConfigured: true
     };
     
     this.messagesEndRef = React.createRef();
-    this.chatCoreRef = React.createRef();
   }
 
   componentDidMount() {
@@ -64,31 +71,91 @@ class ChatWidget extends Component {
     this.setState({ inputValue: '' });
   };
 
-  // Expose sendMessage method for external calls (like quick actions)
+  // Send message using the new assistant client
   sendMessage = async (userMessage) => {
-    if (this.chatCoreRef.current) {
-      return await this.chatCoreRef.current.sendMessage(userMessage);
-    }
-  };
+    if (!userMessage.trim() || this.state.isLoading) return;
 
-  // Custom tool execution for ChatWidget
-  executeToolFunction = async (toolName, parameters, userId, currentCart) => {
-    console.log(`ChatWidget executing tool: ${toolName}`, parameters);
-    
-    // Handle cart operations through parent component
-    if (toolName === 'add_to_cart' || toolName === 'remove_from_cart') {
-      if (this.props.onCartOperation) {
-        return await this.props.onCartOperation(toolName, parameters);
+    // Add user message to conversation
+    this.setState(prevState => ({
+      messages: [...prevState.messages, { role: 'user', content: userMessage }],
+      isLoading: true,
+      error: null
+    }));
+
+    try {
+      // Build context for the assistant
+      const context = {
+        userId: this.props.userId || 'guest',
+        cartItems: this.props.currentCart?.map(item => ({
+          id: item.id,
+          name: item.name,
+          price: item.price
+        })) || [],
+        currentPage: window.location.pathname
+      };
+
+      // Send message to assistant with conversation history
+      const result = await assistantClient.sendCustomerMessage(userMessage, context, this.state.messages);
+
+      if (result.success) {
+        // Handle cart operations if any
+        if (result.cartOperations && result.cartOperations.length > 0 && this.props.actions) {
+          result.cartOperations.forEach(operation => {
+            if (operation.type === 'add' && operation.products) {
+              operation.products.forEach(product => {
+                this.props.actions.addItemToCart(product);
+              });
+            } else if (operation.type === 'remove' && operation.productIds) {
+              operation.productIds.forEach(productId => {
+                this.props.actions.removeItemFromCart(productId);
+              });
+            }
+          });
+        }
+        
+        // Use the enhanced conversation history from server if available
+        if (result.conversationHistory) {
+          this.setState({
+            messages: result.conversationHistory,
+            isLoading: false
+          });
+        } else {
+          // Fallback: Add assistant response to conversation
+          this.setState(prevState => ({
+            messages: [...prevState.messages, { role: 'assistant', content: result.response }],
+            isLoading: false
+          }));
+        }
       } else {
-        return {
-          success: false,
-          message: 'Cart operations are not available in this context.'
-        };
+        // Handle error - use server conversation history if available, otherwise add error message
+        if (result.conversationHistory) {
+          this.setState({
+            messages: result.conversationHistory,
+            isLoading: false,
+            error: result.error
+          });
+        } else {
+          this.setState(prevState => ({
+            messages: [...prevState.messages, { 
+              role: 'assistant', 
+              content: result.response || 'I apologize, but I encountered an error. Please try again.' 
+            }],
+            isLoading: false,
+            error: result.error
+          }));
+        }
       }
+    } catch (error) {
+      console.error('ChatWidget sendMessage error:', error);
+      this.setState(prevState => ({
+        messages: [...prevState.messages, { 
+          role: 'assistant', 
+          content: 'I apologize, but I\'m having trouble processing your request right now. Please try again later.' 
+        }],
+        isLoading: false,
+        error: error.message
+      }));
     }
-    
-    // Execute other tools normally
-    return await executeCustomerTool(toolName, parameters, userId, currentCart);
   };
 
 
@@ -110,27 +177,13 @@ class ChatWidget extends Component {
   };
 
   render() {
-    const { isOpen, inputValue, unreadCount } = this.state;
-    const { userId, currentCart } = this.props;
+    const { isOpen, inputValue, unreadCount, messages, isLoading, error, isConfigured } = this.state;
+
+    if (!isConfigured) {
+      return null; // Don't show widget if not configured
+    }
 
     return (
-      <ChatCore
-        ref={this.chatCoreRef}
-        chatType="customer"
-        systemPrompt={CUSTOMER_SYSTEM_PROMPT}
-        tools={CUSTOMER_TOOLS}
-        executeToolFunction={this.executeToolFunction}
-        userId={userId}
-        currentCart={currentCart}
-        welcomeMessage="Hi! 👋 I'm your shopping assistant. How can I help you today?"
-        onMessagesUpdate={() => this.scrollToBottom()}
-      >
-        {({ messages, isLoading, error, isConfigured }) => {
-          if (!isConfigured) {
-            return null; // Don't show widget if not configured
-          }
-
-          return (
             <>
               {/* Floating Chat Button */}
               {!isOpen && (
@@ -259,9 +312,6 @@ class ChatWidget extends Component {
                 </div>
               )}
             </>
-          );
-        }}
-      </ChatCore>
     );
   }
 }
