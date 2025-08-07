@@ -1,5 +1,8 @@
 # Aito Grocery Store Demo
 
+> ### 🚀 **[Try the Live Demo → aito-demo.azurewebsites.net](https://aito-demo.azurewebsites.net/)**
+> Experience AI-powered grocery shopping with personalized recommendations, smart search, and predictive cart filling!
+
 Aito.ai is a predictive database, that provides real time predictions, recommendations and statistics via instant SQL-like queries without separate train step. The goal of the system is to drastically reduce the effort needed to create basic machine learning applications.
 
 The Aito.ai demo highlights 11 production-ready ML features that can be build extremely quickly using the predictive database capabilities. Each live feature comes with screenshots, code samples and tutorials. 
