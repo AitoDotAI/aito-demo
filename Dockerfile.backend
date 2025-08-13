@@ -1,0 +1,44 @@
+# Node.js backend container for aito-demo
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install ALL dependencies (including dev dependencies for building frontend)
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Build frontend first
+RUN npm run build
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Set ownership
+RUN chown -R nextjs:nodejs /app
+
+# Switch to non-root user  
+USER nextjs
+
+# Expose port
+EXPOSE 80
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-80}/health || exit 1
+
+# Set environment variables for OpenAI (these will be overridden by App Service settings)
+ENV REACT_APP_OPENAI_MODEL_URL=https://dummy.openai.azure.com
+ENV REACT_APP_OPENAI_RESOURCE_NAME=dummy
+ENV REACT_APP_OPENAI_MODEL_API_KEY=dummy
+ENV REACT_APP_OPENAI_MODEL_DEPLOYMENT=gpt-4
+ENV REACT_APP_OPENAI_MODEL_API_VERSION=2024-02-15-preview
+
+# Start both backend server and serve frontend
+CMD ["sh", "-c", "PORT=80 npm run start:backend"]
