@@ -40,5 +40,8 @@ ENV REACT_APP_OPENAI_MODEL_API_KEY=dummy
 ENV REACT_APP_OPENAI_MODEL_DEPLOYMENT=gpt-4
 ENV REACT_APP_OPENAI_MODEL_API_VERSION=2024-02-15-preview
 
+# Set chat backend URL to empty (uses relative URLs since frontend and backend are served together)
+ENV REACT_APP_CHAT_BACKEND_URL=""
+
 # Start both backend server and serve frontend
 CMD ["sh", "-c", "PORT=80 npm run start:backend"]
