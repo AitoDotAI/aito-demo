@@ -6,9 +6,9 @@
 
 const config = require('../config.js');
 
-// Backend configuration
+// Backend configuration - use relative URLs in production
 const BACKEND_CONFIG = {
-  baseURL: process.env.REACT_APP_CHAT_BACKEND_URL || 'http://localhost:3001',
+  baseURL: process.env.REACT_APP_CHAT_BACKEND_URL || '',
   timeout: 60000 // 60 seconds
 };
 

@@ -5,7 +5,7 @@
  * This replaces the direct OpenAI calls with secure server-side assistant endpoints
  */
 
-const BACKEND_URL = process.env.REACT_APP_CHAT_BACKEND_URL || 'http://localhost:3001';
+const BACKEND_URL = process.env.REACT_APP_CHAT_BACKEND_URL || '';
 
 class AssistantClient {
   /**
