@@ -22,7 +22,7 @@ export function getAutoComplete(userId, prefix) {
   // $startsWith is Aito's string prefix matching operator
   if (prefix) {
     where['queryPhrase'] = {
-      "$startsWith": prefix
+      "$startsWith": prefix.toLowerCase()
     }
   } 
   
