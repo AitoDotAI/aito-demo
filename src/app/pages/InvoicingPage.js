@@ -60,7 +60,8 @@ class InvoicingPage extends Component {
         "Processor": null,
         "Acceptor": null,
         "GLCode": null
-      }
+      },
+      highlightedInputs: new Set()
     }
 
     this.toggleTooltip = this.toggleTooltip.bind(this);
@@ -140,8 +141,50 @@ class InvoicingPage extends Component {
 
   toggleTooltip = (output) => {
     const dropDownHelp = this.state.dropDownHelp
-    dropDownHelp[output] = !dropDownHelp[output]
-    this.setState({dropDownHelp})
+    const isOpening = !dropDownHelp[output]
+    dropDownHelp[output] = isOpening
+    
+    // Handle input highlighting
+    let highlightedInputs = new Set()
+    
+    if (isOpening) {
+      // Extract highlights from the prediction
+      const hits = this.state.output[output]
+      if (hits && hits.length > 0 && hits[0].$why) {
+        const factors = hits[0].$why.factors || []
+        
+        // Collect all highlighted terms
+        const highlightTerms = []
+        factors.forEach(factor => {
+          if (factor.highlight && factor.highlight.length > 0) {
+            factor.highlight.forEach(h => {
+              highlightTerms.push({
+                field: h.field.replace('invoices.', ''),
+                value: h.highlight.replace(/<\/?b>/g, '') // Remove HTML tags
+              })
+            })
+          }
+        })
+        
+        // Check which input fields contain these terms
+        Object.entries(this.state.input).forEach(([fieldName, fieldValue]) => {
+          const hasHighlight = highlightTerms.some(term => {
+            // Check if this specific field matches or if the value contains the term
+            if (term.field === fieldName && fieldValue.toLowerCase().includes(term.value.toLowerCase())) {
+              return true
+            }
+            // Also check if any field value contains the highlighted term
+            return fieldValue.toLowerCase().includes(term.value.toLowerCase())
+          })
+          
+          if (hasHighlight) {
+            highlightedInputs.add(fieldName)
+          }
+        })
+      }
+    }
+    
+    this.setState({ dropDownHelp, highlightedInputs })
   }
 
   render() {
@@ -149,7 +192,7 @@ class InvoicingPage extends Component {
       <div key={field} className="form-field">
         <Label className="form-field__label">{FIELD_LABELS[field] || field}</Label>
         <Input
-          className="form-field__input"
+          className={`form-field__input ${this.state.highlightedInputs.has(field) ? 'form-field__input--highlighted' : ''}`}
           value={value}
           onChange={(e) => this.onInputChange(field, e)}
           type="text"

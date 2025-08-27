@@ -265,6 +265,31 @@
   color: var(--aito-text-secondary);
 }
 
+/* Highlighted input fields */
+.form-field__input--highlighted {
+  border-color: #fbbf24;
+  background-color: #fffbeb;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+  animation: highlight-pulse 2s ease-in-out infinite;
+}
+
+.form-field__input--highlighted:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
+}
+
+@keyframes highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(251, 191, 36, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+  }
+}
+
 /* Prediction output styling */
 .prediction-item {
   margin-bottom: var(--aito-spacing-xl);
