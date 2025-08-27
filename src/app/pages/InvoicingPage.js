@@ -329,6 +329,7 @@ class InvoicingPage extends Component {
           <Tooltip
             autohide={false}
             flip={false}
+            fade={false}
             isOpen={this.state.dropDownHelp[field]}
             target={tooltipName}
             toggle={() => this.toggleTooltip(field)}

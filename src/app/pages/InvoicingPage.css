@@ -337,7 +337,12 @@
 /* Aito Explanation Tooltip Styles */
 .aito-explanation-tooltip {
   opacity: 1 !important;
-  z-index: 1100;
+  z-index: 1100 !important;
+}
+
+/* Override Bootstrap's default tooltip opacity */
+.aito-explanation-tooltip.tooltip.show {
+  opacity: 1 !important;
 }
 
 .aito-explanation-tooltip .tooltip-inner {
