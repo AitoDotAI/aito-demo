@@ -153,39 +153,22 @@ class InvoicingPage extends Component {
       if (hits && hits.length > 0 && hits[0].$p >= 0.5 && hits[0].$why) {
         const factors = hits[0].$why.factors || []
         
-        // Collect all highlighted terms
-        const highlightTerms = []
+        // Collect all fields that have highlights
         factors.forEach(factor => {
           if (factor.highlight && Array.isArray(factor.highlight) && factor.highlight.length > 0) {
             factor.highlight.forEach(h => {
-              if (h.field && h.highlight) {
-                const cleanField = h.field.replace('invoices.', '')
-                highlightTerms.push({
-                  field: cleanField,
-                  value: h.highlight.replace(/<\/?b>/g, '') // Remove HTML tags
-                })
+              if (h.field) {
+                // Extract field name from $context.FieldName format
+                const fieldMatch = h.field.match(/\$context\.(\w+)/)
+                if (fieldMatch && fieldMatch[1]) {
+                  const fieldName = fieldMatch[1]
+                  // Add this field to highlighted inputs
+                  highlightedInputs.add(fieldName)
+                }
               }
             })
           }
         })
-        
-        // Only proceed if we have highlight terms
-        if (highlightTerms.length > 0) {
-          // Check which input fields contain these terms
-          Object.entries(this.state.input).forEach(([fieldName, fieldValue]) => {
-            if (fieldValue && typeof fieldValue === 'string') {
-              const hasHighlight = highlightTerms.some(term => {
-                // Only highlight if this specific field matches AND contains the term
-                return term.field === fieldName && 
-                       fieldValue.toLowerCase().includes(term.value.toLowerCase())
-              })
-              
-              if (hasHighlight) {
-                highlightedInputs.add(fieldName)
-              }
-            }
-          })
-        }
       }
     }
     
