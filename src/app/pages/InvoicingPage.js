@@ -299,7 +299,7 @@ class InvoicingPage extends Component {
             <DropdownToggle caret>{topValue}</DropdownToggle>
             <DropdownMenu>
               {
-                hits.filter(hit => hit.$p >= 0.1).map((hit, index) => {
+                hits.slice(0, 3).filter(hit => hit.$p >= 0.005).map((hit, index) => {
                   var [value, name] = this.hitValueAndName(hit)
                   return <DropdownItem key={index} onClick={() => this.setOutput(field, value)}>{(100*hit.$p).toFixed(1)}% {name}</DropdownItem>
                 })
