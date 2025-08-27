@@ -140,47 +140,52 @@ class InvoicingPage extends Component {
   }
 
   toggleTooltip = (output) => {
-    const dropDownHelp = this.state.dropDownHelp
+    const dropDownHelp = { ...this.state.dropDownHelp }
     const isOpening = !dropDownHelp[output]
     dropDownHelp[output] = isOpening
     
-    // Handle input highlighting
+    // Handle input highlighting - always start fresh
     let highlightedInputs = new Set()
     
     if (isOpening) {
       // Extract highlights from the prediction
       const hits = this.state.output[output]
-      if (hits && hits.length > 0 && hits[0].$why) {
+      if (hits && hits.length > 0 && hits[0].$p >= 0.5 && hits[0].$why) {
         const factors = hits[0].$why.factors || []
         
         // Collect all highlighted terms
         const highlightTerms = []
         factors.forEach(factor => {
-          if (factor.highlight && factor.highlight.length > 0) {
+          if (factor.highlight && Array.isArray(factor.highlight) && factor.highlight.length > 0) {
             factor.highlight.forEach(h => {
-              highlightTerms.push({
-                field: h.field.replace('invoices.', ''),
-                value: h.highlight.replace(/<\/?b>/g, '') // Remove HTML tags
-              })
+              if (h.field && h.highlight) {
+                const cleanField = h.field.replace('invoices.', '')
+                highlightTerms.push({
+                  field: cleanField,
+                  value: h.highlight.replace(/<\/?b>/g, '') // Remove HTML tags
+                })
+              }
             })
           }
         })
         
-        // Check which input fields contain these terms
-        Object.entries(this.state.input).forEach(([fieldName, fieldValue]) => {
-          const hasHighlight = highlightTerms.some(term => {
-            // Check if this specific field matches or if the value contains the term
-            if (term.field === fieldName && fieldValue.toLowerCase().includes(term.value.toLowerCase())) {
-              return true
+        // Only proceed if we have highlight terms
+        if (highlightTerms.length > 0) {
+          // Check which input fields contain these terms
+          Object.entries(this.state.input).forEach(([fieldName, fieldValue]) => {
+            if (fieldValue && typeof fieldValue === 'string') {
+              const hasHighlight = highlightTerms.some(term => {
+                // Only highlight if this specific field matches AND contains the term
+                return term.field === fieldName && 
+                       fieldValue.toLowerCase().includes(term.value.toLowerCase())
+              })
+              
+              if (hasHighlight) {
+                highlightedInputs.add(fieldName)
+              }
             }
-            // Also check if any field value contains the highlighted term
-            return fieldValue.toLowerCase().includes(term.value.toLowerCase())
           })
-          
-          if (hasHighlight) {
-            highlightedInputs.add(fieldName)
-          }
-        })
+        }
       }
     }
     
