@@ -13,7 +13,7 @@ The Aito.ai demo highlights 11 production-ready ML features that can be build ex
 
 ```bash
 # Test the API instantly (no signup required)
-curl -X POST https://aito-demo.aito.app/api/v1/_predict \
+curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
   -H "X-API-Key: bvss2i2dIkaWUfBCdzEO89LpPNhqjD" \
   -H "Content-Type: application/json" \
   -d '{

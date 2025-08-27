@@ -19,7 +19,7 @@
     },
     {
       "src": "/api/(.*)",
-      "dest": "https://aito-demo.aito.app/api/$1"
+      "dest": "https://shared.aito.ai/db/aito-demo/api/$1"
     },
     {
       "src": "/(.*)",

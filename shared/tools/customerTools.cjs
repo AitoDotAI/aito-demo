@@ -8,7 +8,7 @@ const path = require('path');
 
 // Configuration for Aito.ai API (same as frontend config.js)
 const AITO_CONFIG = {
-  url: process.env.REACT_APP_AITO_URL || 'https://aito-demo.aito.app',
+  url: process.env.REACT_APP_AITO_URL || 'https://shared.aito.ai/db/aito-demo',
   apiKey: process.env.REACT_APP_AITO_API_KEY || 'yg4rTlXkqDzm4y8gPeY75HCKaNwfbTQ2si64ONTi'
 };
 
@@ -117,7 +117,7 @@ async function getRecommendations(userId, currentCart = [], limit = 5) {
     // Aito's _recommend endpoint uses machine learning to find items
     // that maximize the probability of achieving a specified goal
     const response = await axios.post(`${config.aito.url}/api/v1/_recommend`, {
-      from: 'impressions',  // Analyze product impression data
+      from: 'impressions',  //  Analyze product impression data
       
       where: {
         // Filter recommendations for specific user

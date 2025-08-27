@@ -5,7 +5,7 @@
  */
 
 // Default to demo instance if no environment variables are set
-const DEFAULT_AITO_URL = "https://aito-demo.aito.app"
+const DEFAULT_AITO_URL = "https://shared.aito.ai/db/aito-demo"
 const DEFAULT_AITO_API_KEY = "yg4rTlXkqDzm4y8gPeY75HCKaNwfbTQ2si64ONTi" // Demo key
 
 // Get configuration from environment variables or use defaults
