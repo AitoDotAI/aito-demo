@@ -162,14 +162,14 @@ class InvoicingPage extends Component {
 
     const propositionString = (proposition) => {
       const key = Object.keys(proposition)[0]
-      if (key == "$and") {
-        value = proposition[key]
+      if (key === "$and") {
+        var value = proposition[key]
         return value.map(v => propositionString(v)).join(" and ")
       }
-      if (key == "$not") {
+      if (key === "$not") {
         return `not ${propositionString(proposition[key])}`
       }
-      var value = proposition[key]["$has"]
+      value = proposition[key]["$has"]
       if (value !== undefined) {
         return `${key} has ${value}`
       }
@@ -181,43 +181,84 @@ class InvoicingPage extends Component {
     }
     
     const output = Object.entries(this.state.output).map(([field, hits]) => {
-      var name = field
       var why = ""
       var topValue = field
       var p = undefined
       var factors = []
       if (hits.length > 0 && hits[0].$p >= 0.5) {
-        [name, topValue] = this.hitValueAndName(hits[0])
+        var [, newTopValue] = this.hitValueAndName(hits[0])
+        topValue = newTopValue
         why = hits[0].$why
         p = hits[0].$p
-        factors = why["factors"].map(factor => {
+        factors = why["factors"].map((factor, index) => {
           const t = factor["type"]
           var value = factor["value"]
           var rv = null
-          if (t == "baseP") {
-            rv = <li>{(value*100).toFixed(0)}% for base probability</li>
-          } else if (t == "product") {
-            value = 1
-            factor.factors.forEach(f => {
-              value *= f.value
-            })
-            rv = <li>* {(value).toFixed(2)} for normalization</li>
-          } else if (t == "relatedPropositionLift") {
-            var prop = propositionString(factor["proposition"])
-            var factors2 = factor["factors"]
-            if (factors2) {
-              prop = factors2.map(f => propositionString(f["proposition"])).join(" and ")
+          
+          if (t === "baseP") {
+            rv = (
+              <div key={index} className="aito-factor base-probability">
+                <div className="factor-header">
+                  <span className="factor-label">Base Probability</span>
+                  <span className="factor-value">{(value*100).toFixed(0)}%</span>
+                </div>
+                <div className="factor-description">
+                  Historical rate for {topValue}
+                </div>
+              </div>
+            )
+          } else if (t === "product") {
+            // Skip normalization - internal calculation
+            return null
+          } else if (t === "relatedPropositionLift") {
+            var highlightElements = []
+            
+            if (factor["highlight"] && factor["highlight"].length > 0) {
+              // Build the highlighted text with proper HTML rendering
+              const highlightTexts = factor["highlight"].map((h, i) => {
+                const fieldName = h["field"].substring(9) // Remove 'invoices.'
+                return `${i > 0 ? ' and ' : ''}<span class="field-name">${fieldName}</span> is <mark>${h["highlight"]}</mark>`
+              }).join('')
+              
+              highlightElements = <span dangerouslySetInnerHTML={{__html: highlightTexts}} />
+            } else {
+              // Fallback to proposition string if no highlights
+              highlightElements = <span dangerouslySetInnerHTML={{__html: propositionString(factor["proposition"])}} />
             }
-            if (factor["highlight"]) {
-              prop = factor["highlight"].map(h => h["field"].substring(9) + " is " + h["highlight"]).join(" and ")
-            }
-
-            rv = <li>* {(value).toFixed(2)} for <span dangerouslySetInnerHTML={{__html: prop}} /></li>
-          } else {
-            rv = <li>JSON.stringify(factor)</li>
+            
+            rv = (
+              <div key={index} className="aito-factor pattern-match">
+                <div className="factor-header">
+                  <span className="factor-label">Pattern Match</span>
+                  <span className="factor-multiplier">× {value.toFixed(1)}</span>
+                </div>
+                <div className="factor-description">
+                  When {highlightElements}
+                </div>
+              </div>
+            )
           }
           return rv
-        })
+        }).filter(Boolean)
+        
+        // Add calculation summary if we have factors
+        if (factors.length > 0) {
+          const baseP = why["factors"].find(f => f.type === "baseP")?.value || 0
+          const lifts = why["factors"]
+            .filter(f => f.type === "relatedPropositionLift")
+            .map(f => f.value)
+          
+          factors.push(
+            <div key="calculation" className="aito-calculation-summary">
+              <span>{(baseP * 100).toFixed(0)}%</span>
+              {lifts.map((lift, i) => (
+                <span key={i}> × {lift.toFixed(1)}</span>
+              ))}
+              <span className="equals"> = </span>
+              <span className="final-probability">{(p * 100).toFixed(0)}%</span>
+            </div>
+          )
+        }
       }
       var tooltipName = "tooltip_" + field
       return <div key={field} className="prediction-item">
@@ -260,11 +301,19 @@ class InvoicingPage extends Component {
             isOpen={this.state.dropDownHelp[field]}
             target={tooltipName}
             toggle={() => this.toggleTooltip(field)}
+            placement="bottom-end"
+            className="aito-explanation-tooltip"
           >
-            <b>Why {field} is {topValue} with {(100*p).toFixed(0)}% probability?</b>
-            <ol>
-            {factors}
-            </ol>
+            <div className="aito-tooltip-content">
+              <div className="aito-tooltip-header">
+                <h4>Why {topValue}?</h4>
+                <span className="confidence-badge">{(100*p).toFixed(0)}%</span>
+              </div>
+              
+              <div className="aito-factors">
+                {factors}
+              </div>
+            </div>
           </Tooltip>
         </div>
       </div>
