@@ -340,8 +340,8 @@
   z-index: 1100 !important;
 }
 
-/* Override Bootstrap's default tooltip opacity */
-.aito-explanation-tooltip.tooltip.show {
+/* Override Bootstrap's .tooltip.show{opacity:0.9} rule directly */
+.tooltip.show {
   opacity: 1 !important;
 }
 
