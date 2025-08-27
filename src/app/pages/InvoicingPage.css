@@ -310,19 +310,43 @@
 }
 
 /* Aito Explanation Tooltip Styles */
+.aito-explanation-tooltip {
+  opacity: 1 !important;
+  z-index: 1100;
+}
+
 .aito-explanation-tooltip .tooltip-inner {
   max-width: 400px;
   padding: 0;
-  background: white;
+  background: white !important;
   text-align: left;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  opacity: 1 !important;
 }
 
 .aito-tooltip-content {
-  background: transparent;
+  background: white;
+  border-radius: 12px;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* Override Reactstrap default styles */
+.aito-explanation-tooltip .tooltip-arrow {
+  display: none !important;
+}
+
+.aito-explanation-tooltip.show {
+  opacity: 1 !important;
+}
+
+/* Ensure the tooltip content is fully opaque */
+.bs-tooltip-auto[x-placement^="bottom"] .aito-explanation-tooltip,
+.bs-tooltip-bottom .aito-explanation-tooltip {
+  opacity: 1 !important;
 }
 
 .aito-tooltip-header {
