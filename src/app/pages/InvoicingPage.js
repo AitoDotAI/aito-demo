@@ -150,12 +150,12 @@ class InvoicingPage extends Component {
     if (isOpening) {
       // Extract highlights from the prediction
       const hits = this.state.output[output]
-      if (hits && hits.length > 0 && hits[0].$p >= 0.5 && hits[0].$why) {
+      if (hits && hits.length > 0 && hits[0].$p >= 0.5 && hits[0].$why && hits[0].$why.factors) {
         const factors = hits[0].$why.factors || []
         
         // Collect all fields that have highlights
         factors.forEach(factor => {
-          if (factor.highlight && Array.isArray(factor.highlight) && factor.highlight.length > 0) {
+          if (factor && factor.highlight && Array.isArray(factor.highlight) && factor.highlight.length > 0) {
             factor.highlight.forEach(h => {
               if (h.field) {
                 // Extract field name from $context.FieldName format
@@ -221,7 +221,7 @@ class InvoicingPage extends Component {
         topValue = newTopValue
         why = hits[0].$why
         p = hits[0].$p
-        factors = why["factors"].map((factor, index) => {
+        factors = (why && why["factors"] ? why["factors"] : []).map((factor, index) => {
           const t = factor["type"]
           var value = factor["value"]
           var rv = null
@@ -273,7 +273,7 @@ class InvoicingPage extends Component {
         }).filter(Boolean)
         
         // Add calculation summary if we have factors
-        if (factors.length > 0) {
+        if (factors.length > 0 && why && why["factors"]) {
           const baseP = why["factors"].find(f => f.type === "baseP")?.value || 0
           const lifts = why["factors"]
             .filter(f => f.type === "relatedPropositionLift")
