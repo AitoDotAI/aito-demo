@@ -279,12 +279,41 @@ class InvoicingPage extends Component {
             .filter(f => f.type === "relatedPropositionLift")
             .map(f => f.value)
           
+          // Calculate what the unnormalized probability would be
+          const unnormalizedP = baseP * lifts.reduce((acc, lift) => acc * lift, 1)
+          
+          // Calculate normalizer (if final probability differs significantly from calculated)
+          const normalizer = unnormalizedP > 0 ? p / unnormalizedP : 1
+          const showNormalizer = Math.abs(normalizer - 1) > 0.1 // Show if normalizer differs by more than 10%
+          
           factors.push(
             <div key="calculation" className="aito-calculation-summary">
               <span>{(baseP * 100).toFixed(0)}%</span>
               {lifts.map((lift, i) => (
                 <span key={i}> × {lift.toFixed(1)}</span>
               ))}
+              {showNormalizer && (
+                <span>
+                  {' × '}
+                  {normalizer.toFixed(2)}
+                  <a 
+                    href="https://en.wikipedia.org/wiki/Normalizing_constant" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: '#FF6B35',
+                      fontSize: '11px',
+                      verticalAlign: 'super',
+                      marginLeft: '0px',
+                      fontWeight: 'bold'
+                    }}
+                    title="Normalizing constant"
+                  >
+                    *
+                  </a>
+                </span>
+              )}
               <span className="equals"> = </span>
               <span className="final-probability">{(p * 100).toFixed(0)}%</span>
             </div>
