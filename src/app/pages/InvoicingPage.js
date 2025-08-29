@@ -60,7 +60,13 @@ class InvoicingPage extends Component {
         "Processor": null,
         "Acceptor": null,
         "GLCode": null
-      }
+      },
+      selectedIndex: {
+        "Processor": 0,
+        "Acceptor": 0,
+        "GLCode": 0
+      },
+      highlightedInputs: new Set()
     }
 
     this.toggleTooltip = this.toggleTooltip.bind(this);
@@ -69,18 +75,21 @@ class InvoicingPage extends Component {
   }
 
 
-  setOutput = (field, value) => {
-    const output = this.state.output
-    output[field] = [{
-      $p: 1,
-      feature: value
-    }] 
-    const dropDownOpen = this.state.dropDownOpen
-    dropDownOpen[output] = false
+  setOutput = (field, selectedIndex) => {
+    console.log(`setOutput called - field: ${field}, selectedIndex: ${selectedIndex}`)
+    console.log('Current output:', this.state.output[field])
+    
+    const selectedIndexState = { ...this.state.selectedIndex }
+    selectedIndexState[field] = selectedIndex
+    
+    const dropDownOpen = { ...this.state.dropDownOpen }
+    dropDownOpen[field] = false
 
     this.setState({
-      output,
+      selectedIndex: selectedIndexState,
       dropDownOpen
+    }, () => {
+      console.log('New selectedIndex state:', this.state.selectedIndex)
     })
   }
 
@@ -119,9 +128,9 @@ class InvoicingPage extends Component {
     this.debouncedFetchResults()
   }
 
-  toggleDropDown = (output) => {
+  toggleDropDown = (field) => {
     const dropDownOpen = this.state.dropDownOpen
-    dropDownOpen[output] = !dropDownOpen[output]
+    dropDownOpen[field] = !dropDownOpen[field]
     this.setState({dropDownOpen})
   }
   
@@ -139,9 +148,42 @@ class InvoicingPage extends Component {
   }
 
   toggleTooltip = (output) => {
-    const dropDownHelp = this.state.dropDownHelp
-    dropDownHelp[output] = !dropDownHelp[output]
-    this.setState({dropDownHelp})
+    const dropDownHelp = { ...this.state.dropDownHelp }
+    const isOpening = !dropDownHelp[output]
+    dropDownHelp[output] = isOpening
+    
+    // Handle input highlighting - always start fresh
+    let highlightedInputs = new Set()
+    
+    if (isOpening) {
+      // Extract highlights from the prediction
+      const hits = this.state.output[output]
+      const selectedIdx = this.state.selectedIndex[output] || 0
+      const selectedHit = hits[selectedIdx]
+      
+      if (selectedHit && selectedHit.$p >= 0.5 && selectedHit.$why && selectedHit.$why.factors) {
+        const factors = selectedHit.$why.factors || []
+        
+        // Collect all fields that have highlights
+        factors.forEach(factor => {
+          if (factor && factor.highlight && Array.isArray(factor.highlight) && factor.highlight.length > 0) {
+            factor.highlight.forEach(h => {
+              if (h.field) {
+                // Extract field name from $context.FieldName format
+                const fieldMatch = h.field.match(/\$context\.(\w+)/)
+                if (fieldMatch && fieldMatch[1]) {
+                  const fieldName = fieldMatch[1]
+                  // Add this field to highlighted inputs
+                  highlightedInputs.add(fieldName)
+                }
+              }
+            })
+          }
+        })
+      }
+    }
+    
+    this.setState({ dropDownHelp, highlightedInputs })
   }
 
   render() {
@@ -149,7 +191,7 @@ class InvoicingPage extends Component {
       <div key={field} className="form-field">
         <Label className="form-field__label">{FIELD_LABELS[field] || field}</Label>
         <Input
-          className="form-field__input"
+          className={`form-field__input ${this.state.highlightedInputs.has(field) ? 'form-field__input--highlighted' : ''}`}
           value={value}
           onChange={(e) => this.onInputChange(field, e)}
           type="text"
@@ -162,14 +204,14 @@ class InvoicingPage extends Component {
 
     const propositionString = (proposition) => {
       const key = Object.keys(proposition)[0]
-      if (key == "$and") {
-        value = proposition[key]
+      if (key === "$and") {
+        var value = proposition[key]
         return value.map(v => propositionString(v)).join(" and ")
       }
-      if (key == "$not") {
+      if (key === "$not") {
         return `not ${propositionString(proposition[key])}`
       }
-      var value = proposition[key]["$has"]
+      value = proposition[key]["$has"]
       if (value !== undefined) {
         return `${key} has ${value}`
       }
@@ -181,55 +223,140 @@ class InvoicingPage extends Component {
     }
     
     const output = Object.entries(this.state.output).map(([field, hits]) => {
-      var name = field
       var why = ""
       var topValue = field
       var p = undefined
       var factors = []
-      if (hits.length > 0 && hits[0].$p >= 0.5) {
-        [name, topValue] = this.hitValueAndName(hits[0])
-        why = hits[0].$why
-        p = hits[0].$p
-        factors = why["factors"].map(factor => {
+      const selectedIdx = this.state.selectedIndex[field] || 0
+      const selectedHit = hits[selectedIdx]
+      
+      console.log(`Rendering ${field}: selectedIdx=${selectedIdx}, hits.length=${hits.length}, selectedHit=`, selectedHit)
+      
+      if (selectedHit) {
+        var [, newTopValue] = this.hitValueAndName(selectedHit)
+        topValue = newTopValue
+        why = selectedHit.$why
+        p = selectedHit.$p
+        console.log(`topValue ${topValue}: why=${why}, p=${p}`)
+
+        factors = (why && why["factors"] ? why["factors"] : []).map((factor, index) => {
           const t = factor["type"]
           var value = factor["value"]
           var rv = null
-          if (t == "baseP") {
-            rv = <li>{(value*100).toFixed(0)}% for base probability</li>
-          } else if (t == "product") {
-            value = 1
-            factor.factors.forEach(f => {
-              value *= f.value
-            })
-            rv = <li>* {(value).toFixed(2)} for normalization</li>
-          } else if (t == "relatedPropositionLift") {
-            var prop = propositionString(factor["proposition"])
-            var factors2 = factor["factors"]
-            if (factors2) {
-              prop = factors2.map(f => propositionString(f["proposition"])).join(" and ")
+          
+          if (t === "baseP") {
+            rv = (
+              <div key={index} className="aito-factor base-probability">
+                <div className="factor-header">
+                  <span className="factor-label">Base Probability</span>
+                  <span className="factor-value">{(value*100).toFixed(0)}%</span>
+                </div>
+                <div className="factor-description">
+                  Historical rate for {topValue}
+                </div>
+              </div>
+            )
+          } else if (t === "product") {
+            // Skip normalization - internal calculation
+            return null
+          } else if (t === "relatedPropositionLift") {
+            // Skip lifts that are approximately 1.0 (between 0.95 and 1.05)
+            if (Math.abs(value - 1.0) < 0.05) {
+              return null
             }
-            if (factor["highlight"]) {
-              prop = factor["highlight"].map(h => h["field"].substring(9) + " is " + h["highlight"]).join(" and ")
+            
+            var highlightElements = []
+            
+            if (factor["highlight"] && factor["highlight"].length > 0) {
+              // Build the highlighted text with proper HTML rendering
+              const highlightTexts = factor["highlight"].map((h, i) => {
+                const fieldName = h["field"].substring(9) // Remove 'invoices.'
+                return `${i > 0 ? ' and ' : ''}<span class="field-name">${fieldName}</span> is <mark>${h["highlight"]}</mark>`
+              }).join('')
+              
+              highlightElements = <span dangerouslySetInnerHTML={{__html: highlightTexts}} />
+            } else {
+              // Fallback to proposition string if no highlights
+              highlightElements = <span dangerouslySetInnerHTML={{__html: propositionString(factor["proposition"])}} />
             }
-
-            rv = <li>* {(value).toFixed(2)} for <span dangerouslySetInnerHTML={{__html: prop}} /></li>
-          } else {
-            rv = <li>JSON.stringify(factor)</li>
+            
+            rv = (
+              <div key={index} className="aito-factor pattern-match">
+                <div className="factor-header">
+                  <span className="factor-label">Pattern Match</span>
+                  <span className="factor-multiplier">× {value.toFixed(1)}</span>
+                </div>
+                <div className="factor-description">
+                  When {highlightElements}
+                </div>
+              </div>
+            )
           }
           return rv
-        })
+        }).filter(Boolean)
+        
+        // Add calculation summary if we have factors
+        if (factors.length > 0 && why && why["factors"]) {
+          const baseP = why["factors"].find(f => f.type === "baseP")?.value || 0
+          const allLifts = why["factors"]
+            .filter(f => f.type === "relatedPropositionLift")
+            .map(f => f.value)
+          const significantLifts = allLifts.filter(lift => Math.abs(lift - 1.0) >= 0.05) // Only show significant lifts
+          
+          // Calculate what the unnormalized probability would be (using ALL lifts)
+          const unnormalizedP = baseP * allLifts.reduce((acc, lift) => acc * lift, 1)
+          
+          // Calculate normalizer (if final probability differs significantly from calculated)
+          const normalizer = unnormalizedP > 0 ? p / unnormalizedP : 1
+          const showNormalizer = Math.abs(normalizer - 1) > 0.1 // Show if normalizer differs by more than 10%
+          
+          factors.push(
+            <div key="calculation" className="aito-calculation-summary">
+              <span>{(baseP * 100).toFixed(0)}%</span>
+              {significantLifts.map((lift, i) => (
+                <span key={i}> × {lift.toFixed(1)}</span>
+              ))}
+              {showNormalizer && (
+                <span>
+                  {' × '}
+                  {normalizer.toFixed(2)}
+                  <a 
+                    href="https://en.wikipedia.org/wiki/Normalizing_constant" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: '#FF6B35',
+                      fontSize: '11px',
+                      verticalAlign: 'super',
+                      marginLeft: '0px',
+                      fontWeight: 'bold'
+                    }}
+                    title="Normalizing constant"
+                  >
+                    *
+                  </a>
+                </span>
+              )}
+              <span className="equals"> = </span>
+              <span className="final-probability">{(p * 100).toFixed(0)}%</span>
+            </div>
+          )
+        }
       }
       var tooltipName = "tooltip_" + field
       return <div key={field} className="prediction-item">
         <h4 className="prediction-item__title">{FIELD_LABELS[field] || field}</h4>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--aito-spacing-md)' }}>
-          <Dropdown isOpen={this.state.dropDownOpen[field]} toggle={(x) => this.toggleDropDown(field, x)}>
+          <Dropdown isOpen={this.state.dropDownOpen[field]} toggle={() => this.toggleDropDown(field)}>
             <DropdownToggle caret>{topValue}</DropdownToggle>
             <DropdownMenu>
               {
-                hits.filter(hit => hit.$p >= 0.1).map((hit, index) => {
+                hits.slice(0, 3).filter(hit => hit.$p >= 0.005).map((hit, index) => {
                   var [value, name] = this.hitValueAndName(hit)
-                  return <DropdownItem key={index} onClick={() => this.setOutput(field, value)}>{(100*hit.$p).toFixed(1)}% {name}</DropdownItem>
+                  // Find the actual index of this hit in the original array
+                  const actualIndex = hits.indexOf(hit)
+                  return <DropdownItem key={index} onClick={() => this.setOutput(field, actualIndex)}>{(100*hit.$p).toFixed(1)}% {name}</DropdownItem>
                 })
               }
             </DropdownMenu>
@@ -257,14 +384,24 @@ class InvoicingPage extends Component {
           <Tooltip
             autohide={false}
             flip={false}
+            fade={false}
+            transition={{ timeout: 0 }}
             isOpen={this.state.dropDownHelp[field]}
             target={tooltipName}
             toggle={() => this.toggleTooltip(field)}
+            placement="bottom-end"
+            className="aito-explanation-tooltip"
           >
-            <b>Why {field} is {topValue} with {(100*p).toFixed(0)}% probability?</b>
-            <ol>
-            {factors}
-            </ol>
+            <div className="aito-tooltip-content">
+              <div className="aito-tooltip-header">
+                <h4>Why {topValue}?</h4>
+                <span className="confidence-badge">{(100*p).toFixed(0)}%</span>
+              </div>
+              
+              <div className="aito-factors">
+                {factors}
+              </div>
+            </div>
           </Tooltip>
         </div>
       </div>

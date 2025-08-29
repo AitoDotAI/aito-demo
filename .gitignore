@@ -83,3 +83,9 @@ docs/design/
 
 # Temporary screenshot generation
 screenshots-temp/
+
+# Nix and direnv
+.direnv/
+.envrc.local
+result
+result-*
