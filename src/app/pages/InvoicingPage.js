@@ -16,6 +16,7 @@ import {
   DropdownItem,
   Tooltip
 } from 'reactstrap'
+import { FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import HelpButton from '../components/HelpButton'
 import { HELP_CONTENT } from '../constants/helpContent'
 
@@ -66,6 +67,7 @@ class InvoicingPage extends Component {
         "Acceptor": 0,
         "GLCode": 0
       },
+      currentInvoiceIndex: -1, // -1 means no test invoice loaded (new/empty)
       highlightedInputs: new Set()
     }
 
@@ -116,16 +118,63 @@ class InvoicingPage extends Component {
       .catch(err => this.props.actions.showError(err))
   }
 
-  next = () => {
-    const selected = invoiceEvaluationData[Math.floor(Math.random() * invoiceEvaluationData.length)]
+  // Load a new/empty invoice
+  newInvoice = () => {
+    const input = {
+      "InvoiceID": "",
+      "SenderName": "",
+      "ProductName": "",
+      "AccountNumber": "",
+      "Description": ""
+    }
+    this.setState({
+      input,
+      currentInvoiceIndex: -1,
+      output: {
+        "Processor": [],
+        "Acceptor": [],
+        "GLCode": []
+      }
+    })
+    this.debouncedFetchResults()
+  }
+
+  // Load next test invoice
+  nextInvoice = () => {
+    const currentIndex = this.state.currentInvoiceIndex
+    const nextIndex = currentIndex >= invoiceEvaluationData.length - 1 ? 0 : currentIndex + 1
+    this.loadInvoiceByIndex(nextIndex)
+  }
+
+  // Load previous test invoice
+  prevInvoice = () => {
+    const currentIndex = this.state.currentInvoiceIndex
+    const prevIndex = currentIndex <= 0 ? invoiceEvaluationData.length - 1 : currentIndex - 1
+    this.loadInvoiceByIndex(prevIndex)
+  }
+
+  // Load specific test invoice by index
+  loadInvoiceByIndex = (index) => {
+    const selected = invoiceEvaluationData[index]
     const input = {}
     for (var key in this.state.input) {
-      input[key] = selected[key]
+      input[key] = selected[key] || ""
     }
-
-    this.setState({input})
-
+    this.setState({
+      input,
+      currentInvoiceIndex: index,
+      output: {
+        "Processor": [],
+        "Acceptor": [],
+        "GLCode": []
+      }
+    })
     this.debouncedFetchResults()
+  }
+
+  // Legacy method for backward compatibility
+  next = () => {
+    this.nextInvoice()
   }
 
   toggleDropDown = (field) => {
@@ -425,7 +474,42 @@ class InvoicingPage extends Component {
         </div>
         
         <div className="InvoicingPage__actions">
-          <button className="Button" onClick={this.next}>Load Sample Invoice</button>
+          <div className="invoice-navigation">
+            <Button 
+              color="secondary" 
+              size="md"
+              onClick={this.newInvoice}
+              className="invoice-nav-btn"
+            >
+              <FaPlus className="me-2" /> New Invoice
+            </Button>
+            <div className="invoice-nav-controls">
+              <Button 
+                color="light" 
+                size="sm"
+                onClick={this.prevInvoice}
+                disabled={invoiceEvaluationData.length === 0}
+                className="invoice-nav-btn"
+              >
+                <FaChevronLeft />
+              </Button>
+              <span className="invoice-counter">
+                {this.state.currentInvoiceIndex === -1 
+                  ? "New Invoice" 
+                  : `Invoice ${this.state.currentInvoiceIndex + 1} of ${invoiceEvaluationData.length}`
+                }
+              </span>
+              <Button 
+                color="light" 
+                size="sm"
+                onClick={this.nextInvoice}
+                disabled={invoiceEvaluationData.length === 0}
+                className="invoice-nav-btn"
+              >
+                <FaChevronRight />
+              </Button>
+            </div>
+          </div>
         </div>
 
         <div className="InvoicingPage__content">
