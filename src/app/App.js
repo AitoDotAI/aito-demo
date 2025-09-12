@@ -12,6 +12,7 @@ import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
 import AnalyticsPage from './pages/AnalyticsPage'
 import InvoicingPage from './pages/InvoicingPage'
+import QualityMonitoringPage from './pages/QualityMonitoringPage'
 import HelpPage from './pages/HelpPage'
 import CartPage from './pages/CartPage'
 import ProductPage from './pages/ProductPage'
@@ -140,6 +141,8 @@ class App extends Component {
         return AnalyticsPage
       case '/invoicing':
         return InvoicingPage
+      case '/quality':
+        return QualityMonitoringPage
       case '/product':
         return ProductPage
       case '/':
@@ -197,6 +200,10 @@ class App extends Component {
       // Invoice classification and routing
       predictInvoice: 
         (input, output) => data.predictInvoice(input, output),
+      
+      // Model evaluation using Aito's _evaluate endpoint
+      evaluateModel:
+        (query) => data.evaluateModel(query),
 
       // Product information retrieval
       getProductDetails: 

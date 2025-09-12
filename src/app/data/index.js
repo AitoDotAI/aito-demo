@@ -8,6 +8,7 @@ import { relate } from '../../07-relate'
 import { predictInvoice } from '../../08-predict-invoice'
 import { getProductDetails, getAllProducts, getProductStats, getProductAnalytics } from '../../09-product'
 import { getDistinctValues } from '../../10-get-distinct-values'
+import { evaluateModel } from '../../11-evaluate'
 
 export {
   getProductSearchResults,
@@ -19,6 +20,7 @@ export {
   prompt,
   relate,
   predictInvoice,
+  evaluateModel,
   getProductDetails,
   getAllProducts,
   getProductStats, 

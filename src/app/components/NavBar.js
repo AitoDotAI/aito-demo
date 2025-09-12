@@ -69,6 +69,7 @@ class NavBar extends Component {
               <DropdownItem onClick={() => this.onMenuItemClick('/product')}>Products</DropdownItem>
               <DropdownItem onClick={() => this.onMenuItemClick('/analytics')}>Analytics</DropdownItem>
               <DropdownItem onClick={() => this.onMenuItemClick('/invoicing')}>Invoicing</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/quality')}>Evaluation</DropdownItem>
             </DropdownMenu>
           </Dropdown>
           
