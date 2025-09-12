@@ -95,7 +95,7 @@ app.post('/api/chat/completions', async (req, res) => {
       });
     }
 
-    const { messages, tools, temperature = 0.7, max_tokens = 1000 } = req.body;
+    const { messages, tools, max_completion_tokens = 1000 } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({
@@ -106,8 +106,7 @@ app.post('/api/chat/completions', async (req, res) => {
     const requestParams = {
       model: AZURE_CONFIG.deploymentName,
       messages,
-      temperature,
-      max_tokens,
+      max_completion_tokens,
     };
 
     // Add tools if provided
@@ -120,8 +119,7 @@ app.post('/api/chat/completions', async (req, res) => {
       model: requestParams.model,
       messageCount: messages.length,
       toolCount: tools ? tools.length : 0,
-      temperature,
-      max_tokens
+      max_completion_tokens
     });
 
     const completion = await openai.chat.completions.create(requestParams);
@@ -234,8 +232,7 @@ app.post('/api/assistant/customer', async (req, res) => {
       messages,
       tools: CUSTOMER_TOOLS,
       tool_choice: 'auto',
-      temperature: 0.7,
-      max_tokens: 1000
+      max_completion_tokens: 1000
     });
 
     const assistantMessage = completion.choices[0]?.message;
@@ -343,8 +340,7 @@ app.post('/api/assistant/customer', async (req, res) => {
       const finalCompletion = await openai.chat.completions.create({
         model: AZURE_CONFIG.deploymentName,
         messages,
-        temperature: 0.7,
-        max_tokens: 1000
+          max_completion_tokens: 1000
       });
 
       finalResponse = finalCompletion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
@@ -452,8 +448,7 @@ app.post('/api/assistant/admin', async (req, res) => {
     const completion = await openai.chat.completions.create({
       model: AZURE_CONFIG.deploymentName,
       messages,
-      temperature: 0.7,
-      max_tokens: 1000
+      max_completion_tokens: 1000
     });
 
     console.log(`Admin assistant response generated for ${clientIP}`);
