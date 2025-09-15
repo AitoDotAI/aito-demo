@@ -15,7 +15,7 @@ const {
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 80;
+const PORT = process.env.BACKEND_PORT || process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -67,8 +67,10 @@ try {
   
   console.log('✅ Azure OpenAI client initialized successfully');
   console.log(`   Endpoint: ${azureEndpoint}`);
+  console.log(`   Full Base URL: ${azureEndpoint}/openai/deployments/${AZURE_CONFIG.deploymentName}`);
   console.log(`   Deployment: ${AZURE_CONFIG.deploymentName}`);
   console.log(`   API Version: ${AZURE_CONFIG.apiVersion}`);
+  console.log(`   API Key: ${AZURE_CONFIG.apiKey ? AZURE_CONFIG.apiKey.substring(0, 10) + '...' : 'MISSING'}`);
 } catch (error) {
   console.error('❌ Failed to initialize Azure OpenAI client:', error.message);
   openai = null;
