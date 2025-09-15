@@ -49,8 +49,7 @@ export async function createChatCompletion(messages, tools = null, modelName = n
 
     const requestBody = {
       messages: messages,
-      max_tokens: 2000,
-      temperature: 0.7
+      max_completion_tokens: 2000
     };
 
     // Add tools if provided
