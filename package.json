@@ -22,6 +22,7 @@
     "reactstrap": "^9.2.3",
     "recharts": "^2.15.0"
   },
+  "proxy": "http://localhost:3010",
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "start:backend": "node server.js",
