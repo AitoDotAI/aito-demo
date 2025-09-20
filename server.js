@@ -178,7 +178,15 @@ app.post('/api/assistant/customer', async (req, res) => {
 
     // Basic rate limiting - in production, use Redis or proper rate limiter
     const clientIP = req.ip || req.connection.remoteAddress;
-    console.log(`Customer assistant request from ${clientIP}: "${message.substring(0, 50)}..." for user: ${context.user || 'guest'}`);
+    
+    // Handle both context.userId (from frontend) and context.user for backward compatibility
+    const userId = context.userId || context.user || 'guest';
+    console.log(`Customer assistant request from ${clientIP}: "${message.substring(0, 50)}..." for user: ${userId}`);
+    
+    // Warn about invalid user context
+    if (!userId || userId === 'null' || userId === 'undefined' || userId === 'guest') {
+      console.warn(`⚠️ WARNING: Customer assistant called with invalid user: '${userId}'. Personalization will not work properly.`);
+    }
 
     // Build conversation with system prompt, history, and new user message
     const messages = [
@@ -187,7 +195,7 @@ app.post('/api/assistant/customer', async (req, res) => {
         content: `${CUSTOMER_SYSTEM_PROMPT}
 
         Current customer context:
-        - User ID: ${context.user || 'guest'}
+        - User ID: ${context.userId || context.user || 'guest'}
         - Cart items: ${context.cartItems?.length || 0} items
         - Current page: ${context.currentPage || 'unknown'}
         - Timestamp: ${new Date().toISOString()}
@@ -252,7 +260,7 @@ app.post('/api/assistant/customer', async (req, res) => {
 
     // Handle tool calls if present
     if (assistantMessage?.tool_calls) {
-      console.log(`Executing ${assistantMessage.tool_calls.length} tool(s) for ${context.user || 'guest'}`);
+      console.log(`Executing ${assistantMessage.tool_calls.length} tool(s) for ${context.userId || context.user || 'guest'}`);
       
       // Add assistant message with tool calls to conversation
       messages.push(assistantMessage);
@@ -263,7 +271,7 @@ app.post('/api/assistant/customer', async (req, res) => {
           const toolResult = await executeCustomerTool(
             toolCall.function.name,
             JSON.parse(toolCall.function.arguments),
-            context.user || 'guest',
+            context.userId || context.user || 'guest',
             context.cartItems || []
           );
 
@@ -334,12 +342,26 @@ app.post('/api/assistant/customer', async (req, res) => {
           });
         } catch (toolError) {
           console.error(`Tool execution error for ${toolCall.function.name}:`, toolError);
+          
+          // Provide specific error messages for configuration issues
+          let errorMessage = toolError.message || 'An error occurred while processing your request.';
+          
+          // Make configuration errors more visible
+          if (errorMessage.includes('REACT_APP_AITO_URL') || errorMessage.includes('Cannot connect to Aito')) {
+            errorMessage = '⚠️ Configuration Error: Unable to connect to Aito server. The backend is not properly configured with REACT_APP_AITO_URL.';
+          } else if (errorMessage.includes('REACT_APP_AITO_API_KEY') || errorMessage.includes('authentication failed')) {
+            errorMessage = '⚠️ Configuration Error: Aito API authentication failed. The backend is not properly configured with REACT_APP_AITO_API_KEY.';
+          } else if (errorMessage.includes('database') || errorMessage.includes('table not found')) {
+            errorMessage = '⚠️ Configuration Error: Aito database or table not found. Please check the database configuration.';
+          }
+          
           messages.push({
             role: 'tool',
             tool_call_id: toolCall.id,
             content: JSON.stringify({
               success: false,
-              message: 'I encountered an error while processing your request. Please try again.'
+              message: errorMessage,
+              error: true
             })
           });
         }

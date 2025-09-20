@@ -89,21 +89,21 @@ async function searchProducts(userId, query, limit = 5) {
       message: `Found ${products.length} products matching "${query}"`
     };
   } catch (error) {
-    console.error('Product search error:', error);
+    const errorMsg = `❌ AITO API ERROR in searchProducts: ${error.message}`;
+    console.error(errorMsg);
+    console.error('Full error:', error.response?.data || error);
     
-    // Fallback to simple mock search
-    const mockProducts = [
-      { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
-      { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
-      { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 }
-    ].filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
-     .slice(0, limit);
-
-    return {
-      success: true,
-      products: mockProducts,
-      message: `Found ${mockProducts.length} products matching "${query}" (cached results)`
-    };
+    // Check for specific error types
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      throw new Error('Cannot connect to Aito server. Please check REACT_APP_AITO_URL configuration.');
+    } else if (error.response?.status === 401 || error.response?.status === 403) {
+      throw new Error('Aito API authentication failed. Please check REACT_APP_AITO_API_KEY configuration.');
+    } else if (error.response?.status === 404) {
+      throw new Error('Aito database or table not found. Please check the database configuration.');
+    }
+    
+    // Don't use mock data - fail visibly
+    throw new Error(`Failed to search products in Aito: ${error.message}`);
   }
 }
 
@@ -112,6 +112,10 @@ async function searchProducts(userId, query, limit = 5) {
  */
 async function getRecommendations(userId, currentCart = [], limit = 5) {
   try {
+    // Warning if user is not provided
+    if (!userId || userId === 'null' || userId === 'undefined' || userId === 'guest') {
+      console.warn(`⚠️ WARNING: getRecommendations called with invalid userId: '${userId}'. Personalization will not work.`);
+    }
     console.log(`Getting recommendations for user ${userId}, excluding ${currentCart.length} cart items`);
     
     // Aito's _recommend endpoint uses machine learning to find items
@@ -153,27 +157,21 @@ async function getRecommendations(userId, currentCart = [], limit = 5) {
       message: `Here are ${products.length} personalized recommendations based on your shopping history`
     };
   } catch (error) {
-    console.error('Recommendations error:', error);
+    const errorMsg = `❌ AITO API ERROR in getRecommendations: ${error.message}`;
+    console.error(errorMsg);
+    console.error('Full error:', error.response?.data || error);
     
-    // Fallback to mock recommendations
-    const mockRecs = {
-      'larry': [
-        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
-        { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 }
-      ],
-      'veronica': [
-        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
-        { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99 }
-      ]
-    };
-
-    const fallbackRecs = mockRecs[userId] || mockRecs['larry'];
+    // Check for specific error types
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      throw new Error('Cannot connect to Aito server. Please check REACT_APP_AITO_URL configuration.');
+    } else if (error.response?.status === 401 || error.response?.status === 403) {
+      throw new Error('Aito API authentication failed. Please check REACT_APP_AITO_API_KEY configuration.');
+    } else if (error.response?.status === 404) {
+      throw new Error('Aito database or table not found. Please check the database configuration.');
+    }
     
-    return {
-      success: true,
-      products: fallbackRecs.slice(0, limit),
-      message: `Here are ${Math.min(fallbackRecs.length, limit)} personalized recommendations (cached results)`
-    };
+    // Don't use mock data - fail visibly
+    throw new Error(`Failed to get recommendations from Aito: ${error.message}`);
   }
 }
 
@@ -206,6 +204,10 @@ async function getProductsByIds(ids) {
  * Get autofill - exact copy of 05-autofill.js getAutoFill()
  */
 async function getAutoFill(userId) {
+  // Warning if user is not provided
+  if (!userId || userId === 'null' || userId === 'undefined' || userId === 'guest') {
+    console.warn(`⚠️ WARNING: getAutoFill called with invalid userId: '${userId}'. Personalization will not work.`);
+  }
   console.log(`getAutoFill: Starting prediction for userId: ${userId}`);
   
   var where = {}
@@ -253,8 +255,20 @@ async function getAutoFill(userId) {
       return ids
     })
     .catch(error => {
-      console.error(`getAutoFill: API error for userId ${userId}:`, error);
-      throw error;
+      const errorMsg = `❌ AITO API ERROR in getAutoFill: ${error.message}`;
+      console.error(errorMsg);
+      console.error('Full error:', error.response?.data || error);
+      
+      // Check for specific error types
+      if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+        throw new Error('Cannot connect to Aito server. Please check REACT_APP_AITO_URL configuration.');
+      } else if (error.response?.status === 401 || error.response?.status === 403) {
+        throw new Error('Aito API authentication failed. Please check REACT_APP_AITO_API_KEY configuration.');
+      } else if (error.response?.status === 404) {
+        throw new Error('Aito database or table not found. Please check the database configuration.');
+      }
+      
+      throw new Error(`Failed to get predictions from Aito: ${error.message}`);
     })
 }
 
@@ -290,50 +304,11 @@ async function getSmartCartSuggestions(userId) {
       message: `Based on your shopping patterns, I predict you'll want these ${Math.min(products.length, 8)} items on your next visit`
     };
   } catch (error) {
-    console.error('Smart cart prediction error:', error);
+    const errorMsg = `❌ AITO API ERROR in getSmartCartSuggestions: ${error.message}`;
+    console.error(errorMsg);
     
-    // Enhanced fallback with more realistic personalized predictions (8+ items like cart autofill)
-    const mockPredictions = {
-      'larry': [
-        { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
-        { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
-        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
-        { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 },
-        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
-        { id: '6410405082664', name: 'Pirkka fresh bread', price: 1.85 },
-        { id: '6410405025642', name: 'Pirkka eggs 12 pcs', price: 2.45 },
-        { id: '6410405025611', name: 'Pirkka butter 500g', price: 3.25 }
-      ],
-      'veronica': [
-        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
-        { id: '6411401029097', name: 'XTRA tomatoes Finland 1st class 1kg', price: 3.99 },
-        { id: '6410405218018', name: 'Pirkka Finnish semi-skimmed milk 1l UHT', price: 0.95 },
-        { id: '6410405025642', name: 'Pirkka organic carrots 1kg', price: 1.95 },
-        { id: '6410405025668', name: 'Pirkka organic cucumber', price: 1.55 },
-        { id: '6410405025675', name: 'Pirkka organic spinach 150g', price: 2.25 },
-        { id: '6410405025682', name: 'Pirkka organic bell pepper', price: 2.85 },
-        { id: '6410405025699', name: 'Pirkka organic avocado', price: 1.75 }
-      ],
-      'alice': [
-        { id: '2000818700008', name: 'Pirkka banana', price: 0.26 },
-        { id: '6411300000494', name: 'Juhla Mokka coffee 500g UTZ', price: 3.45 },
-        { id: '6410405025659', name: 'Pirkka iceberg salad Finland 100g', price: 1.29 },
-        { id: '6410405082657', name: 'Pirkka Finnish semi-skimmed milk 1l', price: 0.95 },
-        { id: '6410405040817', name: 'Pirkka sugar 1 kg', price: 0.95 },
-        { id: '6410405025642', name: 'Pirkka eggs 12 pcs', price: 2.45 },
-        { id: '6410405025611', name: 'Pirkka butter 500g', price: 3.25 },
-        { id: '6410405082664', name: 'Pirkka fresh bread', price: 1.85 }
-      ]
-    };
-    
-    const fallbackProducts = mockPredictions[userId] || mockPredictions['alice'];
-    
-    return {
-      success: true,
-      products: fallbackProducts,
-      productIds: fallbackProducts.map(p => p.id),
-      message: `Based on your shopping patterns, I predict you'll want these ${fallbackProducts.length} items: ${fallbackProducts.map(p => p.name).join(', ')}`
-    };
+    // Don't use mock data - fail visibly
+    throw error; // Propagate the error from getAutoFill
   }
 }
 
