@@ -178,7 +178,7 @@ app.post('/api/assistant/customer', async (req, res) => {
 
     // Basic rate limiting - in production, use Redis or proper rate limiter
     const clientIP = req.ip || req.connection.remoteAddress;
-    console.log(`Customer assistant request from ${clientIP}: "${message.substring(0, 50)}..." for user: ${context.userId || 'guest'}`);
+    console.log(`Customer assistant request from ${clientIP}: "${message.substring(0, 50)}..." for user: ${context.user || 'guest'}`);
 
     // Build conversation with system prompt, history, and new user message
     const messages = [
@@ -187,7 +187,7 @@ app.post('/api/assistant/customer', async (req, res) => {
         content: `${CUSTOMER_SYSTEM_PROMPT}
 
         Current customer context:
-        - User ID: ${context.userId || 'guest'}
+        - User ID: ${context.user || 'guest'}
         - Cart items: ${context.cartItems?.length || 0} items
         - Current page: ${context.currentPage || 'unknown'}
         - Timestamp: ${new Date().toISOString()}
@@ -252,7 +252,7 @@ app.post('/api/assistant/customer', async (req, res) => {
 
     // Handle tool calls if present
     if (assistantMessage?.tool_calls) {
-      console.log(`Executing ${assistantMessage.tool_calls.length} tool(s) for ${context.userId || 'guest'}`);
+      console.log(`Executing ${assistantMessage.tool_calls.length} tool(s) for ${context.user || 'guest'}`);
       
       // Add assistant message with tool calls to conversation
       messages.push(assistantMessage);
@@ -263,7 +263,7 @@ app.post('/api/assistant/customer', async (req, res) => {
           const toolResult = await executeCustomerTool(
             toolCall.function.name,
             JSON.parse(toolCall.function.arguments),
-            context.userId || 'guest',
+            context.user || 'guest',
             context.cartItems || []
           );
 
