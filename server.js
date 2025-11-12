@@ -178,7 +178,15 @@ app.post('/api/assistant/customer', async (req, res) => {
 
     // Basic rate limiting - in production, use Redis or proper rate limiter
     const clientIP = req.ip || req.connection.remoteAddress;
-    console.log(`Customer assistant request from ${clientIP}: "${message.substring(0, 50)}..." for user: ${context.userId || 'guest'}`);
+    
+    // Handle both context.userId (from frontend) and context.user for backward compatibility
+    const userId = context.userId || context.user || 'guest';
+    console.log(`Customer assistant request from ${clientIP}: "${message.substring(0, 50)}..." for user: ${userId}`);
+    
+    // Warn about invalid user context
+    if (!userId || userId === 'null' || userId === 'undefined' || userId === 'guest') {
+      console.warn(`⚠️ WARNING: Customer assistant called with invalid user: '${userId}'. Personalization will not work properly.`);
+    }
 
     // Build conversation with system prompt, history, and new user message
     const messages = [
@@ -187,10 +195,13 @@ app.post('/api/assistant/customer', async (req, res) => {
         content: `${CUSTOMER_SYSTEM_PROMPT}
 
         Current customer context:
-        - User ID: ${context.userId || 'guest'}
+        - User ID: ${context.userId || context.user || 'guest'}
         - Cart items: ${context.cartItems?.length || 0} items
         - Current page: ${context.currentPage || 'unknown'}
-        - Timestamp: ${new Date().toISOString()}`
+        - Timestamp: ${new Date().toISOString()}
+        
+        CRITICAL: Do not include any JSON objects, API responses, or technical data in your responses. 
+        Use tools silently and then provide only human-friendly summaries of the results.`
       }
     ];
     
@@ -238,14 +249,18 @@ app.post('/api/assistant/customer', async (req, res) => {
     });
 
     const assistantMessage = completion.choices[0]?.message;
-    let finalResponse = assistantMessage?.content || '';
+    let finalResponse = '';
+
+    // Debug: Log the initial assistant response to understand what's happening
+    console.log('Initial assistant response content:', assistantMessage?.content);
+    console.log('Tool calls present:', !!assistantMessage?.tool_calls);
 
     // Track cart operations for frontend state sync
     const cartOperations = [];
 
     // Handle tool calls if present
     if (assistantMessage?.tool_calls) {
-      console.log(`Executing ${assistantMessage.tool_calls.length} tool(s) for ${context.userId || 'guest'}`);
+      console.log(`Executing ${assistantMessage.tool_calls.length} tool(s) for ${context.userId || context.user || 'guest'}`);
       
       // Add assistant message with tool calls to conversation
       messages.push(assistantMessage);
@@ -256,7 +271,7 @@ app.post('/api/assistant/customer', async (req, res) => {
           const toolResult = await executeCustomerTool(
             toolCall.function.name,
             JSON.parse(toolCall.function.arguments),
-            context.userId || 'guest',
+            context.userId || context.user || 'guest',
             context.cartItems || []
           );
 
@@ -327,12 +342,26 @@ app.post('/api/assistant/customer', async (req, res) => {
           });
         } catch (toolError) {
           console.error(`Tool execution error for ${toolCall.function.name}:`, toolError);
+          
+          // Provide specific error messages for configuration issues
+          let errorMessage = toolError.message || 'An error occurred while processing your request.';
+          
+          // Make configuration errors more visible
+          if (errorMessage.includes('REACT_APP_AITO_URL') || errorMessage.includes('Cannot connect to Aito')) {
+            errorMessage = '⚠️ Configuration Error: Unable to connect to Aito server. The backend is not properly configured with REACT_APP_AITO_URL.';
+          } else if (errorMessage.includes('REACT_APP_AITO_API_KEY') || errorMessage.includes('authentication failed')) {
+            errorMessage = '⚠️ Configuration Error: Aito API authentication failed. The backend is not properly configured with REACT_APP_AITO_API_KEY.';
+          } else if (errorMessage.includes('database') || errorMessage.includes('table not found')) {
+            errorMessage = '⚠️ Configuration Error: Aito database or table not found. Please check the database configuration.';
+          }
+          
           messages.push({
             role: 'tool',
             tool_call_id: toolCall.id,
             content: JSON.stringify({
               success: false,
-              message: 'I encountered an error while processing your request. Please try again.'
+              message: errorMessage,
+              error: true
             })
           });
         }
@@ -346,6 +375,11 @@ app.post('/api/assistant/customer', async (req, res) => {
       });
 
       finalResponse = finalCompletion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
+      console.log('Final response after tool execution:', finalResponse);
+    } else {
+      // No tool calls, use the original response but ensure it's clean
+      finalResponse = assistantMessage?.content || 'I apologize, but I was unable to generate a response.';
+      console.log('Using original response (no tools):', finalResponse);
     }
 
     console.log(`Customer assistant response generated for ${clientIP}`);

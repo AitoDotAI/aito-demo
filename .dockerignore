@@ -6,9 +6,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Build outputs  
-build
-dist
+# Build outputs (ensure clean slate)
+build/
+build/*
+dist/
+dist/*
+.next/
+.next/*
 
 # Environment files
 .env.local
