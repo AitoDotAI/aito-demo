@@ -86,6 +86,7 @@ class PricingPage extends Component {
       loading: false,
       productStats: null,
       priceHistory: [],
+      showAdjustedValues: false, // Toggle between original and adjusted values
     }
 
     // Debounce estimation calls
@@ -545,6 +546,12 @@ class PricingPage extends Component {
     if (!active || !payload || payload.length === 0) return null
 
     const data = payload[0].payload
+    const { showAdjustedValues } = this.state
+
+    // Determine which values to show
+    const displayPrice = showAdjustedValues && data.adjustedPrice !== undefined ? data.adjustedPrice : data.price
+    const displayDemand = showAdjustedValues && data.adjustedDemand !== undefined ? data.adjustedDemand : data.demand
+    const hasAdjustments = data.adjustedPrice !== undefined || data.adjustedDemand !== undefined
 
     return (
       <div className="PricingPage__chart-tooltip">
@@ -564,14 +571,20 @@ class PricingPage extends Component {
           </div>
         )}
 
+        {hasAdjustments && showAdjustedValues && (
+          <div className="PricingPage__chart-tooltip-info" style={{ marginBottom: '0.5rem', fontStyle: 'italic' }}>
+            Adjusted values (what-if scenario)
+          </div>
+        )}
+
         <div className="PricingPage__chart-tooltip-metrics">
           <div className="PricingPage__chart-tooltip-metric">
             <span className="PricingPage__chart-tooltip-label">Price:</span>
-            <span className="PricingPage__chart-tooltip-value">€{data.price?.toFixed(3)}</span>
+            <span className="PricingPage__chart-tooltip-value">€{displayPrice?.toFixed(3)}</span>
           </div>
           <div className="PricingPage__chart-tooltip-metric">
             <span className="PricingPage__chart-tooltip-label">Demand:</span>
-            <span className="PricingPage__chart-tooltip-value">{Math.round(data.demand)} units</span>
+            <span className="PricingPage__chart-tooltip-value">{Math.round(displayDemand)} units</span>
           </div>
           {data.margin !== undefined && (
             <div className="PricingPage__chart-tooltip-metric">
@@ -580,6 +593,12 @@ class PricingPage extends Component {
             </div>
           )}
         </div>
+
+        {hasAdjustments && !showAdjustedValues && (
+          <div className="PricingPage__chart-tooltip-info" style={{ fontSize: '0.75rem', marginTop: '0.5rem' }}>
+            Toggle to see adjusted values
+          </div>
+        )}
 
         {(data.placement || data.competitorPrice) && (
           <div className="PricingPage__chart-tooltip-context">
@@ -618,8 +637,10 @@ class PricingPage extends Component {
 
     // Prepare neighbor points
     const neighborPoints = neighbors.slice(0, 20).map(neighbor => ({
-      price: neighbor.instance.sale_price,
-      demand: neighbor.instance.units_sold,
+      price: neighbor.instance.sale_price,  // Original price
+      demand: neighbor.instance.units_sold, // Original demand
+      adjustedPrice: neighbor.adjustedValue,  // Adjusted price from estimation
+      adjustedDemand: neighbor.adjustedValue, // Adjusted demand (same as adjusted value for now)
       type: 'neighbor',
       hitScore: neighbor.hitScore,
       name: neighbor.instance.name || neighbor.instance.product_id,
@@ -963,7 +984,24 @@ class PricingPage extends Component {
             <div className="PricingPage__panel--right">
               {/* Scatter plot */}
               <div className="PricingPage__visualization">
-                <h3 className="PricingPage__viz-title">Price-Demand Relationship</h3>
+                <div className="PricingPage__viz-header">
+                  <h3 className="PricingPage__viz-title">Price-Demand Relationship</h3>
+                  <button
+                    className={`PricingPage__viz-toggle ${this.state.showAdjustedValues ? 'active' : ''}`}
+                    onClick={() => this.setState({ showAdjustedValues: !this.state.showAdjustedValues })}
+                    title={this.state.showAdjustedValues ? 'Show original values' : 'Show adjusted values (what-if)'}
+                  >
+                    {this.state.showAdjustedValues ? (
+                      <>
+                        <FaArrowRight /> Adjusted
+                      </>
+                    ) : (
+                      <>
+                        <FaArrowRight /> Original
+                      </>
+                    )}
+                  </button>
+                </div>
                 {this.renderScatterPlot()}
               </div>
 

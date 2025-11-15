@@ -332,27 +332,52 @@
   box-shadow: var(--pricing-shadow);
 }
 
+.PricingPage__viz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--pricing-accent);
+}
+
 .PricingPage__viz-title {
   font-size: 1.2rem;
   font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 1.5rem;
-  text-align: center;
   letter-spacing: 0.3px;
-  position: relative;
-  padding-bottom: 1rem;
+  margin: 0;
 }
 
-.PricingPage__viz-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
+.PricingPage__viz-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  color: var(--pricing-accent);
+  border: 2px solid var(--pricing-accent);
+  border-radius: var(--pricing-radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.PricingPage__viz-toggle:hover {
+  background: var(--pricing-surface);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
+}
+
+.PricingPage__viz-toggle.active {
   background: var(--pricing-accent);
-  border-radius: 2px;
+  color: #fff;
+}
+
+.PricingPage__viz-toggle.active:hover {
+  background: var(--pricing-accent-hover);
 }
 
 /* KPI Section */
