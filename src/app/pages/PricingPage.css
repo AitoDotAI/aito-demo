@@ -304,17 +304,34 @@
 
 /* Visualization Section */
 .PricingPage__visualization {
-  background: var(--pricing-surface);
-  padding: 1.5rem;
+  background: #fff;
+  padding: 2rem;
   border-radius: var(--pricing-radius);
+  border: 1px solid var(--pricing-border);
+  box-shadow: var(--pricing-shadow);
 }
 
 .PricingPage__viz-title {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   text-align: center;
+  letter-spacing: 0.3px;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.PricingPage__viz-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: var(--pricing-accent);
+  border-radius: 2px;
 }
 
 /* KPI Section */

@@ -568,25 +568,60 @@ class PricingPage extends Component {
 
     return (
       <ResponsiveContainer width="100%" height={450}>
-        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-          <CartesianGrid strokeDasharray="3 3" />
+        <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 60 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
           <XAxis
             type="number"
             dataKey="price"
             name="Price"
             unit="€"
             domain={['auto', 'auto']}
-            label={{ value: 'Sale Price (€)', position: 'insideBottom', offset: -10 }}
+            label={{
+              value: 'Sale Price (€)',
+              position: 'insideBottom',
+              offset: -15,
+              style: { fontSize: '14px', fontWeight: 600, fill: '#2c3e50' }
+            }}
+            tick={{ fontSize: 12, fill: '#6c757d' }}
+            stroke="#6c757d"
           />
           <YAxis
             type="number"
             dataKey="demand"
             name="Demand"
             unit=" units"
-            label={{ value: 'Units Sold', angle: -90, position: 'insideLeft' }}
+            label={{
+              value: 'Units Sold',
+              angle: -90,
+              position: 'insideLeft',
+              offset: -45,
+              style: { fontSize: '14px', fontWeight: 600, fill: '#2c3e50' }
+            }}
+            tick={{ fontSize: 12, fill: '#6c757d' }}
+            stroke="#6c757d"
           />
-          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-          <Legend />
+          <Tooltip
+            cursor={{ strokeDasharray: '3 3' }}
+            contentStyle={{
+              backgroundColor: '#fff',
+              border: '1px solid #e0e0e0',
+              borderRadius: '8px',
+              padding: '10px',
+              fontSize: '13px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            }}
+            labelStyle={{ fontWeight: 600, marginBottom: '5px' }}
+          />
+          <Legend
+            verticalAlign="top"
+            height={50}
+            iconType="circle"
+            wrapperStyle={{
+              paddingTop: '10px',
+              fontSize: '13px',
+              fontWeight: 500
+            }}
+          />
 
           {/* Historical data (light blue, small) */}
           <Scatter
