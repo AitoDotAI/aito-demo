@@ -311,10 +311,12 @@
 }
 
 .PricingPage__kpis {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: row;
   gap: 1rem;
   position: relative;
+  flex-wrap: nowrap;
+  align-items: stretch;
 }
 
 .PricingPage__kpi {
@@ -324,6 +326,11 @@
   text-align: center;
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .PricingPage__kpi:hover {
@@ -403,10 +410,10 @@
 }
 
 .PricingPage__mode-reset {
-  grid-column: 1 / -1;
+  width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .PricingPage__reset-btn {

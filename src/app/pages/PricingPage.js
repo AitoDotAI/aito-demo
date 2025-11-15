@@ -625,83 +625,85 @@ class PricingPage extends Component {
     const margin = estimatedPrice ? ((estimatedPrice - purchaseCost) / estimatedPrice * 100) : 0
 
     return (
-      <div className="PricingPage__kpis">
-        {/* Price KPI */}
-        <div className="PricingPage__kpi">
-          <div className="PricingPage__kpi-header">
-            <h4 className="PricingPage__kpi-label">Price</h4>
-            {estimationMode !== 'set_price' && (
-              <button
-                className="PricingPage__kpi-mode-btn"
-                onClick={() => this.setState({ estimationMode: 'set_price', manualPrice: estimatedPrice || 0.5 })}
-                title="Set price manually"
-              >
-                Set Manual
-              </button>
-            )}
-          </div>
-
-          {estimationMode === 'set_price' ? (
-            <Input
-              type="number"
-              step="0.01"
-              value={manualPrice || ''}
-              onChange={(e) => this.setManualPrice(e.target.value)}
-              className="PricingPage__kpi-input"
-            />
-          ) : (
-            <div className="PricingPage__kpi-value">
-              {loading ? '...' : estimatedPrice ? `€${estimatedPrice.toFixed(3)}` : '—'}
+      <>
+        <div className="PricingPage__kpis">
+          {/* Price KPI */}
+          <div className="PricingPage__kpi">
+            <div className="PricingPage__kpi-header">
+              <h4 className="PricingPage__kpi-label">Price</h4>
+              {estimationMode !== 'set_price' && (
+                <button
+                  className="PricingPage__kpi-mode-btn"
+                  onClick={() => this.setState({ estimationMode: 'set_price', manualPrice: estimatedPrice || 0.5 })}
+                  title="Set price manually"
+                >
+                  Set Manual
+                </button>
+              )}
             </div>
-          )}
 
-          <div className="PricingPage__kpi-meta">
-            Margin: {margin.toFixed(1)}%
-          </div>
-        </div>
-
-        {/* Demand KPI */}
-        <div className="PricingPage__kpi">
-          <div className="PricingPage__kpi-header">
-            <h4 className="PricingPage__kpi-label">Demand</h4>
-            {estimationMode !== 'set_demand' && (
-              <button
-                className="PricingPage__kpi-mode-btn"
-                onClick={() => this.setState({ estimationMode: 'set_demand', manualDemand: Math.round(estimatedDemand) || 100 })}
-                title="Set demand manually"
-              >
-                Set Manual
-              </button>
+            {estimationMode === 'set_price' ? (
+              <Input
+                type="number"
+                step="0.01"
+                value={manualPrice || ''}
+                onChange={(e) => this.setManualPrice(e.target.value)}
+                className="PricingPage__kpi-input"
+              />
+            ) : (
+              <div className="PricingPage__kpi-value">
+                {loading ? '...' : estimatedPrice ? `€${estimatedPrice.toFixed(3)}` : '—'}
+              </div>
             )}
-          </div>
 
-          {estimationMode === 'set_demand' ? (
-            <Input
-              type="number"
-              step="1"
-              value={manualDemand || ''}
-              onChange={(e) => this.setManualDemand(e.target.value)}
-              className="PricingPage__kpi-input"
-            />
-          ) : (
-            <div className="PricingPage__kpi-value">
-              {loading ? '...' : estimatedDemand ? `${Math.round(estimatedDemand)} units` : '—'}
+            <div className="PricingPage__kpi-meta">
+              Margin: {margin.toFixed(1)}%
             </div>
-          )}
-
-          <div className="PricingPage__kpi-meta">
-            Volume per day
           </div>
-        </div>
 
-        {/* Profit KPI */}
-        <div className="PricingPage__kpi PricingPage__kpi--highlight">
-          <h4 className="PricingPage__kpi-label">Total Profit</h4>
-          <div className="PricingPage__kpi-value PricingPage__kpi-value--large">
-            {loading ? '...' : profit > 0 ? `€${profit.toFixed(2)}` : '—'}
+          {/* Demand KPI */}
+          <div className="PricingPage__kpi">
+            <div className="PricingPage__kpi-header">
+              <h4 className="PricingPage__kpi-label">Demand</h4>
+              {estimationMode !== 'set_demand' && (
+                <button
+                  className="PricingPage__kpi-mode-btn"
+                  onClick={() => this.setState({ estimationMode: 'set_demand', manualDemand: Math.round(estimatedDemand) || 100 })}
+                  title="Set demand manually"
+                >
+                  Set Manual
+                </button>
+              )}
+            </div>
+
+            {estimationMode === 'set_demand' ? (
+              <Input
+                type="number"
+                step="1"
+                value={manualDemand || ''}
+                onChange={(e) => this.setManualDemand(e.target.value)}
+                className="PricingPage__kpi-input"
+              />
+            ) : (
+              <div className="PricingPage__kpi-value">
+                {loading ? '...' : estimatedDemand ? `${Math.round(estimatedDemand)} units` : '—'}
+              </div>
+            )}
+
+            <div className="PricingPage__kpi-meta">
+              Volume per day
+            </div>
           </div>
-          <div className="PricingPage__kpi-meta">
-            Per day revenue
+
+          {/* Profit KPI */}
+          <div className="PricingPage__kpi PricingPage__kpi--highlight">
+            <h4 className="PricingPage__kpi-label">Total Profit</h4>
+            <div className="PricingPage__kpi-value PricingPage__kpi-value--large">
+              {loading ? '...' : profit > 0 ? `€${profit.toFixed(2)}` : '—'}
+            </div>
+            <div className="PricingPage__kpi-meta">
+              Per day revenue
+            </div>
           </div>
         </div>
 
@@ -716,7 +718,7 @@ class PricingPage extends Component {
             </button>
           </div>
         )}
-      </div>
+      </>
     )
   }
 
