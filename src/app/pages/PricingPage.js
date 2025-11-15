@@ -567,7 +567,7 @@ class PricingPage extends Component {
     }] : []
 
     return (
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={450}>
         <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
@@ -817,81 +817,86 @@ class PricingPage extends Component {
           </p>
         </div>
 
-        {/* Main content - three panels */}
+        {/* Main content */}
         <div className="PricingPage__content">
-          {/* LEFT PANEL: Field Selection */}
-          <div className="PricingPage__panel PricingPage__panel--left">
-            <div className="PricingPage__panel-header">
-              <h2 className="PricingPage__panel-title">Field Selection</h2>
-              <div className="PricingPage__panel-actions">
-                <button
-                  className="PricingPage__action-btn PricingPage__action-btn--secondary"
-                  onClick={this.populateFromProduct}
-                  disabled={!this.state.fieldValues.product_id}
-                  title="Populate from product"
-                >
-                  <FaCheckCircle /> Populate
-                </button>
-                <button
-                  className="PricingPage__action-btn PricingPage__action-btn--secondary"
-                  onClick={this.resetFields}
-                  title="Reset all fields"
-                >
-                  <FaSync /> Reset
-                </button>
-              </div>
-            </div>
-
-            <div className="PricingPage__fields">
-              {this.renderFieldGroups()}
-            </div>
-          </div>
-
-          {/* MIDDLE PANEL: Visualization & KPIs */}
-          <div className="PricingPage__panel PricingPage__panel--middle">
-            {/* Scatter plot */}
-            <div className="PricingPage__visualization">
-              <h3 className="PricingPage__viz-title">Price-Demand Relationship</h3>
-              {this.renderScatterPlot()}
-            </div>
-
-            {/* KPIs */}
+          {/* KPI SECTION - Full Width at Top */}
+          <div className="PricingPage__kpi-section-wrapper">
             <div className="PricingPage__kpi-section">
               {this.renderKPIs()}
             </div>
           </div>
 
-          {/* RIGHT PANEL: Evidence & Neighbors */}
-          <div className="PricingPage__panel PricingPage__panel--right">
-            <div className="PricingPage__panel-header">
-              <h2 className="PricingPage__panel-title">Evidence</h2>
+          {/* Two-Panel Layout */}
+          <div className="PricingPage__main-section">
+            {/* LEFT PANEL: Field Selection */}
+            <div className="PricingPage__panel PricingPage__panel--left">
+              <div className="PricingPage__panel-header">
+                <h2 className="PricingPage__panel-title">Field Selection</h2>
+                <div className="PricingPage__panel-actions">
+                  <button
+                    className="PricingPage__action-btn PricingPage__action-btn--secondary"
+                    onClick={this.populateFromProduct}
+                    disabled={!this.state.fieldValues.product_id}
+                    title="Populate from product"
+                  >
+                    <FaCheckCircle /> Populate
+                  </button>
+                  <button
+                    className="PricingPage__action-btn PricingPage__action-btn--secondary"
+                    onClick={this.resetFields}
+                    title="Reset all fields"
+                  >
+                    <FaSync /> Reset
+                  </button>
+                </div>
+              </div>
+
+              <div className="PricingPage__fields">
+                {this.renderFieldGroups()}
+              </div>
             </div>
 
-            {/* Overview stats */}
-            {neighbors.length > 0 && (
-              <div className="PricingPage__evidence-overview">
-                <div className="PricingPage__evidence-stat">
-                  <span className="PricingPage__evidence-stat-value">{neighbors.length}</span>
-                  <span className="PricingPage__evidence-stat-label">Similar Cases Found</span>
+            {/* RIGHT PANEL: Visualization & Evidence */}
+            <div className="PricingPage__panel--right">
+              {/* Scatter plot */}
+              <div className="PricingPage__visualization">
+                <h3 className="PricingPage__viz-title">Price-Demand Relationship</h3>
+                {this.renderScatterPlot()}
+              </div>
+
+              {/* Evidence Section */}
+              <div className="PricingPage__evidence-section">
+                <div className="PricingPage__panel-header">
+                  <h2 className="PricingPage__panel-title">Evidence</h2>
                 </div>
-                {productStats && (
-                  <div className="PricingPage__evidence-meta">
-                    <div>Avg Price: €{productStats['sale_price.$mean']?.toFixed(3)}</div>
-                    <div>Avg Demand: {Math.round(productStats['units_sold.$mean'])} units</div>
+
+                {/* Overview stats */}
+                {neighbors.length > 0 && (
+                  <div className="PricingPage__evidence-overview">
+                    <div className="PricingPage__evidence-stat">
+                      <span className="PricingPage__evidence-stat-value">{neighbors.length}</span>
+                      <span className="PricingPage__evidence-stat-label">Similar Cases Found</span>
+                    </div>
+                    {productStats && (
+                      <div className="PricingPage__evidence-meta">
+                        <div>Avg Price: €{productStats['sale_price.$mean']?.toFixed(3)}</div>
+                        <div>Avg Demand: {Math.round(productStats['units_sold.$mean'])} units</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Neighbor list */}
+                {this.renderNeighbors()}
+
+                {loading && (
+                  <div className="PricingPage__loading">
+                    <FaSync className="PricingPage__loading-icon" />
+                    <span>Analyzing historical data...</span>
                   </div>
                 )}
               </div>
-            )}
-
-            {/* Neighbor list */}
-            {this.renderNeighbors()}
-
-            {loading && (
-              <div className="PricingPage__loading">
-                <FaSync className="PricingPage__loading-icon" />
-                <span>Analyzing historical data...</span>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

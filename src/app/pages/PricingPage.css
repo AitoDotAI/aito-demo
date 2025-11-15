@@ -49,12 +49,18 @@
   line-height: 1.6;
 }
 
-/* Three-Panel Layout */
+/* Two-Panel Layout with KPIs on Top */
 .PricingPage__content {
-  display: grid;
-  grid-template-columns: 30% 40% 30%;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
   min-height: 800px;
+}
+
+.PricingPage__main-section {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap: 1.5rem;
 }
 
 /* Panel Base Styles */
@@ -66,6 +72,12 @@
   box-shadow: var(--pricing-shadow);
   display: flex;
   flex-direction: column;
+}
+
+.PricingPage__panel--right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .PricingPage__panel-header {
@@ -279,19 +291,22 @@
 }
 
 /* ============================================
-   MIDDLE PANEL: VISUALIZATION & KPIs
+   KPI SECTION (TOP OF PAGE)
    ============================================ */
 
-.PricingPage__panel--middle {
-  padding: 1.5rem;
+.PricingPage__kpi-section-wrapper {
+  width: 100%;
 }
+
+/* ============================================
+   VISUALIZATION SECTION (RIGHT PANEL)
+   ============================================ */
 
 /* Visualization Section */
 .PricingPage__visualization {
   background: var(--pricing-surface);
   padding: 1.5rem;
   border-radius: var(--pricing-radius);
-  margin-bottom: 1.5rem;
 }
 
 .PricingPage__viz-title {
@@ -484,8 +499,16 @@
 /* Neighbor List */
 .PricingPage__neighbor-list {
   overflow-y: auto;
-  max-height: 600px;
+  max-height: 400px;
   padding-right: 0.5rem;
+}
+
+.PricingPage__evidence-section {
+  background: #fff;
+  border: 1px solid var(--pricing-border);
+  border-radius: var(--pricing-radius);
+  padding: 1.5rem;
+  box-shadow: var(--pricing-shadow);
 }
 
 .PricingPage__neighbor-list::-webkit-scrollbar {
@@ -653,22 +676,22 @@
    ============================================ */
 
 @media (max-width: 1400px) {
-  .PricingPage__content {
-    grid-template-columns: 25% 50% 25%;
+  .PricingPage__main-section {
+    grid-template-columns: 35% 65%;
   }
 }
 
 @media (max-width: 1200px) {
-  .PricingPage__content {
+  .PricingPage__main-section {
     grid-template-columns: 1fr;
   }
 
-  .PricingPage__panel--middle {
-    order: -1;
+  .PricingPage__kpis {
+    flex-wrap: wrap;
   }
 
-  .PricingPage__kpis {
-    grid-template-columns: repeat(3, 1fr);
+  .PricingPage__kpi {
+    min-width: 200px;
   }
 }
 
@@ -678,12 +701,16 @@
   }
 
   .PricingPage__kpis {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   .PricingPage__panel-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .PricingPage__neighbor-list {
+    max-height: 300px;
   }
 }
