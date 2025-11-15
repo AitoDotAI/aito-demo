@@ -9,6 +9,15 @@ import { predictInvoice } from '../../08-predict-invoice'
 import { getProductDetails, getAllProducts, getProductStats, getProductAnalytics } from '../../09-product'
 import { getDistinctValues } from '../../10-get-distinct-values'
 import { evaluateModel } from '../../11-evaluate'
+import {
+  getPriceProducts,
+  estimatePrice,
+  estimateDemand,
+  getPriceFieldValues,
+  getProductPriceContext,
+  getPriceHistory,
+  getPriceStats
+} from '../../12-price-estimation'
 
 export {
   getProductSearchResults,
@@ -23,7 +32,14 @@ export {
   evaluateModel,
   getProductDetails,
   getAllProducts,
-  getProductStats, 
+  getProductStats,
   getProductAnalytics,
-  getDistinctValues
+  getDistinctValues,
+  getPriceProducts,
+  estimatePrice,
+  estimateDemand,
+  getPriceFieldValues,
+  getProductPriceContext,
+  getPriceHistory,
+  getPriceStats
 }

@@ -1,0 +1,682 @@
+/* ============================================
+   PRICING PAGE - BEAUTIFUL & PROFESSIONAL
+   ============================================ */
+
+/* CSS Variables for consistency */
+:root {
+  --pricing-accent: #FF6B35;
+  --pricing-accent-hover: #e55a2b;
+  --pricing-primary: #6c757d;
+  --pricing-border: #e0e0e0;
+  --pricing-surface: #f8f9fa;
+  --pricing-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --pricing-shadow-hover: 0 4px 16px rgba(0,0,0,0.12);
+  --pricing-radius: 8px;
+  --pricing-radius-small: 4px;
+}
+
+/* ============================================
+   PAGE STRUCTURE
+   ============================================ */
+
+.PricingPage {
+  padding: 2rem;
+  max-width: 1800px;
+  margin: 0 auto;
+  background: #fff;
+}
+
+/* Header Section */
+.PricingPage__header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 3px solid var(--pricing-accent);
+}
+
+.PricingPage__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.PricingPage__subtitle {
+  font-size: 1.1rem;
+  color: var(--pricing-primary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Three-Panel Layout */
+.PricingPage__content {
+  display: grid;
+  grid-template-columns: 30% 40% 30%;
+  gap: 1.5rem;
+  min-height: 800px;
+}
+
+/* Panel Base Styles */
+.PricingPage__panel {
+  background: #fff;
+  border: 1px solid var(--pricing-border);
+  border-radius: var(--pricing-radius);
+  padding: 1.5rem;
+  box-shadow: var(--pricing-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.PricingPage__panel-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--pricing-surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.PricingPage__panel-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  position: relative;
+}
+
+.PricingPage__panel-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--pricing-accent);
+  border-radius: 2px;
+}
+
+.PricingPage__panel-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ============================================
+   LEFT PANEL: FIELD SELECTION
+   ============================================ */
+
+.PricingPage__fields {
+  overflow-y: auto;
+  max-height: 700px;
+  padding-right: 0.5rem;
+}
+
+/* Scrollbar styling */
+.PricingPage__fields::-webkit-scrollbar {
+  width: 6px;
+}
+
+.PricingPage__fields::-webkit-scrollbar-track {
+  background: var(--pricing-surface);
+  border-radius: 3px;
+}
+
+.PricingPage__fields::-webkit-scrollbar-thumb {
+  background: var(--pricing-accent);
+  border-radius: 3px;
+}
+
+/* Field Groups */
+.PricingPage__field-group {
+  margin-bottom: 1.5rem;
+}
+
+.PricingPage__field-group-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--pricing-accent);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--pricing-border);
+}
+
+/* Individual Field */
+.PricingPage__field {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--pricing-radius-small);
+  transition: all 0.2s ease;
+  background: var(--pricing-surface);
+  border: 2px solid transparent;
+}
+
+.PricingPage__field--active {
+  background: #fff;
+  border-color: var(--pricing-accent);
+  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.1);
+}
+
+.PricingPage__field-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.PricingPage__toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.PricingPage__toggle:hover {
+  transform: scale(1.1);
+}
+
+.PricingPage__toggle-icon {
+  font-size: 1.5rem;
+  color: #ccc;
+  transition: color 0.2s ease;
+}
+
+.PricingPage__toggle-icon--on {
+  color: var(--pricing-accent);
+}
+
+.PricingPage__field-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  flex: 1;
+}
+
+.PricingPage__field-control {
+  margin-left: 2rem;
+}
+
+/* Dropdowns */
+.PricingPage__dropdown-toggle {
+  width: 100%;
+  background: #fff !important;
+  border: 1px solid var(--pricing-border) !important;
+  color: #2c3e50 !important;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.PricingPage__dropdown-toggle:hover,
+.PricingPage__dropdown-toggle:focus {
+  border-color: var(--pricing-accent) !important;
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1) !important;
+}
+
+.PricingPage__dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--pricing-border);
+  box-shadow: var(--pricing-shadow-hover);
+}
+
+.PricingPage__number-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--pricing-border);
+  border-radius: var(--pricing-radius-small);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.PricingPage__number-input:focus {
+  outline: none;
+  border-color: var(--pricing-accent);
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+}
+
+/* Action Buttons */
+.PricingPage__action-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--pricing-radius-small);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--pricing-accent);
+  color: #fff;
+}
+
+.PricingPage__action-btn:hover:not(:disabled) {
+  background: var(--pricing-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--pricing-shadow);
+}
+
+.PricingPage__action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.PricingPage__action-btn--secondary {
+  background: #fff;
+  color: var(--pricing-accent);
+  border: 1px solid var(--pricing-accent);
+}
+
+.PricingPage__action-btn--secondary:hover:not(:disabled) {
+  background: var(--pricing-surface);
+}
+
+/* ============================================
+   MIDDLE PANEL: VISUALIZATION & KPIs
+   ============================================ */
+
+.PricingPage__panel--middle {
+  padding: 1.5rem;
+}
+
+/* Visualization Section */
+.PricingPage__visualization {
+  background: var(--pricing-surface);
+  padding: 1.5rem;
+  border-radius: var(--pricing-radius);
+  margin-bottom: 1.5rem;
+}
+
+.PricingPage__viz-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* KPI Section */
+.PricingPage__kpi-section {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: var(--pricing-radius);
+  border: 2px solid var(--pricing-accent);
+}
+
+.PricingPage__kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  position: relative;
+}
+
+.PricingPage__kpi {
+  background: var(--pricing-surface);
+  padding: 1.25rem;
+  border-radius: var(--pricing-radius);
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.PricingPage__kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--pricing-shadow);
+}
+
+.PricingPage__kpi--highlight {
+  background: linear-gradient(135deg, #fff5f0 0%, #ffe8dc 100%);
+  border-color: var(--pricing-accent);
+}
+
+.PricingPage__kpi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.PricingPage__kpi-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--pricing-primary);
+  margin: 0;
+}
+
+.PricingPage__kpi-mode-btn {
+  background: none;
+  border: 1px solid var(--pricing-accent);
+  color: var(--pricing-accent);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--pricing-radius-small);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.PricingPage__kpi-mode-btn:hover {
+  background: var(--pricing-accent);
+  color: #fff;
+}
+
+.PricingPage__kpi-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0.5rem 0;
+}
+
+.PricingPage__kpi-value--large {
+  font-size: 2.25rem;
+  color: var(--pricing-accent);
+}
+
+.PricingPage__kpi-meta {
+  font-size: 0.8rem;
+  color: var(--pricing-primary);
+  margin-top: 0.5rem;
+}
+
+.PricingPage__kpi-input {
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.5rem;
+  border: 2px solid var(--pricing-accent);
+  border-radius: var(--pricing-radius-small);
+  background: #fff;
+}
+
+.PricingPage__kpi-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+.PricingPage__mode-reset {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.PricingPage__reset-btn {
+  background: #fff;
+  border: 2px solid var(--pricing-accent);
+  color: var(--pricing-accent);
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--pricing-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.PricingPage__reset-btn:hover {
+  background: var(--pricing-accent);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* ============================================
+   RIGHT PANEL: EVIDENCE & NEIGHBORS
+   ============================================ */
+
+.PricingPage__evidence-overview {
+  background: linear-gradient(135deg, #fff5f0 0%, #ffe8dc 100%);
+  padding: 1.25rem;
+  border-radius: var(--pricing-radius);
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--pricing-accent);
+}
+
+.PricingPage__evidence-stat {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.PricingPage__evidence-stat-value {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--pricing-accent);
+  line-height: 1;
+}
+
+.PricingPage__evidence-stat-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pricing-primary);
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.PricingPage__evidence-meta {
+  font-size: 0.875rem;
+  color: var(--pricing-primary);
+  text-align: center;
+}
+
+.PricingPage__evidence-meta div {
+  margin-bottom: 0.25rem;
+}
+
+/* Neighbor List */
+.PricingPage__neighbor-list {
+  overflow-y: auto;
+  max-height: 600px;
+  padding-right: 0.5rem;
+}
+
+.PricingPage__neighbor-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.PricingPage__neighbor-list::-webkit-scrollbar-track {
+  background: var(--pricing-surface);
+  border-radius: 3px;
+}
+
+.PricingPage__neighbor-list::-webkit-scrollbar-thumb {
+  background: var(--pricing-accent);
+  border-radius: 3px;
+}
+
+/* Neighbor Card */
+.PricingPage__neighbor-card {
+  background: #fff;
+  border: 2px solid var(--pricing-border);
+  border-radius: var(--pricing-radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.PricingPage__neighbor-card:hover {
+  border-color: var(--pricing-accent);
+  box-shadow: var(--pricing-shadow-hover);
+  transform: translateX(4px);
+}
+
+.PricingPage__neighbor-card--selected {
+  border-color: var(--pricing-accent);
+  background: #fff5f0;
+}
+
+/* Similarity Score */
+.PricingPage__neighbor-score {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.PricingPage__neighbor-score-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--pricing-surface);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.PricingPage__neighbor-score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pricing-accent) 0%, #ff8c5a 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.PricingPage__neighbor-score-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--pricing-accent);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Product Info */
+.PricingPage__neighbor-product {
+  margin-bottom: 0.75rem;
+}
+
+.PricingPage__neighbor-product strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.PricingPage__neighbor-date {
+  font-size: 0.8rem;
+  color: var(--pricing-primary);
+}
+
+/* Metrics */
+.PricingPage__neighbor-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: var(--pricing-surface);
+  border-radius: var(--pricing-radius-small);
+}
+
+.PricingPage__neighbor-metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.PricingPage__neighbor-metric-label {
+  font-size: 0.75rem;
+  color: var(--pricing-primary);
+  margin-bottom: 0.25rem;
+}
+
+.PricingPage__neighbor-metric-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Conditions/Tags */
+.PricingPage__neighbor-conditions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.PricingPage__neighbor-tag {
+  padding: 0.25rem 0.75rem;
+  background: var(--pricing-accent);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* No Neighbors State */
+.PricingPage__no-neighbors {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--pricing-primary);
+}
+
+.PricingPage__no-neighbors p {
+  margin-bottom: 0.5rem;
+}
+
+/* Loading State */
+.PricingPage__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: var(--pricing-primary);
+}
+
+.PricingPage__loading-icon {
+  font-size: 2rem;
+  color: var(--pricing-accent);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1400px) {
+  .PricingPage__content {
+    grid-template-columns: 25% 50% 25%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .PricingPage__content {
+    grid-template-columns: 1fr;
+  }
+
+  .PricingPage__panel--middle {
+    order: -1;
+  }
+
+  .PricingPage__kpis {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .PricingPage {
+    padding: 1rem;
+  }
+
+  .PricingPage__kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .PricingPage__panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

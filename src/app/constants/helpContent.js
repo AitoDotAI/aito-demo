@@ -80,6 +80,13 @@ export const HELP_CONTENT = {
     description: 'Explore statistical relationships and correlations in your data using AI-powered analysis. Discover hidden patterns and insights by selecting different data fields and values to see what factors are related.',
     technicalDetails: 'Uses Aito.ai\'s _relate endpoint to perform statistical correlation analysis. Calculates lift values to show positive and negative relationships between different data dimensions.',
     useCaseLink: `${GITHUB_BASE}/07-data-analytics.md`
+  },
+
+  'Price Optimization': {
+    title: 'AI-Powered Price Optimization',
+    description: 'Data-driven pricing decisions that maximize profitability by estimating optimal prices and forecasting demand. Uses historical sales data, competitor pricing, seasonal patterns, and contextual factors to predict the price-demand relationship and identify the profit-maximizing price point.',
+    technicalDetails: 'Uses Aito.ai\'s _estimate endpoint with K-NN estimation to predict price and demand based on historical patterns. Provides full explainability through the $why operator, showing similar historical cases (neighbors) and their impact on the estimate. Supports what-if analysis by allowing users to set either price (to estimate demand) or demand (to estimate price).',
+    useCaseLink: `${GITHUB_BASE}/../tasks/grocery-price-optimization-demo.md`
   }
 }
 

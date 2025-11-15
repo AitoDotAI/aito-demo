@@ -19,6 +19,7 @@ import ProductPage from './pages/ProductPage'
 import DataInspectPage from './pages/DataInspectPage'
 import CustomerChatPage from './pages/CustomerChatPage'
 import AdminChatPage from './pages/AdminChatPage'
+import PricingPage from './pages/PricingPage'
 
 import './App.css'
 
@@ -143,6 +144,8 @@ class App extends Component {
         return InvoicingPage
       case '/quality':
         return QualityMonitoringPage
+      case '/pricing':
+        return PricingPage
       case '/product':
         return ProductPage
       case '/':
@@ -223,6 +226,28 @@ class App extends Component {
       // Get distinct values for a field
       getDistinctValues:
         (field) => data.getDistinctValues(field),
+
+      // Price estimation and optimization
+      getPriceProducts:
+        () => data.getPriceProducts(),
+
+      estimatePrice:
+        (where) => data.estimatePrice(where),
+
+      estimateDemand:
+        (where) => data.estimateDemand(where),
+
+      getPriceFieldValues:
+        (field) => data.getPriceFieldValues(field),
+
+      getProductPriceContext:
+        (productId) => data.getProductPriceContext(productId),
+
+      getPriceHistory:
+        (productId, limit) => data.getPriceHistory(productId, limit),
+
+      getPriceStats:
+        (productId) => data.getPriceStats(productId),
 
     }
 

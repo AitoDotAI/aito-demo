@@ -1,0 +1,206 @@
+import axios from 'axios'
+
+/**
+ * Price Estimation API Functions
+ *
+ * This module provides functions to interact with Aito's _estimate endpoint
+ * for price optimization and demand forecasting in grocery retail.
+ *
+ * Business Context:
+ * - Helps store managers optimize pricing to maximize profit (margin × demand)
+ * - Uses K-NN estimation to predict price-demand relationships
+ * - Provides explainability through neighbor analysis
+ *
+ * Technical Details:
+ * - Connects to local Aito RnD server at localhost:9005
+ * - Uses _estimate endpoint with $why for explainability
+ * - Works with price_history table containing historical sales data
+ */
+
+// Local RnD server configuration
+const PRICING_API_URL = 'http://localhost:9005'
+const PRICING_API_KEY = 'demo-key' // Security disabled but header still required
+
+/**
+ * Get list of products that have price history data
+ *
+ * @returns {Promise<Array>} Array of products with id, name, category
+ */
+export function getPriceProducts() {
+  return axios.post(`${PRICING_API_URL}/api/v1/_query`,
+    {
+      from: 'price_history',
+      get: 'product_id',
+      select: ['$value', '$f'],
+      limit: 100
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      // Return unique products
+      return response.data.hits
+    })
+}
+
+/**
+ * Get distinct values for a specific field in price_history
+ * Used to populate dropdown options for field selection
+ *
+ * @param {string} fieldName - The field to get distinct values for
+ * @returns {Promise<Array>} Array of distinct values
+ */
+export function getPriceFieldValues(fieldName) {
+  return axios.post(`${PRICING_API_URL}/api/v1/_query`,
+    {
+      from: 'price_history',
+      get: fieldName,
+      select: ['$value', '$f'],
+      limit: 100
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      return response.data.hits
+    })
+}
+
+/**
+ * Get sample product context to populate fields
+ * Returns a recent price_history record for the given product
+ *
+ * @param {string} productId - Product ID to get context for
+ * @returns {Promise<Object>} Product context with all fields
+ */
+export function getProductPriceContext(productId) {
+  return axios.post(`${PRICING_API_URL}/api/v1/_query`,
+    {
+      from: 'price_history',
+      where: { product_id: productId },
+      orderBy: 'date',
+      limit: 1
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      return response.data.hits[0] || null
+    })
+}
+
+/**
+ * Estimate sale price given market conditions
+ *
+ * Uses K-NN estimation to predict optimal price based on:
+ * - Product characteristics
+ * - Temporal factors (day of week, holiday, etc.)
+ * - Competitive context (competitor pricing)
+ * - Environmental factors (weather, placement, etc.)
+ *
+ * Returns estimate with full explainability via $why operator
+ *
+ * @param {Object} whereConditions - Conditions to estimate price for
+ * @returns {Promise<Object>} Estimation result with neighbors
+ */
+export function estimatePrice(whereConditions) {
+  return axios.post(`${PRICING_API_URL}/api/v1/_estimate`,
+    {
+      from: 'price_history',
+      where: whereConditions,
+      estimate: 'sale_price',
+      select: ['estimate', 'field', 'neighbors_count', '$why']
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      return response.data
+    })
+}
+
+/**
+ * Estimate demand (units_sold) given market conditions including price
+ *
+ * Uses K-NN estimation to predict sales volume based on:
+ * - Sale price (key demand driver)
+ * - Product characteristics
+ * - Temporal and competitive factors
+ *
+ * Returns estimate with full explainability via $why operator
+ *
+ * @param {Object} whereConditions - Conditions to estimate demand for (must include sale_price)
+ * @returns {Promise<Object>} Estimation result with neighbors
+ */
+export function estimateDemand(whereConditions) {
+  return axios.post(`${PRICING_API_URL}/api/v1/_estimate`,
+    {
+      from: 'price_history',
+      where: whereConditions,
+      estimate: 'units_sold',
+      select: ['estimate', 'field', 'neighbors_count', '$why']
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      return response.data
+    })
+}
+
+/**
+ * Get historical price-demand data points for a product
+ * Used for scatter plot visualization
+ *
+ * @param {string} productId - Product ID to get history for
+ * @param {number} limit - Number of records to return (default 365)
+ * @returns {Promise<Array>} Historical data points
+ */
+export function getPriceHistory(productId, limit = 365) {
+  return axios.post(`${PRICING_API_URL}/api/v1/_query`,
+    {
+      from: 'price_history',
+      where: { product_id: productId },
+      select: [
+        'sale_price',
+        'units_sold',
+        'margin_percentage',
+        'date',
+        'purchase_cost',
+        'day_of_week',
+        'is_weekend',
+        'promotional_placement'
+      ],
+      orderBy: 'date',
+      limit: limit
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      return response.data.hits
+    })
+}
+
+/**
+ * Get basic statistics for a product's pricing
+ * Useful for showing baseline metrics
+ *
+ * @param {string} productId - Product ID to get stats for
+ * @returns {Promise<Object>} Statistics including avg price, demand, etc.
+ */
+export function getPriceStats(productId) {
+  return axios.post(`${PRICING_API_URL}/api/v1/_aggregate`,
+    {
+      from: 'price_history',
+      where: { product_id: productId },
+      aggregate: [
+        'sale_price.$mean',
+        'sale_price.$min',
+        'sale_price.$max',
+        'units_sold.$mean',
+        'units_sold.$min',
+        'units_sold.$max',
+        'margin_percentage.$mean'
+      ]
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      return response.data
+    })
+}
