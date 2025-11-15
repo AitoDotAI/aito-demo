@@ -539,6 +539,65 @@ class PricingPage extends Component {
   }
 
   /**
+   * Custom tooltip for scatter plot
+   */
+  renderCustomTooltip = ({ active, payload }) => {
+    if (!active || !payload || payload.length === 0) return null
+
+    const data = payload[0].payload
+
+    return (
+      <div className="PricingPage__chart-tooltip">
+        <div className="PricingPage__chart-tooltip-header">
+          <strong>{data.name}</strong>
+          {data.type === 'neighbor' && data.hitScore && (
+            <span className="PricingPage__chart-tooltip-badge">
+              Score: {data.hitScore.toFixed(2)}
+            </span>
+          )}
+        </div>
+
+        {data.date && (
+          <div className="PricingPage__chart-tooltip-date">
+            {data.dayOfWeek}, {data.date}
+            {data.isWeekend && <span className="PricingPage__chart-tooltip-tag">Weekend</span>}
+          </div>
+        )}
+
+        <div className="PricingPage__chart-tooltip-metrics">
+          <div className="PricingPage__chart-tooltip-metric">
+            <span className="PricingPage__chart-tooltip-label">Price:</span>
+            <span className="PricingPage__chart-tooltip-value">€{data.price?.toFixed(3)}</span>
+          </div>
+          <div className="PricingPage__chart-tooltip-metric">
+            <span className="PricingPage__chart-tooltip-label">Demand:</span>
+            <span className="PricingPage__chart-tooltip-value">{Math.round(data.demand)} units</span>
+          </div>
+          {data.margin !== undefined && (
+            <div className="PricingPage__chart-tooltip-metric">
+              <span className="PricingPage__chart-tooltip-label">Margin:</span>
+              <span className="PricingPage__chart-tooltip-value">{data.margin.toFixed(1)}%</span>
+            </div>
+          )}
+        </div>
+
+        {(data.placement || data.competitorPrice) && (
+          <div className="PricingPage__chart-tooltip-context">
+            {data.placement && data.placement !== 'normal' && (
+              <div className="PricingPage__chart-tooltip-tag">{data.placement}</div>
+            )}
+            {data.competitorPrice && (
+              <div className="PricingPage__chart-tooltip-info">
+                Competitor: €{data.competitorPrice.toFixed(3)}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  /**
    * Render scatter plot
    */
   renderScatterPlot = () => {
@@ -548,7 +607,13 @@ class PricingPage extends Component {
     const historicalPoints = priceHistory.map(point => ({
       price: point.sale_price,
       demand: point.units_sold,
-      type: 'historical'
+      type: 'historical',
+      name: point.name || 'Historical Data',
+      date: point.date,
+      dayOfWeek: point.day_of_week,
+      isWeekend: point.is_weekend,
+      placement: point.promotional_placement,
+      margin: point.margin_percentage
     }))
 
     // Prepare neighbor points
@@ -556,14 +621,23 @@ class PricingPage extends Component {
       price: neighbor.instance.sale_price,
       demand: neighbor.instance.units_sold,
       type: 'neighbor',
-      hitScore: neighbor.hitScore
+      hitScore: neighbor.hitScore,
+      name: neighbor.instance.name || neighbor.instance.product_id,
+      date: neighbor.instance.date,
+      dayOfWeek: neighbor.instance.day_of_week,
+      isWeekend: neighbor.instance.is_weekend,
+      placement: neighbor.instance.promotional_placement,
+      margin: neighbor.instance.margin_percentage,
+      competitorPrice: neighbor.instance.competitor_avg_price
     }))
 
     // Current estimate point
     const currentPoint = estimatedPrice && estimatedDemand ? [{
       price: estimatedPrice,
       demand: estimatedDemand,
-      type: 'current'
+      type: 'current',
+      name: 'Current Estimate',
+      margin: estimatedPrice ? ((estimatedPrice - purchaseCost) / estimatedPrice * 100) : 0
     }] : []
 
     return (
@@ -601,16 +675,8 @@ class PricingPage extends Component {
             stroke="#6c757d"
           />
           <Tooltip
+            content={this.renderCustomTooltip}
             cursor={{ strokeDasharray: '3 3' }}
-            contentStyle={{
-              backgroundColor: '#fff',
-              border: '1px solid #e0e0e0',
-              borderRadius: '8px',
-              padding: '10px',
-              fontSize: '13px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}
-            labelStyle={{ fontWeight: 600, marginBottom: '5px' }}
           />
           <Legend
             verticalAlign="top"

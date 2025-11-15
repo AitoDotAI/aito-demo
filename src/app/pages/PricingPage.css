@@ -489,6 +489,97 @@
   transform: scale(1.05);
 }
 
+/* Custom Chart Tooltip */
+.PricingPage__chart-tooltip {
+  background: #fff;
+  border: 2px solid var(--pricing-accent);
+  border-radius: var(--pricing-radius);
+  padding: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  min-width: 220px;
+  max-width: 300px;
+}
+
+.PricingPage__chart-tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--pricing-border);
+}
+
+.PricingPage__chart-tooltip-header strong {
+  font-size: 0.95rem;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.PricingPage__chart-tooltip-badge {
+  background: var(--pricing-accent);
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.PricingPage__chart-tooltip-date {
+  font-size: 0.8rem;
+  color: var(--pricing-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.PricingPage__chart-tooltip-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.PricingPage__chart-tooltip-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.PricingPage__chart-tooltip-label {
+  color: var(--pricing-primary);
+  font-weight: 500;
+}
+
+.PricingPage__chart-tooltip-value {
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.PricingPage__chart-tooltip-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--pricing-border);
+}
+
+.PricingPage__chart-tooltip-tag {
+  background: var(--pricing-accent);
+  color: #fff;
+  padding: 0.25rem 0.65rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.PricingPage__chart-tooltip-info {
+  font-size: 0.8rem;
+  color: var(--pricing-primary);
+  font-weight: 500;
+}
+
 /* ============================================
    RIGHT PANEL: EVIDENCE & NEIGHBORS
    ============================================ */
