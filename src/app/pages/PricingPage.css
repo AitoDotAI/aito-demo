@@ -790,7 +790,19 @@
   color: #fff;
   border-radius: 12px;
   font-size: 0.75rem;
+}
+
+.PricingPage__neighbor-adjusted-badge {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.125rem 0.375rem;
+  background: var(--pricing-accent);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.65rem;
   font-weight: 600;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
 
 /* No Neighbors State */

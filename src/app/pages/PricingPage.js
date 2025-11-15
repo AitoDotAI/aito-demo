@@ -546,9 +546,9 @@ class PricingPage extends Component {
     const data = payload[0].payload
     const { showAdjustedValues } = this.state
 
-    // Determine which values to show
-    const displayPrice = showAdjustedValues && data.adjustedPrice !== undefined ? data.adjustedPrice : data.price
-    const displayDemand = showAdjustedValues && data.adjustedDemand !== undefined ? data.adjustedDemand : data.demand
+    // Use the price and demand fields directly (they're already adjusted based on toggle)
+    const displayPrice = data.price
+    const displayDemand = data.demand
     const hasAdjustments = data.adjustedPrice !== undefined || data.adjustedDemand !== undefined
 
     return (
@@ -570,19 +570,33 @@ class PricingPage extends Component {
         )}
 
         {hasAdjustments && showAdjustedValues && (
-          <div className="PricingPage__chart-tooltip-info" style={{ marginBottom: '0.5rem', fontStyle: 'italic' }}>
-            Adjusted values (what-if scenario)
+          <div className="PricingPage__chart-tooltip-info" style={{ marginBottom: '0.5rem', fontStyle: 'italic', fontSize: '0.75rem', color: '#FF6B35' }}>
+            Showing adjusted values
           </div>
         )}
 
         <div className="PricingPage__chart-tooltip-metrics">
           <div className="PricingPage__chart-tooltip-metric">
             <span className="PricingPage__chart-tooltip-label">Price:</span>
-            <span className="PricingPage__chart-tooltip-value">€{displayPrice?.toFixed(3)}</span>
+            <span className="PricingPage__chart-tooltip-value">
+              €{displayPrice?.toFixed(3)}
+              {hasAdjustments && showAdjustedValues && data.adjustedPrice !== undefined && (
+                <span style={{ fontSize: '0.7rem', color: '#888', marginLeft: '0.25rem' }}>
+                  (was €{data.originalPrice?.toFixed(3)})
+                </span>
+              )}
+            </span>
           </div>
           <div className="PricingPage__chart-tooltip-metric">
             <span className="PricingPage__chart-tooltip-label">Demand:</span>
-            <span className="PricingPage__chart-tooltip-value">{Math.round(displayDemand)} units</span>
+            <span className="PricingPage__chart-tooltip-value">
+              {Math.round(displayDemand)} units
+              {hasAdjustments && showAdjustedValues && data.adjustedDemand !== undefined && (
+                <span style={{ fontSize: '0.7rem', color: '#888', marginLeft: '0.25rem' }}>
+                  (was {Math.round(data.originalDemand)})
+                </span>
+              )}
+            </span>
           </div>
           {data.margin !== undefined && (
             <div className="PricingPage__chart-tooltip-metric">
@@ -593,8 +607,8 @@ class PricingPage extends Component {
         </div>
 
         {hasAdjustments && !showAdjustedValues && (
-          <div className="PricingPage__chart-tooltip-info" style={{ fontSize: '0.75rem', marginTop: '0.5rem' }}>
-            Toggle to see adjusted values
+          <div className="PricingPage__chart-tooltip-info" style={{ fontSize: '0.75rem', marginTop: '0.5rem', color: '#888' }}>
+            Click "Adjusted" to see what-if values
           </div>
         )}
 
@@ -618,7 +632,7 @@ class PricingPage extends Component {
    * Render scatter plot
    */
   renderScatterPlot = () => {
-    const { priceHistory, estimatedPrice, estimatedDemand, neighbors, purchaseCost } = this.state
+    const { priceHistory, estimatedPrice, estimatedDemand, neighbors, purchaseCost, estimationMode, showAdjustedValues } = this.state
 
     // Prepare data points
     const historicalPoints = priceHistory.map(point => ({
@@ -633,22 +647,49 @@ class PricingPage extends Component {
       margin: point.margin_percentage
     }))
 
-    // Prepare neighbor points
-    const neighborPoints = neighbors.slice(0, 20).map(neighbor => ({
-      price: neighbor.instance.sale_price,  // Original price
-      demand: neighbor.instance.units_sold, // Original demand
-      adjustedPrice: neighbor.adjustedValue,  // Adjusted price from estimation
-      adjustedDemand: neighbor.adjustedValue, // Adjusted demand (same as adjusted value for now)
-      type: 'neighbor',
-      hitScore: neighbor.hitScore,
-      name: neighbor.instance.name || neighbor.instance.product_id,
-      date: neighbor.instance.date,
-      dayOfWeek: neighbor.instance.day_of_week,
-      isWeekend: neighbor.instance.is_weekend,
-      placement: neighbor.instance.promotional_placement,
-      margin: neighbor.instance.margin_percentage,
-      competitorPrice: neighbor.instance.competitor_avg_price
-    }))
+    // Prepare neighbor points with correct adjusted values based on what was estimated
+    const neighborPoints = neighbors.slice(0, 20).map(neighbor => {
+      // Determine display values based on toggle
+      let displayPrice = neighbor.instance.sale_price
+      let displayDemand = neighbor.instance.units_sold
+
+      if (showAdjustedValues && neighbor.adjustedValue !== undefined) {
+        // If we estimated price (set_demand or both modes), use adjusted price
+        if (estimationMode === 'set_demand' || estimationMode === 'both') {
+          displayPrice = neighbor.adjustedValue
+        }
+        // If we estimated demand (set_price mode), use adjusted demand
+        if (estimationMode === 'set_price') {
+          displayDemand = neighbor.adjustedValue
+        }
+      }
+
+      const point = {
+        price: displayPrice,  // Display price (original or adjusted)
+        demand: displayDemand, // Display demand (original or adjusted)
+        originalPrice: neighbor.instance.sale_price,
+        originalDemand: neighbor.instance.units_sold,
+        type: 'neighbor',
+        hitScore: neighbor.hitScore,
+        name: neighbor.instance.name || neighbor.instance.product_id,
+        date: neighbor.instance.date,
+        dayOfWeek: neighbor.instance.day_of_week,
+        isWeekend: neighbor.instance.is_weekend,
+        placement: neighbor.instance.promotional_placement,
+        margin: neighbor.instance.margin_percentage,
+        competitorPrice: neighbor.instance.competitor_avg_price
+      }
+
+      // Also store adjusted values for tooltip display
+      if (estimationMode === 'set_demand' || estimationMode === 'both') {
+        point.adjustedPrice = neighbor.adjustedValue
+      }
+      if (estimationMode === 'set_price') {
+        point.adjustedDemand = neighbor.adjustedValue
+      }
+
+      return point
+    })
 
     // Current estimate point
     const currentPoint = estimatedPrice && estimatedDemand ? [{
@@ -846,7 +887,7 @@ class PricingPage extends Component {
    * Render neighbor list
    */
   renderNeighbors = () => {
-    const { neighbors, selectedNeighborIndex } = this.state
+    const { neighbors, selectedNeighborIndex, showAdjustedValues, estimationMode } = this.state
 
     if (neighbors.length === 0) {
       return (
@@ -859,59 +900,84 @@ class PricingPage extends Component {
 
     return (
       <div className="PricingPage__neighbor-list">
-        {neighbors.slice(0, 10).map((neighbor, idx) => (
-          <div
-            key={idx}
-            className={`PricingPage__neighbor-card ${selectedNeighborIndex === idx ? 'PricingPage__neighbor-card--selected' : ''}`}
-            onClick={() => this.selectNeighbor(idx)}
-          >
-            {/* Similarity score */}
-            <div className="PricingPage__neighbor-score">
-              <div className="PricingPage__neighbor-score-bar">
-                <div
-                  className="PricingPage__neighbor-score-fill"
-                  style={{ width: `${Math.min(100, neighbor.hitScore * 10)}%` }}
-                />
-              </div>
-              <span className="PricingPage__neighbor-score-value">
-                {neighbor.hitScore.toFixed(2)}
-              </span>
-            </div>
+        {neighbors.slice(0, 10).map((neighbor, idx) => {
+          // Determine which values to show based on toggle and estimation mode
+          let displayPrice = neighbor.instance.sale_price
+          let displayDemand = neighbor.instance.units_sold
 
-            {/* Product info */}
-            <div className="PricingPage__neighbor-product">
-              <strong>{neighbor.instance.name || neighbor.instance.product_id}</strong>
-              <span className="PricingPage__neighbor-date">
-                {neighbor.instance.day_of_week}, {neighbor.instance.date}
-              </span>
-            </div>
+          if (showAdjustedValues) {
+            // If we estimated price (set_demand or both modes), show adjusted price
+            if ((estimationMode === 'set_demand' || estimationMode === 'both') && neighbor.adjustedValue !== undefined) {
+              displayPrice = neighbor.adjustedValue
+            }
+            // If we estimated demand (set_price mode), show adjusted demand
+            if (estimationMode === 'set_price' && neighbor.adjustedValue !== undefined) {
+              displayDemand = neighbor.adjustedValue
+            }
+          }
 
-            {/* Price & demand */}
-            <div className="PricingPage__neighbor-metrics">
-              <div className="PricingPage__neighbor-metric">
-                <span className="PricingPage__neighbor-metric-label">Price:</span>
-                <span className="PricingPage__neighbor-metric-value">
-                  €{neighbor.instance.sale_price?.toFixed(3)}
+          return (
+            <div
+              key={idx}
+              className={`PricingPage__neighbor-card ${selectedNeighborIndex === idx ? 'PricingPage__neighbor-card--selected' : ''}`}
+              onClick={() => this.selectNeighbor(idx)}
+            >
+              {/* Similarity score */}
+              <div className="PricingPage__neighbor-score">
+                <div className="PricingPage__neighbor-score-bar">
+                  <div
+                    className="PricingPage__neighbor-score-fill"
+                    style={{ width: `${Math.min(100, neighbor.hitScore * 10)}%` }}
+                  />
+                </div>
+                <span className="PricingPage__neighbor-score-value">
+                  {neighbor.hitScore.toFixed(2)}
                 </span>
               </div>
-              <div className="PricingPage__neighbor-metric">
-                <span className="PricingPage__neighbor-metric-label">Demand:</span>
-                <span className="PricingPage__neighbor-metric-value">
-                  {neighbor.instance.units_sold} units
+
+              {/* Product info */}
+              <div className="PricingPage__neighbor-product">
+                <strong>{neighbor.instance.name || neighbor.instance.product_id}</strong>
+                <span className="PricingPage__neighbor-date">
+                  {neighbor.instance.day_of_week}, {neighbor.instance.date}
                 </span>
               </div>
-            </div>
 
-            {/* Key conditions */}
-            <div className="PricingPage__neighbor-conditions">
-              {neighbor.instance.is_weekend && <span className="PricingPage__neighbor-tag">Weekend</span>}
-              {neighbor.instance.is_holiday_week && <span className="PricingPage__neighbor-tag">Holiday</span>}
-              {neighbor.instance.promotional_placement !== 'normal' && (
-                <span className="PricingPage__neighbor-tag">{neighbor.instance.promotional_placement}</span>
-              )}
+              {/* Price & demand */}
+              <div className="PricingPage__neighbor-metrics">
+                <div className="PricingPage__neighbor-metric">
+                  <span className="PricingPage__neighbor-metric-label">Price:</span>
+                  <span className="PricingPage__neighbor-metric-value">
+                    €{displayPrice?.toFixed(3)}
+                    {showAdjustedValues && neighbor.adjustedValue !== undefined &&
+                     (estimationMode === 'set_demand' || estimationMode === 'both') && (
+                      <span className="PricingPage__neighbor-adjusted-badge">adj</span>
+                    )}
+                  </span>
+                </div>
+                <div className="PricingPage__neighbor-metric">
+                  <span className="PricingPage__neighbor-metric-label">Demand:</span>
+                  <span className="PricingPage__neighbor-metric-value">
+                    {Math.round(displayDemand)} units
+                    {showAdjustedValues && neighbor.adjustedValue !== undefined &&
+                     estimationMode === 'set_price' && (
+                      <span className="PricingPage__neighbor-adjusted-badge">adj</span>
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              {/* Key conditions */}
+              <div className="PricingPage__neighbor-conditions">
+                {neighbor.instance.is_weekend && <span className="PricingPage__neighbor-tag">Weekend</span>}
+                {neighbor.instance.is_holiday_week && <span className="PricingPage__neighbor-tag">Holiday</span>}
+                {neighbor.instance.promotional_placement !== 'normal' && (
+                  <span className="PricingPage__neighbor-tag">{neighbor.instance.promotional_placement}</span>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     )
   }
