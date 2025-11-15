@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import {
-  Button,
-  FormGroup,
   Label,
   Input,
   Dropdown,
@@ -10,7 +8,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap'
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceDot } from 'recharts'
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { FaToggleOn, FaToggleOff, FaSync, FaCheckCircle, FaArrowRight } from 'react-icons/fa'
 import HelpButton from '../components/HelpButton'
 import { HELP_CONTENT } from '../constants/helpContent'
