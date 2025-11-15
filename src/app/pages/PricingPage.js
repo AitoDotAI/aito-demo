@@ -601,7 +601,7 @@ class PricingPage extends Component {
    * Render scatter plot
    */
   renderScatterPlot = () => {
-    const { priceHistory, estimatedPrice, estimatedDemand, neighbors } = this.state
+    const { priceHistory, estimatedPrice, estimatedDemand, neighbors, purchaseCost } = this.state
 
     // Prepare data points
     const historicalPoints = priceHistory.map(point => ({
