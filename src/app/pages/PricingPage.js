@@ -9,7 +9,7 @@ import {
   DropdownItem,
 } from 'reactstrap'
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { FaToggleOn, FaToggleOff, FaSync, FaCheckCircle, FaArrowRight } from 'react-icons/fa'
+import { FaToggleOn, FaToggleOff, FaSync, FaCheckCircle } from 'react-icons/fa'
 import HelpButton from '../components/HelpButton'
 import { HELP_CONTENT } from '../constants/helpContent'
 
@@ -1050,21 +1050,22 @@ class PricingPage extends Component {
               <div className="PricingPage__visualization">
                 <div className="PricingPage__viz-header">
                   <h3 className="PricingPage__viz-title">Price-Demand Relationship</h3>
-                  <button
-                    className={`PricingPage__viz-toggle ${this.state.showAdjustedValues ? 'active' : ''}`}
-                    onClick={() => this.setState({ showAdjustedValues: !this.state.showAdjustedValues })}
-                    title={this.state.showAdjustedValues ? 'Show original values' : 'Show adjusted values (what-if)'}
-                  >
-                    {this.state.showAdjustedValues ? (
-                      <>
-                        <FaArrowRight /> Adjusted
-                      </>
-                    ) : (
-                      <>
-                        <FaArrowRight /> Original
-                      </>
-                    )}
-                  </button>
+                  <div className="PricingPage__viz-toggle-group">
+                    <button
+                      className={`PricingPage__viz-toggle-btn ${!this.state.showAdjustedValues ? 'active' : ''}`}
+                      onClick={() => this.setState({ showAdjustedValues: false })}
+                      title="Show original historical values"
+                    >
+                      Original
+                    </button>
+                    <button
+                      className={`PricingPage__viz-toggle-btn ${this.state.showAdjustedValues ? 'active' : ''}`}
+                      onClick={() => this.setState({ showAdjustedValues: true })}
+                      title="Show adjusted what-if values"
+                    >
+                      Adjusted
+                    </button>
+                  </div>
                 </div>
                 {this.renderScatterPlot()}
               </div>

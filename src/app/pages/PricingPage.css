@@ -349,35 +349,51 @@
   margin: 0;
 }
 
-.PricingPage__viz-toggle {
+/* Toggle Button Group */
+.PricingPage__viz-toggle-group {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #fff;
-  color: var(--pricing-accent);
   border: 2px solid var(--pricing-accent);
   border-radius: var(--pricing-radius);
+  overflow: hidden;
+  background: #fff;
+}
+
+.PricingPage__viz-toggle-btn {
+  padding: 0.5rem 1.25rem;
+  background: #fff;
+  color: var(--pricing-accent);
+  border: none;
+  border-right: 1px solid var(--pricing-accent);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  position: relative;
 }
 
-.PricingPage__viz-toggle:hover {
+.PricingPage__viz-toggle-btn:last-child {
+  border-right: none;
+}
+
+.PricingPage__viz-toggle-btn:hover:not(.active) {
   background: var(--pricing-surface);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
 }
 
-.PricingPage__viz-toggle.active {
+.PricingPage__viz-toggle-btn.active {
   background: var(--pricing-accent);
   color: #fff;
+  font-weight: 700;
 }
 
-.PricingPage__viz-toggle.active:hover {
-  background: var(--pricing-accent-hover);
+.PricingPage__viz-toggle-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 /* KPI Section */
