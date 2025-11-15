@@ -119,8 +119,18 @@
 
 .PricingPage__fields {
   overflow-y: auto;
-  max-height: 700px;
+  max-height: 600px;
   padding-right: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.PricingPage__field-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--pricing-surface);
+  margin-top: auto;
 }
 
 /* Scrollbar styling */
@@ -140,24 +150,24 @@
 
 /* Field Groups */
 .PricingPage__field-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .PricingPage__field-group-title {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--pricing-accent);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--pricing-border);
 }
 
 /* Individual Field */
 .PricingPage__field {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.65rem;
   border-radius: var(--pricing-radius-small);
   transition: all 0.2s ease;
   background: var(--pricing-surface);
@@ -255,39 +265,50 @@
 
 /* Action Buttons */
 .PricingPage__action-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.25rem;
   border: none;
-  border-radius: var(--pricing-radius-small);
-  font-size: 0.875rem;
+  border-radius: var(--pricing-radius);
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.PricingPage__action-btn--primary {
   background: var(--pricing-accent);
   color: #fff;
+  border: 2px solid var(--pricing-accent);
 }
 
-.PricingPage__action-btn:hover:not(:disabled) {
+.PricingPage__action-btn--primary:hover:not(:disabled) {
   background: var(--pricing-accent-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--pricing-shadow);
+  border-color: var(--pricing-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
 }
 
-.PricingPage__action-btn:disabled {
+.PricingPage__action-btn--primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
 .PricingPage__action-btn--secondary {
   background: #fff;
   color: var(--pricing-accent);
-  border: 1px solid var(--pricing-accent);
+  border: 2px solid var(--pricing-accent);
 }
 
 .PricingPage__action-btn--secondary:hover:not(:disabled) {
   background: var(--pricing-surface);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.15);
 }
 
 /* ============================================

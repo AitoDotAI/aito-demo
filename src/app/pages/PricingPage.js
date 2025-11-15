@@ -867,27 +867,29 @@ class PricingPage extends Component {
             <div className="PricingPage__panel PricingPage__panel--left">
               <div className="PricingPage__panel-header">
                 <h2 className="PricingPage__panel-title">Field Selection</h2>
-                <div className="PricingPage__panel-actions">
-                  <button
-                    className="PricingPage__action-btn PricingPage__action-btn--secondary"
-                    onClick={this.populateFromProduct}
-                    disabled={!this.state.fieldValues.product_id}
-                    title="Populate from product"
-                  >
-                    <FaCheckCircle /> Populate
-                  </button>
-                  <button
-                    className="PricingPage__action-btn PricingPage__action-btn--secondary"
-                    onClick={this.resetFields}
-                    title="Reset all fields"
-                  >
-                    <FaSync /> Reset
-                  </button>
-                </div>
               </div>
 
               <div className="PricingPage__fields">
                 {this.renderFieldGroups()}
+              </div>
+
+              {/* Action buttons at bottom */}
+              <div className="PricingPage__field-actions">
+                <button
+                  className="PricingPage__action-btn PricingPage__action-btn--primary"
+                  onClick={this.populateFromProduct}
+                  disabled={!this.state.fieldValues.product_id}
+                  title="Populate fields from selected product"
+                >
+                  <FaCheckCircle /> Populate from Product
+                </button>
+                <button
+                  className="PricingPage__action-btn PricingPage__action-btn--secondary"
+                  onClick={this.resetFields}
+                  title="Reset all fields"
+                >
+                  <FaSync /> Reset All
+                </button>
               </div>
             </div>
 
