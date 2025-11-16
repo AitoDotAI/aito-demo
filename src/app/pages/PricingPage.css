@@ -903,3 +903,179 @@
     max-height: 300px;
   }
 }
+
+/* ============================================
+   EXPLANATION TOOLTIP STYLES
+   ============================================ */
+
+/* Aito Explanation Tooltip Styles */
+.aito-explanation-tooltip {
+  opacity: 1 !important;
+  z-index: 1100 !important;
+}
+
+/* Override Bootstrap's .tooltip.show{opacity:0.9} rule directly */
+.tooltip.show {
+  opacity: 1 !important;
+}
+
+.aito-explanation-tooltip .tooltip-inner {
+  max-width: 400px;
+  padding: 0;
+  background: white !important;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  opacity: 1 !important;
+}
+
+.aito-tooltip-content {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* Override Reactstrap default styles */
+.aito-explanation-tooltip .tooltip-arrow {
+  display: none !important;
+}
+
+.aito-explanation-tooltip.show {
+  opacity: 1 !important;
+}
+
+/* Ensure the tooltip content is fully opaque */
+.bs-tooltip-auto[x-placement^="bottom"] .aito-explanation-tooltip,
+.bs-tooltip-bottom .aito-explanation-tooltip {
+  opacity: 1 !important;
+}
+
+.aito-tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.aito-tooltip-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.aito-tooltip-body {
+  padding: 16px 20px;
+}
+
+/* Explanation Table */
+.aito-explanation-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.aito-explanation-row {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 0.15s ease;
+}
+
+.aito-explanation-row:last-child {
+  border-bottom: none;
+}
+
+.aito-explanation-row:hover {
+  background-color: #f8fafc;
+}
+
+.aito-explanation-row.base-row {
+  background: linear-gradient(to right, #f8fafc, #ffffff);
+  border-left: 3px solid #64748b;
+}
+
+.aito-explanation-row.positive-row {
+  background: linear-gradient(to right, #f0fdf4, #ffffff);
+  border-left: 3px solid #22c55e;
+}
+
+.aito-explanation-row.negative-row {
+  background: linear-gradient(to right, #fef2f2, #ffffff);
+  border-left: 3px solid #ef4444;
+}
+
+.aito-explanation-row.adjustment-row {
+  background: linear-gradient(to right, #fffbeb, #ffffff);
+  border-left: 3px solid #f59e0b;
+  font-weight: 600;
+}
+
+.aito-explanation-cell {
+  padding: 12px 10px;
+  vertical-align: middle;
+}
+
+.aito-explanation-factor {
+  font-size: 13px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.aito-explanation-factor-label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.aito-explanation-factor-value {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.aito-explanation-effect {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 60px;
+}
+
+.aito-explanation-effect.positive {
+  color: #16a34a;
+}
+
+.aito-explanation-effect.negative {
+  color: #dc2626;
+}
+
+.aito-explanation-effect.neutral {
+  color: #64748b;
+}
+
+.aito-explanation-effect.adjustment {
+  color: #d97706;
+}
+
+.aito-explanation-running-total {
+  text-align: right;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  min-width: 70px;
+  font-family: 'Courier New', monospace;
+}
+
+.aito-explanation-final {
+  background: linear-gradient(to right, #fff7ed, #ffffff) !important;
+  border-left: 3px solid #FF6B35 !important;
+  border-top: 2px solid #FF6B35;
+}
+
+.aito-explanation-final .aito-explanation-running-total {
+  color: #FF6B35;
+  font-size: 16px;
+}

@@ -155,6 +155,58 @@ export function estimateDemand(whereConditions) {
 }
 
 /**
+ * Estimate sale price using regression model for better explainability
+ *
+ * Uses simple regression model to predict price with clear field contributions.
+ * Returns explanation in the form of: base + field_effect_1 + field_effect_2 + ...
+ * Results are in log scale and need to be converted via: e^(base + effects)
+ *
+ * @param {Object} whereConditions - Conditions to estimate price for
+ * @returns {Promise<Object>} Estimation result with regression explanation
+ */
+export function estimatePriceRegression(whereConditions) {
+  return axios.post(`${PRICING_API_URL}/api/v1/_estimate`,
+    {
+      from: 'price_history',
+      where: whereConditions,
+      estimate: 'sale_price',
+      model: 'regression',
+      select: ['estimate', 'why']
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      return response.data
+    })
+}
+
+/**
+ * Estimate demand using regression model for better explainability
+ *
+ * Uses simple regression model to predict demand with clear field contributions.
+ * Returns explanation in the form of: base + field_effect_1 + field_effect_2 + ...
+ * Results are in log scale and need to be converted via: e^(base + effects)
+ *
+ * @param {Object} whereConditions - Conditions to estimate demand for (must include sale_price)
+ * @returns {Promise<Object>} Estimation result with regression explanation
+ */
+export function estimateDemandRegression(whereConditions) {
+  return axios.post(`${PRICING_API_URL}/api/v1/_estimate`,
+    {
+      from: 'price_history',
+      where: whereConditions,
+      estimate: 'units_sold',
+      model: 'regression',
+      select: ['estimate', 'why']
+    }, {
+      headers: { 'x-api-key': PRICING_API_KEY },
+    })
+    .then(response => {
+      return response.data
+    })
+}
+
+/**
  * Get historical price-demand data points for a product
  * Used for scatter plot visualization
  *

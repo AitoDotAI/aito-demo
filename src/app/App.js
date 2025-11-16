@@ -237,6 +237,12 @@ class App extends Component {
       estimateDemand:
         (where) => data.estimateDemand(where),
 
+      estimatePriceRegression:
+        (where) => data.estimatePriceRegression(where),
+
+      estimateDemandRegression:
+        (where) => data.estimateDemandRegression(where),
+
       getPriceFieldValues:
         (field) => data.getPriceFieldValues(field),
 

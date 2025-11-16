@@ -7,9 +7,10 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Tooltip as TooltipComponent,
 } from 'reactstrap'
 import { ComposedChart, Scatter, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { FaToggleOn, FaToggleOff, FaSync, FaCheckCircle } from 'react-icons/fa'
+import { FaToggleOn, FaToggleOff, FaSync } from 'react-icons/fa'
 import HelpButton from '../components/HelpButton'
 import { HELP_CONTENT } from '../constants/helpContent'
 
@@ -81,6 +82,10 @@ class PricingPage extends Component {
       demandEstimation: null,
       neighbors: [],
 
+      // Regression explanations
+      priceRegressionExplanation: null,
+      demandRegressionExplanation: null,
+
       // UI state
       selectedNeighborIndex: null,
       loading: false,
@@ -89,12 +94,31 @@ class PricingPage extends Component {
       showAdjustedValues: true, // Toggle between original and adjusted values (default: adjusted)
       yAxisMode: 'demand', // 'demand' | 'profit' - what to show on Y-axis
 
+      // Tooltip visibility
+      tooltipOpen: {
+        price: false,
+        demand: false,
+        profit: false,
+      },
+
       // Price-demand curve points
       curvePoints: [], // Additional points to show the price-demand relationship
     }
 
     // Debounce estimation calls
     this.debouncedEstimate = _.debounce(this.performEstimation, 500).bind(this)
+  }
+
+  /**
+   * Toggle tooltip visibility
+   */
+  toggleTooltip = (tooltipName) => {
+    this.setState(prevState => ({
+      tooltipOpen: {
+        ...prevState.tooltipOpen,
+        [tooltipName]: !prevState.tooltipOpen[tooltipName]
+      }
+    }))
   }
 
   componentDidMount() {
@@ -400,6 +424,135 @@ class PricingPage extends Component {
   }
 
   /**
+   * Parse regression explanation from why data
+   * Converts log-scale effects to display format
+   *
+   * Response structure: e^(sum of terms)
+   * - why.type = 'exponent'
+   * - why.power.type = 'sum'
+   * - why.power.terms[] contains:
+   *   - input: residual (usually 0)
+   *   - mean centering: global mean
+   *   - regression: field effects with proposition object { "field": "value" }
+   */
+  parseRegressionExplanation = (regressionResult, knnEstimate) => {
+    if (!regressionResult || !regressionResult.why) {
+      return null
+    }
+
+    const why = regressionResult.why
+    const components = []
+
+    // Parse the nested exponent structure: e^(sum of terms)
+    if (why.type === 'exponent' && why.power && why.power.type === 'sum' && why.power.terms) {
+      const terms = why.power.terms
+
+      terms.forEach(term => {
+        if (term.type === 'input' && term.name === 'residual') {
+          // Skip residual (usually 0)
+          if (term.value !== 0) {
+            const baseValue = Math.exp(term.value)
+            components.push({
+              label: 'Residual',
+              value: baseValue,
+              effect: null,
+              isBase: true,
+              logValue: term.value
+            })
+          }
+        } else if (term.type === 'mean centering') {
+          // Global mean/base - this is the starting point
+          const baseValue = Math.exp(term.value)
+          components.push({
+            label: 'Base (mean)',
+            value: baseValue,
+            effect: null,
+            isBase: true,
+            logValue: term.value
+          })
+        } else if (term.type === 'regression' && term.proposition) {
+          // Field effects with proposition object
+          const multiplier = Math.exp(term.value)
+          const percentageChange = (multiplier - 1) * 100
+
+          // Extract field and value from proposition
+          const fieldName = Object.keys(term.proposition)[0]
+          const fieldValue = term.proposition[fieldName]
+
+          // Get user-friendly field label from FIELD_CONFIG
+          const fieldConfig = FIELD_CONFIG[fieldName]
+          const fieldLabel = fieldConfig ? fieldConfig.label : fieldName
+
+          // Format the label nicely
+          let displayLabel = `${fieldLabel}: ${fieldValue}`
+
+          // Special formatting for boolean values
+          if (fieldConfig && fieldConfig.type === 'boolean') {
+            displayLabel = `${fieldLabel}: ${fieldValue ? 'Yes' : 'No'}`
+          }
+
+          // Special formatting for price/cost fields
+          if (fieldName.includes('price') || fieldName.includes('cost')) {
+            displayLabel = `${fieldLabel}: €${parseFloat(fieldValue).toFixed(2)}`
+          }
+
+          components.push({
+            label: displayLabel,
+            value: fieldValue,
+            field: fieldName,
+            effect: percentageChange,
+            isBase: false,
+            logValue: term.value,
+            regressionType: term.regressionType
+          })
+        }
+      })
+    }
+
+    // Sort components: categorical fields (product_id, category) first, then others
+    const sortedComponents = components.sort((a, b) => {
+      if (a.isBase) return -1  // Base always first
+      if (b.isBase) return 1
+
+      // Define priority order for fields
+      const priorityFields = ['product_id', 'category', 'category_name', 'brand']
+
+      const aField = a.field || ''
+      const bField = b.field || ''
+
+      const aPriority = priorityFields.indexOf(aField)
+      const bPriority = priorityFields.indexOf(bField)
+
+      // If both are priority fields, sort by their order in priorityFields
+      if (aPriority !== -1 && bPriority !== -1) {
+        return aPriority - bPriority
+      }
+
+      // If only a is priority, it comes first
+      if (aPriority !== -1) return -1
+
+      // If only b is priority, it comes first
+      if (bPriority !== -1) return 1
+
+      // Otherwise maintain original order
+      return 0
+    })
+
+    // Calculate adjustment (KNN estimate - regression estimate)
+    const regressionEstimate = regressionResult.estimate
+    const adjustment = knnEstimate && regressionEstimate
+      ? ((knnEstimate / regressionEstimate) - 1) * 100
+      : null
+
+    return {
+      components: sortedComponents,
+      regressionEstimate,
+      knnEstimate,
+      adjustment
+    }
+  }
+
+  /**
    * Main estimation logic
    */
   performEstimation = async () => {
@@ -417,19 +570,38 @@ class PricingPage extends Component {
 
     try {
       if (estimationMode === 'both') {
-        // Estimate both price and demand
-        const priceResult = await dataFetchers.estimatePrice(where)
+        // Estimate both price and demand (both KNN and regression)
+        const [priceResult, priceRegression] = await Promise.all([
+          dataFetchers.estimatePrice(where),
+          dataFetchers.estimatePriceRegression(where).catch(err => {
+            console.warn('Regression estimation failed:', err)
+            return null
+          })
+        ])
+
         const demandWhere = { ...where, sale_price: priceResult.estimate }
-        const demandResult = await dataFetchers.estimateDemand(demandWhere)
+        const [demandResult, demandRegression] = await Promise.all([
+          dataFetchers.estimateDemand(demandWhere),
+          dataFetchers.estimateDemandRegression(demandWhere).catch(err => {
+            console.warn('Demand regression estimation failed:', err)
+            return null
+          })
+        ])
 
         // Estimate curve points around the estimated price
         const curvePoints = await this.estimateCurvePoints(priceResult.estimate, where)
+
+        // Parse regression explanations
+        const priceExplanation = this.parseRegressionExplanation(priceRegression, priceResult.estimate)
+        const demandExplanation = this.parseRegressionExplanation(demandRegression, demandResult.estimate)
 
         this.setState({
           estimatedPrice: priceResult.estimate,
           estimatedDemand: demandResult.estimate,
           priceEstimation: priceResult,
           demandEstimation: demandResult,
+          priceRegressionExplanation: priceExplanation,
+          demandRegressionExplanation: demandExplanation,
           neighbors: this.extractNeighbors(priceResult, demandResult),
           curvePoints,
           loading: false
@@ -438,15 +610,26 @@ class PricingPage extends Component {
       } else if (estimationMode === 'set_price') {
         // User set price manually, estimate demand
         const demandWhere = { ...where, sale_price: manualPrice }
-        const demandResult = await dataFetchers.estimateDemand(demandWhere)
+        const [demandResult, demandRegression] = await Promise.all([
+          dataFetchers.estimateDemand(demandWhere),
+          dataFetchers.estimateDemandRegression(demandWhere).catch(err => {
+            console.warn('Demand regression estimation failed:', err)
+            return null
+          })
+        ])
 
         // Estimate curve points around the manual price
         const curvePoints = await this.estimateCurvePoints(manualPrice, where)
+
+        // Parse regression explanation
+        const demandExplanation = this.parseRegressionExplanation(demandRegression, demandResult.estimate)
 
         this.setState({
           estimatedPrice: manualPrice,
           estimatedDemand: demandResult.estimate,
           demandEstimation: demandResult,
+          demandRegressionExplanation: demandExplanation,
+          priceRegressionExplanation: null,
           neighbors: this.extractNeighbors(null, demandResult),
           curvePoints,
           loading: false
@@ -455,15 +638,26 @@ class PricingPage extends Component {
       } else if (estimationMode === 'set_demand') {
         // User set demand manually, estimate price
         const priceWhere = { ...where, units_sold: manualDemand }
-        const priceResult = await dataFetchers.estimatePrice(priceWhere)
+        const [priceResult, priceRegression] = await Promise.all([
+          dataFetchers.estimatePrice(priceWhere),
+          dataFetchers.estimatePriceRegression(priceWhere).catch(err => {
+            console.warn('Regression estimation failed:', err)
+            return null
+          })
+        ])
 
         // Estimate curve points around the estimated price
         const curvePoints = await this.estimateCurvePoints(priceResult.estimate, where)
+
+        // Parse regression explanation
+        const priceExplanation = this.parseRegressionExplanation(priceRegression, priceResult.estimate)
 
         this.setState({
           estimatedPrice: priceResult.estimate,
           estimatedDemand: manualDemand,
           priceEstimation: priceResult,
+          priceRegressionExplanation: priceExplanation,
+          demandRegressionExplanation: null,
           neighbors: this.extractNeighbors(priceResult, null),
           curvePoints,
           loading: false
@@ -994,10 +1188,218 @@ class PricingPage extends Component {
   }
 
   /**
+   * Render explanation tooltip content
+   */
+  renderExplanationTooltip = (explanation, type, title) => {
+    if (!explanation || !explanation.components) {
+      return <div>No explanation available</div>
+    }
+
+    const estimate = type === 'price' ? this.state.estimatedPrice : this.state.estimatedDemand
+    const formatValue = (val) => type === 'price' ? `€${val.toFixed(2)}` : val.toFixed(1)
+
+    // Separate base components from effect components
+    const baseComponents = explanation.components.filter(comp => comp.isBase)
+    const effectComponents = explanation.components.filter(comp => !comp.isBase)
+
+    // Calculate running totals
+    let runningTotal = baseComponents.length > 0 ? baseComponents[0].value : estimate
+    const rows = []
+
+    // Add base row
+    if (baseComponents.length > 0) {
+      rows.push({
+        type: 'base',
+        label: baseComponents[0].label,
+        value: null,
+        effect: null,
+        runningTotal: runningTotal,
+        isBase: true
+      })
+    }
+
+    // Add effect rows with running calculations
+    effectComponents.forEach(comp => {
+      const multiplier = 1 + (comp.effect / 100)
+      const previousTotal = runningTotal
+      runningTotal = previousTotal * multiplier
+
+      rows.push({
+        type: comp.effect >= 0 ? 'positive' : 'negative',
+        label: comp.label,
+        value: comp.value,
+        effect: comp.effect,
+        runningTotal: runningTotal,
+        isBase: false
+      })
+    })
+
+    // Add adjustment row
+    if (explanation.adjustment !== null) {
+      const adjustmentMultiplier = 1 + (explanation.adjustment / 100)
+      const previousTotal = runningTotal
+      runningTotal = previousTotal * adjustmentMultiplier
+
+      rows.push({
+        type: 'adjustment',
+        label: 'History-based adjustment',
+        value: null,
+        effect: explanation.adjustment,
+        runningTotal: runningTotal,
+        isBase: false,
+        isFinal: true
+      })
+    }
+
+    return (
+      <div className="aito-tooltip-content">
+        <div className="aito-tooltip-header">
+          <h4>{title}</h4>
+          {estimate && (
+            <span style={{ fontSize: '14px', fontWeight: 600, color: '#FF6B35' }}>
+              {type === 'price' ? `€${estimate.toFixed(3)}` : `${Math.round(estimate)} units`}
+            </span>
+          )}
+        </div>
+        <div className="aito-tooltip-body">
+          <table className="aito-explanation-table">
+            <tbody>
+              {rows.map((row, idx) => (
+                <tr
+                  key={idx}
+                  className={`aito-explanation-row ${row.type}-row ${row.isFinal ? 'aito-explanation-final' : ''}`}
+                >
+                  <td className="aito-explanation-cell">
+                    <div className="aito-explanation-factor">
+                      <span className="aito-explanation-factor-label">
+                        {row.isBase ? row.label : row.label.split(':')[0]}
+                      </span>
+                      {row.value && (
+                        <span className="aito-explanation-factor-value">
+                          {row.label.includes(':') ? row.label.split(':')[1].trim() : ''}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="aito-explanation-cell">
+                    {row.effect !== null ? (
+                      <div className={`aito-explanation-effect ${row.type}`}>
+                        {row.effect >= 0 ? '↑' : '↓'} {row.effect >= 0 ? '+' : ''}{row.effect.toFixed(1)}%
+                      </div>
+                    ) : (
+                      <div className="aito-explanation-effect neutral">—</div>
+                    )}
+                  </td>
+                  <td className="aito-explanation-cell">
+                    <div className="aito-explanation-running-total">
+                      {formatValue(row.runningTotal)}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )
+  }
+
+  /**
+   * Render profit explanation tooltip
+   */
+  renderProfitExplanation = () => {
+    const { estimatedPrice, estimatedDemand, purchaseCost } = this.state
+    const profit = this.calculateProfit()
+    const margin = estimatedPrice - purchaseCost
+    const marginPercent = estimatedPrice > 0 ? ((margin / estimatedPrice) * 100) : 0
+
+    const rows = [
+      {
+        type: 'base',
+        label: 'Sale Price',
+        value: null,
+        effect: null,
+        runningTotal: estimatedPrice,
+        isBase: true
+      },
+      {
+        type: 'negative',
+        label: 'Product Cost',
+        value: `€${purchaseCost?.toFixed(2)}`,
+        effect: null,
+        runningTotal: margin,
+        operation: '−'
+      },
+      {
+        type: 'positive',
+        label: 'Units Sold',
+        value: `${Math.round(estimatedDemand)} units`,
+        effect: null,
+        runningTotal: profit,
+        operation: '×',
+        isFinal: true
+      }
+    ]
+
+    return (
+      <div className="aito-tooltip-content">
+        <div className="aito-tooltip-header">
+          <h4>Profit Calculation</h4>
+          <span style={{ fontSize: '14px', fontWeight: 600, color: '#FF6B35' }}>
+            €{profit.toFixed(2)}
+          </span>
+        </div>
+        <div className="aito-tooltip-body">
+          <table className="aito-explanation-table">
+            <tbody>
+              {rows.map((row, idx) => (
+                <tr
+                  key={idx}
+                  className={`aito-explanation-row ${row.type}-row ${row.isFinal ? 'aito-explanation-final' : ''}`}
+                >
+                  <td className="aito-explanation-cell">
+                    <div className="aito-explanation-factor">
+                      <span className="aito-explanation-factor-label">
+                        {row.label}
+                      </span>
+                      {row.value && (
+                        <span className="aito-explanation-factor-value">
+                          {row.value}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="aito-explanation-cell">
+                    {row.operation ? (
+                      <div className="aito-explanation-effect neutral" style={{ fontSize: '18px' }}>
+                        {row.operation}
+                      </div>
+                    ) : (
+                      <div className="aito-explanation-effect neutral">—</div>
+                    )}
+                  </td>
+                  <td className="aito-explanation-cell">
+                    <div className="aito-explanation-running-total">
+                      €{row.runningTotal.toFixed(2)}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #e2e8f0', fontSize: '12px', color: '#64748b', textAlign: 'center' }}>
+            Margin: {marginPercent.toFixed(1)}% • Daily revenue
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  /**
    * Render KPI section
    */
   renderKPIs = () => {
-    const { estimatedPrice, estimatedDemand, purchaseCost, estimationMode, manualPrice, manualDemand, loading } = this.state
+    const { estimatedPrice, estimatedDemand, purchaseCost, estimationMode, manualPrice, manualDemand, loading, priceRegressionExplanation, demandRegressionExplanation } = this.state
     const profit = this.calculateProfit()
     const margin = estimatedPrice ? ((estimatedPrice - purchaseCost) / estimatedPrice * 100) : 0
 
@@ -1028,9 +1430,31 @@ class PricingPage extends Component {
                 className="PricingPage__kpi-input"
               />
             ) : (
-              <div className="PricingPage__kpi-value">
-                {loading ? '...' : estimatedPrice ? `€${estimatedPrice.toFixed(3)}` : '—'}
-              </div>
+              <>
+                <div
+                  className="PricingPage__kpi-value"
+                  id="price-kpi-value"
+                  onClick={() => priceRegressionExplanation && estimatedPrice && this.toggleTooltip('price')}
+                  style={{ cursor: priceRegressionExplanation && estimatedPrice ? 'pointer' : 'default' }}
+                >
+                  {loading ? '...' : estimatedPrice ? `€${estimatedPrice.toFixed(3)}` : '—'}
+                </div>
+                {priceRegressionExplanation && estimatedPrice && (
+                  <TooltipComponent
+                    autohide={false}
+                    flip={false}
+                    fade={false}
+                    transition={{ timeout: 0 }}
+                    isOpen={this.state.tooltipOpen.price}
+                    target="price-kpi-value"
+                    toggle={() => this.toggleTooltip('price')}
+                    placement="bottom-end"
+                    className="aito-explanation-tooltip"
+                  >
+                    {this.renderExplanationTooltip(priceRegressionExplanation, 'price', 'Price Estimate')}
+                  </TooltipComponent>
+                )}
+              </>
             )}
 
             <div className="PricingPage__kpi-meta">
@@ -1062,9 +1486,31 @@ class PricingPage extends Component {
                 className="PricingPage__kpi-input"
               />
             ) : (
-              <div className="PricingPage__kpi-value">
-                {loading ? '...' : estimatedDemand ? `${Math.round(estimatedDemand)} units` : '—'}
-              </div>
+              <>
+                <div
+                  className="PricingPage__kpi-value"
+                  id="demand-kpi-value"
+                  onClick={() => demandRegressionExplanation && estimatedDemand && this.toggleTooltip('demand')}
+                  style={{ cursor: demandRegressionExplanation && estimatedDemand ? 'pointer' : 'default' }}
+                >
+                  {loading ? '...' : estimatedDemand ? `${Math.round(estimatedDemand)} units` : '—'}
+                </div>
+                {demandRegressionExplanation && estimatedDemand && (
+                  <TooltipComponent
+                    autohide={false}
+                    flip={false}
+                    fade={false}
+                    transition={{ timeout: 0 }}
+                    isOpen={this.state.tooltipOpen.demand}
+                    target="demand-kpi-value"
+                    toggle={() => this.toggleTooltip('demand')}
+                    placement="bottom-end"
+                    className="aito-explanation-tooltip"
+                  >
+                    {this.renderExplanationTooltip(demandRegressionExplanation, 'demand', 'Demand Estimate')}
+                  </TooltipComponent>
+                )}
+              </>
             )}
 
             <div className="PricingPage__kpi-meta">
@@ -1075,9 +1521,29 @@ class PricingPage extends Component {
           {/* Profit KPI */}
           <div className="PricingPage__kpi PricingPage__kpi--highlight">
             <h4 className="PricingPage__kpi-label">Total Profit</h4>
-            <div className="PricingPage__kpi-value PricingPage__kpi-value--large">
+            <div
+              className="PricingPage__kpi-value PricingPage__kpi-value--large"
+              id="profit-kpi-value"
+              onClick={() => estimatedPrice && estimatedDemand && profit > 0 && this.toggleTooltip('profit')}
+              style={{ cursor: estimatedPrice && estimatedDemand && profit > 0 ? 'pointer' : 'default' }}
+            >
               {loading ? '...' : profit > 0 ? `€${profit.toFixed(2)}` : '—'}
             </div>
+            {estimatedPrice && estimatedDemand && profit > 0 && (
+              <TooltipComponent
+                autohide={false}
+                flip={false}
+                fade={false}
+                transition={{ timeout: 0 }}
+                isOpen={this.state.tooltipOpen.profit}
+                target="profit-kpi-value"
+                toggle={() => this.toggleTooltip('profit')}
+                placement="bottom-end"
+                className="aito-explanation-tooltip"
+              >
+                {this.renderProfitExplanation()}
+              </TooltipComponent>
+            )}
             <div className="PricingPage__kpi-meta">
               Per day revenue
             </div>
