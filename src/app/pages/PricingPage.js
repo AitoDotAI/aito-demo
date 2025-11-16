@@ -8,7 +8,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap'
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { ScatterChart, Scatter, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { FaToggleOn, FaToggleOff, FaSync, FaCheckCircle } from 'react-icons/fa'
 import HelpButton from '../components/HelpButton'
 import { HELP_CONTENT } from '../constants/helpContent'
@@ -85,6 +85,9 @@ class PricingPage extends Component {
       productStats: null,
       priceHistory: [],
       showAdjustedValues: false, // Toggle between original and adjusted values
+
+      // Price-demand curve points
+      curvePoints: [], // Additional points to show the price-demand relationship
     }
 
     // Debounce estimation calls
@@ -278,6 +281,40 @@ class PricingPage extends Component {
   }
 
   /**
+   * Estimate demand at different price points to show price-demand curve
+   */
+  estimateCurvePoints = async (basePrice, where) => {
+    const { dataFetchers } = this.props
+    const priceAdjustments = [-0.15, -0.10, -0.05, 0.05, 0.10, 0.15]
+
+    try {
+      // Estimate demand at each price point (without $why for performance)
+      const promises = priceAdjustments.map(async (adjustment) => {
+        const adjustedPrice = basePrice * (1 + adjustment)
+        const demandWhere = { ...where, sale_price: adjustedPrice }
+
+        try {
+          const result = await dataFetchers.estimateDemand(demandWhere)
+          return {
+            price: adjustedPrice,
+            demand: result.estimate,
+            adjustment: adjustment
+          }
+        } catch (err) {
+          console.warn(`Failed to estimate at ${adjustment * 100}% price adjustment:`, err)
+          return null
+        }
+      })
+
+      const results = await Promise.all(promises)
+      return results.filter(r => r !== null)
+    } catch (err) {
+      console.error('Error estimating curve points:', err)
+      return []
+    }
+  }
+
+  /**
    * Main estimation logic
    */
   performEstimation = async () => {
@@ -300,12 +337,16 @@ class PricingPage extends Component {
         const demandWhere = { ...where, sale_price: priceResult.estimate }
         const demandResult = await dataFetchers.estimateDemand(demandWhere)
 
+        // Estimate curve points around the estimated price
+        const curvePoints = await this.estimateCurvePoints(priceResult.estimate, where)
+
         this.setState({
           estimatedPrice: priceResult.estimate,
           estimatedDemand: demandResult.estimate,
           priceEstimation: priceResult,
           demandEstimation: demandResult,
           neighbors: this.extractNeighbors(priceResult, demandResult),
+          curvePoints,
           loading: false
         })
 
@@ -314,11 +355,15 @@ class PricingPage extends Component {
         const demandWhere = { ...where, sale_price: manualPrice }
         const demandResult = await dataFetchers.estimateDemand(demandWhere)
 
+        // Estimate curve points around the manual price
+        const curvePoints = await this.estimateCurvePoints(manualPrice, where)
+
         this.setState({
           estimatedPrice: manualPrice,
           estimatedDemand: demandResult.estimate,
           demandEstimation: demandResult,
           neighbors: this.extractNeighbors(null, demandResult),
+          curvePoints,
           loading: false
         })
 
@@ -327,11 +372,15 @@ class PricingPage extends Component {
         const priceWhere = { ...where, units_sold: manualDemand }
         const priceResult = await dataFetchers.estimatePrice(priceWhere)
 
+        // Estimate curve points around the estimated price
+        const curvePoints = await this.estimateCurvePoints(priceResult.estimate, where)
+
         this.setState({
           estimatedPrice: priceResult.estimate,
           estimatedDemand: manualDemand,
           priceEstimation: priceResult,
           neighbors: this.extractNeighbors(priceResult, null),
+          curvePoints,
           loading: false
         })
       }
@@ -632,7 +681,7 @@ class PricingPage extends Component {
    * Render scatter plot
    */
   renderScatterPlot = () => {
-    const { priceHistory, estimatedPrice, estimatedDemand, neighbors, purchaseCost, estimationMode, showAdjustedValues } = this.state
+    const { priceHistory, estimatedPrice, estimatedDemand, neighbors, purchaseCost, estimationMode, showAdjustedValues, curvePoints } = this.state
 
     // Prepare data points
     const historicalPoints = priceHistory.map(point => ({
@@ -646,6 +695,16 @@ class PricingPage extends Component {
       placement: point.promotional_placement,
       margin: point.margin_percentage
     }))
+
+    // Prepare curve points (sorted by price for proper line connection)
+    const curveData = [...curvePoints]
+      .sort((a, b) => a.price - b.price)
+      .map(point => ({
+        price: point.price,
+        demand: point.demand,
+        type: 'curve',
+        name: `Price: €${point.price.toFixed(3)} (${point.adjustment > 0 ? '+' : ''}${(point.adjustment * 100).toFixed(0)}%)`
+      }))
 
     // Prepare neighbor points with correct adjusted values based on what was estimated
     const neighborPoints = neighbors.slice(0, 20).map(neighbor => {
@@ -764,6 +823,23 @@ class PricingPage extends Component {
             fill="#4A90E2"
             opacity={0.6}
           />
+
+          {/* Price-Demand Curve (transparent orange line with points) */}
+          {curveData.length > 0 && (
+            <>
+              <Line
+                name="Price-Demand Curve"
+                data={curveData}
+                type="monotone"
+                dataKey="demand"
+                stroke="#FF6B35"
+                strokeWidth={2}
+                dot={{ fill: '#FF6B35', fillOpacity: 0.4, r: 4 }}
+                opacity={0.6}
+                connectNulls={true}
+              />
+            </>
+          )}
 
           {/* Current estimate (orange, large) */}
           <Scatter
