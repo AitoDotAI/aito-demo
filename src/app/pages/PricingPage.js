@@ -19,26 +19,27 @@ import './PricingPage.css'
 const FIELD_CONFIG = {
   // Product fields
   product_id: { label: 'Product', group: 'Product', type: 'string', priority: 1 },
-  category: { label: 'Category', group: 'Product', type: 'string', priority: 2 },
-  category_name: { label: 'Category Name', group: 'Product', type: 'string', priority: 3 },
-  brand: { label: 'Brand', group: 'Product', type: 'string', priority: 4 },
+  purchase_cost: { label: 'Product Cost', group: 'Product', type: 'number', priority: 2 },
+  category: { label: 'Category', group: 'Product', type: 'string', priority: 3 },
+  category_name: { label: 'Category Name', group: 'Product', type: 'string', priority: 4 },
+  brand: { label: 'Brand', group: 'Product', type: 'string', priority: 5 },
 
   // Temporal fields
-  day_of_week: { label: 'Day of Week', group: 'Temporal', type: 'string', priority: 5 },
-  is_weekend: { label: 'Weekend', group: 'Temporal', type: 'boolean', priority: 6 },
-  is_holiday_week: { label: 'Holiday Week', group: 'Temporal', type: 'boolean', priority: 7 },
+  day_of_week: { label: 'Day of Week', group: 'Temporal', type: 'string', priority: 6 },
+  is_weekend: { label: 'Weekend', group: 'Temporal', type: 'boolean', priority: 7 },
+  is_holiday_week: { label: 'Holiday Week', group: 'Temporal', type: 'boolean', priority: 8 },
 
   // Competitive & placement
-  competitor_avg_price: { label: 'Competitor Price', group: 'Competitive', type: 'number', priority: 8 },
-  promotional_placement: { label: 'Placement', group: 'Competitive', type: 'string', priority: 9 },
+  competitor_avg_price: { label: 'Competitor Price', group: 'Competitive', type: 'number', priority: 9 },
+  promotional_placement: { label: 'Placement', group: 'Competitive', type: 'string', priority: 10 },
 
   // Contextual
-  weather_temp: { label: 'Temperature (°C)', group: 'Contextual', type: 'number', priority: 10 },
-  days_until_expiry: { label: 'Days to Expiry', group: 'Contextual', type: 'number', priority: 11 },
+  weather_temp: { label: 'Temperature (°C)', group: 'Contextual', type: 'number', priority: 11 },
+  days_until_expiry: { label: 'Days to Expiry', group: 'Contextual', type: 'number', priority: 12 },
 }
 
-// Default active fields (5 most important)
-const DEFAULT_ACTIVE_FIELDS = ['product_id', 'category', 'day_of_week', 'is_weekend', 'competitor_avg_price']
+// Default active fields (most important)
+const DEFAULT_ACTIVE_FIELDS = ['product_id', 'purchase_cost', 'category', 'day_of_week', 'is_weekend', 'competitor_avg_price']
 
 class PricingPage extends Component {
   constructor(props) {
@@ -52,7 +53,8 @@ class PricingPage extends Component {
 
     Object.keys(FIELD_CONFIG).forEach(field => {
       activeFields[field] = DEFAULT_ACTIVE_FIELDS.includes(field)
-      fieldValues[field] = null
+      // Set default cost value, others start as null
+      fieldValues[field] = field === 'purchase_cost' ? 0.10 : null
       fieldOptions[field] = []
       dropdownOpen[field] = false
     })
@@ -84,7 +86,8 @@ class PricingPage extends Component {
       loading: false,
       productStats: null,
       priceHistory: [],
-      showAdjustedValues: false, // Toggle between original and adjusted values
+      showAdjustedValues: true, // Toggle between original and adjusted values (default: adjusted)
+      yAxisMode: 'demand', // 'demand' | 'profit' - what to show on Y-axis
 
       // Price-demand curve points
       curvePoints: [], // Additional points to show the price-demand relationship
@@ -172,7 +175,9 @@ class PricingPage extends Component {
       dropdownOpen: {
         ...prevState.dropdownOpen,
         [fieldName]: false
-      }
+      },
+      // Update purchaseCost state when cost field changes
+      ...(fieldName === 'purchase_cost' && value !== null && value !== undefined ? { purchaseCost: parseFloat(value) || 0.10 } : {})
     }), () => {
       // Special handling for product selection
       if (fieldName === 'product_id' && value) {
@@ -190,18 +195,82 @@ class PricingPage extends Component {
   loadProductContext = async (productId) => {
     const { dataFetchers } = this.props
 
-    try {
-      const context = await dataFetchers.getProductPriceContext(productId)
-      const stats = await dataFetchers.getPriceStats(productId)
-      const history = await dataFetchers.getPriceHistory(productId, 100)
+    console.log('=== loadProductContext called ===')
+    console.log('Product ID:', productId)
 
-      if (context) {
-        // Update purchase cost
+    try {
+      // Fetch critical data in parallel
+      const [context, history, productDetails] = await Promise.all([
+        dataFetchers.getProductPriceContext(productId),
+        dataFetchers.getPriceHistory(productId, 100),
+        dataFetchers.getProductDetails(productId)
+      ])
+
+      console.log('Product Details Response:', productDetails)
+      console.log('Price Context:', context)
+
+      // Fetch stats separately (non-critical, can fail)
+      let stats = null
+      try {
+        stats = await dataFetchers.getPriceStats(productId)
+      } catch (statsErr) {
+        console.warn('Could not fetch product stats (non-critical):', statsErr)
+      }
+
+      const product = productDetails?.hits?.[0]
+      console.log('Extracted product:', product)
+
+      if (product) {
+        // Use cost from products table
+        const productCost = product.cost || 0.10
+        console.log('Product cost:', productCost)
+
+        // Auto-populate fields from product table
+        const newFieldValues = { ...this.state.fieldValues }
+        console.log('Current fieldValues before update:', this.state.fieldValues)
+
+        // Keep product_id as is (already selected)
+        newFieldValues.product_id = productId
+
+        // Populate from products table
+        if (product.category !== undefined) {
+          newFieldValues.category = product.category
+          console.log('Set category to:', product.category)
+        }
+
+        // Set the cost field from product table
+        newFieldValues.purchase_cost = productCost
+        console.log('Set purchase_cost to:', productCost)
+
+        // Populate remaining fields from price_history context if available
+        if (context) {
+          Object.keys(FIELD_CONFIG).forEach(field => {
+            // Skip product_id, category, and purchase_cost as they're from products table
+            if (field !== 'product_id' && field !== 'category' && field !== 'purchase_cost') {
+              if (this.state.activeFields[field] && context[field] !== undefined) {
+                newFieldValues[field] = context[field]
+                console.log(`Set ${field} to:`, context[field])
+              }
+            }
+          })
+        }
+
+        console.log('New fieldValues:', newFieldValues)
+        console.log('Active fields:', this.state.activeFields)
+
         this.setState({
-          purchaseCost: context.purchase_cost || 0.10,
+          purchaseCost: productCost,
           productStats: stats,
-          priceHistory: history
+          priceHistory: history,
+          fieldValues: newFieldValues
+        }, () => {
+          console.log('State updated! New fieldValues:', this.state.fieldValues)
+          console.log('New purchaseCost:', this.state.purchaseCost)
+          // Trigger estimation after populating fields
+          this.debouncedEstimate()
         })
+      } else {
+        console.warn('No product found in productDetails')
       }
     } catch (err) {
       console.error('Error loading product context:', err)
@@ -209,7 +278,7 @@ class PricingPage extends Component {
   }
 
   /**
-   * Populate all active fields from current product
+   * Reset all active fields to defaults from current product
    */
   populateFromProduct = async () => {
     const productId = this.state.fieldValues.product_id
@@ -221,7 +290,11 @@ class PricingPage extends Component {
     const { dataFetchers } = this.props
 
     try {
-      const context = await dataFetchers.getProductPriceContext(productId)
+      // Fetch both price context and product details
+      const [context, productDetails] = await Promise.all([
+        dataFetchers.getProductPriceContext(productId),
+        dataFetchers.getProductDetails(productId)
+      ])
 
       if (context) {
         const newFieldValues = { ...this.state.fieldValues }
@@ -233,7 +306,14 @@ class PricingPage extends Component {
           }
         })
 
-        this.setState({ fieldValues: newFieldValues }, () => {
+        // Get cost from products table
+        const productCost = productDetails?.hits?.[0]?.cost || context.purchase_cost || 0.10
+        newFieldValues.purchase_cost = productCost
+
+        this.setState({
+          fieldValues: newFieldValues,
+          purchaseCost: productCost
+        }, () => {
           this.debouncedEstimate()
         })
       }
@@ -249,11 +329,13 @@ class PricingPage extends Component {
   resetFields = () => {
     const fieldValues = {}
     Object.keys(FIELD_CONFIG).forEach(field => {
-      fieldValues[field] = null
+      // Keep default cost value when resetting
+      fieldValues[field] = field === 'purchase_cost' ? 0.10 : null
     })
 
     this.setState({
       fieldValues,
+      purchaseCost: 0.10, // Reset to default cost
       estimatedPrice: null,
       estimatedDemand: null,
       manualPrice: null,
@@ -267,13 +349,16 @@ class PricingPage extends Component {
 
   /**
    * Build where conditions from active fields
+   * Only includes fields that are active AND have non-empty values
    */
   buildWhereConditions = () => {
     const where = {}
 
     Object.keys(this.state.activeFields).forEach(field => {
-      if (this.state.activeFields[field] && this.state.fieldValues[field] !== null) {
-        where[field] = this.state.fieldValues[field]
+      const value = this.state.fieldValues[field]
+      // Only include if field is active and has a non-null, non-empty value
+      if (this.state.activeFields[field] && value !== null && value !== '' && value !== undefined) {
+        where[field] = value
       }
     })
 
@@ -288,7 +373,7 @@ class PricingPage extends Component {
     const priceAdjustments = [-0.15, -0.10, -0.05, 0.05, 0.10, 0.15]
 
     try {
-      // Estimate demand at each price point (without $why for performance)
+      // Estimate demand at each price point (without why for performance)
       const promises = priceAdjustments.map(async (adjustment) => {
         const adjustedPrice = basePrice * (1 + adjustment)
         const demandWhere = { ...where, sale_price: adjustedPrice }
@@ -323,8 +408,8 @@ class PricingPage extends Component {
 
     const where = this.buildWhereConditions()
 
-    // Need at least product selected
-    if (!where.product_id) {
+    // Need at least one condition for estimation
+    if (Object.keys(where).length === 0) {
       return
     }
 
@@ -398,11 +483,11 @@ class PricingPage extends Component {
   extractNeighbors = (priceResult, demandResult) => {
     const neighbors = []
 
-    // Use whichever result has $why data
+    // Use whichever result has why data
     const result = priceResult || demandResult
 
-    if (result && result.$why && result.$why.components) {
-      result.$why.components.forEach((component, index) => {
+    if (result && result.why && result.why.components) {
+      result.why.components.forEach((component, index) => {
         if (component.value && component.value.instance) {
           neighbors.push({
             index,
@@ -603,6 +688,18 @@ class PricingPage extends Component {
     const displayDemand = data.demand
     const hasAdjustments = data.adjustedPrice !== undefined || data.adjustedDemand !== undefined
 
+    // Calculate profit: (price - cost) × demand
+    const purchaseCost = data.purchaseCost || 0
+    const displayProfit = (displayPrice - purchaseCost) * displayDemand
+
+    // Calculate original profit if showing adjusted values
+    let originalProfit = null
+    if (hasAdjustments && showAdjustedValues) {
+      const origPrice = data.originalPrice || displayPrice
+      const origDemand = data.originalDemand || displayDemand
+      originalProfit = (origPrice - purchaseCost) * origDemand
+    }
+
     return (
       <div className="PricingPage__chart-tooltip">
         <div className="PricingPage__chart-tooltip-header">
@@ -650,6 +747,17 @@ class PricingPage extends Component {
               )}
             </span>
           </div>
+          <div className="PricingPage__chart-tooltip-metric">
+            <span className="PricingPage__chart-tooltip-label">Est. Profit:</span>
+            <span className="PricingPage__chart-tooltip-value">
+              €{displayProfit.toFixed(2)}
+              {originalProfit !== null && (
+                <span style={{ fontSize: '0.7rem', color: '#888', marginLeft: '0.25rem' }}>
+                  (was €{originalProfit.toFixed(2)})
+                </span>
+              )}
+            </span>
+          </div>
           {data.margin !== undefined && (
             <div className="PricingPage__chart-tooltip-metric">
               <span className="PricingPage__chart-tooltip-label">Margin:</span>
@@ -684,30 +792,47 @@ class PricingPage extends Component {
    * Render scatter plot
    */
   renderScatterPlot = () => {
-    const { priceHistory, estimatedPrice, estimatedDemand, neighbors, purchaseCost, estimationMode, showAdjustedValues, curvePoints } = this.state
+    const { priceHistory, estimatedPrice, estimatedDemand, neighbors, purchaseCost, estimationMode, showAdjustedValues, curvePoints, yAxisMode } = this.state
 
-    // Prepare data points
-    const historicalPoints = priceHistory.map(point => ({
-      price: point.sale_price,
-      demand: point.units_sold,
-      type: 'historical',
-      name: point.name || 'Historical Data',
-      date: point.date,
-      dayOfWeek: point.day_of_week,
-      isWeekend: point.is_weekend,
-      placement: point.promotional_placement,
-      margin: point.margin_percentage
-    }))
+    // Prepare data points with x/y coordinates based on mode
+    const historicalPoints = priceHistory.map(point => {
+      const cost = point.purchase_cost || purchaseCost
+      const profit = (point.sale_price - cost) * point.units_sold
+      return {
+        x: point.sale_price,
+        y: yAxisMode === 'demand' ? point.units_sold : profit,
+        price: point.sale_price,
+        demand: point.units_sold,
+        profit: profit,
+        type: 'historical',
+        name: point.name || 'Historical Data',
+        date: point.date,
+        dayOfWeek: point.day_of_week,
+        isWeekend: point.is_weekend,
+        placement: point.promotional_placement,
+        margin: point.margin_percentage,  // Use original margin from database
+        purchaseCost: cost
+      }
+    })
 
     // Prepare curve points (sorted by price for proper line connection)
     const curveData = [...curvePoints]
       .sort((a, b) => a.price - b.price)
-      .map(point => ({
-        price: point.price,
-        demand: point.demand,
-        type: 'curve',
-        name: `Price: €${point.price.toFixed(3)} (${point.adjustment > 0 ? '+' : ''}${(point.adjustment * 100).toFixed(0)}%)`
-      }))
+      .map(point => {
+        const profit = (point.price - purchaseCost) * point.demand
+        const margin = point.price > 0 ? ((point.price - purchaseCost) / point.price * 100) : 0
+        return {
+          x: point.price,
+          y: yAxisMode === 'demand' ? point.demand : profit,
+          price: point.price,
+          demand: point.demand,
+          profit: profit,
+          margin: margin,
+          type: 'curve',
+          name: `Price: €${point.price.toFixed(3)} (${point.adjustment > 0 ? '+' : ''}${(point.adjustment * 100).toFixed(0)}%)`,
+          purchaseCost: purchaseCost
+        }
+      })
 
     // Prepare neighbor points with correct adjusted values based on what was estimated
     const neighborPoints = neighbors.slice(0, 20).map(neighbor => {
@@ -726,11 +851,19 @@ class PricingPage extends Component {
         }
       }
 
+      const cost = neighbor.instance.purchase_cost || purchaseCost
+      const displayProfit = (displayPrice - cost) * displayDemand
+      const originalProfit = (neighbor.instance.sale_price - cost) * neighbor.instance.units_sold
+
       const point = {
+        x: displayPrice,
+        y: yAxisMode === 'demand' ? displayDemand : displayProfit,
         price: displayPrice,  // Display price (original or adjusted)
         demand: displayDemand, // Display demand (original or adjusted)
+        profit: displayProfit, // Display profit (original or adjusted)
         originalPrice: neighbor.instance.sale_price,
         originalDemand: neighbor.instance.units_sold,
+        originalProfit: originalProfit,
         type: 'neighbor',
         hitScore: neighbor.hitScore,
         name: neighbor.instance.name || neighbor.instance.product_id,
@@ -738,8 +871,9 @@ class PricingPage extends Component {
         dayOfWeek: neighbor.instance.day_of_week,
         isWeekend: neighbor.instance.is_weekend,
         placement: neighbor.instance.promotional_placement,
-        margin: neighbor.instance.margin_percentage,
-        competitorPrice: neighbor.instance.competitor_avg_price
+        margin: neighbor.instance.margin_percentage,  // Use original margin from database
+        competitorPrice: neighbor.instance.competitor_avg_price,
+        purchaseCost: cost
       }
 
       // Also store adjusted values for tooltip display
@@ -754,12 +888,17 @@ class PricingPage extends Component {
     })
 
     // Current estimate point
+    const currentEstimateProfit = estimatedPrice && estimatedDemand ? (estimatedPrice - purchaseCost) * estimatedDemand : 0
     const currentPoint = estimatedPrice && estimatedDemand ? [{
+      x: estimatedPrice,
+      y: yAxisMode === 'demand' ? estimatedDemand : currentEstimateProfit,
       price: estimatedPrice,
       demand: estimatedDemand,
+      profit: currentEstimateProfit,
       type: 'current',
       name: 'Current Estimate',
-      margin: estimatedPrice ? ((estimatedPrice - purchaseCost) / estimatedPrice * 100) : 0
+      margin: estimatedPrice ? ((estimatedPrice - purchaseCost) / estimatedPrice * 100) : 0,
+      purchaseCost: purchaseCost
     }] : []
 
     return (
@@ -768,7 +907,7 @@ class PricingPage extends Component {
           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
           <XAxis
             type="number"
-            dataKey="price"
+            dataKey="x"
             name="Price"
             unit="€"
             domain={['auto', 'auto']}
@@ -783,11 +922,11 @@ class PricingPage extends Component {
           />
           <YAxis
             type="number"
-            dataKey="demand"
-            name="Demand"
-            unit=" units"
+            dataKey="y"
+            name={yAxisMode === 'demand' ? 'Demand' : 'Profit'}
+            unit={yAxisMode === 'demand' ? ' units' : '€'}
             label={{
-              value: 'Units Sold',
+              value: yAxisMode === 'demand' ? 'Units Sold' : 'Estimated Profit (€)',
               angle: -90,
               position: 'insideLeft',
               offset: -45,
@@ -827,13 +966,13 @@ class PricingPage extends Component {
             opacity={0.6}
           />
 
-          {/* Price-Demand Curve (transparent orange line with points) */}
+          {/* Price-Demand/Profit Curve (transparent orange line with points) */}
           {curveData.length > 0 && (
             <Line
-              name="Price-Demand Curve"
+              name={yAxisMode === 'demand' ? 'Price-Demand Curve' : 'Price-Profit Curve'}
               data={curveData}
               type="monotone"
-              dataKey="demand"
+              dataKey="y"
               stroke="#FF6B35"
               strokeWidth={2}
               dot={{ fill: '#FF6B35', fillOpacity: 0.4, r: 4 }}
@@ -1107,9 +1246,9 @@ class PricingPage extends Component {
                   className="PricingPage__action-btn PricingPage__action-btn--primary"
                   onClick={this.populateFromProduct}
                   disabled={!this.state.fieldValues.product_id}
-                  title="Populate fields from selected product"
+                  title="Reset fields to product defaults"
                 >
-                  <FaCheckCircle /> Populate from Product
+                  <FaSync /> Reset from Product
                 </button>
                 <button
                   className="PricingPage__action-btn PricingPage__action-btn--secondary"
@@ -1127,21 +1266,39 @@ class PricingPage extends Component {
               <div className="PricingPage__visualization">
                 <div className="PricingPage__viz-header">
                   <h3 className="PricingPage__viz-title">Price-Demand Relationship</h3>
-                  <div className="PricingPage__viz-toggle-group">
-                    <button
-                      className={`PricingPage__viz-toggle-btn ${!this.state.showAdjustedValues ? 'active' : ''}`}
-                      onClick={() => this.setState({ showAdjustedValues: false })}
-                      title="Show original historical values"
-                    >
-                      Original
-                    </button>
-                    <button
-                      className={`PricingPage__viz-toggle-btn ${this.state.showAdjustedValues ? 'active' : ''}`}
-                      onClick={() => this.setState({ showAdjustedValues: true })}
-                      title="Show adjusted what-if values"
-                    >
-                      Adjusted
-                    </button>
+                  <div className="PricingPage__viz-controls">
+                    <div className="PricingPage__viz-toggle-group">
+                      <button
+                        className={`PricingPage__viz-toggle-btn ${!this.state.showAdjustedValues ? 'active' : ''}`}
+                        onClick={() => this.setState({ showAdjustedValues: false })}
+                        title="Show original historical values"
+                      >
+                        Original
+                      </button>
+                      <button
+                        className={`PricingPage__viz-toggle-btn ${this.state.showAdjustedValues ? 'active' : ''}`}
+                        onClick={() => this.setState({ showAdjustedValues: true })}
+                        title="Show adjusted what-if values"
+                      >
+                        Adjusted
+                      </button>
+                    </div>
+                    <div className="PricingPage__viz-toggle-group">
+                      <button
+                        className={`PricingPage__viz-toggle-btn ${this.state.yAxisMode === 'demand' ? 'active' : ''}`}
+                        onClick={() => this.setState({ yAxisMode: 'demand' })}
+                        title="Show demand (units sold) on Y-axis"
+                      >
+                        Demand
+                      </button>
+                      <button
+                        className={`PricingPage__viz-toggle-btn ${this.state.yAxisMode === 'profit' ? 'active' : ''}`}
+                        onClick={() => this.setState({ yAxisMode: 'profit' })}
+                        title="Show profit on Y-axis"
+                      >
+                        Profit
+                      </button>
+                    </div>
                   </div>
                 </div>
                 {this.renderScatterPlot()}

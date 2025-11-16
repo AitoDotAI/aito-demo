@@ -349,6 +349,13 @@
   margin: 0;
 }
 
+/* Toggle Controls Container */
+.PricingPage__viz-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 /* Toggle Button Group */
 .PricingPage__viz-toggle-group {
   display: flex;

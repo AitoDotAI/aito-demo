@@ -13,7 +13,7 @@ import axios from 'axios'
  *
  * Technical Details:
  * - Connects to local Aito RnD server at localhost:9005
- * - Uses _estimate endpoint with $why for explainability
+ * - Uses _estimate endpoint with why for explainability
  * - Works with price_history table containing historical sales data
  */
 
@@ -106,7 +106,7 @@ export function getProductPriceContext(productId) {
  * - Competitive context (competitor pricing)
  * - Environmental factors (weather, placement, etc.)
  *
- * Returns estimate with full explainability via $why operator
+ * Returns estimate with full explainability via why operator
  *
  * @param {Object} whereConditions - Conditions to estimate price for
  * @returns {Promise<Object>} Estimation result with neighbors
@@ -117,7 +117,7 @@ export function estimatePrice(whereConditions) {
       from: 'price_history',
       where: whereConditions,
       estimate: 'sale_price',
-      select: ['estimate', 'field', 'neighbors_count', '$why']
+      select: ['estimate', 'why']
     }, {
       headers: { 'x-api-key': PRICING_API_KEY },
     })
@@ -134,7 +134,7 @@ export function estimatePrice(whereConditions) {
  * - Product characteristics
  * - Temporal and competitive factors
  *
- * Returns estimate with full explainability via $why operator
+ * Returns estimate with full explainability via why operator
  *
  * @param {Object} whereConditions - Conditions to estimate demand for (must include sale_price)
  * @returns {Promise<Object>} Estimation result with neighbors
@@ -145,7 +145,7 @@ export function estimateDemand(whereConditions) {
       from: 'price_history',
       where: whereConditions,
       estimate: 'units_sold',
-      select: ['estimate', 'field', 'neighbors_count', '$why']
+      select: ['estimate', 'why']
     }, {
       headers: { 'x-api-key': PRICING_API_KEY },
     })
