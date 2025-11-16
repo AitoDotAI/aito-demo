@@ -546,7 +546,10 @@ class PricingPage extends Component {
             ) : (
               <Dropdown isOpen={isOpen} toggle={() => this.toggleDropdown(fieldName)}>
                 <DropdownToggle caret className="PricingPage__dropdown-toggle">
-                  {value || 'Select...'}
+                  {value ? (
+                    // Show display name if available, otherwise show value
+                    options.find(opt => opt.$value === value)?.$displayName || value
+                  ) : 'Select...'}
                 </DropdownToggle>
                 <DropdownMenu className="PricingPage__dropdown-menu">
                   {options.map((option, idx) => (
@@ -554,7 +557,7 @@ class PricingPage extends Component {
                       key={idx}
                       onClick={() => this.setFieldValue(fieldName, option.$value)}
                     >
-                      {option.$value}
+                      {option.$displayName || option.$value}
                     </DropdownItem>
                   ))}
                 </DropdownMenu>
