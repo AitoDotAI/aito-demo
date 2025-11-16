@@ -93,12 +93,20 @@
 .cases-card {
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e0e0e0 !important;
   border-radius: 8px;
   margin-top: 0 !important;
   margin-bottom: 1.5rem;
   transition: all 0.2s ease;
   overflow: hidden;
+}
+
+/* Override Bootstrap card border */
+.config-card.card,
+.metrics-card.card,
+.cases-card.card {
+  border: 1px solid #e0e0e0 !important;
+  border-top: 1px solid #e0e0e0 !important;
 }
 
 .metrics-card:hover,
