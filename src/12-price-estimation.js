@@ -30,11 +30,8 @@ export function getPriceProducts() {
   return axios.post(`${PRICING_API_URL}/api/v1/_query`,
     {
       from: 'price_history',
-      get: ['product_id', 'name'],
-      select: {
-        product_id: true,
-        name: true
-      },
+      get: 'product_id',
+      select: ['$value', '$f', 'name'],
       orderBy: 'name',
       limit: 100
     }, {
@@ -44,11 +41,11 @@ export function getPriceProducts() {
       // Group by product_id to get unique products with their names
       const productsMap = new Map()
       response.data.hits.forEach(hit => {
-        if (!productsMap.has(hit.product_id)) {
-          productsMap.set(hit.product_id, {
-            $value: hit.product_id,
+        if (!productsMap.has(hit.$value)) {
+          productsMap.set(hit.$value, {
+            $value: hit.$value,
             $displayName: hit.name,
-            $f: 1
+            $f: hit.$f || 1
           })
         }
       })
