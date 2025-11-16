@@ -8,7 +8,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap'
-import { ScatterChart, Scatter, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { ComposedChart, Scatter, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { FaToggleOn, FaToggleOff, FaSync, FaCheckCircle } from 'react-icons/fa'
 import HelpButton from '../components/HelpButton'
 import { HELP_CONTENT } from '../constants/helpContent'
@@ -761,7 +761,7 @@ class PricingPage extends Component {
 
     return (
       <ResponsiveContainer width="100%" height={450}>
-        <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 60 }}>
+        <ComposedChart margin={{ top: 20, right: 30, bottom: 40, left: 60 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
           <XAxis
             type="number"
@@ -826,19 +826,17 @@ class PricingPage extends Component {
 
           {/* Price-Demand Curve (transparent orange line with points) */}
           {curveData.length > 0 && (
-            <>
-              <Line
-                name="Price-Demand Curve"
-                data={curveData}
-                type="monotone"
-                dataKey="demand"
-                stroke="#FF6B35"
-                strokeWidth={2}
-                dot={{ fill: '#FF6B35', fillOpacity: 0.4, r: 4 }}
-                opacity={0.6}
-                connectNulls={true}
-              />
-            </>
+            <Line
+              name="Price-Demand Curve"
+              data={curveData}
+              type="monotone"
+              dataKey="demand"
+              stroke="#FF6B35"
+              strokeWidth={2}
+              dot={{ fill: '#FF6B35', fillOpacity: 0.4, r: 4 }}
+              strokeOpacity={0.6}
+              connectNulls={true}
+            />
           )}
 
           {/* Current estimate (orange, large) */}
@@ -848,7 +846,7 @@ class PricingPage extends Component {
             fill="#FF6B35"
             shape="star"
           />
-        </ScatterChart>
+        </ComposedChart>
       </ResponsiveContainer>
     )
   }
