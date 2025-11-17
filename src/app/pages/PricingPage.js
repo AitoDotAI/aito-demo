@@ -677,23 +677,66 @@ class PricingPage extends Component {
   extractNeighbors = (priceResult, demandResult) => {
     const neighbors = []
 
-    // Use whichever result has why data
-    const result = priceResult || demandResult
-
-    if (result && result.why && result.why.components) {
-      result.why.components.forEach((component, index) => {
+    // Extract neighbors from price result
+    const priceNeighbors = new Map()
+    if (priceResult && priceResult.why && priceResult.why.components) {
+      priceResult.why.components.forEach((component, index) => {
         if (component.value && component.value.instance) {
-          neighbors.push({
+          const instanceKey = JSON.stringify(component.value.instance)
+          priceNeighbors.set(instanceKey, {
             index,
             hitScore: component.value.hitScore || 0,
-            adjustedValue: component.value.value,
-            originalValue: component.value.original,
+            adjustedPrice: component.value.value,
+            originalPrice: component.value.original,
             instance: component.value.instance,
             adjustments: component.value.adjustments,
             weight: component.weight || 1.0
           })
         }
       })
+    }
+
+    // Extract neighbors from demand result and merge with price neighbors
+    if (demandResult && demandResult.why && demandResult.why.components) {
+      demandResult.why.components.forEach((component, index) => {
+        if (component.value && component.value.instance) {
+          const instanceKey = JSON.stringify(component.value.instance)
+          const existing = priceNeighbors.get(instanceKey)
+
+          if (existing) {
+            // Merge demand data with existing price neighbor
+            existing.adjustedDemand = component.value.value
+            existing.originalDemand = component.value.original
+          } else {
+            // Create new neighbor with demand data only
+            priceNeighbors.set(instanceKey, {
+              index,
+              hitScore: component.value.hitScore || 0,
+              adjustedDemand: component.value.value,
+              originalDemand: component.value.original,
+              instance: component.value.instance,
+              adjustments: component.value.adjustments,
+              weight: component.weight || 1.0
+            })
+          }
+        }
+      })
+    }
+
+    // Convert map to array
+    neighbors.push(...priceNeighbors.values())
+
+    // For backward compatibility, if only one result exists, use adjustedValue
+    if (neighbors.length > 0 && neighbors[0].adjustedPrice === undefined && neighbors[0].adjustedDemand === undefined) {
+      const result = priceResult || demandResult
+      if (result && result.why && result.why.components) {
+        result.why.components.forEach((component, index) => {
+          if (component.value && component.value.instance && index < neighbors.length) {
+            neighbors[index].adjustedValue = component.value.value
+            neighbors[index].originalValue = component.value.original
+          }
+        })
+      }
     }
 
     // Sort by hit score (highest first)
@@ -1034,13 +1077,18 @@ class PricingPage extends Component {
       let displayPrice = neighbor.instance.sale_price
       let displayDemand = neighbor.instance.units_sold
 
-      if (showAdjustedValues && neighbor.adjustedValue !== undefined) {
-        // If we estimated price (set_demand or both modes), use adjusted price
-        if (estimationMode === 'set_demand' || estimationMode === 'both') {
+      if (showAdjustedValues) {
+        // Use adjusted price if available
+        if (neighbor.adjustedPrice !== undefined) {
+          displayPrice = neighbor.adjustedPrice
+        } else if (neighbor.adjustedValue !== undefined && (estimationMode === 'set_demand' || estimationMode === 'both')) {
           displayPrice = neighbor.adjustedValue
         }
-        // If we estimated demand (set_price mode), use adjusted demand
-        if (estimationMode === 'set_price') {
+
+        // Use adjusted demand if available
+        if (neighbor.adjustedDemand !== undefined) {
+          displayDemand = neighbor.adjustedDemand
+        } else if (neighbor.adjustedValue !== undefined && estimationMode === 'set_price') {
           displayDemand = neighbor.adjustedValue
         }
       }
@@ -1070,12 +1118,12 @@ class PricingPage extends Component {
         purchaseCost: cost
       }
 
-      // Also store adjusted values for tooltip display
-      if (estimationMode === 'set_demand' || estimationMode === 'both') {
-        point.adjustedPrice = neighbor.adjustedValue
+      // Store adjusted values for tooltip display
+      if (neighbor.adjustedPrice !== undefined) {
+        point.adjustedPrice = neighbor.adjustedPrice
       }
-      if (estimationMode === 'set_price') {
-        point.adjustedDemand = neighbor.adjustedValue
+      if (neighbor.adjustedDemand !== undefined) {
+        point.adjustedDemand = neighbor.adjustedDemand
       }
 
       return point
@@ -1588,12 +1636,17 @@ class PricingPage extends Component {
           let displayDemand = neighbor.instance.units_sold
 
           if (showAdjustedValues) {
-            // If we estimated price (set_demand or both modes), show adjusted price
-            if ((estimationMode === 'set_demand' || estimationMode === 'both') && neighbor.adjustedValue !== undefined) {
+            // Use adjusted price if available
+            if (neighbor.adjustedPrice !== undefined) {
+              displayPrice = neighbor.adjustedPrice
+            } else if (neighbor.adjustedValue !== undefined && (estimationMode === 'set_demand' || estimationMode === 'both')) {
               displayPrice = neighbor.adjustedValue
             }
-            // If we estimated demand (set_price mode), show adjusted demand
-            if (estimationMode === 'set_price' && neighbor.adjustedValue !== undefined) {
+
+            // Use adjusted demand if available
+            if (neighbor.adjustedDemand !== undefined) {
+              displayDemand = neighbor.adjustedDemand
+            } else if (neighbor.adjustedValue !== undefined && estimationMode === 'set_price') {
               displayDemand = neighbor.adjustedValue
             }
           }
