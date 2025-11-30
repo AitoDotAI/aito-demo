@@ -4,7 +4,7 @@
 
 *Autofill in action: One-click cart filling based on user's shopping patterns*
 
-**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/cart)** - Test the predictive autofill feature in the shopping cart. Click the "Smart Cart Fill" button to see personalized product suggestions based on shopping patterns.
+**[🚀 Try Live Demo](https://demo.aito.ai/cart)** - Test the predictive autofill feature in the shopping cart. Click the "Smart Cart Fill" button to see personalized product suggestions based on shopping patterns.
 
 ## Overview
 
@@ -26,29 +26,28 @@ The autofill feature demonstrates how Aito.ai can predict and automatically popu
 
 ### Implementation
 
-The autofill feature uses Aito's predictive capabilities to analyze user behavior:
+The autofill feature uses Aito's `_predict` endpoint to forecast likely purchases:
 
 ```javascript
-// Core autofill logic from src/api/autofill.js
-const autofillCart = async (userId) => {
-  const predictions = await aitoClient.query({
-    from: 'impressions',
+// Core autofill logic from src/05-autofill.js
+export function getAutoFill(userId) {
+  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+    from: 'visits',           // Analyze visit/session data
     where: {
-      'context.user': String(userId),
-      purchase: true
+      user: userId            // Filter by specific user
     },
-    orderBy: {
-      $p: {
-        $context: {
-          purchase: true,
-          'context.user': String(userId)
-        }
-      }
-    },
-    limit: 8
+    predict: 'purchases',     // Predict the purchases field (array of product IDs)
+    exclusiveness: false,     // Users can buy multiple products
+    select: ['$p', '$value']  // Return probability and product ID
   })
-  
-  return predictions.map(item => item.product)
+  .then(result => {
+    // Filter to include only high-confidence predictions
+    const ids = result.data.hits
+      .filter(hit => hit.$p >= 0.4)  // 40%+ purchase probability
+      .map(hit => hit.$value)
+
+    return ids
+  })
 }
 ```
 
@@ -71,16 +70,17 @@ const autofillCart = async (userId) => {
 
 ## Data Schema
 
-The autofill feature leverages purchase history data:
+The autofill feature leverages visit and purchase history data:
 
 ```json
 {
-  "impressions": {
+  "visits": {
     "type": "table",
     "columns": {
-      "session": { "type": "String", "link": "sessions.id" },
-      "product": { "type": "String", "link": "products.id" },
-      "purchase": { "type": "Boolean" },
+      "id": { "type": "String" },
+      "user": { "type": "String", "link": "users.id" },
+      "purchases": { "type": "Array", "items": { "type": "String" } },
+      "weekday": { "type": "String" },
       "timestamp": { "type": "DateTime" }
     }
   },
@@ -93,11 +93,11 @@ The autofill feature leverages purchase history data:
       "price": { "type": "Decimal" }
     }
   },
-  "sessions": {
+  "users": {
     "type": "table",
     "columns": {
       "id": { "type": "String" },
-      "user": { "type": "String", "link": "users.username" },
+      "tags": { "type": "Array", "items": { "type": "String" } },
       "timestamp": { "type": "DateTime" }
     }
   }
