@@ -1736,6 +1736,16 @@ class PricingPage extends Component {
           <p className="PricingPage__subtitle">
             Data-driven pricing decisions to maximize profitability. Estimate optimal prices and forecast demand using historical patterns.
           </p>
+
+          {/* Beta Disclaimer */}
+          <div className="PricingPage__beta-disclaimer">
+            <div className="beta-badge">BETA</div>
+            <div className="beta-message">
+              <strong>Beta Feature:</strong> The <code>_estimate</code> endpoint is currently in beta testing.
+              While it provides powerful price optimization capabilities, you may occasionally encounter unexpected behavior.
+              We're actively improving this feature based on user feedback.
+            </div>
+          </div>
         </div>
 
         {/* Main content */}
