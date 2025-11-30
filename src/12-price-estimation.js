@@ -1,4 +1,5 @@
 import axios from 'axios'
+import config from './config'
 
 /**
  * Price Estimation API Functions
@@ -12,14 +13,9 @@ import axios from 'axios'
  * - Provides explainability through neighbor analysis
  *
  * Technical Details:
- * - Connects to local Aito RnD server at localhost:9005
  * - Uses _estimate endpoint with why for explainability
  * - Works with price_history table containing historical sales data
  */
-
-// Local RnD server configuration
-const PRICING_API_URL = 'http://localhost:9005'
-const PRICING_API_KEY = 'demo-key' // Security disabled but header still required
 
 /**
  * Get list of products that have price history data
@@ -27,7 +23,7 @@ const PRICING_API_KEY = 'demo-key' // Security disabled but header still require
  * @returns {Promise<Array>} Array of products with id, name, category
  */
 export function getPriceProducts() {
-  return axios.post(`${PRICING_API_URL}/api/v1/_query`,
+  return axios.post(`${config.aito.url}/api/v1/_query`,
     {
       from: 'price_history',
       get: 'product_id',
@@ -35,7 +31,7 @@ export function getPriceProducts() {
       orderBy: 'name',
       limit: 100
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       // Group by product_id to get unique products with their names
@@ -61,14 +57,14 @@ export function getPriceProducts() {
  * @returns {Promise<Array>} Array of distinct values
  */
 export function getPriceFieldValues(fieldName) {
-  return axios.post(`${PRICING_API_URL}/api/v1/_query`,
+  return axios.post(`${config.aito.url}/api/v1/_query`,
     {
       from: 'price_history',
       get: fieldName,
       select: ['$value', '$f'],
       limit: 100
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       return response.data.hits
@@ -83,14 +79,14 @@ export function getPriceFieldValues(fieldName) {
  * @returns {Promise<Object>} Product context with all fields
  */
 export function getProductPriceContext(productId) {
-  return axios.post(`${PRICING_API_URL}/api/v1/_query`,
+  return axios.post(`${config.aito.url}/api/v1/_query`,
     {
       from: 'price_history',
       where: { product_id: productId },
       orderBy: 'date',
       limit: 1
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       return response.data.hits[0] || null
@@ -112,14 +108,14 @@ export function getProductPriceContext(productId) {
  * @returns {Promise<Object>} Estimation result with neighbors
  */
 export function estimatePrice(whereConditions) {
-  return axios.post(`${PRICING_API_URL}/api/v1/_estimate`,
+  return axios.post(`${config.aito.url}/api/v1/_estimate`,
     {
       from: 'price_history',
       where: whereConditions,
       estimate: 'sale_price',
       select: ['estimate', 'why']
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       return response.data
@@ -140,14 +136,14 @@ export function estimatePrice(whereConditions) {
  * @returns {Promise<Object>} Estimation result with neighbors
  */
 export function estimateDemand(whereConditions) {
-  return axios.post(`${PRICING_API_URL}/api/v1/_estimate`,
+  return axios.post(`${config.aito.url}/api/v1/_estimate`,
     {
       from: 'price_history',
       where: whereConditions,
       estimate: 'units_sold',
       select: ['estimate', 'why']
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       return response.data
@@ -165,7 +161,7 @@ export function estimateDemand(whereConditions) {
  * @returns {Promise<Object>} Estimation result with regression explanation
  */
 export function estimatePriceRegression(whereConditions) {
-  return axios.post(`${PRICING_API_URL}/api/v1/_estimate`,
+  return axios.post(`${config.aito.url}/api/v1/_estimate`,
     {
       from: 'price_history',
       where: whereConditions,
@@ -173,7 +169,7 @@ export function estimatePriceRegression(whereConditions) {
       model: 'regression',
       select: ['estimate', 'why']
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       return response.data
@@ -191,7 +187,7 @@ export function estimatePriceRegression(whereConditions) {
  * @returns {Promise<Object>} Estimation result with regression explanation
  */
 export function estimateDemandRegression(whereConditions) {
-  return axios.post(`${PRICING_API_URL}/api/v1/_estimate`,
+  return axios.post(`${config.aito.url}/api/v1/_estimate`,
     {
       from: 'price_history',
       where: whereConditions,
@@ -199,7 +195,7 @@ export function estimateDemandRegression(whereConditions) {
       model: 'regression',
       select: ['estimate', 'why']
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       return response.data
@@ -215,7 +211,7 @@ export function estimateDemandRegression(whereConditions) {
  * @returns {Promise<Array>} Historical data points
  */
 export function getPriceHistory(productId, limit = 365) {
-  return axios.post(`${PRICING_API_URL}/api/v1/_query`,
+  return axios.post(`${config.aito.url}/api/v1/_query`,
     {
       from: 'price_history',
       where: { product_id: productId },
@@ -232,7 +228,7 @@ export function getPriceHistory(productId, limit = 365) {
       orderBy: 'date',
       limit: limit
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       return response.data.hits
@@ -247,7 +243,7 @@ export function getPriceHistory(productId, limit = 365) {
  * @returns {Promise<Object>} Statistics including avg price, demand, etc.
  */
 export function getPriceStats(productId) {
-  return axios.post(`${PRICING_API_URL}/api/v1/_aggregate`,
+  return axios.post(`${config.aito.url}/api/v1/_aggregate`,
     {
       from: 'price_history',
       where: { product_id: productId },
@@ -261,7 +257,7 @@ export function getPriceStats(productId) {
         'margin_percentage.$mean'
       ]
     }, {
-      headers: { 'x-api-key': PRICING_API_KEY },
+      headers: { 'x-api-key': config.aito.apiKey },
     })
     .then(response => {
       return response.data
