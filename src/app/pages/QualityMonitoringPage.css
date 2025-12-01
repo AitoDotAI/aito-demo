@@ -225,12 +225,20 @@
   border-color: #e0e0e0;
 }
 
+.form-check input[type="checkbox"] {
+  margin-top: 0;
+  vertical-align: middle;
+}
+
 .form-check label,
 .form-check .form-check-label {
   font-size: 0.875rem !important;
   font-weight: 400 !important;
   color: #2c3e50;
   margin-bottom: 0;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
 }
 
 .config-card .form-group {
