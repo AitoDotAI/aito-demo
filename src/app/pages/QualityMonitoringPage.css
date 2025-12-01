@@ -228,6 +228,9 @@
 .QualityMonitoringPage .form-check input[type="checkbox"] {
   margin-top: 4px;
   vertical-align: middle;
+  padding: 0.625rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
 .QualityMonitoringPage .form-check label,
@@ -267,8 +270,10 @@
   transition: all 0.2s ease;
 }
 
-.QualityMonitoringPage .config-card select.form-control {
+.QualityMonitoringPage .config-card select.form-control,
+.QualityMonitoringPage .config-card .form-select {
   padding: 0.875rem 1rem;
+  font-size: 0.875rem;
 }
 
 .QualityMonitoringPage .config-card .form-control:focus {
