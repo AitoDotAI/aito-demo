@@ -121,7 +121,7 @@
 .cases-card .card-header {
   background-color: transparent;
   border-bottom: none;
-  padding: 2rem 2rem 0;
+  padding: 2rem 2rem 1rem;
 }
 
 .metrics-card .card-header h5,
@@ -139,7 +139,7 @@
 
 /* Metrics card body with padding container */
 .metrics-card-body {
-  padding: 2rem !important;
+  padding: 0 2rem 2rem 2rem !important;
   background-color: #fff;
 }
 
