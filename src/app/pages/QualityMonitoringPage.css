@@ -29,7 +29,7 @@
 
 .page-header p {
   color: #6c757d;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 400;
   max-width: 800px;
   margin: 0;
@@ -61,8 +61,8 @@
   border: 2px solid #e0e0e0;
   border-radius: 6px;
   padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 500;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
   margin-bottom: 0;
   white-space: nowrap;
@@ -121,7 +121,7 @@
 .cases-card .card-header {
   background-color: transparent;
   border-bottom: none;
-  padding: 1.5rem 1.5rem 0;
+  padding: 2rem 2rem 0;
 }
 
 .metrics-card .card-header h5,
@@ -132,7 +132,7 @@
   margin-bottom: 1.5rem;
   margin-top: 0;
   padding-bottom: 0.75rem;
-  border-bottom: 3px solid var(--aito-accent);
+  border-bottom: 2px solid var(--aito-accent);
   display: inline-block;
   letter-spacing: -0.01em;
 }
@@ -144,7 +144,7 @@
   margin-bottom: 1.5rem;
   margin-top: 0;
   padding-bottom: 0.75rem;
-  border-bottom: 3px solid var(--aito-accent);
+  border-bottom: 2px solid var(--aito-accent);
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -164,7 +164,7 @@
 
 .metric-item {
   text-align: center;
-  padding: 1.5rem 1rem;
+  padding: 2rem 1.5rem;
   border-right: 1px solid #e0e0e0;
   transition: all 0.2s ease;
 }
@@ -179,7 +179,7 @@
 }
 
 .metric-value {
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   font-weight: 700;
   color: var(--aito-accent);
   margin-bottom: 0.5rem;
@@ -188,11 +188,11 @@
 }
 
 .metric-label {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: #6c757d;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-weight: 500;
 }
 
 /* ============================================
@@ -221,15 +221,15 @@
 }
 
 .config-card .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .config-card .form-group label {
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  letter-spacing: -0.01em;
+  font-size: 0.875rem;
+  letter-spacing: 0;
 }
 
 .config-card .form-control {
@@ -318,19 +318,19 @@
 
 .cases-table {
   margin-bottom: 0;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 .cases-table thead th {
   position: sticky;
   top: 0;
   background-color: #f8f9fa;
-  border-bottom: 3px solid var(--aito-accent);
+  border-bottom: 2px solid var(--aito-accent);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   font-size: 0.75rem;
-  padding: 1rem;
+  padding: 1.25rem 1.5rem;
   z-index: 10;
   color: #2c3e50;
 }
@@ -345,7 +345,7 @@
 }
 
 .cases-table tbody td {
-  padding: 1rem;
+  padding: 1.25rem 1.5rem;
   vertical-align: middle;
 }
 
