@@ -213,7 +213,7 @@
 .QualityMonitoringPage .form-check {
   display: flex;
   align-items: center;
-  padding: 0.75rem;
+  padding: 0.5rem;
   border-radius: 6px;
   transition: all 0.2s ease;
   border: 1px solid transparent;
@@ -226,7 +226,8 @@
 }
 
 .QualityMonitoringPage .form-check input[type="checkbox"] {
-  margin-top: 4px;
+  margin-top: 0px;
+  margin-left: -10px;
   vertical-align: middle;
   padding: 0.625rem;
   width: 1.125rem;
@@ -238,6 +239,7 @@
   font-size: 0.875rem !important;
   font-weight: 400 !important;
   color: #2c3e50;
+  margin-left: 20px;
   margin-bottom: 0;
   line-height: 1.5;
   display: flex;
@@ -255,6 +257,7 @@
   font-weight: 600 !important;
   color: #2c3e50 !important;
   margin-bottom: 0.5rem !important;
+  margin-right: 1rem !important;
   font-size: 0.9rem !important;
   letter-spacing: 0 !important;
 }
@@ -272,7 +275,8 @@
 
 .QualityMonitoringPage .config-card select.form-control,
 .QualityMonitoringPage .config-card .form-select {
-  padding: 0.875rem 1rem;
+  padding: 0.5rem 1rem;
+  margin: 0rem 0rem 0.5rem 0rem;
   font-size: 0.875rem;
 }
 
@@ -353,7 +357,7 @@
 .QualityMonitoringPage .cases-table thead th {
   position: sticky;
   top: 0;
-  background-color: #f8f9fa;
+  background-color: #fff;
   border-bottom: 2px solid var(--aito-accent);
   font-weight: 600;
   text-transform: uppercase;
