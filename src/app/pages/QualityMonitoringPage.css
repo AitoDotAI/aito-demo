@@ -371,11 +371,10 @@
 .QualityMonitoringPage .cases-table tbody tr {
   transition: background-color 0.2s ease;
   border-bottom: 1px solid #f0f0f0;
-  background-color: #fff !important;
 }
 
 .QualityMonitoringPage .cases-table tbody tr:hover {
-  background-color: #f8f9fa !important;
+  background-color: #f8f9fa;
 }
 
 .QualityMonitoringPage .cases-table tbody td {
