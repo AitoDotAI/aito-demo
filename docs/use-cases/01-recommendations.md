@@ -4,7 +4,7 @@
 
 *Personalized product recommendations adapting to user preferences and cart contents*
 
-**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/)** - Experience personalized recommendations in action. Switch between users to see how recommendations change based on different shopping patterns.
+**[🚀 Try Live Demo](https://demo.aito.ai/)** - Experience personalized recommendations in action. Switch between users to see how recommendations change based on different shopping patterns.
 
 ## Overview
 

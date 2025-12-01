@@ -4,7 +4,7 @@
 
 *AI-powered tag suggestion interface for automatic product categorization*
 
-**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/admin)** - Experience automatic tag prediction by exploring the product catalog. See how AI suggests relevant tags based on product names and descriptions.
+**[🚀 Try Live Demo](https://demo.aito.ai/admin)** - Experience automatic tag prediction by exploring the product catalog. See how AI suggests relevant tags based on product names and descriptions.
 
 ## Overview
 

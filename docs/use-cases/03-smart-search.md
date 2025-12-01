@@ -4,7 +4,7 @@
 
 *Smart search in action: "milk" query showing personalized lactose-free results for Larry*
 
-**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/)** - Search for products like "milk" or "bread" and see how results are personalized based on the selected user's preferences.
+**[🚀 Try Live Demo](https://demo.aito.ai/)** - Search for products like "milk" or "bread" and see how results are personalized based on the selected user's preferences.
 
 ## Overview
 

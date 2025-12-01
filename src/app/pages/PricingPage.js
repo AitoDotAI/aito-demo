@@ -1742,7 +1742,6 @@ class PricingPage extends Component {
             <div className="beta-badge">BETA</div>
             <div className="beta-message">
               <strong>Beta Feature:</strong> The <code>_estimate</code> endpoint is currently in beta testing.
-              While it provides powerful price optimization capabilities, you may occasionally encounter unexpected behavior.
               We're actively improving this feature based on user feedback.
             </div>
           </div>

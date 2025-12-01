@@ -4,7 +4,7 @@
 
 *Intelligent autocomplete providing contextual search suggestions as you type*
 
-**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/)** - Test the intelligent autocomplete by typing in the search box. Try different users to see personalized suggestions.
+**[🚀 Try Live Demo](https://demo.aito.ai/)** - Test the intelligent autocomplete by typing in the search box. Try different users to see personalized suggestions.
 
 ## Overview
 
