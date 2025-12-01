@@ -1,0 +1,467 @@
+/* ============================================
+   QUALITY MONITORING PAGE - PROFESSIONAL
+   ============================================ */
+
+.QualityMonitoringPage {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #fff;
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+
+.QualityMonitoringPage .page-header {
+  margin: 0rem 0rem 0.5rem 0rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 3px solid var(--aito-accent);
+}
+
+.QualityMonitoringPage .page-header h1 {
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.QualityMonitoringPage .page-header p {
+  color: #6c757d;
+  font-size: 1rem;
+  font-weight: 400;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ============================================
+   NAVIGATION TABS
+   ============================================ */
+
+.QualityMonitoringPage .nav-tabs {
+  border-bottom: none;
+  background-color: #fff;
+  padding: 1rem 0;
+  border-radius: 8px;
+  margin-bottom: 0.5rem!important;
+  gap: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.QualityMonitoringPage .nav-tabs .nav-item {
+  margin-right: 0;
+}
+
+.QualityMonitoringPage .nav-tabs .nav-link {
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.QualityMonitoringPage .nav-tabs .nav-link:hover {
+  color: var(--aito-accent);
+  background-color: #fff;
+  border-color: var(--aito-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.15);
+}
+
+.QualityMonitoringPage .nav-tabs .nav-link.active {
+  color: white;
+  background-color: var(--aito-accent);
+  border-color: var(--aito-accent);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+  transform: translateY(0);
+}
+
+/* ============================================
+   CARD COMPONENTS
+   ============================================ */
+
+.QualityMonitoringPage .metrics-card,
+.QualityMonitoringPage .config-card,
+.QualityMonitoringPage .cases-card {
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 8px;
+  margin-top: 0 !important;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+/* Override Bootstrap card border */
+.QualityMonitoringPage .config-card.card,
+.QualityMonitoringPage .metrics-card.card,
+.QualityMonitoringPage .cases-card.card {
+  border: 1px solid #e0e0e0 !important;
+  border-top: 1px solid #e0e0e0 !important;
+}
+
+.QualityMonitoringPage .metrics-card:hover,
+.QualityMonitoringPage .config-card:hover,
+.QualityMonitoringPage .cases-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border-color: var(--aito-accent);
+}
+
+.QualityMonitoringPage .metrics-card .card-header,
+.QualityMonitoringPage .config-card .card-header,
+.QualityMonitoringPage .cases-card .card-header {
+  background-color: transparent;
+  border-bottom: none;
+  padding: 2rem 2rem 0rem 2rem;
+}
+
+.QualityMonitoringPage .metrics-card .card-header h5,
+.QualityMonitoringPage .cases-card .card-header h5 {
+  color: #2c3e50;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--aito-accent);
+  display: inline-block;
+  letter-spacing: -0.01em;
+}
+
+/* Metrics card body with padding container */
+.QualityMonitoringPage .metrics-card-body {
+  padding: 0 2rem 2rem 2rem !important;
+  background-color: #fff;
+}
+
+.QualityMonitoringPage .config-card .card-header h5 {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--aito-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+/* Sticky Configuration Card */
+.QualityMonitoringPage .config-card {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+}
+
+.QualityMonitoringPage .config-card .card-body {
+  padding: 1.5rem 2rem 2rem 2rem !important;
+}
+
+/* ============================================
+   METRICS SECTION
+   ============================================ */
+
+.QualityMonitoringPage .metric-item {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.QualityMonitoringPage .metric-item:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+}
+
+.QualityMonitoringPage .metric-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--aito-accent);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.QualityMonitoringPage .metric-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+/* ============================================
+   CONFIGURATION FORM
+   ============================================ */
+
+.QualityMonitoringPage .field-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.QualityMonitoringPage .form-check {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  background: #fff;
+}
+
+.QualityMonitoringPage .form-check:hover {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+}
+
+.QualityMonitoringPage .form-check input[type="checkbox"] {
+  margin-top: 0px;
+  margin-left: -10px;
+  vertical-align: middle;
+  padding: 0.625rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.QualityMonitoringPage .form-check label,
+.QualityMonitoringPage .form-check .form-check-label {
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  color: #2c3e50;
+  margin-left: 20px;
+  margin-bottom: 0;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+}
+
+.QualityMonitoringPage .config-card .form-group {
+  margin-bottom: 2rem;
+}
+
+/* Override Bootstrap form-label styling to match invoice page */
+.QualityMonitoringPage .config-card .form-group label,
+.QualityMonitoringPage .config-card .form-label,
+.QualityMonitoringPage .config-card label.form-label {
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  margin-bottom: 0.5rem !important;
+  margin-right: 1rem !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0 !important;
+}
+
+.QualityMonitoringPage .config-card .form-control {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.QualityMonitoringPage .config-card select.form-control,
+.QualityMonitoringPage .config-card .form-select {
+  padding: 0.5rem 1rem;
+  margin: 0rem 0rem 0.5rem 0rem;
+  font-size: 0.875rem;
+}
+
+.QualityMonitoringPage .config-card .form-control:focus {
+  outline: none;
+  border-color: var(--aito-accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.QualityMonitoringPage .config-card .btn-primary {
+  background-color: var(--aito-accent);
+  border-color: var(--aito-accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: 6px;
+  border: 2px solid var(--aito-accent);
+}
+
+.QualityMonitoringPage .config-card .btn-primary .me-2 {
+  margin-right: 0.5rem !important;
+}
+
+.QualityMonitoringPage .config-card .btn-primary:hover {
+  background-color: #e55a2b;
+  border-color: #e55a2b;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+
+.QualityMonitoringPage .config-card .btn-primary:focus {
+  background-color: var(--aito-accent);
+  border-color: var(--aito-accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25);
+  color: white;
+}
+
+.QualityMonitoringPage .config-card .btn-primary:active {
+  transform: translateY(0);
+}
+
+.QualityMonitoringPage .config-card .btn-primary:disabled {
+  opacity: 0.6;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.QualityMonitoringPage .config-card .text-muted {
+  font-size: 0.8rem;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+/* ============================================
+   CASES TABLE
+   ============================================ */
+
+.QualityMonitoringPage .cases-table-container {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-radius: 6px;
+}
+
+.QualityMonitoringPage .cases-table {
+  margin-bottom: 0;
+  font-size: 0.875rem;
+}
+
+.QualityMonitoringPage .cases-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  border-bottom: 2px solid var(--aito-accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  z-index: 10;
+  color: #2c3e50;
+}
+
+.QualityMonitoringPage .cases-table tbody tr {
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.QualityMonitoringPage .cases-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.QualityMonitoringPage .cases-table tbody td {
+  padding: 1.25rem 1.5rem;
+  vertical-align: middle;
+}
+
+.QualityMonitoringPage .correct-row {
+  background-color: #fff;
+  border-left: 3px solid #28a745;
+}
+
+.QualityMonitoringPage .error-row {
+  background-color: #fff;
+  border-left: 3px solid #dc3545;
+}
+
+.QualityMonitoringPage .text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 992px) {
+  .QualityMonitoringPage .metric-item {
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .QualityMonitoringPage .metric-item:last-child {
+    border-bottom: none;
+  }
+
+  .QualityMonitoringPage .config-card {
+    position: static;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .QualityMonitoringPage {
+    padding: 1rem;
+  }
+
+  .QualityMonitoringPage .page-header {
+    padding-bottom: 1rem;
+  }
+
+  .QualityMonitoringPage .page-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .QualityMonitoringPage .page-header p {
+    font-size: 1rem;
+  }
+
+  .QualityMonitoringPage .metric-value {
+    font-size: 2rem;
+  }
+
+  .QualityMonitoringPage .cases-table {
+    font-size: 0.8rem;
+  }
+
+  .QualityMonitoringPage .cases-table thead th {
+    padding: 0.75rem;
+    font-size: 0.7rem;
+  }
+
+  .QualityMonitoringPage .cases-table tbody td {
+    padding: 0.75rem;
+  }
+
+  .QualityMonitoringPage .config-card .card-header,
+  .QualityMonitoringPage .metrics-card .card-header,
+  .QualityMonitoringPage .cases-card .card-header {
+    padding: 1rem 1rem 0;
+  }
+
+  .QualityMonitoringPage .nav-tabs .nav-link {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+}

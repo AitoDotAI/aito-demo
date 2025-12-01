@@ -4,7 +4,7 @@
 
 *Invoice processing in action: Automatic GL code assignment and approval routing*
 
-**[🚀 Try Live Demo](https://aito-demo.azurewebsites.net/invoicing)** - Experience AI-powered invoice processing. Select different invoices to see automatic GL code assignment and approval routing predictions.
+**[🚀 Try Live Demo](https://demo.aito.ai/invoicing)** - Experience AI-powered invoice processing. Select different invoices to see automatic GL code assignment and approval routing predictions.
 
 ## Overview
 
@@ -28,75 +28,85 @@ The invoice processing feature demonstrates how Aito.ai can transform manual doc
 
 ### Implementation
 
-The invoice processing uses multiple Aito prediction endpoints:
+The invoice processing uses a flexible prediction function from `src/08-predict-invoice.js`:
 
 ```javascript
 // Core invoice processing logic
-const processInvoice = async (invoiceData) => {
-  // Predict GL code based on description and vendor
-  const glPrediction = await aitoClient.predict({
-    from: 'invoices',
-    where: {
-      description: invoiceData.description,
-      vendor: invoiceData.vendor,
-      amount: { $gte: invoiceData.amount * 0.8, $lte: invoiceData.amount * 1.2 }
-    },
-    predict: 'glCode'
-  })
-
-  // Predict appropriate processor
-  const processorPrediction = await aitoClient.predict({
-    from: 'invoices', 
-    where: {
-      glCode: glPrediction.value,
-      amount: invoiceData.amount
-    },
-    predict: 'processor'
-  })
-
-  // Predict approval requirements
-  const approvalPrediction = await aitoClient.predict({
-    from: 'invoices',
-    where: {
-      amount: invoiceData.amount,
-      glCode: glPrediction.value,
-      vendor: invoiceData.vendor
-    },
-    predict: 'requiresApproval'
-  })
-
-  return {
-    glCode: glPrediction.value,
-    processor: processorPrediction.value,
-    requiresApproval: approvalPrediction.value,
-    confidence: {
-      glCode: glPrediction.p,
-      processor: processorPrediction.p,
-      approval: approvalPrediction.p
-    }
-  }
+// Configuration for which fields to return for each prediction type
+const outputFields = {
+  Processor: ['Name', 'Role', 'Department', 'Superior'],  // Employee details
+  Acceptor: ['Name', 'Role', 'Department', 'Superior'],   // Approver details
+  GLCode: ['Name', 'GLCode', 'Department']                // GL code details
 }
+
+export function predictInvoice(input, output) {
+  // Make predictions for each requested field in parallel
+  return Promise.all(output.map(predicted => {
+    // Build select clause with probability and explanation
+    const select = [
+      '$p',                   // Probability score
+      {
+        $why: {               // Explanation for the prediction
+          highlight: {
+            posPreTag: '<b>',   // Highlight key factors
+            posPostTag: '</b>'
+          }
+        }
+      }
+    ]
+
+    // Add specific fields for this prediction type
+    outputFields[predicted].forEach(field => {
+      select.push(field)
+    })
+
+    // Execute the prediction
+    return axios.post(`${config.aito.url}/api/v1/_predict`, {
+      from: 'invoices',       // Analyze historical invoices
+      where: input,           // Invoice details (vendor, amount, description)
+      predict: predicted,     // Field to predict (Processor/Acceptor/GLCode)
+      select: select,         // Return probability, explanation, and details
+      limit: 10               // Top 10 predictions
+    }).then(response => response.data.hits)
+  }))
+}
+
+// Usage example:
+const input = {
+  Vendor: 'Office Supplies Inc',
+  Amount: 450.00,
+  Description: 'Monthly office supplies order'
+}
+
+const predictions = await predictInvoice(input, ['Processor', 'GLCode'])
+// Returns array: [processorPredictions[], glCodePredictions[]]
 ```
 
 ## Key Features
 
-### 1. Intelligent GL Code Assignment
-- Analyzes invoice description and vendor
-- Considers amount ranges for context
-- Learns from historical coding decisions
-- Provides confidence scores for predictions
+### 1. Multi-Field Prediction
+- Predicts **Processor** (who should handle the invoice)
+- Predicts **Acceptor** (who should approve it)
+- Predicts **GL Code** (accounting category)
+- All predictions run in parallel for efficiency
 
-### 2. Dynamic Approval Routing
-- Routes based on amount thresholds
-- Considers vendor relationships
-- Adapts to organizational hierarchy
-- Handles exception cases intelligently
+### 2. Explainable AI with $why
+- Each prediction includes explanation (`$why` operator)
+- Highlights which invoice fields influenced the decision
+- HTML formatting shows key factors in bold
+- Helps users understand and trust predictions
 
-### 3. Field Extraction
-- Automatic vendor identification
-- Amount and date extraction
-- Description parsing and categorization
-- Tax and line item recognition
+### 3. Confidence Scoring
+- Every prediction includes probability score (`$p`)
+- Top 10 predictions returned for each field
+- Allows filtering by confidence threshold
+- Enables human review of low-confidence cases
+
+### 4. Linked Data Enrichment
+- Returns complete employee details (Name, Role, Department, Superior)
+- Returns GL code details (Name, GLCode, Department)
+- Uses table linking to fetch related information
+- Single query returns all necessary context
 
 ## Data Schema
 

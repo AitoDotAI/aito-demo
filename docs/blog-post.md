@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-I replaced months of ML pipeline development with SQL-like queries that return predictions instead of data. No model training, no MLOps, just queries. [Live demo](https://aito-demo.azurewebsites.net/) | [Source code](https://github.com/AitoDotAI/aito-demo)
+I replaced months of ML pipeline development with SQL-like queries that return predictions instead of data. No model training, no MLOps, just queries. [Live demo](https://demo.aito.ai/) | [Source code](https://github.com/AitoDotAI/aito-demo)
 
 ## The Problem That Started This
 
@@ -40,7 +40,7 @@ No training. No deployment. Just queries.
 
 ## What I Built: 11 Working ML Features
 
-Here's the [live demo](https://aito-demo.azurewebsites.net/) - try it yourself. Switch between users to see personalization in action.
+Here's the [live demo](https://demo.aito.ai/) - try it yourself. Switch between users to see personalization in action.
 
 ### Technical Benefits
 - **No cold starts**: Predictions computed on-demand
@@ -524,7 +524,7 @@ Use the same predictive models across web, mobile, and in-store experiences.
 
 ## Try It Yourself
 
-1. **Live Demo**: https://aito-demo.azurewebsites.net/
+1. **Live Demo**: https://demo.aito.ai/
 2. **Source Code**: https://github.com/AitoDotAI/aito-demo (MIT licensed)
 3. **Documentation**: [Complete use case guides](use-cases/) | [Project README](../README.md)
 

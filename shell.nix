@@ -5,7 +5,7 @@ pkgs.mkShell {
   
   buildInputs = with pkgs; [
     # Node.js and package managers
-    nodejs_18
+    nodejs_20
     nodePackages.npm
     nodePackages.yarn
     nodePackages.pnpm

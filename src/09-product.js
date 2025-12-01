@@ -11,13 +11,13 @@ export function getProductDetails(id){
   return axios.post(`${config.aito.url}/api/v1/_query`,
     {
       from: 'products',
-      limit:1,
-      offset: id
+      where: { id: id },
+      limit: 1
     }, {
     headers: { 'x-api-key': config.aito.apiKey },
   })
     .then(response => {
-      return response.data    
+      return response.data
   })
 }
 

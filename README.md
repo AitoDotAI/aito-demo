@@ -1,13 +1,13 @@
 # Aito Grocery Store Demo
 
-> ### 🚀 **[Try the Live Demo → aito-demo.azurewebsites.net](https://aito-demo.azurewebsites.net/)**
+> ### 🚀 **[Try the Live Demo → demo.aito.ai](https://demo.aito.ai/)**
 > Experience AI-powered grocery shopping with personalized recommendations, smart search, and predictive cart filling!
 
 Aito.ai is a predictive database, that provides real time predictions, recommendations and statistics via instant SQL-like queries without separate train step. The goal of the system is to drastically reduce the effort needed to create basic machine learning applications.
 
-The Aito.ai demo highlights 11 production-ready ML features that can be build extremely quickly using the predictive database capabilities. Each live feature comes with screenshots, code samples and tutorials. 
+The Aito.ai demo highlights 13 production-ready ML features that can be build extremely quickly using the predictive database capabilities. Each live feature comes with screenshots, code samples and tutorials. 
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://aito-demo.azurewebsites.net/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt) [![Powered by Aito.ai](https://img.shields.io/badge/Powered%20by-Aito.ai-orange)](https://aito.ai)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://demo.aito.ai/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt) [![Powered by Aito.ai](https://img.shields.io/badge/Powered%20by-Aito.ai-orange)](https://aito.ai)
 
 ## Try It Now
 
@@ -40,7 +40,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
   "limit": 5
 }
 ```
-[→ Implementation](src/01-recommend.js) | [Use case guide](docs/use-cases/01-recommendations.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/)
+[→ Implementation](src/01-recommend.js) | [Use case guide](docs/use-cases/01-recommendations.md) | [🚀 Live Demo](https://demo.aito.ai/)
 
 ### 2. 💡 Intelligent Autocomplete
 ![Autocomplete](docs/screenshots/features/autocomplete-full.png)
@@ -56,7 +56,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
   "select": ["$p", "$value"]
 }
 ```
-[→ Implementation](src/02-autocomplete.js) | [Use case guide](docs/use-cases/02-autocomplete.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/)
+[→ Implementation](src/02-autocomplete.js) | [Use case guide](docs/use-cases/02-autocomplete.md) | [🚀 Live Demo](https://demo.aito.ai/)
 
 ### 3. 🔍 Smart Search with Personalization
 ![Smart Search](docs/screenshots/features/search-milk-results.png)
@@ -83,7 +83,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
   "limit": 5
 }
 ```
-[→ Implementation](src/03-search.js) | [Use case guide](docs/use-cases/03-smart-search.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/)
+[→ Implementation](src/03-search.js) | [Use case guide](docs/use-cases/03-smart-search.md) | [🚀 Live Demo](https://demo.aito.ai/)
 
 ### 4. 🏷️ Automated Tag Prediction
 ![Tag Prediction](docs/screenshots/features/tag-prediction.png)
@@ -98,7 +98,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 ```
 // Filter: hit.$p > 0.5, Extract: hit.feature
 // Returns: ['organic', 'chocolate', 'dark', 'healthy', 'premium']
-[→ Implementation](src/04-get-tag-suggestions.js) | [Use case guide](docs/use-cases/04-tag-prediction.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/admin)
+[→ Implementation](src/04-get-tag-suggestions.js) | [Use case guide](docs/use-cases/04-tag-prediction.md) | [🚀 Live Demo](https://demo.aito.ai/admin)
 
 ### 5. 📝 Smart Cart Autofill
 ![Autofill](docs/screenshots/features/autofill-cart.png)
@@ -112,7 +112,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 }
 ```
 // Filter results: hit.$p >= 0.4 (40%+ confidence)
-[→ Implementation](src/05-autofill.js) | [Use case guide](docs/use-cases/05-autofill.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/cart)
+[→ Implementation](src/05-autofill.js) | [Use case guide](docs/use-cases/05-autofill.md) | [🚀 Live Demo](https://demo.aito.ai/cart)
 
 ### 6. 🗣️ NLP Text Classification
 ![NLP Processing](docs/screenshots/features/nlp-processing.png)
@@ -124,7 +124,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 }
 ```
 // Returns: sentiment: 'negative', category: 'user_experience'
-[→ Implementation](src/06-prompt.js) | [Use case guide](docs/use-cases/06-nlp-processing.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/help)
+[→ Implementation](src/06-prompt.js) | [Use case guide](docs/use-cases/06-nlp-processing.md) | [🚀 Live Demo](https://demo.aito.ai/help)
 
 ### 7. 📊 Statistical Relationship Discovery
 ![Data Analytics](docs/screenshots/features/analytics-dashboard.png)
@@ -136,7 +136,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 }
 ```
 // Returns: lift scores showing what club members buy more
-[→ Implementation](src/07-relate.js) | [Use case guide](docs/use-cases/07-data-analytics.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/analytics)
+[→ Implementation](src/07-relate.js) | [Use case guide](docs/use-cases/07-data-analytics.md) | [🚀 Live Demo](https://demo.aito.ai/analytics)
 
 ### 8. 📄 Automated Invoice Processing
 ![Invoice Processing](docs/screenshots/features/invoice-automation.png)
@@ -148,7 +148,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
   "select": ["$p", "Name", "Role", { "$why": { "highlight": true } }]
 }
 ```
-[→ Implementation](src/08-predict-invoice.js) | [Use case guide](docs/use-cases/08-invoice-processing.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/invoicing)
+[→ Implementation](src/08-predict-invoice.js) | [Use case guide](docs/use-cases/08-invoice-processing.md) | [🚀 Live Demo](https://demo.aito.ai/invoicing)
 
 ### 9. 📈 Product Analytics Dashboard
 ![Product Analytics](docs/screenshots/features/product-analytics-page.png)
@@ -168,7 +168,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
   }
 ]
 ```
-[→ Implementation](src/09-product.js) | [Use case guide](docs/use-cases/09-product-analytics.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/product)
+[→ Implementation](src/09-product.js) | [Use case guide](docs/use-cases/09-product-analytics.md) | [🚀 Live Demo](https://demo.aito.ai/product)
 
 ### 10. 🤖 AI Shopping Assistant
 ![Shopping Assistant](docs/screenshots/features/shopping-assistant.png)
@@ -183,7 +183,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 }
 ```
 // "Find gluten-free bread under $5"
-[→ Implementation](src/services/chatTools/customerTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/customer-chat)
+[→ Implementation](src/services/chatTools/customerTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://demo.aito.ai/customer-chat)
 
 ### 11. 🔧 Admin Business Intelligence
 ![Admin Assistant](docs/screenshots/features/admin-assistant.png)
@@ -196,7 +196,41 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 }
 ```
 // "What are our top selling products this week?"
-[→ Implementation](src/services/chatTools/adminTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://aito-demo.azurewebsites.net/admin-chat)
+[→ Implementation](src/services/chatTools/adminTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://demo.aito.ai/admin-chat)
+
+### 12. 📊 Quality Monitoring & Model Evaluation
+![Quality Monitoring](docs/screenshots/features/quality-monitoring.png)
+```json
+{
+  "test": { "$index": { "$gt": 90 } },
+  "evaluate": {
+    "from": "impressions",
+    "where": { "context.user": { "$exists": true } },
+    "predict": "purchase"
+  },
+  "select": ["accuracy", "meanRank", "meanMs", "cases"]
+}
+```
+// Returns: accuracy: 0.87, meanRank: 2.3, meanMs: 45
+[→ Implementation](src/11-evaluate.js) | [Use case guide](docs/use-cases/10-quality-monitoring.md) | [🚀 Live Demo](https://demo.aito.ai/quality)
+
+### 13. 💰 Price Optimization & Demand Forecasting
+![Price Optimization](docs/screenshots/features/price-optimization.png)
+```json
+{
+  "from": "price_history",
+  "where": {
+    "product_id": "milk_organic",
+    "day_of_week": "Friday",
+    "is_weekend": false
+  },
+  "estimate": "sale_price",
+  "model": "regression",
+  "select": ["estimate", "why"]
+}
+```
+// Returns: optimal price with demand forecast and profit maximization
+[→ Implementation](src/12-price-estimation.js) | [Use case guide](docs/use-cases/11-price-optimization.md) | [🚀 Live Demo](https://demo.aito.ai/pricing)
 
 ## 🚀 Quick Start
 
