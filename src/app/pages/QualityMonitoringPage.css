@@ -13,13 +13,13 @@
    HEADER SECTION
    ============================================ */
 
-.page-header {
-  margin-bottom: 2rem;
+.QualityMonitoringPage .page-header {
+  margin: 0rem 0rem 0rem 0rem;
   padding-bottom: 1.5rem;
   border-bottom: 3px solid var(--aito-accent);
 }
 
-.page-header h1 {
+.QualityMonitoringPage .page-header h1 {
   color: #2c3e50;
   font-size: 2rem;
   font-weight: 700;
@@ -27,7 +27,7 @@
   letter-spacing: -0.02em;
 }
 
-.page-header p {
+.QualityMonitoringPage .page-header p {
   color: #6c757d;
   font-size: 1rem;
   font-weight: 400;
@@ -40,7 +40,7 @@
    NAVIGATION TABS
    ============================================ */
 
-.nav-tabs {
+.QualityMonitoringPage .nav-tabs {
   border-bottom: none;
   background-color: #fff;
   padding: 0.75rem 0;
@@ -51,11 +51,11 @@
   flex-wrap: wrap;
 }
 
-.nav-tabs .nav-item {
+.QualityMonitoringPage .nav-tabs .nav-item {
   margin-right: 0;
 }
 
-.nav-tabs .nav-link {
+.QualityMonitoringPage .nav-tabs .nav-link {
   color: #6c757d;
   background-color: #f8f9fa;
   border: 2px solid #e0e0e0;
@@ -68,7 +68,7 @@
   white-space: nowrap;
 }
 
-.nav-tabs .nav-link:hover {
+.QualityMonitoringPage .nav-tabs .nav-link:hover {
   color: var(--aito-accent);
   background-color: #fff;
   border-color: var(--aito-accent);
@@ -76,7 +76,7 @@
   box-shadow: 0 4px 12px rgba(255, 107, 53, 0.15);
 }
 
-.nav-tabs .nav-link.active {
+.QualityMonitoringPage .nav-tabs .nav-link.active {
   color: white;
   background-color: var(--aito-accent);
   border-color: var(--aito-accent);
@@ -121,7 +121,7 @@
 .cases-card .card-header {
   background-color: transparent;
   border-bottom: none;
-  padding: 2rem 2rem 1rem;
+  padding: 2rem 2rem 0rem 2rem;
 }
 
 .metrics-card .card-header h5,
