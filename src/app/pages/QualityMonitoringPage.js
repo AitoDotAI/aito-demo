@@ -186,7 +186,7 @@ class QualityMonitoringPage extends Component {
   
   renderMetricsCard = () => {
     const { metrics, loading } = this.state
-    
+
     if (loading || !metrics) {
       return (
         <Card className="metrics-card">
@@ -196,13 +196,13 @@ class QualityMonitoringPage extends Component {
         </Card>
       )
     }
-    
+
     return (
       <Card className="metrics-card">
         <CardHeader>
           <h5>Model Performance Metrics</h5>
         </CardHeader>
-        <CardBody>
+        <CardBody className="metrics-card-body">
           <Row>
             <Col md={3} className="metric-item">
               <div className="metric-value">{(metrics.accuracy * 100).toFixed(2)}%</div>
@@ -228,7 +228,7 @@ class QualityMonitoringPage extends Component {
             </Col>
             <Col md={6} className="metric-item">
               <div className="metric-value">
-                {metrics.testSamples > 0 
+                {metrics.testSamples > 0
                   ? `${((metrics.accuracy * metrics.testSamples).toFixed(0))} / ${metrics.testSamples}`
                   : 'N/A'
                 }

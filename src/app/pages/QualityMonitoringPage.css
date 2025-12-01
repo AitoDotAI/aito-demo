@@ -137,6 +137,12 @@
   letter-spacing: -0.01em;
 }
 
+/* Metrics card body with padding container */
+.metrics-card-body {
+  padding: 2rem !important;
+  background-color: #fff;
+}
+
 .config-card .card-header h5 {
   color: #2c3e50;
   font-size: 1.1rem;
@@ -164,13 +170,8 @@
 
 .metric-item {
   text-align: center;
-  padding: 2rem 1.5rem;
-  border-right: 1px solid #e0e0e0;
+  padding: 1.5rem 1rem;
   transition: all 0.2s ease;
-}
-
-.metric-item:last-child {
-  border-right: none;
 }
 
 .metric-item:hover {
@@ -228,7 +229,7 @@
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   letter-spacing: 0;
 }
 
