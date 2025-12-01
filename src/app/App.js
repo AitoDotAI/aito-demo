@@ -12,7 +12,7 @@ import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
 import AnalyticsPage from './pages/AnalyticsPage'
 import InvoicingPage from './pages/InvoicingPage'
-import QualityMonitoringPage from './pages/QualityMonitoringPage'
+import EvaluationPage from './pages/EvaluationPage'
 import HelpPage from './pages/HelpPage'
 import CartPage from './pages/CartPage'
 import ProductPage from './pages/ProductPage'
@@ -142,8 +142,8 @@ class App extends Component {
         return AnalyticsPage
       case '/invoicing':
         return InvoicingPage
-      case '/quality':
-        return QualityMonitoringPage
+      case '/evaluation':
+        return EvaluationPage
       case '/pricing':
         return PricingPage
       case '/product':

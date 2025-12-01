@@ -22,9 +22,9 @@ import {
   Alert
 } from 'reactstrap'
 import { FaCheckCircle, FaTimesCircle, FaSync, FaCog } from 'react-icons/fa'
-import './QualityMonitoringPage.css'
+import './EvaluationPage.css'
 
-class QualityMonitoringPage extends Component {
+class EvaluationPage extends Component {
   constructor(props) {
     super(props)
     
@@ -331,7 +331,7 @@ class QualityMonitoringPage extends Component {
               block
             >
               <FaSync className="me-2" />
-              Run Evaluation
+              Evaluate
             </Button>
           </Form>
         </CardBody>
@@ -376,14 +376,14 @@ class QualityMonitoringPage extends Component {
           <thead>
             <tr>
               <th style={{ width: '40px' }}>Status</th>
-              <th>Invoice ID</th>
+              <th>ID</th>
               <th>Sender</th>
               <th>Product</th>
               <th>Account</th>
               <th>Description</th>
-              <th>Predicted {targetDisplayName}</th>
+              <th>Predicted</th>
               <th>Confidence</th>
-              <th>Actual {targetDisplayName}</th>
+              <th>Actual</th>
             </tr>
           </thead>
           <tbody>
@@ -437,7 +437,7 @@ class QualityMonitoringPage extends Component {
     const { activeTab, error } = this.state
     
     return (
-      <div className="QualityMonitoringPage">
+      <div className="EvaluationPage">
         <Container fluid>
           <div className="page-header">
             <h1>Evaluation</h1>
@@ -491,4 +491,4 @@ class QualityMonitoringPage extends Component {
   }
 }
 
-export default QualityMonitoringPage
+export default EvaluationPage
