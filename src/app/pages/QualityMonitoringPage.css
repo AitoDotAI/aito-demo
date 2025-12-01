@@ -221,6 +221,14 @@
   border-color: #e0e0e0;
 }
 
+.form-check label,
+.form-check .form-check-label {
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  color: #2c3e50;
+  margin-bottom: 0;
+}
+
 .config-card .form-group {
   margin-bottom: 2rem;
 }
