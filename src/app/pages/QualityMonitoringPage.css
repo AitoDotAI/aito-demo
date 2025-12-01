@@ -310,6 +310,10 @@
    CASES TABLE
    ============================================ */
 
+.cases-card .card-body {
+  padding: 2rem !important;
+}
+
 .cases-table-container {
   max-height: 600px;
   overflow-y: auto;
