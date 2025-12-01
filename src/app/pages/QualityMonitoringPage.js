@@ -477,7 +477,7 @@ class QualityMonitoringPage extends Component {
                     <CardHeader>
                       <h5>Evaluation Cases</h5>
                     </CardHeader>
-                    <CardBody>
+                    <CardBody className="p-0">
                       {this.renderCasesTable()}
                     </CardBody>
                   </Card>

@@ -225,12 +225,15 @@
   margin-bottom: 2rem;
 }
 
-.config-card .form-group label {
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  letter-spacing: 0;
+/* Override Bootstrap form-label styling to match invoice page */
+.config-card .form-group label,
+.config-card .form-label,
+.config-card label.form-label {
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0 !important;
 }
 
 .config-card .form-control {
@@ -309,10 +312,6 @@
 /* ============================================
    CASES TABLE
    ============================================ */
-
-.cases-card .card-body {
-  padding: 2rem !important;
-}
 
 .cases-table-container {
   max-height: 600px;
