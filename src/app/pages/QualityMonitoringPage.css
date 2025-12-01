@@ -14,7 +14,7 @@
    ============================================ */
 
 .QualityMonitoringPage .page-header {
-  margin: 0rem 0rem 0rem 0rem;
+  margin: 0rem 0rem 0.5rem 0rem;
   padding-bottom: 1.5rem;
   border-bottom: 3px solid var(--aito-accent);
 }
@@ -45,7 +45,7 @@
   background-color: #fff;
   padding: 0.75rem 0;
   border-radius: 8px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem!important;
   gap: 0.75rem;
   display: flex;
   flex-wrap: wrap;
@@ -88,9 +88,9 @@
    CARD COMPONENTS
    ============================================ */
 
-.metrics-card,
-.config-card,
-.cases-card {
+.QualityMonitoringPage .metrics-card,
+.QualityMonitoringPage .config-card,
+.QualityMonitoringPage .cases-card {
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border: 1px solid #e0e0e0 !important;
@@ -102,30 +102,30 @@
 }
 
 /* Override Bootstrap card border */
-.config-card.card,
-.metrics-card.card,
-.cases-card.card {
+.QualityMonitoringPage .config-card.card,
+.QualityMonitoringPage .metrics-card.card,
+.QualityMonitoringPage .cases-card.card {
   border: 1px solid #e0e0e0 !important;
   border-top: 1px solid #e0e0e0 !important;
 }
 
-.metrics-card:hover,
-.config-card:hover,
-.cases-card:hover {
+.QualityMonitoringPage .metrics-card:hover,
+.QualityMonitoringPage .config-card:hover,
+.QualityMonitoringPage .cases-card:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.12);
   border-color: var(--aito-accent);
 }
 
-.metrics-card .card-header,
-.config-card .card-header,
-.cases-card .card-header {
+.QualityMonitoringPage .metrics-card .card-header,
+.QualityMonitoringPage .config-card .card-header,
+.QualityMonitoringPage .cases-card .card-header {
   background-color: transparent;
   border-bottom: none;
   padding: 2rem 2rem 0rem 2rem;
 }
 
-.metrics-card .card-header h5,
-.cases-card .card-header h5 {
+.QualityMonitoringPage .metrics-card .card-header h5,
+.QualityMonitoringPage .cases-card .card-header h5 {
   color: #2c3e50;
   font-size: 1.25rem;
   font-weight: 600;
@@ -138,12 +138,12 @@
 }
 
 /* Metrics card body with padding container */
-.metrics-card-body {
+.QualityMonitoringPage .metrics-card-body {
   padding: 0 2rem 2rem 2rem !important;
   background-color: #fff;
 }
 
-.config-card .card-header h5 {
+.QualityMonitoringPage .config-card .card-header h5 {
   color: #2c3e50;
   font-size: 1.1rem;
   font-weight: 600;
@@ -158,13 +158,13 @@
 }
 
 /* Sticky Configuration Card */
-.config-card {
+.QualityMonitoringPage .config-card {
   position: sticky;
   top: 0;
   align-self: flex-start;
 }
 
-.config-card .card-body {
+.QualityMonitoringPage .config-card .card-body {
   padding: 1.5rem 2rem 2rem 2rem !important;
 }
 
@@ -172,18 +172,18 @@
    METRICS SECTION
    ============================================ */
 
-.metric-item {
+.QualityMonitoringPage .metric-item {
   text-align: center;
   padding: 1.5rem 1rem;
   transition: all 0.2s ease;
 }
 
-.metric-item:hover {
+.QualityMonitoringPage .metric-item:hover {
   background-color: #f8f9fa;
   transform: translateY(-2px);
 }
 
-.metric-value {
+.QualityMonitoringPage .metric-value {
   font-size: 2.25rem;
   font-weight: 700;
   color: var(--aito-accent);
@@ -192,7 +192,7 @@
   line-height: 1.1;
 }
 
-.metric-label {
+.QualityMonitoringPage .metric-label {
   font-size: 0.8rem;
   color: #6c757d;
   text-transform: uppercase;
@@ -204,13 +204,13 @@
    CONFIGURATION FORM
    ============================================ */
 
-.field-checkboxes {
+.QualityMonitoringPage .field-checkboxes {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.form-check {
+.QualityMonitoringPage .form-check {
   display: flex;
   align-items: center;
   padding: 0.75rem;
@@ -220,18 +220,18 @@
   background: #fff;
 }
 
-.form-check:hover {
+.QualityMonitoringPage .form-check:hover {
   background-color: #f8f9fa;
   border-color: #e0e0e0;
 }
 
-.form-check input[type="checkbox"] {
-  margin-top: 0;
+.QualityMonitoringPage .form-check input[type="checkbox"] {
+  margin-top: 4px;
   vertical-align: middle;
 }
 
-.form-check label,
-.form-check .form-check-label {
+.QualityMonitoringPage .form-check label,
+.QualityMonitoringPage .form-check .form-check-label {
   font-size: 0.875rem !important;
   font-weight: 400 !important;
   color: #2c3e50;
@@ -241,14 +241,14 @@
   align-items: center;
 }
 
-.config-card .form-group {
+.QualityMonitoringPage .config-card .form-group {
   margin-bottom: 2rem;
 }
 
 /* Override Bootstrap form-label styling to match invoice page */
-.config-card .form-group label,
-.config-card .form-label,
-.config-card label.form-label {
+.QualityMonitoringPage .config-card .form-group label,
+.QualityMonitoringPage .config-card .form-label,
+.QualityMonitoringPage .config-card label.form-label {
   font-weight: 600 !important;
   color: #2c3e50 !important;
   margin-bottom: 0.5rem !important;
@@ -256,7 +256,7 @@
   letter-spacing: 0 !important;
 }
 
-.config-card .form-control {
+.QualityMonitoringPage .config-card .form-control {
   padding: 0.75rem 1rem;
   border: 2px solid #e0e0e0;
   border-radius: 6px;
@@ -267,17 +267,17 @@
   transition: all 0.2s ease;
 }
 
-.config-card select.form-control {
+.QualityMonitoringPage .config-card select.form-control {
   padding: 0.875rem 1rem;
 }
 
-.config-card .form-control:focus {
+.QualityMonitoringPage .config-card .form-control:focus {
   outline: none;
   border-color: var(--aito-accent);
   box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
 }
 
-.config-card .btn-primary {
+.QualityMonitoringPage .config-card .btn-primary {
   background-color: var(--aito-accent);
   border-color: var(--aito-accent);
   color: white;
@@ -293,11 +293,11 @@
   border: 2px solid var(--aito-accent);
 }
 
-.config-card .btn-primary .me-2 {
+.QualityMonitoringPage .config-card .btn-primary .me-2 {
   margin-right: 0.5rem !important;
 }
 
-.config-card .btn-primary:hover {
+.QualityMonitoringPage .config-card .btn-primary:hover {
   background-color: #e55a2b;
   border-color: #e55a2b;
   color: white;
@@ -305,24 +305,24 @@
   box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
 }
 
-.config-card .btn-primary:focus {
+.QualityMonitoringPage .config-card .btn-primary:focus {
   background-color: var(--aito-accent);
   border-color: var(--aito-accent);
   box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25);
   color: white;
 }
 
-.config-card .btn-primary:active {
+.QualityMonitoringPage .config-card .btn-primary:active {
   transform: translateY(0);
 }
 
-.config-card .btn-primary:disabled {
+.QualityMonitoringPage .config-card .btn-primary:disabled {
   opacity: 0.6;
   transform: none;
   cursor: not-allowed;
 }
 
-.config-card .text-muted {
+.QualityMonitoringPage .config-card .text-muted {
   font-size: 0.8rem;
   color: #6c757d;
   line-height: 1.5;
@@ -333,19 +333,19 @@
    CASES TABLE
    ============================================ */
 
-.cases-table-container {
+.QualityMonitoringPage .cases-table-container {
   max-height: 600px;
   overflow-y: auto;
   overflow-x: auto;
   border-radius: 6px;
 }
 
-.cases-table {
+.QualityMonitoringPage .cases-table {
   margin-bottom: 0;
   font-size: 0.875rem;
 }
 
-.cases-table thead th {
+.QualityMonitoringPage .cases-table thead th {
   position: sticky;
   top: 0;
   background-color: #f8f9fa;
@@ -359,31 +359,31 @@
   color: #2c3e50;
 }
 
-.cases-table tbody tr {
+.QualityMonitoringPage .cases-table tbody tr {
   transition: background-color 0.2s ease;
   border-bottom: 1px solid #f0f0f0;
 }
 
-.cases-table tbody tr:hover {
+.QualityMonitoringPage .cases-table tbody tr:hover {
   background-color: #f8f9fa;
 }
 
-.cases-table tbody td {
+.QualityMonitoringPage .cases-table tbody td {
   padding: 1.25rem 1.5rem;
   vertical-align: middle;
 }
 
-.correct-row {
+.QualityMonitoringPage .correct-row {
   background-color: rgba(40, 167, 69, 0.05);
   border-left: 3px solid #28a745;
 }
 
-.error-row {
+.QualityMonitoringPage .error-row {
   background-color: rgba(220, 53, 69, 0.05);
   border-left: 3px solid #dc3545;
 }
 
-.text-truncate {
+.QualityMonitoringPage .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -395,16 +395,16 @@
    ============================================ */
 
 @media (max-width: 992px) {
-  .metric-item {
+  .QualityMonitoringPage .metric-item {
     border-right: none;
     border-bottom: 1px solid #e0e0e0;
   }
 
-  .metric-item:last-child {
+  .QualityMonitoringPage .metric-item:last-child {
     border-bottom: none;
   }
 
-  .config-card {
+  .QualityMonitoringPage .config-card {
     position: static;
     margin-bottom: 1.5rem;
   }
@@ -415,42 +415,42 @@
     padding: 1rem;
   }
 
-  .page-header {
+  .QualityMonitoringPage .page-header {
     padding-bottom: 1rem;
   }
 
-  .page-header h1 {
+  .QualityMonitoringPage .page-header h1 {
     font-size: 1.75rem;
   }
 
-  .page-header p {
+  .QualityMonitoringPage .page-header p {
     font-size: 1rem;
   }
 
-  .metric-value {
+  .QualityMonitoringPage .metric-value {
     font-size: 2rem;
   }
 
-  .cases-table {
+  .QualityMonitoringPage .cases-table {
     font-size: 0.8rem;
   }
 
-  .cases-table thead th {
+  .QualityMonitoringPage .cases-table thead th {
     padding: 0.75rem;
     font-size: 0.7rem;
   }
 
-  .cases-table tbody td {
+  .QualityMonitoringPage .cases-table tbody td {
     padding: 0.75rem;
   }
 
-  .config-card .card-header,
-  .metrics-card .card-header,
-  .cases-card .card-header {
+  .QualityMonitoringPage .config-card .card-header,
+  .QualityMonitoringPage .metrics-card .card-header,
+  .QualityMonitoringPage .cases-card .card-header {
     padding: 1rem 1rem 0;
   }
 
-  .nav-tabs .nav-link {
+  .QualityMonitoringPage .nav-tabs .nav-link {
     padding: 0.625rem 1rem;
     font-size: 0.875rem;
   }
