@@ -16,6 +16,7 @@
 .env
 .env.*
 !.env.example
+*.log
 
 # IDE and editor files
 .idea
