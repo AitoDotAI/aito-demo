@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## About This Project
 
-A comprehensive React-based demonstration of Aito.ai's predictive database capabilities through an intelligent grocery store application. This project showcases 11 real-world ML use cases in e-commerce, from personalized search to automated document processing.
+A comprehensive React-based demonstration of Aito.ai's predictive database capabilities through an intelligent grocery store application. This project showcases 13 real-world ML use cases in e-commerce, from personalized search to price-demand analytics and AI-powered product catalog management.
 
 ## Commands
 
@@ -30,8 +30,13 @@ npm run format:check        # Check code formatting
 npm run upload-data           # Upload all data to Aito.ai instance
 npm run upload-data:dry-run   # Test upload process without actual upload
 
+# Screenshot Generation
+npm run screenshots:docker    # Docker-based (most reliable, includes all deps)
+npm run screenshots:all       # All screenshots (requires Playwright deps)
+npm run screenshots:verify    # Verify screenshots exist
+
 # Note: Data files are provided as static JSON files in src/data/
-# See UPLOAD_README.md for detailed upload instructions
+# See UPLOAD_README.md for data upload and DEVELOPMENT.md for screenshot details
 ```
 
 ### Environment Notes
@@ -43,19 +48,42 @@ npm run upload-data:dry-run   # Test upload process without actual upload
 ## Architecture Overview
 
 ### High-Level Structure
-This is a single-page React application that demonstrates 11 different Aito.ai use cases through a cohesive grocery store interface. The architecture emphasizes educational value while maintaining production-ready code quality.
+This is a single-page React application that demonstrates 13 different Aito.ai use cases through a cohesive grocery store interface organized using Aito's Analytics/Assistance/Automation framework. The architecture emphasizes educational value while maintaining production-ready code quality.
 
 **Key Design Principles:**
-- Each Aito.ai feature is isolated in numbered files (01-recommend.js through 09-product.js)
+- Each Aito.ai feature is isolated in numbered files (01-recommend.js through 13-product-predictions.js)
 - All API interactions are abstracted through a `dataFetchers` object passed down as props
 - Components are designed for both functionality and educational clarity
-- Three distinct user personas (Larry, Veronica, Alice) demonstrate personalization
+- Three distinct user personas (Larry, Veronica, Alice) plus 67 additional users demonstrate personalization
+- Menu organized into logical categories: Customer Experience, Analytics, Assistance, and Automation
 
 ### Core Application Flow
 1. **App.js** - Central hub managing state, routing, and data fetching abstraction
 2. **DataFetchers** - Clean API layer that maps UI actions to Aito.ai calls
-3. **API Modules** (01-09.js) - Individual files demonstrating specific Aito capabilities
+3. **API Modules** (01-13.js) - Individual files demonstrating specific Aito capabilities
 4. **Components** - React components for UI with integrated ML features
+
+### Navigation Structure
+
+The application menu is organized into logical categories matching Aito's framework:
+
+**👥 Customer Experience:**
+- Store - Main shopping interface with search and recommendations
+- Help - NLP-powered support with sentiment analysis
+- Customer Assistant - AI chatbot for shopping assistance
+
+**📊 Analytics:**
+- Product Analytics - Individual product performance metrics
+- Preference Analytics - Customer segment to product preference relationships
+- Price-Demand Analytics - Pricing optimization and demand forecasting
+
+**🤝 Assistance:**
+- Invoice Processing - Automated GL code assignment and routing
+- Product Catalog - AI-powered category and price prediction for new products
+- Employee Assistant - Internal business intelligence chatbot
+
+**⚙️ Automation:**
+- Model Quality - Real-time model evaluation and performance monitoring
 
 ### Technology Stack
 - **Frontend**: React 18.3.1 with Create React App
@@ -75,8 +103,10 @@ The application showcases these core Aito.ai capabilities:
 
 **Machine Learning:**
 - `01-recommend.js` - Goal-oriented recommendations using `_recommend` endpoint
-- `04-get-tag-suggestions.js` - Classification using `_predict` with confidence thresholds
+- `04-get-tag-suggestions.js` - Tag prediction using `_predict` with confidence thresholds
 - `05-autofill.js` - Predictive user behavior analysis
+- `13-product-predictions.js` - Category and price prediction for product catalog management
+- `12-price-estimation.js` - Price and demand estimation using `_estimate` endpoint (beta)
 
 **Advanced Analytics:**
 - `06-prompt.js` - Natural language processing with explainable AI (`$why` operator)
@@ -86,9 +116,11 @@ The application showcases these core Aito.ai capabilities:
 
 **Enterprise Features:**
 - **Invoice Processing**: Automatic GL code assignment and approval routing
+- **Product Catalog Management**: AI-powered category and price prediction for new products
 - **Customer Support**: NLP-powered inquiry classification and auto-assignment
 - **Demographic Targeting**: Tag-based user segmentation for personalized experiences
 - **Temporal Analytics**: Day-of-week and seasonal pattern analysis
+- **Price Optimization**: Data-driven pricing and demand forecasting with regression models
 
 ### Data Architecture
 
@@ -111,6 +143,9 @@ The application showcases these core Aito.ai capabilities:
 - `questions` - Q&A pairs for support automation (150 entries)
 - `answers` - Standardized responses for customer support (50 entries)
 
+**Analytics Tables:**
+- `price_history` - Historical pricing and demand data for price-demand analytics
+
 **Key Relationships:**
 - `users` → `visits` → `contexts` → `impressions` → `products` (core shopping flow)
 - `employees` ← `invoices` → `glCodes` (enterprise document processing)
@@ -131,6 +166,8 @@ The application showcases these core Aito.ai capabilities:
 - `_predict` - Classification and regression with confidence scores
 - `_recommend` - Goal-oriented ML recommendations
 - `_relate` - Statistical relationship analysis
+- `_evaluate` - Model quality monitoring and performance metrics
+- `_estimate` - Regression-based estimation for pricing and demand (beta)
 - `_batch` - Multiple queries for comprehensive analytics
 
 ### Development Patterns

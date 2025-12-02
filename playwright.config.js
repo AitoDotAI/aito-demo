@@ -6,7 +6,8 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
-  testDir: './tests',
+  testDir: './',
+  testMatch: ['tests/**/*.spec.js', 'scripts/**/*.spec.js'],
   fullyParallel: true,
   timeout: 60000, // Increase default timeout to 60 seconds per test
   forbidOnly: !!process.env.CI,

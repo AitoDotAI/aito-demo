@@ -487,35 +487,19 @@ test.describe('Aito Grocery Store Screenshots', () => {
       if (await element.isVisible()) {
         await element.scrollIntoViewIfNeeded();
         await element.fill('Which payment methods do you provide?');
-        await page.waitForTimeout(1000);
-        
-        // Look for process button
-        const processButtons = [
-          'button:has-text("Process")',
-          'button:has-text("Analyze")',
-          'button:has-text("Submit")',
-          'button:has-text("Send")',
-          'button:has-text("Ask")',
-          '[data-testid="nlp-process"]'
-        ];
-        
-        for (const btnSelector of processButtons) {
-          const btn = page.locator(btnSelector).first();
-          if (await btn.isVisible()) {
-            await btn.click();
-            await page.waitForTimeout(2000);
-            
-            // Wait for the answer/response to appear
-            try {
-              await page.waitForSelector('.response, .answer, .result, .output', { timeout: 8000 });
-              await page.waitForTimeout(2000); // Extra wait for content to fully load
-            } catch (error) {
-              console.log('No response section found, continuing...');
-            }
-            break;
-          }
+
+        // Wait for debounced auto-results (HelpPage uses 300ms debounce)
+        console.log('Waiting for auto-results to appear...');
+        try {
+          // Wait for the result section to appear (HelpPage__result class)
+          await page.waitForSelector('.HelpPage__result, .HelpPage__metadata, .HelpPage__result-title', { timeout: 5000 });
+          await page.waitForTimeout(2000); // Extra wait for content to fully load
+          console.log('Results appeared successfully');
+        } catch (error) {
+          console.log('No auto-results appeared, waiting additional time...');
+          await page.waitForTimeout(3000);
         }
-        
+
         foundNlpInput = true;
         break;
       }
@@ -578,11 +562,14 @@ test.describe('Aito Grocery Store Screenshots', () => {
   });
 
   test('Comprehensive Use Case Screenshots', async ({ page }) => {
+    // Increase timeout for comprehensive screenshot test
+    test.setTimeout(120000); // 2 minutes
+
     // Standard viewport for use case screenshots
     await page.setViewportSize({ width: 1280, height: 900 });
-    
+
     console.log('📸 Generating comprehensive use case screenshots...');
-    
+
     // 1. Main app interface
     await page.goto(APP_URL);
     await page.waitForLoadState('networkidle');
@@ -686,7 +673,11 @@ test.describe('Aito Grocery Store Screenshots', () => {
       await page.goto(`${APP_URL}/customer-chat`);
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(WAIT_TIME);
-      
+
+      // Scroll to top to show header
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(500);
+
       await takeScreenshot(page, 'shopping-assistant-interface', {
         directory: 'features',
         fullPage: false
@@ -729,7 +720,11 @@ test.describe('Aito Grocery Store Screenshots', () => {
       await page.goto(`${APP_URL}/admin-chat`);
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(WAIT_TIME);
-      
+
+      // Scroll to top to show header
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(500);
+
       await takeScreenshot(page, 'admin-assistant-interface', {
         directory: 'features',
         fullPage: false
@@ -897,13 +892,12 @@ test.describe('Aito Grocery Store Screenshots', () => {
           directory: 'features',
           fullPage: true
         });
-      }
-        
+
         // Clear input for next scenario
         await nlpInput.clear();
         await page.waitForTimeout(500);
       }
-      
+
       // Scenario 2: Product request
       if (await nlpInput.isVisible()) {
         await nlpInput.fill('Could you provide more bananas?');
@@ -951,7 +945,55 @@ test.describe('Aito Grocery Store Screenshots', () => {
     } catch (error) {
       console.log('Could not generate NLP processing screenshots');
     }
-    
+
+    // 13. Model Quality (Evaluation Page)
+    try {
+      await page.goto(`${APP_URL}/evaluation`);
+      await page.waitForLoadState('networkidle');
+      await page.waitForTimeout(WAIT_TIME);
+
+      // Scroll to top to show header and metrics
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(500);
+
+      await takeScreenshot(page, 'quality-monitoring', {
+        directory: 'features',
+        fullPage: false  // Show top of page with metrics
+      });
+
+      await takeScreenshot(page, 'model-evaluation', {
+        directory: 'features',
+        fullPage: true  // Full page view
+      });
+
+    } catch (error) {
+      console.log('Could not generate Model Quality screenshots');
+    }
+
+    // 14. Price-Demand Analytics (Pricing Page)
+    try {
+      await page.goto(`${APP_URL}/pricing`);
+      await page.waitForLoadState('networkidle');
+      await page.waitForTimeout(3000);  // Wait for data to load
+
+      // Scroll to top to show header and controls
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(500);
+
+      await takeScreenshot(page, 'price-optimization', {
+        directory: 'features',
+        fullPage: false  // Show top section with controls
+      });
+
+      await takeScreenshot(page, 'pricing-analytics', {
+        directory: 'features',
+        fullPage: true  // Full page with charts
+      });
+
+    } catch (error) {
+      console.log('Could not generate Price-Demand Analytics screenshots');
+    }
+
     console.log('✅ Comprehensive use case screenshots completed!');
   });
 });

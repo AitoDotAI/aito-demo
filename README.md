@@ -85,9 +85,10 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 ```
 [→ Implementation](src/03-search.js) | [Use case guide](docs/use-cases/03-smart-search.md) | [🚀 Live Demo](https://demo.aito.ai/)
 
-### 4. 🏷️ Automated Tag Prediction
-![Tag Prediction](docs/screenshots/features/tag-prediction.png)
+### 4. 🏷️ Automated Tag and Category Predictions
+![Tag & Category Prediction](docs/screenshots/features/tag-prediction.png)
 ```json
+// Predict tags
 {
   "from": "products",
   "where": { "name": "Rye bread" },
@@ -95,10 +96,19 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
   "exclusiveness": false,
   "limit": 10
 }
+// Returns: ['gluten', 'bread'] (filtered by $p > 0.5)
+
+// Predict category
+{
+  "from": "products",
+  "where": { "name": "Rye bread" },
+  "predict": "category",
+  "limit": 1
+}
+// Returns: { feature: "101", $p: 0.83 }
 ```
-// Filter: hit.$p > 0.5, Extract: hit.feature
-// Returns: ['organic', 'chocolate', 'dark', 'healthy', 'premium']
-[→ Implementation](src/04-get-tag-suggestions.js) | [Use case guide](docs/use-cases/04-tag-prediction.md) | [🚀 Live Demo](https://demo.aito.ai/admin)
+AI-powered product catalog management predicts tags, category, and price for new products
+[→ Implementation](src/04-get-tag-suggestions.js) & [src/13-product-predictions.js](src/13-product-predictions.js) | [Use case guide](docs/use-cases/04-tag-prediction.md) | [🚀 Live Demo](https://demo.aito.ai/admin)
 
 ### 5. 📝 Smart Cart Autofill
 ![Autofill](docs/screenshots/features/autofill-cart.png)
