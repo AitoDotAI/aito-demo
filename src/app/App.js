@@ -169,6 +169,9 @@ class App extends Component {
     const dataFetchers = {
       // Call async API functions directly (they already return promises)
       getTagSuggestions: (productName) => data.getTagSuggestions(productName),
+      predictCategory: (productName) => data.predictCategory(productName),
+      predictPrice: (productName) => data.predictPrice(productName),
+      predictProductAttributes: (productName) => data.predictProductAttributes(productName),
 
       // Add user behavior for personalized recommendations
       getRecommendedProducts:

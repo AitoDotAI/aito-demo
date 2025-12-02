@@ -24,7 +24,11 @@ class AdminPage extends Component {
       modalOpen: false,
       tagsInputValue: '',
       productNameInputValue: '',
-      tagSuggestions: []
+      categoryInputValue: '',
+      priceInputValue: '',
+      tagSuggestions: [],
+      categoryPrediction: null,
+      pricePrediction: null
     }
 
     this.debouncedFetchNewSuggestions = _.debounce(this.fetchNewSuggestions, 300).bind(this)
@@ -44,7 +48,11 @@ class AdminPage extends Component {
     })
 
     if (!val) {
-      this.setState({ tagSuggestions: [] })
+      this.setState({
+        tagSuggestions: [],
+        categoryPrediction: null,
+        pricePrediction: null
+      })
     } else {
       this.debouncedFetchNewSuggestions(val)
     }
@@ -65,9 +73,35 @@ class AdminPage extends Component {
   }
 
   fetchNewSuggestions(productName) {
-    return this.props.dataFetchers.getTagSuggestions(productName)
-      .then(tagSuggestions => this.setState({ tagSuggestions }))
+    // Fetch tags, category, and price predictions in parallel
+    return Promise.all([
+      this.props.dataFetchers.getTagSuggestions(productName),
+      this.props.dataFetchers.predictCategory(productName),
+      this.props.dataFetchers.predictPrice(productName)
+    ])
+      .then(([tagSuggestions, categoryPrediction, pricePrediction]) => {
+        this.setState({
+          tagSuggestions,
+          categoryPrediction,
+          pricePrediction,
+          // Auto-fill the input fields with predictions
+          categoryInputValue: categoryPrediction ? categoryPrediction.value : '',
+          priceInputValue: pricePrediction ? pricePrediction.value.toFixed(2) : ''
+        })
+      })
       .catch(err => this.props.actions.showError(err))
+  }
+
+  onCategoryChange = (e) => {
+    this.setState({
+      categoryInputValue: e.target.value
+    })
+  }
+
+  onPriceChange = (e) => {
+    this.setState({
+      priceInputValue: e.target.value
+    })
   }
 
   render() {
@@ -79,7 +113,7 @@ class AdminPage extends Component {
         <div className="AdminPage__header">
           <h1 className="AdminPage__title">Product Catalog</h1>
           <p className="AdminPage__subtitle">
-            Manage products with AI-powered assistance. Enter a product name to get intelligent tagging recommendations based on similar products.
+            Manage products with AI-powered assistance. Enter a product name to automatically predict tags, category, and price based on similar products.
           </p>
         </div>
 
@@ -146,6 +180,47 @@ class AdminPage extends Component {
                 placeholder="Enter custom tags or click suggestions above"
               />
             </div>
+          </div>
+
+          <div className="form-field">
+            <label className="form-field__label" htmlFor="category">
+              Category
+              {this.state.categoryPrediction && (
+                <span className="prediction-badge">
+                  AI Predicted ({(this.state.categoryPrediction.confidence * 100).toFixed(0)}% confidence)
+                </span>
+              )}
+            </label>
+            <input
+              className={`form-field__input ${this.state.categoryPrediction ? 'form-field__input--highlighted' : ''}`}
+              value={this.state.categoryInputValue}
+              onChange={this.onCategoryChange}
+              type="text"
+              name="category"
+              id="category"
+              placeholder="Category will be predicted automatically"
+            />
+          </div>
+
+          <div className="form-field">
+            <label className="form-field__label" htmlFor="price">
+              Price (€)
+              {this.state.pricePrediction && (
+                <span className="prediction-badge">
+                  AI Predicted ({(this.state.pricePrediction.confidence * 100).toFixed(0)}% confidence)
+                </span>
+              )}
+            </label>
+            <input
+              className={`form-field__input ${this.state.pricePrediction ? 'form-field__input--highlighted' : ''}`}
+              value={this.state.priceInputValue}
+              onChange={this.onPriceChange}
+              type="number"
+              step="0.01"
+              name="price"
+              id="price"
+              placeholder="Price will be predicted automatically"
+            />
           </div>
 
           <button 
