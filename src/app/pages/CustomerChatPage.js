@@ -216,7 +216,7 @@ class CustomerChatPage extends Component {
                     <FaComments />
                   </div>
                   <div className="header-text">
-                    <h2>Shopping Assistant</h2>
+                    <h2>Customer Assistant</h2>
                     <p>Get personalized help with your shopping experience</p>
                   </div>
                 </div>

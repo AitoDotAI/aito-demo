@@ -1,8 +1,8 @@
-# Statistical Data Analysis
+# Preference Analytics
 
-![Data Analytics](../screenshots/features/analytics-dashboard.png)
+![Preference Analytics](../screenshots/features/analytics-dashboard.png)
 
-*Data analytics in action: Exploring which products are statistically correlated with user demographics and temporal patterns*
+*Preference analytics in action: Discovering how different customer segments relate to product preferences*
 
 **[🚀 Try Live Demo](https://demo.aito.ai/analytics)** - Explore product-customer relationships by selecting user demographics (tags, user ID) or temporal patterns (weekday). See which products are statistically more likely to be purchased.
 

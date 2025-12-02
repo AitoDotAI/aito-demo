@@ -69,7 +69,7 @@ class NavBar extends Component {
               <DropdownItem header>📊 Analytics</DropdownItem>
               <DropdownItem onClick={() => this.onMenuItemClick('/product')}>Product Analytics</DropdownItem>
               <DropdownItem onClick={() => this.onMenuItemClick('/analytics')}>Preference Analytics</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/pricing')}>Pricing Analytics</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/pricing')}>Price-Demand Analytics</DropdownItem>
 
               <DropdownItem divider />
               <DropdownItem header>🤝 Assistance</DropdownItem>

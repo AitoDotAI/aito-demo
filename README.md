@@ -170,8 +170,8 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 ```
 [→ Implementation](src/09-product.js) | [Use case guide](docs/use-cases/09-product-analytics.md) | [🚀 Live Demo](https://demo.aito.ai/product)
 
-### 10. 🤖 AI Shopping Assistant
-![Shopping Assistant](docs/screenshots/features/shopping-assistant.png)
+### 10. 🤖 Customer Assistant
+![Customer Assistant](docs/screenshots/features/shopping-assistant.png)
 ```json
 {
   "from": "impressions",
@@ -185,8 +185,8 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 // "Find gluten-free bread under $5"
 [→ Implementation](src/services/chatTools/customerTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://demo.aito.ai/customer-chat)
 
-### 11. 🔧 Admin Business Intelligence
-![Admin Assistant](docs/screenshots/features/admin-assistant.png)
+### 11. 🔧 Employee Assistant
+![Employee Assistant](docs/screenshots/features/admin-assistant.png)
 ```json
 {
   "from": "impressions",
@@ -198,8 +198,8 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 // "What are our top selling products this week?"
 [→ Implementation](src/services/chatTools/adminTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://demo.aito.ai/admin-chat)
 
-### 12. 📊 Quality Monitoring & Model Evaluation
-![Quality Monitoring](docs/screenshots/features/quality-monitoring.png)
+### 12. 📊 Model Quality
+![Model Quality](docs/screenshots/features/quality-monitoring.png)
 ```json
 {
   "test": { "$index": { "$gt": 90 } },
@@ -212,10 +212,10 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 }
 ```
 // Returns: accuracy: 0.87, meanRank: 2.3, meanMs: 45
-[→ Implementation](src/11-evaluate.js) | [Use case guide](docs/use-cases/10-quality-monitoring.md) | [🚀 Live Demo](https://demo.aito.ai/quality)
+[→ Implementation](src/11-evaluate.js) | [Use case guide](docs/use-cases/10-quality-monitoring.md) | [🚀 Live Demo](https://demo.aito.ai/evaluation)
 
-### 13. 💰 Price Optimization & Demand Forecasting
-![Price Optimization](docs/screenshots/features/price-optimization.png)
+### 13. 💰 Price-Demand Analytics
+![Price-Demand Analytics](docs/screenshots/features/price-optimization.png)
 ```json
 {
   "from": "price_history",

@@ -1,8 +1,8 @@
-# Price Optimization & Demand Forecasting
+# Price-Demand Analytics
 
-![Price Optimization](../screenshots/features/price-optimization.png)
+![Price-Demand Analytics](../screenshots/features/price-optimization.png)
 
-*Price optimization dashboard showing demand forecasts, profit maximization, and explainable price-demand relationships*
+*Price-demand analytics dashboard showing demand forecasts, profit maximization, and explainable price-demand relationships*
 
 **[🚀 Try Live Demo](https://demo.aito.ai/pricing)** - Experience AI-powered pricing. Set product conditions and see optimal price recommendations with demand forecasts and profit projections.
 

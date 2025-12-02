@@ -135,8 +135,8 @@ class AnalyticsPage extends Component {
       <div className="AnalyticsPage">
         <div className="AnalyticsPage__header">
           <h1 className="AnalyticsPage__title">
-            Data Analytics
-            <HelpButton 
+            Preference Analytics
+            <HelpButton
               feature="Data Analytics"
               {...HELP_CONTENT['Data Analytics']}
               size="md"
@@ -144,13 +144,13 @@ class AnalyticsPage extends Component {
             />
           </h1>
           <p className="AnalyticsPage__subtitle">
-            Explore statistical relationships in your data using AI-powered correlation analysis. Select a field and value to discover related patterns and preferences.
+            Discover how different customer segments relate to product preferences. Select an audience characteristic (age, gender, diet) or condition (day of week, time) to reveal which products they prefer and how strongly.
           </p>
         </div>
 
         <div className="AnalyticsPage__info">
           <div className="AnalyticsPage__info-title">How it works</div>
-          Choose a data field (like user tags, user ID, or weekday) and specify a value to analyze. The system will show you what other data points are statistically related to your selection, along with their correlation strength.
+          Select a customer segment or condition to discover related product preferences. For example, choose 'club-member' to see which products club members prefer, or select a specific weekday to reveal products popular on that day. Results show preference strength through correlation scores.
         </div>
 
         <div className="AnalyticsPage__controls">
