@@ -1725,7 +1725,7 @@ class PricingPage extends Component {
         {/* Header */}
         <div className="PricingPage__header">
           <h1 className="PricingPage__title">
-            Price Optimization
+            Price-Demand Analytics
             <HelpButton
               feature="Price Optimization"
               {...HELP_CONTENT['Price Optimization']}

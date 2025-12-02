@@ -20,6 +20,7 @@ import {
   getPriceHistory,
   getPriceStats
 } from '../../12-price-estimation'
+import { predictCategory, predictPrice, predictProductAttributes } from '../../13-product-predictions'
 
 export {
   getProductSearchResults,
@@ -45,5 +46,8 @@ export {
   getPriceFieldValues,
   getProductPriceContext,
   getPriceHistory,
-  getPriceStats
+  getPriceStats,
+  predictCategory,
+  predictPrice,
+  predictProductAttributes
 }

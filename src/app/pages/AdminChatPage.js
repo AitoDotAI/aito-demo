@@ -63,7 +63,7 @@ class AdminChatPage extends Component {
                     <FaChartLine />
                   </div>
                   <div className="header-text">
-                    <h2>Admin Assistant</h2>
+                    <h2>Employee Assistant</h2>
                     <p>AI-powered insights for business operations and analytics</p>
                   </div>
                 </div>
@@ -217,7 +217,7 @@ class AdminChatPage extends Component {
               <Row className="mt-4">
                 <Col>
                   <Alert color="info" className="admin-help-alert">
-                    <h6>🔧 Admin Assistant Capabilities:</h6>
+                    <h6>🔧 Employee Assistant Capabilities:</h6>
                     <Row>
                       <Col md={6}>
                         <ul className="admin-help-list">

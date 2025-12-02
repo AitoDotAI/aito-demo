@@ -440,9 +440,9 @@ class EvaluationPage extends Component {
       <div className="EvaluationPage">
         <Container fluid>
           <div className="page-header">
-            <h1>Evaluation</h1>
+            <h1>Model Quality</h1>
             <p className="text-muted">
-              Evaluate model performance with real-time accuracy metrics and case analysis
+              Monitor and evaluate AI model performance with real-time accuracy metrics and case analysis
             </p>
           </div>
           

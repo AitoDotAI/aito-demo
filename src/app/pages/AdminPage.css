@@ -299,3 +299,28 @@
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(255, 107, 53, 0.25);
 }
+/* ============================================
+   AI PREDICTION ENHANCEMENTS
+   ============================================ */
+
+.prediction-badge {
+  display: inline-block;
+  margin-left: var(--aito-spacing-sm);
+  padding: var(--aito-spacing-xs) var(--aito-spacing-sm);
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--aito-radius-small);
+  border: 1px solid #a5d6a7;
+}
+
+.form-field__input--highlighted {
+  border-color: #fbbf24 !important;
+  background-color: #fffbeb !important;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2) !important;
+}
+
+.form-field__input--highlighted::placeholder {
+  color: #d97706;
+}

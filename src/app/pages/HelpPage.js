@@ -135,8 +135,8 @@ class HelpPage extends Component {
       <div className="HelpPage">
         <div className="HelpPage__header">
           <h1 className="HelpPage__title">
-            Help & Support
-            <HelpButton 
+            Help
+            <HelpButton
               feature="NLP Processing"
               {...HELP_CONTENT['NLP Processing']}
               size="md"

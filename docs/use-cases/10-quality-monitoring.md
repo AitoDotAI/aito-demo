@@ -1,10 +1,10 @@
-# Quality Monitoring & Model Evaluation
+# Model Quality
 
-![Quality Monitoring](../screenshots/features/quality-monitoring.png)
+![Model Quality](../screenshots/features/quality-monitoring.png)
 
-*Quality monitoring dashboard showing model performance metrics and case-by-case analysis*
+*Model quality dashboard showing performance metrics and case-by-case analysis*
 
-**[🚀 Try Live Demo](https://demo.aito.ai/quality)** - Experience AI model evaluation. Monitor prediction accuracy, response times, and analyze individual predictions vs actual outcomes.
+**[🚀 Try Live Demo](https://demo.aito.ai/evaluation)** - Experience AI model evaluation. Monitor prediction accuracy, response times, and analyze individual predictions vs actual outcomes.
 
 ## Overview
 

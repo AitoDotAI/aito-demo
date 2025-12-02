@@ -60,17 +60,26 @@ class NavBar extends Component {
               <FaBars />
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem onClick={() => this.onMenuItemClick('/')}>Grocery Store</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/customer-chat')}>Shopping Assistant</DropdownItem>
+              <DropdownItem header>👥 Customer Experience</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/')}>Store</DropdownItem>
               <DropdownItem onClick={() => this.onMenuItemClick('/help')}>Help</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/customer-chat')}>Customer Assistant</DropdownItem>
+
               <DropdownItem divider />
-              <DropdownItem onClick={() => this.onMenuItemClick('/admin')}>Admin View</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/admin-chat')}>Admin Assistant</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/product')}>Products</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/pricing')}>Pricing</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/analytics')}>Analytics</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/invoicing')}>Invoicing</DropdownItem>
-              <DropdownItem onClick={() => this.onMenuItemClick('/evaluation')}>Evaluation</DropdownItem>
+              <DropdownItem header>📊 Analytics</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/product')}>Product Analytics</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/analytics')}>Preference Analytics</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/pricing')}>Price-Demand Analytics</DropdownItem>
+
+              <DropdownItem divider />
+              <DropdownItem header>🤝 Assistance</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/invoicing')}>Invoice Processing</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/admin')}>Product Catalog</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/admin-chat')}>Employee Assistant</DropdownItem>
+
+              <DropdownItem divider />
+              <DropdownItem header>⚙️ Automation</DropdownItem>
+              <DropdownItem onClick={() => this.onMenuItemClick('/evaluation')}>Model Quality</DropdownItem>
             </DropdownMenu>
           </Dropdown>
           

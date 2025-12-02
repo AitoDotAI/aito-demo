@@ -87,6 +87,7 @@ run_screenshots() {
         --name ${CONTAINER_NAME} \
         -v "$(pwd)/docs/screenshots:${APP_DIR}/docs/screenshots" \
         -v "$(pwd)/tests:${APP_DIR}/tests" \
+        -v "$(pwd)/scripts:${APP_DIR}/scripts" \
         -v "$(pwd)/playwright.config.js:${APP_DIR}/playwright.config.js" \
         -p 3001:3000 \
         ${DOCKER_IMAGE} \
