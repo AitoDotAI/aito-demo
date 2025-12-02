@@ -313,7 +313,7 @@ async function main() {
   // Upload tables in dependency order (users and products first)
   const uploadOrder = [
     'users', 'products', 'employees', 'glCodes', 'answers',
-    'visits', 'contexts', 'impressions', 'prompts', 'questions', 'invoices'
+    'visits', 'contexts', 'impressions', 'prompts', 'questions', 'invoices', 'price_history'
   ].filter(table => tablesToUpload.includes(table));
 
   let successCount = 0;
