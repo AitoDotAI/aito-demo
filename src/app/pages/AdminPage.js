@@ -77,9 +77,9 @@ class AdminPage extends Component {
     return (
       <div className="AdminPage">
         <div className="AdminPage__header">
-          <h1 className="AdminPage__title">Product Management</h1>
+          <h1 className="AdminPage__title">Product Catalog</h1>
           <p className="AdminPage__subtitle">
-            Add new products with AI-powered tag suggestions. Enter a product name to get intelligent tagging recommendations based on similar products.
+            Manage products with AI-powered assistance. Enter a product name to get intelligent tagging recommendations based on similar products.
           </p>
         </div>
 
