@@ -93,8 +93,11 @@ class HelpPage extends Component {
                 <div className="HelpPage__metadata-item">
                   <div className="HelpPage__metadata-label">Tags</div>
                   <div className="HelpPage__tags">
-                    {match.tags.split(',').map((tag, index) => (
-                      <span key={index} className="HelpPage__tag">{tag.trim()}</span>
+                    {(Array.isArray(match.tags)
+                      ? match.tags
+                      : match.tags.split(',')
+                    ).map((tag, index) => (
+                      <span key={index} className="HelpPage__tag">{typeof tag === 'string' ? tag.trim() : tag}</span>
                     ))}
                   </div>
                 </div>

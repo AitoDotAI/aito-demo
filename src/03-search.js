@@ -16,15 +16,10 @@ import config from './config'
  */
 export function getProductSearchResults(userId, inputValue) {
   // Build the search query with Aito's $match operator
-  // $match performs fuzzy text matching on fields
+  // $match performs fuzzy text matching on Text fields
+  // Note: tags is now an array field (String[]) so we search only on name
   var where = {
-    'product' : {
-      // Use $or to search across multiple fields
-      '$or': [
-        {'tags': { "$match": inputValue }},  // Search in product tags
-        {'name': { "$match": inputValue }}   // Search in product names
-      ]
-    }
+    'product.name': { "$match": inputValue }
   }
   
   // Add user context for personalization if userId is provided

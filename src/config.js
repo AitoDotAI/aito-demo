@@ -4,9 +4,9 @@
  * Uses environment variables for sensitive data
  */
 
-// Default to demo instance if no environment variables are set
-const DEFAULT_AITO_URL = "https://shared.aito.ai/db/aito-demo"
-const DEFAULT_AITO_API_KEY = "yg4rTlXkqDzm4y8gPeY75HCKaNwfbTQ2si64ONTi" // Demo key
+// Default to local instance if no environment variables are set
+const DEFAULT_AITO_URL = "http://localhost:9005"
+const DEFAULT_AITO_API_KEY = "dummy" // Local dev key (no auth required)
 
 // Get configuration from environment variables or use defaults
 const aitoUrl = process.env.REACT_APP_AITO_URL || DEFAULT_AITO_URL

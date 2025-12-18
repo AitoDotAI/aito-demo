@@ -14,13 +14,9 @@ import config from '../config'
  */
 export function getProductSearchResults(userId, inputValue) {
   // Build search criteria
+  // Note: tags is now an array field (String[]) so we search only on name
   const where = {
-    product: {
-      $or: [
-        { tags: { $match: inputValue } },
-        { name: { $match: inputValue } },
-      ],
-    },
+    'product.name': { $match: inputValue },
   }
 
   // Add user context for personalization if available

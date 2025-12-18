@@ -292,10 +292,15 @@ The application uses the following Aito tables:
 
 **E-commerce Core:**
 - `products` (42 items) - Product catalog with Google Analytics
+  - Array field: `tags` (String[]) - Use `$has` operator for matching
 - `users` (67 entries) - Customer demographics
+  - Array field: `tags` (String[]) - Use `$has` operator for matching
 - `visits` (736 entries) - Shopping sessions
+  - Array field: `purchases` (String[]) - Product IDs purchased
 - `contexts` (5,290 entries) - Search interactions
-- `impressions` (90,087 entries) - Product views and purchases
+  - Array fields: `basket`, `prevBasket` (String[]) - Product IDs
+- `impressions` - Product views and purchases (primary ML training data)
+  - Links: `context` → contexts.id, `product` → products.id
 
 **Enterprise Features:**
 - `invoices` (100 entries) - Purchase invoices
@@ -304,11 +309,18 @@ The application uses the following Aito tables:
 
 **NLP/Support:**
 - `prompts` (350 entries) - Customer inquiries
+  - Array fields: `categories`, `tags` (String[])
 - `questions` (150 entries) - Q&A pairs
 - `answers` (50 entries) - Support responses
 
 **Analytics:**
 - `price_history` - Historical pricing and demand data
+  - Array field: `tags` (String[])
+
+**Working with Array Fields:**
+- Use `$has` operator to match array elements: `{"tags": {"$has": "fresh"}}`
+- Use `$feature` suffix to get distinct values: `_match` with `user.tags.$feature`
+- `$match` operator only works on Text fields, not on String[] arrays
 
 ### Uploading Data
 

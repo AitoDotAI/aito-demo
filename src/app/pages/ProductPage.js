@@ -148,8 +148,11 @@ class ProductPage extends Component {
             <h2 className="ProductCard__name">{this.state.details["name"] || "Loading..."}</h2>
             {this.state.details["tags"] && (
               <div className="ProductCard__tags">
-                {this.state.details["tags"].split(',').map((tag, index) => (
-                  <span key={index} className="Tag">{tag.trim()}</span>
+                {(Array.isArray(this.state.details["tags"])
+                  ? this.state.details["tags"]
+                  : this.state.details["tags"].split(',')
+                ).map((tag, index) => (
+                  <span key={index} className="Tag">{typeof tag === 'string' ? tag.trim() : tag}</span>
                 ))}
               </div>
             )}
