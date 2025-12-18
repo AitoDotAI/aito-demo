@@ -1351,907 +1351,907 @@
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Great grocery store! It's super fast and easy to use.",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "The refund process took too long.",
   "sentiment": "negative",
-  "tags": "refund",
+  "tags": ["refund"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "Customer support was slow to respond.",
   "sentiment": "negative",
-  "tags": "customer support",
+  "tags": ["customer support"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "quality",
+  "categories": ["quality"],
   "prompt": "The app keeps crashing on my iPhone!",
   "sentiment": "negative",
-  "tags": "iPhone,app",
+  "tags": ["iPhone", "app"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Everything was fine, but the packaging could be improved.",
   "sentiment": "neutral",
-  "tags": "packaging",
+  "tags": ["packaging"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "Good for basic groceries, but limited in specialty products.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "It's a decent service, but I prefer going to the store in person.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Everything was fine, but the packaging could be improved.",
   "sentiment": "neutral",
-  "tags": "packaging",
+  "tags": ["packaging"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "The delivery was quick and hassle-free.",
   "sentiment": "positive",
-  "tags": "fast delivery",
+  "tags": ["fast delivery"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Delivery was on time, but not faster than competitors.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "The refund process took too long.",
   "sentiment": "negative",
-  "tags": "refund",
+  "tags": ["refund"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "Good for basic groceries, but limited in specialty products.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "I love the selection of organic products.",
   "sentiment": "positive",
-  "tags": "organic",
+  "tags": ["organic"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "Customer support was slow to respond.",
   "sentiment": "negative",
-  "tags": "customer support",
+  "tags": ["customer support"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "My delivery was missing a few items.",
   "sentiment": "negative",
-  "tags": "missing items",
+  "tags": ["missing items"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Delivery took much longer than expected.",
   "sentiment": "negative",
-  "tags": "delayed delivery",
+  "tags": ["delayed delivery"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "It's a decent service, but I prefer going to the store in person.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "Some products were out of stock after I ordered.",
   "sentiment": "negative",
-  "tags": "out of stock",
+  "tags": ["out of stock"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Delivery was on time, but not faster than competitors.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I like the website, but it could use a fresher design.",
   "sentiment": "neutral",
-  "tags": "website",
+  "tags": ["website"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "pricing",
+  "categories": ["pricing"],
   "prompt": "Prices are a bit high compared to local stores.",
   "sentiment": "negative",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had no problems finding what I needed.",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I like the website, but it could use a fresher design.",
   "sentiment": "neutral",
-  "tags": "website",
+  "tags": ["website"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The store is okay, but there's room for improvement.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Overall, it's a good service, but nothing too impressive.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "It's a decent service, but I prefer going to the store in person.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Great grocery store! It's super fast and easy to use.",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "Customer support was slow to respond.",
   "sentiment": "negative",
-  "tags": "customer support",
+  "tags": ["customer support"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "It's a decent service, but I prefer going to the store in person.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "The selection is fine, but I wish they had more organic items.",
   "sentiment": "neutral",
-  "tags": "organic",
+  "tags": ["organic"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "quality",
+  "categories": ["quality"],
   "prompt": "The website is laggy and takes too long to load.",
   "sentiment": "negative",
-  "tags": "website",
+  "tags": ["website"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "Customer support was slow to respond.",
   "sentiment": "negative",
-  "tags": "customer support",
+  "tags": ["customer support"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Delivery was on time, but not faster than competitors.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The app works fine, but there’s nothing special about it.",
   "sentiment": "neutral",
-  "tags": "app",
+  "tags": ["app"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "pricing",
+  "categories": ["pricing"],
   "prompt": "Amazing discounts and offers every week!",
   "sentiment": "positive",
-  "tags": "promo code",
+  "tags": ["promo code"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I like the website, but it could use a fresher design.",
   "sentiment": "neutral",
-  "tags": "website",
+  "tags": ["website"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The store is okay, but there's room for improvement.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Very convenient, I can shop anytime!",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "It's a decent service, but I prefer going to the store in person.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "pricing",
+  "categories": ["pricing"],
   "prompt": "I had trouble applying the promo code during checkout.",
   "sentiment": "negative",
-  "tags": "promo code",
+  "tags": ["promo code"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Fast delivery, and everything was fresh!",
   "sentiment": "positive",
-  "tags": "fresh products",
+  "tags": ["fresh products"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "I couldn't find many vegan options.",
   "sentiment": "negative",
-  "tags": "vegan",
+  "tags": ["vegan"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Delivery took much longer than expected.",
   "sentiment": "negative",
-  "tags": "delayed delivery",
+  "tags": ["delayed delivery"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had no problems finding what I needed.",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Delivery was on time, but not faster than competitors.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Fast delivery, and everything was fresh!",
   "sentiment": "positive",
-  "tags": "fresh products",
+  "tags": ["fresh products"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Very convenient, I can shop anytime!",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "It's a decent service, but I prefer going to the store in person.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "quality",
+  "categories": ["quality"],
   "prompt": "The app keeps crashing on my iPhone!",
   "sentiment": "negative",
-  "tags": "iPhone,app",
+  "tags": ["iPhone", "app"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Overall, it's a good service, but nothing too impressive.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "My delivery was missing a few items.",
   "sentiment": "negative",
-  "tags": "missing items",
+  "tags": ["missing items"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "quality",
+  "categories": ["quality"],
   "prompt": "The website is laggy and takes too long to load.",
   "sentiment": "negative",
-  "tags": "website",
+  "tags": ["website"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "It's a decent service, but I prefer going to the store in person.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "Good for basic groceries, but limited in specialty products.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Fast delivery, and everything was fresh!",
   "sentiment": "positive",
-  "tags": "fresh products",
+  "tags": ["fresh products"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "The delivery was quick and hassle-free.",
   "sentiment": "positive",
-  "tags": "fast delivery",
+  "tags": ["fast delivery"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The app is intuitive and very user-friendly.",
   "sentiment": "positive",
-  "tags": "app",
+  "tags": ["app"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The app works fine, but there’s nothing special about it.",
   "sentiment": "neutral",
-  "tags": "app",
+  "tags": ["app"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "I love the selection of organic products.",
   "sentiment": "positive",
-  "tags": "organic",
+  "tags": ["organic"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Very convenient, I can shop anytime!",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The website is smooth and easy to navigate.",
   "sentiment": "positive",
-  "tags": "website",
+  "tags": ["website"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Overall, it's a good service, but nothing too impressive.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Fast delivery, and everything was fresh!",
   "sentiment": "positive",
-  "tags": "fresh products",
+  "tags": ["fresh products"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "Good for basic groceries, but limited in specialty products.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "Customer support was helpful and resolved my issue fast.",
   "sentiment": "positive",
-  "tags": "customer support",
+  "tags": ["customer support"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "Customer support was helpful and resolved my issue fast.",
   "sentiment": "positive",
-  "tags": "customer support",
+  "tags": ["customer support"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "quality",
+  "categories": ["quality"],
   "prompt": "The website is laggy and takes too long to load.",
   "sentiment": "negative",
-  "tags": "website",
+  "tags": ["website"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The website is smooth and easy to navigate.",
   "sentiment": "positive",
-  "tags": "website",
+  "tags": ["website"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had no problems finding what I needed.",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The store is okay, but there's room for improvement.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "pricing",
+  "categories": ["pricing"],
   "prompt": "Prices are a bit high compared to local stores.",
   "sentiment": "negative",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Fast delivery, and everything was fresh!",
   "sentiment": "positive",
-  "tags": "fresh products",
+  "tags": ["fresh products"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "The delivery was quick and hassle-free.",
   "sentiment": "positive",
-  "tags": "fast delivery",
+  "tags": ["fast delivery"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "quality",
+  "categories": ["quality"],
   "prompt": "The app keeps crashing on my iPhone!",
   "sentiment": "negative",
-  "tags": "iPhone,app",
+  "tags": ["iPhone", "app"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Delivery was on time, but not faster than competitors.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Very convenient, I can shop anytime!",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Overall, it's a good service, but nothing too impressive.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Great grocery store! It's super fast and easy to use.",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Everything was fine, but the packaging could be improved.",
   "sentiment": "neutral",
-  "tags": "packaging",
+  "tags": ["packaging"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "product selection",
+  "categories": ["product selection"],
   "prompt": "I couldn't find many vegan options.",
   "sentiment": "negative",
-  "tags": "vegan",
+  "tags": ["vegan"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "Everything was fine, but the packaging could be improved.",
   "sentiment": "neutral",
-  "tags": "packaging",
+  "tags": ["packaging"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "It's a decent service, but I prefer going to the store in person.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "My delivery was missing a few items.",
   "sentiment": "negative",
-  "tags": "missing items",
+  "tags": ["missing items"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "The refund process took too long.",
   "sentiment": "negative",
-  "tags": "refund",
+  "tags": ["refund"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "The delivery was quick and hassle-free.",
   "sentiment": "positive",
-  "tags": "fast delivery",
+  "tags": ["fast delivery"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "delivery",
+  "categories": ["delivery"],
   "prompt": "My delivery was missing a few items.",
   "sentiment": "negative",
-  "tags": "missing items",
+  "tags": ["missing items"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Great grocery store! It's super fast and easy to use.",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "customer service",
+  "categories": ["customer service"],
   "prompt": "The refund process took too long.",
   "sentiment": "negative",
-  "tags": "refund",
+  "tags": ["refund"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The store is okay, but there's room for improvement.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "Great grocery store! It's super fast and easy to use.",
   "sentiment": "positive",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "I had an average experience. Nothing extraordinary.",
   "sentiment": "neutral",
-  "tags": "",
+  "tags": [],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": null,
-  "categories": "usability",
+  "categories": ["usability"],
   "prompt": "The app works fine, but there’s nothing special about it.",
   "sentiment": "neutral",
-  "tags": "app",
+  "tags": ["app"],
   "type": "feedback",
   "urgency": null
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add a feature to save favorite products?",
   "sentiment": null,
   "tags": null,
@@ -2260,7 +2260,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add a feature to save favorite products?",
   "sentiment": null,
   "tags": null,
@@ -2269,7 +2269,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I’m unable to update my address in the app. Can you assist?",
   "sentiment": null,
   "tags": null,
@@ -2278,7 +2278,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Some of the items in my order were missing.",
   "sentiment": null,
   "tags": null,
@@ -2287,7 +2287,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I’m having trouble applying a discount code during checkout.",
   "sentiment": null,
   "tags": null,
@@ -2296,7 +2296,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The driver couldn’t find my address and I had to wait.",
   "sentiment": null,
   "tags": null,
@@ -2305,7 +2305,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
   "sentiment": null,
   "tags": null,
@@ -2314,7 +2314,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I’m unable to update my address in the app. Can you assist?",
   "sentiment": null,
   "tags": null,
@@ -2323,7 +2323,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "The app is freezing whenever I try to open it.",
   "sentiment": null,
   "tags": null,
@@ -2332,7 +2332,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "There’s an incorrect charge on my receipt.",
   "sentiment": null,
   "tags": null,
@@ -2341,7 +2341,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "The website loads very slowly, can you help?",
   "sentiment": null,
   "tags": null,
@@ -2350,7 +2350,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Some of the items in my order were missing.",
   "sentiment": null,
   "tags": null,
@@ -2359,7 +2359,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Can you improve the communication during delivery delays?",
   "sentiment": null,
   "tags": null,
@@ -2368,7 +2368,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "I didn’t receive the refund for my returned products.",
   "sentiment": null,
   "tags": null,
@@ -2377,7 +2377,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I’m having trouble applying a discount code during checkout.",
   "sentiment": null,
   "tags": null,
@@ -2386,7 +2386,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add a feature to save favorite products?",
   "sentiment": null,
   "tags": null,
@@ -2395,7 +2395,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The packaging was damaged upon arrival.",
   "sentiment": null,
   "tags": null,
@@ -2404,7 +2404,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "Can you stock more gluten-free products?",
   "sentiment": null,
   "tags": null,
@@ -2413,7 +2413,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "Could you add more dairy-free options?",
   "sentiment": null,
   "tags": null,
@@ -2422,7 +2422,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "Could you start offering organic eggs?",
   "sentiment": null,
   "tags": null,
@@ -2431,7 +2431,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Can you improve the communication during delivery delays?",
   "sentiment": null,
   "tags": null,
@@ -2440,7 +2440,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "I was charged twice for my order. Can you fix this?",
   "sentiment": null,
   "tags": null,
@@ -2449,7 +2449,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "I’d like to see more vegan options in the store.",
   "sentiment": null,
   "tags": null,
@@ -2458,7 +2458,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
   "sentiment": null,
   "tags": null,
@@ -2467,7 +2467,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "There’s a bug in the mobile app when applying promo codes.",
   "sentiment": null,
   "tags": null,
@@ -2476,7 +2476,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Can you improve the communication during delivery delays?",
   "sentiment": null,
   "tags": null,
@@ -2485,7 +2485,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add voice commands for searching products in the app?",
   "sentiment": null,
   "tags": null,
@@ -2494,7 +2494,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "Would it be possible to get a Prime drink in the store?",
   "sentiment": null,
   "tags": null,
@@ -2503,7 +2503,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "There’s a bug in the mobile app when applying promo codes.",
   "sentiment": null,
   "tags": null,
@@ -2512,7 +2512,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add a feature to save favorite products?",
   "sentiment": null,
   "tags": null,
@@ -2521,7 +2521,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "There’s an incorrect charge on my receipt.",
   "sentiment": null,
   "tags": null,
@@ -2530,7 +2530,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "I can’t proceed to payment, it’s stuck on the checkout screen.",
   "sentiment": null,
   "tags": null,
@@ -2539,7 +2539,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I didn’t receive a confirmation for my order. Can you check it?",
   "sentiment": null,
   "tags": null,
@@ -2548,7 +2548,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
   "sentiment": null,
   "tags": null,
@@ -2557,7 +2557,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "My delivery was late. Can you help with that?",
   "sentiment": null,
   "tags": null,
@@ -2566,7 +2566,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "Can you help me? The app crashes, whenever I try to buy the products.",
   "sentiment": null,
   "tags": null,
@@ -2575,7 +2575,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add voice commands for searching products in the app?",
   "sentiment": null,
   "tags": null,
@@ -2584,7 +2584,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Could you add a feature to filter by dietary needs?",
   "sentiment": null,
   "tags": null,
@@ -2593,7 +2593,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "I want the App to have better support for the color blind!",
   "sentiment": null,
   "tags": null,
@@ -2602,7 +2602,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add voice commands for searching products in the app?",
   "sentiment": null,
   "tags": null,
@@ -2611,7 +2611,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add a feature to save favorite products?",
   "sentiment": null,
   "tags": null,
@@ -2620,7 +2620,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "I want the App to have better support for the color blind!",
   "sentiment": null,
   "tags": null,
@@ -2629,7 +2629,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "Can you help me? The app crashes, whenever I try to buy the products.",
   "sentiment": null,
   "tags": null,
@@ -2638,7 +2638,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I’m having trouble applying a discount code during checkout.",
   "sentiment": null,
   "tags": null,
@@ -2647,7 +2647,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "There’s a bug in the mobile app when applying promo codes.",
   "sentiment": null,
   "tags": null,
@@ -2656,7 +2656,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Can you improve the communication during delivery delays?",
   "sentiment": null,
   "tags": null,
@@ -2665,7 +2665,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
   "sentiment": null,
   "tags": null,
@@ -2674,7 +2674,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "I’m unable to reset my password on the app.",
   "sentiment": null,
   "tags": null,
@@ -2683,7 +2683,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "My delivery was late. Can you help with that?",
   "sentiment": null,
   "tags": null,
@@ -2692,7 +2692,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The packaging was damaged upon arrival.",
   "sentiment": null,
   "tags": null,
@@ -2701,7 +2701,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Some of the items in my order were missing.",
   "sentiment": null,
   "tags": null,
@@ -2710,7 +2710,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "I’m unable to reset my password on the app.",
   "sentiment": null,
   "tags": null,
@@ -2719,7 +2719,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "It would be great if I could track my delivery in real-time.",
   "sentiment": null,
   "tags": null,
@@ -2728,7 +2728,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The packaging was damaged upon arrival.",
   "sentiment": null,
   "tags": null,
@@ -2737,7 +2737,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Can you improve the communication during delivery delays?",
   "sentiment": null,
   "tags": null,
@@ -2746,7 +2746,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "I’d like to see more vegan options in the store.",
   "sentiment": null,
   "tags": null,
@@ -2755,7 +2755,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "I’d like to see more vegan options in the store.",
   "sentiment": null,
   "tags": null,
@@ -2764,7 +2764,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "I’d like to see more vegan options in the store.",
   "sentiment": null,
   "tags": null,
@@ -2773,7 +2773,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I can’t log into my account. Can you assist?",
   "sentiment": null,
   "tags": null,
@@ -2782,7 +2782,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The packaging was damaged upon arrival.",
   "sentiment": null,
   "tags": null,
@@ -2791,7 +2791,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "The app is freezing whenever I try to open it.",
   "sentiment": null,
   "tags": null,
@@ -2800,7 +2800,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
   "sentiment": null,
   "tags": null,
@@ -2809,7 +2809,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "I’d like to see more vegan options in the store.",
   "sentiment": null,
   "tags": null,
@@ -2818,7 +2818,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Can you improve the communication during delivery delays?",
   "sentiment": null,
   "tags": null,
@@ -2827,7 +2827,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The packaging was damaged upon arrival.",
   "sentiment": null,
   "tags": null,
@@ -2836,7 +2836,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "I’m unable to reset my password on the app.",
   "sentiment": null,
   "tags": null,
@@ -2845,7 +2845,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I’m having trouble applying a discount code during checkout.",
   "sentiment": null,
   "tags": null,
@@ -2854,7 +2854,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "I was charged twice for my order. Can you fix this?",
   "sentiment": null,
   "tags": null,
@@ -2863,7 +2863,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Could you add a feature to filter by dietary needs?",
   "sentiment": null,
   "tags": null,
@@ -2872,7 +2872,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add a feature to save favorite products?",
   "sentiment": null,
   "tags": null,
@@ -2881,7 +2881,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "The app is freezing whenever I try to open it.",
   "sentiment": null,
   "tags": null,
@@ -2890,7 +2890,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "I was charged twice for my order. Can you fix this?",
   "sentiment": null,
   "tags": null,
@@ -2899,7 +2899,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "I’d like to see more vegan options in the store.",
   "sentiment": null,
   "tags": null,
@@ -2908,7 +2908,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "The app is freezing whenever I try to open it.",
   "sentiment": null,
   "tags": null,
@@ -2917,7 +2917,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "Would it be possible to get a Prime drink in the store?",
   "sentiment": null,
   "tags": null,
@@ -2926,7 +2926,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The driver couldn’t find my address and I had to wait.",
   "sentiment": null,
   "tags": null,
@@ -2935,7 +2935,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add voice commands for searching products in the app?",
   "sentiment": null,
   "tags": null,
@@ -2944,7 +2944,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "I’m unable to reset my password on the app.",
   "sentiment": null,
   "tags": null,
@@ -2953,7 +2953,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "Could you add more dairy-free options?",
   "sentiment": null,
   "tags": null,
@@ -2962,7 +2962,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Some of the items in my order were missing.",
   "sentiment": null,
   "tags": null,
@@ -2971,7 +2971,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Some of the items in my order were missing.",
   "sentiment": null,
   "tags": null,
@@ -2980,7 +2980,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add voice commands for searching products in the app?",
   "sentiment": null,
   "tags": null,
@@ -2989,7 +2989,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Can you improve the communication during delivery delays?",
   "sentiment": null,
   "tags": null,
@@ -2998,7 +2998,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "My delivery was late. Can you help with that?",
   "sentiment": null,
   "tags": null,
@@ -3007,7 +3007,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Can you improve the communication during delivery delays?",
   "sentiment": null,
   "tags": null,
@@ -3016,7 +3016,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "I didn’t receive the refund for my returned products.",
   "sentiment": null,
   "tags": null,
@@ -3025,7 +3025,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "I’d like to see more vegan options in the store.",
   "sentiment": null,
   "tags": null,
@@ -3034,7 +3034,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "Some of the items in my order were missing.",
   "sentiment": null,
   "tags": null,
@@ -3043,7 +3043,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "The receipt shows the wrong amount, can you check?",
   "sentiment": null,
   "tags": null,
@@ -3052,7 +3052,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The driver couldn’t find my address and I had to wait.",
   "sentiment": null,
   "tags": null,
@@ -3061,7 +3061,7 @@
 }, {
   "answer": null,
   "assignee": "Emily Davis",
-  "categories": "finance issue",
+  "categories": ["finance issue"],
   "prompt": "My promo code didn’t apply correctly, can you adjust the price?",
   "sentiment": null,
   "tags": null,
@@ -3070,7 +3070,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "I’m having trouble applying a discount code during checkout.",
   "sentiment": null,
   "tags": null,
@@ -3079,7 +3079,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add a feature to save favorite products?",
   "sentiment": null,
   "tags": null,
@@ -3088,7 +3088,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "Can you stock more gluten-free products?",
   "sentiment": null,
   "tags": null,
@@ -3097,7 +3097,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Could you add a feature to filter by dietary needs?",
   "sentiment": null,
   "tags": null,
@@ -3106,7 +3106,7 @@
 }, {
   "answer": null,
   "assignee": "David Green",
-  "categories": "product wish",
+  "categories": ["product wish"],
   "prompt": "Would it be possible to get a Prime drink in the store?",
   "sentiment": null,
   "tags": null,
@@ -3115,7 +3115,7 @@
 }, {
   "answer": null,
   "assignee": "Bob Smith",
-  "categories": "support request",
+  "categories": ["support request"],
   "prompt": "Can you help me? The app crashes, whenever I try to buy the products.",
   "sentiment": null,
   "tags": null,
@@ -3124,7 +3124,7 @@
 }, {
   "answer": null,
   "assignee": "Frank Wilson",
-  "categories": "operations issue",
+  "categories": ["operations issue"],
   "prompt": "The packaging was damaged upon arrival.",
   "sentiment": null,
   "tags": null,
@@ -3133,7 +3133,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "product feature",
+  "categories": ["product feature"],
   "prompt": "Can you add a feature to save favorite products?",
   "sentiment": null,
   "tags": null,
@@ -3142,7 +3142,7 @@
 }, {
   "answer": null,
   "assignee": "Carol White",
-  "categories": "technical issue",
+  "categories": ["technical issue"],
   "prompt": "The app is freezing whenever I try to open it.",
   "sentiment": null,
   "tags": null,

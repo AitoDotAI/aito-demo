@@ -4,7 +4,7 @@
       "type":"table",
       "columns": {
         "id"       : { "type" : "String" },
-        "tags"     : { "type" : "Text", "analyzer": "Whitespace" }
+        "tags"     : { "type" : "String[]" }
       }
     },
 
@@ -12,11 +12,11 @@
       "type":"table",
       "columns": {
         "id"          : { "type": "String" },
-        "name"        : { "type": "Text",  "analyzer": "English" },
+        "name"        : { "type": "Text", "analyzer": "English" },
         "category"    : { "type": "String" },
         "price"       : { "type": "Decimal"},
         "cost"        : { "type": "Decimal"},
-        "tags"        : { "type": "Text", "analyzer" : "Whitespace" },
+        "tags"        : { "type": "String[]" },
         "googleImpressions": { "type": "Int" },
         "googleClicks": { "type": "Int" }
       }
@@ -32,7 +32,7 @@
         "month"      : { "type" : "Int" },
         "weekday"    : { "type" : "String" },
         "user"       : { "type" : "String", "link":"users.id" },
-        "purchases"  : { "type" : "Text", "analyzer":"Whitespace" }
+        "purchases"  : { "type" : "String[]" }
       }
     },
 
@@ -47,8 +47,8 @@
          "month"       : { "type" : "Int" },
          "weekday"     : { "type" : "String" },
          "user"        : { "type" : "String", "link":"users.id" },
-         "basket"      : { "type" : "Text", "analyzer" : "Whitespace" },
-         "prevBasket"  : { "type" : "Text", "analyzer" : "Whitespace" },
+         "basket"      : { "type" : "String[]" },
+         "prevBasket"  : { "type" : "String[]" },
          "query"       : { "type" : "Text", "analyzer" : "English" },
          "queryPhrase" : { "type" : "String" }
       }
@@ -70,8 +70,8 @@
         "type"  : { "type" : "String" },
         "answer" : { "type" : "Int", "link":"answers.id", "nullable": true },
         "sentiment" : { "type" : "String", "nullable": true },
-        "categories": { "type": "Text", "analyzer": { "type": "delimiter", "delimiter": "," }, "nullable": true },
-        "tags": { "type": "Text", "analyzer": { "type": "delimiter", "delimiter": "," }, "nullable": true },
+        "categories": { "type": "String[]", "nullable": true },
+        "tags": { "type": "String[]", "nullable": true },
         "assignee": { "type": "String", "link": "employees.Name", "nullable": true },
         "urgency": { "type" : "String", "nullable": true }
       }

@@ -3,22 +3,29 @@ import config from './config'
 
 /**
  * Analyzes statistical relationships between data fields
- * 
+ *
  * This demonstrates Aito's _relate endpoint, which performs correlation analysis
  * to find statistical relationships between different data dimensions.
- * 
+ *
  * Key insight: Finds products that are statistically correlated with
  * specific field values (e.g., what products do users from certain
  * demographics tend to purchase?)
- * 
- * @param {string} field - Field name to analyze relationships for (e.g., 'user.demographics')
+ *
+ * @param {string} field - Field name to analyze relationships for (e.g., 'user.tags')
  * @param {any} value - Specific value of the field to analyze
  * @returns {Promise<Array>} Array of related items with lift scores
  */
 export function relate(field, value) {
   // Build query condition for the field-value pair
+  // Array fields (like user.tags) need to use $has operator
+  const arrayFields = ['user.tags']
   var where = {}
-  where[field] = value
+
+  if (arrayFields.includes(field)) {
+    where[field] = { '$has': value }
+  } else {
+    where[field] = value
+  }
 
   // Step 1: Find statistical relationships using _relate endpoint
   return axios.post(`${config.aito.url}/api/v1/_relate`, {

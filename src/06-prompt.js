@@ -48,7 +48,7 @@ export function prompt(question) {
           })
         } else if (top.feature === "feedback") {
           const fields = ["sentiment", "categories.$feature", "tags"]
-
+          
           return Promise.all(fields.map(predicted => {
             return axios.post(`${config.aito.url}/api/v1/_predict`, {
               from: 'prompts',
@@ -57,6 +57,7 @@ export function prompt(question) {
                 "type": "feedback"
               },
               predict: predicted,
+              exclusiveness: predicted != "tags",
               limit: 1
             }, {
               headers: {

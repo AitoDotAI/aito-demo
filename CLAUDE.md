@@ -98,7 +98,7 @@ The application menu is organized into logical categories matching Aito's framew
 The application showcases these core Aito.ai capabilities:
 
 **Search & Discovery:**
-- `03-search.js` - Personalized search with `$match`, `$similarity`, and purchase probability ranking
+- `03-search.js` - Personalized search with `$match` on product name, `$similarity`, and purchase probability ranking
 - `02-autocomplete.js` - Smart query completion using `$startsWith` and user patterns
 
 **Machine Learning:**
@@ -127,11 +127,18 @@ The application showcases these core Aito.ai capabilities:
 **User Demographics**: 67 users with tag-based segmentation (young/older, male/female, club-member) plus the original 3 personas (Larry, Veronica, Alice) for demonstration purposes
 
 **Core E-commerce Tables:**
-- `impressions` - Product interactions and purchase decisions (90,087 entries - primary ML training data)
-- `contexts` - Search interactions and basket states (5,290 entries)
-- `visits` - Shopping sessions with temporal tracking (736 entries)
-- `products` - 42 grocery items with Google Analytics integration (clicks, impressions)
+- `impressions` - Product interactions and purchase decisions (primary ML training data)
+  - Links: `context` → contexts.id, `product` → products.id
+- `contexts` - Search interactions and basket states
+  - Array fields: `basket`, `prevBasket` (String[])
+  - Links: `user` → users.id, `visit` → visits.id
+- `visits` - Shopping sessions with temporal tracking
+  - Array fields: `purchases` (String[])
+  - Links: `user` → users.id, `prev` → visits.id
+- `products` - 42 grocery items with Google Analytics integration
+  - Array fields: `tags` (String[])
 - `users` - Customer demographics with tag-based segmentation (67 entries)
+  - Array fields: `tags` (String[])
 
 **Enterprise Functionality Tables:**
 - `invoices` - Purchase invoices with approval workflows (100 entries)
@@ -140,11 +147,13 @@ The application showcases these core Aito.ai capabilities:
 
 **NLP and Support Tables:**
 - `prompts` - Customer service inquiries with classification (350 entries)
+  - Array fields: `categories`, `tags` (String[])
 - `questions` - Q&A pairs for support automation (150 entries)
 - `answers` - Standardized responses for customer support (50 entries)
 
 **Analytics Tables:**
 - `price_history` - Historical pricing and demand data for price-demand analytics
+  - Array fields: `tags` (String[])
 
 **Key Relationships:**
 - `users` → `visits` → `contexts` → `impressions` → `products` (core shopping flow)
@@ -154,12 +163,14 @@ The application showcases these core Aito.ai capabilities:
 ### Key Aito.ai Concepts Implemented
 
 **Query Operators:**
-- `$match` - Fuzzy text matching across multiple fields
+- `$match` - Fuzzy text matching (Text fields only, not arrays)
 - `$similarity` - Text relevance scoring
 - `$p` - Probability calculations and conditional queries
 - `$or`, `$and`, `$not` - Logical combinations
 - `$startsWith` - String prefix matching
 - `$why` - Explainable AI with decision highlighting
+- `$has` - Array element matching (for String[] fields like tags, purchases)
+- `$feature` - Extract individual values from array fields (e.g., `user.tags.$feature`)
 
 **API Endpoints:**
 - `_query` - Flexible data retrieval with ordering and filtering
@@ -169,6 +180,7 @@ The application showcases these core Aito.ai capabilities:
 - `_evaluate` - Model quality monitoring and performance metrics
 - `_estimate` - Regression-based estimation for pricing and demand (beta)
 - `_batch` - Multiple queries for comprehensive analytics
+- `_match` - Get distinct values from fields (use `field.$feature` for array fields)
 
 ### Development Patterns
 

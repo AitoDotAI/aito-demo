@@ -64,12 +64,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
 {
   "from": "impressions",
   "where": {
-    "product": {
-      "$or": [
-        { "tags": { "$match": "milk" } },
-        { "name": { "$match": "milk" } }
-      ]
-    },
+    "product.name": { "$match": "milk" },
     "context.user": "larry"
   },
   "get": "product",
@@ -83,6 +78,7 @@ curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
   "limit": 5
 }
 ```
+Note: `tags` is now a String[] array field. Use `$match` on Text fields like `name` only.
 [→ Implementation](src/03-search.js) | [Use case guide](docs/use-cases/03-smart-search.md) | [🚀 Live Demo](https://demo.aito.ai/)
 
 ### 4. 🏷️ Automated Tag and Category Predictions
@@ -141,11 +137,12 @@ AI-powered product catalog management predicts tags, category, and price for new
 ```json
 {
   "from": "visits",
-  "where": { "user.tags": "club-member" },
+  "where": { "user.tags": { "$has": "club-member" } },
   "relate": "purchases"
 }
 ```
 // Returns: lift scores showing what club members buy more
+// Note: `user.tags` is a String[] array - use `$has` to match array elements
 [→ Implementation](src/07-relate.js) | [Use case guide](docs/use-cases/07-data-analytics.md) | [🚀 Live Demo](https://demo.aito.ai/analytics)
 
 ### 8. 📄 Automated Invoice Processing
@@ -186,13 +183,14 @@ AI-powered product catalog management predicts tags, category, and price for new
 {
   "from": "impressions",
   "where": {
-    "product.tags": { "$match": "gluten-free bread" },
+    "product.name": { "$match": "gluten-free bread" },
     "product.price": { "$lte": 5 }
   },
   "orderBy": { "$p": { "$context": { "purchase": true } } }
 }
 ```
 // "Find gluten-free bread under $5"
+// Note: Search on `product.name` (Text field). Use `product.tags: { "$has": "gluten" }` for exact tag match.
 [→ Implementation](src/services/chatTools/customerTools.js) | [Use case guide](docs/tutorials/assistant-integration.md) | [🚀 Live Demo](https://demo.aito.ai/customer-chat)
 
 ### 11. 🔧 Employee Assistant
@@ -273,6 +271,11 @@ REACT_APP_AITO_API_KEY=your-api-key
 **Schema**: Proper Aito format with linked tables (users → visits → contexts → impressions → products)
 **Real Data**: 134 users, 42 products, 90,087 interaction records
 **Architecture**: React frontend + Aito.ai backend, fully responsive
+
+**Array Fields**: The schema uses String[] arrays for multi-valued fields:
+- `products.tags`, `users.tags` - Use `$has` for matching (e.g., `{"tags": {"$has": "fresh"}}`)
+- `visits.purchases`, `contexts.basket` - Array of product IDs
+- `prompts.categories`, `prompts.tags` - Classification arrays
 
 ## 📖 Deep Dive
 
