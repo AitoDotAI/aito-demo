@@ -88,3 +88,6 @@ screenshots-temp/
 .envrc.local
 result
 result-*
+
+# AI assistant files
+.ai/
