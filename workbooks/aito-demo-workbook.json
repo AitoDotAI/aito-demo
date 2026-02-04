@@ -1,0 +1,473 @@
+{
+  "name": "Aito Demo - Grocery Store ML",
+  "description": "Interactive demonstration of Aito's predictive database capabilities through a grocery store e-commerce example. Explore recommendations, predictions, analytics, and model quality monitoring.",
+  "sections": [
+    {
+      "title": "Product Recommendations",
+      "description": "Personalized product suggestions using ML",
+      "widgets": [
+        {
+          "type": "text",
+          "title": "Welcome to Aito",
+          "size": "full",
+          "config": {
+            "content": "# Aito Predictive Database Demo\n\nThis workbook showcases Aito's ML capabilities using a **grocery store dataset** with 42 products, 70 users, and 733 shopping visits. Each query below runs live against the Aito API.\n\n![Aito Demo App](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/main-app-interface.png)\n\n## Personalized Recommendations\n\nAito's `_recommend` endpoint finds items that maximize purchase likelihood for each user. The result below loads automatically - try changing the user ID to see how recommendations differ."
+          }
+        },
+        {
+          "type": "query",
+          "title": "Recommend Products for larry",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "impressions",
+              "where": {
+                "context.user": "larry"
+              },
+              "recommend": "product",
+              "goal": { "purchase": true },
+              "select": ["name", "id", "price", "category"],
+              "limit": 5
+            },
+            "endpoint": "recommend",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "onLoad"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Recommend for veronica",
+          "size": "medium",
+          "config": {
+            "query": {
+              "from": "impressions",
+              "where": {
+                "context.user": "veronica"
+              },
+              "recommend": "product",
+              "goal": { "purchase": true },
+              "select": ["name", "price"],
+              "limit": 5
+            },
+            "endpoint": "recommend",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Recommend for alice",
+          "size": "medium",
+          "config": {
+            "query": {
+              "from": "impressions",
+              "where": {
+                "context.user": "alice"
+              },
+              "recommend": "product",
+              "goal": { "purchase": true },
+              "select": ["name", "price"],
+              "limit": 5
+            },
+            "endpoint": "recommend",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Invoice Processing",
+      "description": "Automated document classification and routing",
+      "widgets": [
+        {
+          "type": "text",
+          "title": "Invoice Automation",
+          "size": "full",
+          "config": {
+            "content": "## Automated Invoice Processing\n\nAito can automatically classify invoices and route them to the right people.\n\n![Invoice processing with ML-powered classification](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/invoice-processing-detail.png)\n\n**Use cases:**\n- **GL Code Assignment** - Predict the correct general ledger code\n- **Processor Assignment** - Route to the right team member\n- **Explainable AI** - Understand why predictions were made\n\nThe `$why` operator shows which fields influenced the prediction."
+          }
+        },
+        {
+          "type": "query",
+          "title": "Predict GL Code",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "invoices",
+              "where": {
+                "Description": "office supplies printer paper"
+              },
+              "predict": "GLCode",
+              "select": ["$p", "GLCode", "Name", "Department"],
+              "limit": 5
+            },
+            "endpoint": "predict",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Predict with Explanation ($why)",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "invoices",
+              "where": {
+                "SenderName": "Amazon",
+                "TotalAmount": 150
+              },
+              "predict": "GLCode",
+              "select": [
+                "$p",
+                "GLCode",
+                "Name",
+                { "$why": { "highlight": { "posPreTag": "<b>", "posPostTag": "</b>" }}}
+              ],
+              "limit": 3
+            },
+            "endpoint": "predict",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Predict Invoice Processor",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "invoices",
+              "where": {
+                "Description": "cloud services AWS",
+                "TotalAmount": 500
+              },
+              "predict": "Processor",
+              "select": ["$p", "Name", "Role", "Department"],
+              "limit": 5
+            },
+            "endpoint": "predict",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Product Analytics",
+      "description": "Product purchase statistics, demographics, and market basket analysis",
+      "widgets": [
+        {
+          "type": "text",
+          "title": "Product Insights",
+          "size": "full",
+          "config": {
+            "content": "## Product Analytics\n\nAnalyze individual product performance using purchase data, user demographics, and market basket analysis.\n\n![Product analytics dashboard](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/product-analytics-page.png)\n\nThe queries below analyze **Pirkka banana** (`2000818700008`) - try changing the product ID to explore other products."
+          }
+        },
+        {
+          "type": "query",
+          "title": "Purchase Statistics",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "impressions",
+              "where": {
+                "product.id": "2000818700008"
+              },
+              "aggregate": ["purchase.$sum", "purchase.$mean"]
+            },
+            "endpoint": "aggregate",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Who Buys This Product? (Demographics)",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "visits",
+              "where": {
+                "purchases": { "$has": "2000818700008" }
+              },
+              "relate": "user.tags",
+              "select": ["lift", "related"]
+            },
+            "endpoint": "relate",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Market Basket - Bought Together",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "visits",
+              "where": {
+                "purchases": { "$has": "2000818700008" }
+              },
+              "relate": "purchases",
+              "select": ["lift", "related"]
+            },
+            "endpoint": "relate",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Search Terms Leading to Purchase",
+          "size": "medium",
+          "config": {
+            "query": {
+              "from": "impressions",
+              "where": {
+                "product.id": "2000818700008"
+              },
+              "get": "context.queryPhrase",
+              "orderBy": { "$sum": { "$context": "purchase" } },
+              "select": ["$score", "$value"]
+            },
+            "endpoint": "query",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Weekly Purchase Trends",
+          "size": "medium",
+          "config": {
+            "query": {
+              "from": "impressions",
+              "where": {
+                "product.id": "2000818700008"
+              },
+              "get": "context.week",
+              "select": [
+                "$value",
+                "$f",
+                { "$sum": { "$context": "purchase" } },
+                { "$mean": { "$context": "purchase" } }
+              ]
+            },
+            "endpoint": "query",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Get Started",
+      "description": "Try Aito with your own data",
+      "widgets": [
+        {
+          "type": "text",
+          "title": "Try Aito with Your Own Data",
+          "size": "full",
+          "config": {
+            "content": "## Want to try this with your own data?\n\nEverything you've seen above - recommendations, predictions, explainability, analytics - works on **any structured dataset**. Upload a CSV and start querying in minutes.\n\n**[Sign up free at aito.ai](https://aito.ai)**"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Data Exploration",
+      "description": "Browse and understand the grocery store data",
+      "widgets": [
+        {
+          "type": "text",
+          "title": "Explore the Data",
+          "size": "full",
+          "config": {
+            "content": "## Data Exploration\n\nBrowse the underlying tables. Click **Run** to execute each query, then modify them to explore further."
+          }
+        },
+        {
+          "type": "query",
+          "title": "Browse Products",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "products",
+              "select": ["id", "name", "category", "price", "tags"],
+              "limit": 10
+            },
+            "endpoint": "query",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Browse Users",
+          "size": "medium",
+          "config": {
+            "query": {
+              "from": "users",
+              "select": ["id", "tags"],
+              "limit": 10
+            },
+            "endpoint": "query",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Browse Shopping Visits",
+          "size": "medium",
+          "config": {
+            "query": {
+              "from": "visits",
+              "select": ["id", "user", "weekday", "purchases"],
+              "limit": 10
+            },
+            "endpoint": "query",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Browse Invoices",
+          "size": "full",
+          "config": {
+            "query": {
+              "from": "invoices",
+              "select": ["InvoiceID", "SenderName", "Description", "TotalAmount", "GLCode"],
+              "limit": 5
+            },
+            "endpoint": "query",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Model Quality",
+      "description": "Evaluate prediction accuracy and monitor model performance",
+      "widgets": [
+        {
+          "type": "text",
+          "title": "Quality Monitoring",
+          "size": "full",
+          "config": {
+            "content": "## Model Quality Evaluation\n\nAito's `_evaluate` endpoint measures prediction accuracy using cross-validation.\n\n![Model quality monitoring dashboard](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/quality-monitoring.png)\n\n**Key metrics:**\n- **Accuracy** - Percentage of correct predictions\n- **Test Samples** - Number of samples tested\n- **Mean Rank** - Average position of correct answer\n\nMonitor your models to ensure they maintain accuracy over time."
+          }
+        },
+        {
+          "type": "query",
+          "title": "GL Code Prediction Accuracy",
+          "size": "full",
+          "config": {
+            "query": {
+              "test": {
+                "$index": { "$mod": [5, 0] }
+              },
+              "evaluate": {
+                "from": "invoices",
+                "where": {
+                  "Description": { "$get": "Description" }
+                },
+                "predict": "GLCode"
+              },
+              "select": ["accuracy", "testSamples", "meanRank"]
+            },
+            "endpoint": "evaluate",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "GL Code with More Features",
+          "size": "full",
+          "config": {
+            "query": {
+              "test": {
+                "$index": { "$mod": [5, 0] }
+              },
+              "evaluate": {
+                "from": "invoices",
+                "where": {
+                  "Description": { "$get": "Description" },
+                  "SenderName": { "$get": "SenderName" }
+                },
+                "predict": "GLCode"
+              },
+              "select": ["accuracy", "testSamples", "meanRank"]
+            },
+            "endpoint": "evaluate",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        },
+        {
+          "type": "query",
+          "title": "Recommendation Accuracy",
+          "size": "full",
+          "config": {
+            "query": {
+              "evaluate": {
+                "from": "impressions",
+                "where": {
+                  "context.user": { "$get": "context.user" }
+                },
+                "recommend": "product",
+                "goal": { "purchase": true }
+              },
+              "group": "context",
+              "test": {
+                "context.day": { "$gte": 68 }
+              },
+              "select": ["accuracy", "meanRank", "n"]
+            },
+            "endpoint": "evaluate",
+            "displayMode": "playground",
+            "outputFormat": "table",
+            "runPolicy": "manual"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Next Steps",
+      "description": "Get started with Aito",
+      "widgets": [
+        {
+          "type": "text",
+          "title": "Get Started with Aito",
+          "size": "full",
+          "config": {
+            "content": "## Ready to build with Aito?\n\nYou've seen recommendations, predictions with explainability, analytics, and model quality evaluation - all powered by a single predictive database.\n\n**[Sign up free at aito.ai](https://aito.ai)** and start querying your own data in minutes.\n\n**Resources:**\n- [API Documentation](https://aito.ai/docs/api/)\n- [Use Cases](https://aito.ai/docs/api/use-cases/)\n- [API Playground](https://aito.ai/docs/api/playground/)"
+          }
+        }
+      ]
+    }
+  ]
+}
