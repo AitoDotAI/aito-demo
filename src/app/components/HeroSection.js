@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'reactstrap';
-import { FaGithub, FaExternalLinkAlt, FaRocket, FaTimes } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaRocket, FaTimes, FaBook, FaInfoCircle, FaBars } from 'react-icons/fa';
 import './HeroSection.css';
 
 const HeroSection = () => {
@@ -28,10 +28,11 @@ const HeroSection = () => {
     return (
       <div className="HeroSection__minimized">
         <div className="HeroSection__minimizedContent">
-          <span>🚀 Predictive Database Demo - 11 Real ML Features with Query-Based Inference</span>
-          <Button 
-            size="sm" 
-            color="link" 
+          <span>🚀 Predictive Database Demo - 11 ML Features</span>
+          <span className="HeroSection__menuHint"><FaBars /> Explore all demos</span>
+          <Button
+            size="sm"
+            color="link"
             onClick={handleRestore}
             className="HeroSection__restoreBtn"
           >
@@ -80,8 +81,29 @@ const HeroSection = () => {
         </div>
 
         <div className="HeroSection__cta">
-          <Button 
-            color="primary" 
+          <Button
+            color="primary"
+            size="lg"
+            href="https://console.aito.ai/databases/aito-demo/workbooks"
+          >
+            <FaBook /> View Underlying Workbook
+          </Button>
+          <Button
+            color="secondary"
+            size="lg"
+            href="https://aito.ai"
+          >
+            <FaInfoCircle /> What is Aito?
+          </Button>
+        </div>
+
+        <p className="HeroSection__menuHint HeroSection__menuHint--expanded">
+          <FaBars /> 11 ML demos available - explore via menu
+        </p>
+
+        <div className="HeroSection__cta HeroSection__cta--secondary">
+          <Button
+            color="secondary"
             size="lg"
             href="https://github.com/AitoDotAI/aito-demo"
             target="_blank"
@@ -89,8 +111,8 @@ const HeroSection = () => {
           >
             <FaGithub /> Explore Implementation
           </Button>
-          <Button 
-            color="secondary" 
+          <Button
+            color="secondary"
             size="lg"
             href="https://aito.ai/docs"
             target="_blank"
@@ -98,19 +120,10 @@ const HeroSection = () => {
           >
             <FaExternalLinkAlt /> API Documentation
           </Button>
-          <Button 
-            color="secondary" 
-            size="lg"
-            href="https://aito.ai/blog/could-predictive-database-queries-replace-machine-learning-models/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaExternalLinkAlt /> The Predictive Database
-          </Button>
         </div>
 
         <div className="HeroSection__demo-note">
-          <FaRocket /> Live demonstration with real data. Switch users to observe personalization differences.
+          <FaRocket /> This is one example built on Aito's predictive database. Switch users to observe personalization.
         </div>
 
         <div className="HeroSection__features">

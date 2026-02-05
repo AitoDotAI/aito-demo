@@ -73,6 +73,26 @@
   text-decoration: underline !important;
 }
 
+.HeroSection__menuHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+  background: rgba(255, 107, 53, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+}
+
+.HeroSection__minimizedContent .HeroSection__menuHint {
+  color: #856404;
+  background: rgba(133, 100, 4, 0.1);
+}
+
+.HeroSection__menuHint--expanded {
+  margin: -0.5rem 0 1.5rem 0;
+}
+
 .HeroSection__container {
   max-width: 1200px;
   margin: 0 auto;
@@ -174,6 +194,15 @@
   background-color: #f8f9fa;
   border-color: #adb5bd;
   transform: translateY(-1px);
+}
+
+.HeroSection__cta--secondary {
+  margin-top: -1rem;
+}
+
+.HeroSection__cta--secondary .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
 }
 
 .HeroSection__demo-note {
