@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'reactstrap';
-import { FaGithub, FaExternalLinkAlt, FaRocket, FaTimes, FaBook, FaInfoCircle } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaRocket, FaTimes, FaBook, FaInfoCircle, FaBars } from 'react-icons/fa';
 import './HeroSection.css';
 
 const HeroSection = () => {
@@ -28,10 +28,11 @@ const HeroSection = () => {
     return (
       <div className="HeroSection__minimized">
         <div className="HeroSection__minimizedContent">
-          <span>🚀 Predictive Database Demo - 11 Real ML Features with Query-Based Inference</span>
-          <Button 
-            size="sm" 
-            color="link" 
+          <span>🚀 Predictive Database Demo - 11 ML Features</span>
+          <span className="HeroSection__menuHint"><FaBars /> Explore all demos</span>
+          <Button
+            size="sm"
+            color="link"
             onClick={handleRestore}
             className="HeroSection__restoreBtn"
           >
@@ -95,6 +96,10 @@ const HeroSection = () => {
             <FaInfoCircle /> What is Aito?
           </Button>
         </div>
+
+        <p className="HeroSection__menuHint HeroSection__menuHint--expanded">
+          <FaBars /> 11 ML demos available - explore via menu
+        </p>
 
         <div className="HeroSection__cta HeroSection__cta--secondary">
           <Button
