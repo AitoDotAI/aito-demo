@@ -25,9 +25,17 @@ class NavBar extends Component {
   constructor(props) {
     super(props)
 
+    // Auto-open menu on first visit to help users discover all demos
+    const hasSeenMenu = localStorage.getItem('hasSeenMenu')
+    const shouldAutoOpen = !hasSeenMenu && props.state.urlPath === '/'
+
     this.state = {
       dropdownOpen: false,
-      menuOpen: false,
+      menuOpen: shouldAutoOpen,
+    }
+
+    if (shouldAutoOpen) {
+      localStorage.setItem('hasSeenMenu', 'true')
     }
   }
 
