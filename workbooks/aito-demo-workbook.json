@@ -11,7 +11,7 @@
           "title": "Welcome to Aito",
           "size": "full",
           "config": {
-            "content": "# Aito Predictive Database Demo\n\nThis workbook showcases Aito's ML capabilities using a **grocery store dataset** with 42 products, 70 users, and 733 shopping visits. Each query below runs live against the Aito API.\n\n![Aito Demo App](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/main-app-interface.png)\n\n## Personalized Recommendations\n\nAito's `_recommend` endpoint finds items that maximize purchase likelihood for each user. The result below loads automatically - try changing the user ID to see how recommendations differ."
+            "content": "# Aito Predictive Database Demo\n\nThis workbook showcases Aito's ML capabilities using a **grocery store dataset** with 42 products, 70 users, and 733 shopping visits. Each query below runs live against the Aito API.\n\n![Aito Demo App](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/main-app-interface.png)\n\n**[Try the live demo →](https://demo.aito.ai)**\n\n## Personalized Recommendations\n\nAito's `_recommend` endpoint finds items that maximize purchase likelihood for each user. The result below loads automatically - try changing the user ID to see how recommendations differ."
           }
         },
         {
@@ -88,7 +88,7 @@
           "title": "Invoice Automation",
           "size": "full",
           "config": {
-            "content": "## Automated Invoice Processing\n\nAito can automatically classify invoices and route them to the right people.\n\n![Invoice processing with ML-powered classification](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/invoice-processing-detail.png)\n\n**Use cases:**\n- **GL Code Assignment** - Predict the correct general ledger code\n- **Processor Assignment** - Route to the right team member\n- **Explainable AI** - Understand why predictions were made\n\nThe `$why` operator shows which fields influenced the prediction."
+            "content": "## Automated Invoice Processing\n\nAito can automatically classify invoices and route them to the right people.\n\n![Invoice processing with ML-powered classification](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/invoice-processing-detail.png)\n\n**[Try invoice processing live →](https://demo.aito.ai/invoicing)**\n\n**Use cases:**\n- **GL Code Assignment** - Predict the correct general ledger code\n- **Processor Assignment** - Route to the right team member\n- **Explainable AI** - Understand why predictions were made\n\nThe `$why` operator shows which fields influenced the prediction."
           }
         },
         {
@@ -169,7 +169,7 @@
           "title": "Product Insights",
           "size": "full",
           "config": {
-            "content": "## Product Analytics\n\nAnalyze individual product performance using purchase data, user demographics, and market basket analysis.\n\n![Product analytics dashboard](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/product-analytics-page.png)\n\nThe queries below analyze **Pirkka banana** (`2000818700008`) - try changing the product ID to explore other products."
+            "content": "## Product Analytics\n\nAnalyze individual product performance using purchase data, user demographics, and market basket analysis.\n\n![Product analytics dashboard](https://raw.githubusercontent.com/AitoDotAI/aito-demo/main/docs/screenshots/features/product-analytics-page.png)\n\n**[Try product analytics live →](https://demo.aito.ai/product)**\n\nThe queries below analyze **Pirkka banana** (`2000818700008`) - try changing the product ID to explore other products."
           }
         },
         {
