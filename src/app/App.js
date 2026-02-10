@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 import { createBrowserHistory } from 'history';
 import * as data from './data'
+import { initAnalytics, trackPage, trackEvent, identifyUser } from '../analytics'
 import NavBar from './components/NavBar'
 import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
@@ -59,6 +60,18 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // Initialize analytics
+    initAnalytics()
+
+    // Track initial page view
+    trackPage('demo_page_viewed', { path: this.state.urlPath })
+
+    // Identify initial user persona
+    identifyUser(`demo_${this.state.selectedUserId}`, {
+      persona: this.state.selectedUserId,
+      type: 'demo_user',
+    })
+
     // Listen for changes to the current location (back/forward buttons, direct URL changes)
     this.historyUnlisten = history.listen(({ location, action }) => {
       window.scrollTo(0, 0);
@@ -67,6 +80,9 @@ class App extends Component {
       this.setState({
         urlPath,
       })
+
+      // Track page view on navigation
+      trackPage('demo_page_viewed', { path: urlPath })
     })
   }
 
@@ -87,7 +103,16 @@ class App extends Component {
     const newCart = state.cart.concat([product])
     this.setState({
       cart: _.uniqBy(newCart, item => item.id),
-    }, cb)
+    }, () => {
+      // Track cart addition
+      trackEvent('demo_product_added_to_cart', {
+        product_id: product.id,
+        product_name: product.name,
+        cart_size: this.state.cart.length,
+        user_persona: this.state.selectedUserId,
+      })
+      if (cb) cb()
+    })
   }
 
   /**
@@ -160,6 +185,15 @@ class App extends Component {
 
   onUserSelected = (userId) => {
     this.setState({ selectedUserId: userId, cart: [] })
+
+    // Track persona change and identify
+    identifyUser(`demo_${userId}`, {
+      persona: userId,
+      type: 'demo_user',
+    })
+    trackEvent('demo_persona_selected', {
+      persona: userId,
+    })
   }
 
   render() {
