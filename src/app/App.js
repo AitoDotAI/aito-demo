@@ -36,6 +36,25 @@ function getPath(pathname) {
   return _.trimEnd(pathname, '/')
 }
 
+const PAGE_NAMES = {
+  '/': 'Demo - Store',
+  '/cart': 'Demo - Cart',
+  '/admin': 'Demo - Admin',
+  '/admin-chat': 'Demo - Employee Assistant',
+  '/customer-chat': 'Demo - Customer Assistant',
+  '/help': 'Demo - Help',
+  '/data': 'Demo - Data Inspector',
+  '/analytics': 'Demo - Analytics',
+  '/invoicing': 'Demo - Invoicing',
+  '/evaluation': 'Demo - Evaluation',
+  '/pricing': 'Demo - Pricing',
+}
+
+function getPageName(urlPath) {
+  if (urlPath.startsWith('/product/')) return 'Demo - Product Detail'
+  return PAGE_NAMES[urlPath] || 'Demo - ' + urlPath
+}
+
 /**
  * Main application component for the Aito Grocery Store Demo
  * Manages routing, user selection, shopping cart, and data fetching
@@ -64,7 +83,7 @@ class App extends Component {
     initAnalytics()
 
     // Track initial page view
-    trackPage('demo_page_viewed', { path: this.state.urlPath })
+    trackPage(getPageName(this.state.urlPath), { path: this.state.urlPath })
 
     // Identify initial user persona
     identifyUser(`demo_${this.state.selectedUserId}`, {
@@ -82,7 +101,7 @@ class App extends Component {
       })
 
       // Track page view on navigation
-      trackPage('demo_page_viewed', { path: urlPath })
+      trackPage(getPageName(urlPath), { path: urlPath })
     })
   }
 
