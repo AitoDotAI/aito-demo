@@ -53,6 +53,11 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios)"
+    ]
+  },
   "browserslist": [
     ">0.2%",
     "not dead",

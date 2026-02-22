@@ -57,12 +57,7 @@ describe('Search API', () => {
         {
           from: 'impressions',
           where: {
-            product: {
-              $or: [
-                { tags: { $match: 'milk' } },
-                { name: { $match: 'milk' } }
-              ]
-            },
+            'product.name': { $match: 'milk' },
             'context.user': 'larry'
           },
           get: 'product',
@@ -98,12 +93,7 @@ describe('Search API', () => {
         'https://test.aito.app/api/v1/_query',
         expect.objectContaining({
           where: {
-            product: {
-              $or: [
-                { tags: { $match: 'milk' } },
-                { name: { $match: 'milk' } }
-              ]
-            }
+            'product.name': { $match: 'milk' }
             // Should not include 'context.user'
           }
         }),

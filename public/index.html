@@ -2,14 +2,100 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-
-    <link href="https://fonts.googleapis.com/css?family=Lato:700|Source+Sans+Pro:400,700" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Grocery Store Demo App</title>
+    <title>Aito.ai Predictive Database Demo — ML-Powered Grocery Store</title>
+    <meta name="description" content="Interactive demo of Aito.ai's predictive database: 11 production-ready ML features including personalized search, recommendations, invoice automation, and price-demand analytics. Query-based inference with 20-50ms response times, zero training steps.">
+    <meta name="author" content="Aito.ai">
+    <meta name="theme-color" content="#FF6B35">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://demo.aito.ai/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://demo.aito.ai/">
+    <meta property="og:title" content="Aito.ai Predictive Database Demo">
+    <meta property="og:description" content="11 ML features in a live grocery store demo. Personalized search, recommendations, invoice automation, and price analytics — all via SQL-like queries with 20-50ms response times.">
+    <meta property="og:image" content="https://demo.aito.ai/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Aito.ai Demo">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Aito.ai Predictive Database Demo">
+    <meta name="twitter:description" content="11 ML features in a live grocery store demo. Query-based inference, zero training steps, 20-50ms response times.">
+    <meta name="twitter:image" content="https://demo.aito.ai/og-image.png">
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:700|Source+Sans+Pro:400,700" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Aito.ai Predictive Database Demo",
+      "description": "Interactive demonstration of Aito.ai's predictive database capabilities through an intelligent grocery store application showcasing 11 real-world ML use cases.",
+      "url": "https://demo.aito.ai/",
+      "applicationCategory": "DemoApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Aito.ai",
+        "url": "https://aito.ai"
+      },
+      "featureList": [
+        "Personalized product search",
+        "ML-powered recommendations",
+        "Smart autocomplete",
+        "Invoice automation with GL code prediction",
+        "Product catalog AI predictions",
+        "Price-demand analytics",
+        "Customer support NLP",
+        "Model quality monitoring",
+        "Statistical correlation discovery",
+        "AI shopping assistant",
+        "Employee assistant chatbot"
+      ]
+    }
+    </script>
   </head>
   <body>
     <noscript>
-      You need to enable JavaScript to run this app.
+      <div style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+        <h1>Aito.ai Predictive Database Demo</h1>
+        <p>This interactive demo showcases Aito.ai's predictive database through an intelligent grocery store application with 11 production-ready ML features.</p>
+
+        <h2>Featured ML Capabilities</h2>
+        <ul>
+          <li><strong>Personalized Search</strong> — Query-based ranking with user context and purchase probability</li>
+          <li><strong>Smart Recommendations</strong> — Goal-oriented product suggestions using the _recommend endpoint</li>
+          <li><strong>Invoice Automation</strong> — Automatic GL code assignment and approval routing</li>
+          <li><strong>Price-Demand Analytics</strong> — Data-driven pricing optimization and demand forecasting</li>
+          <li><strong>Product Catalog AI</strong> — Category and price prediction for new products</li>
+          <li><strong>NLP Support</strong> — Customer inquiry classification and sentiment analysis</li>
+          <li><strong>Statistical Discovery</strong> — Correlation analysis with the _relate endpoint</li>
+          <li><strong>Model Quality Monitoring</strong> — Real-time evaluation and performance metrics</li>
+          <li><strong>AI Shopping Assistant</strong> — Contextual chatbot with cart management</li>
+          <li><strong>Employee Assistant</strong> — Internal business intelligence chatbot</li>
+          <li><strong>Predictive Autofill</strong> — Smart cart pre-filling based on user patterns</li>
+        </ul>
+
+        <h2>Technical Highlights</h2>
+        <p>Query-based inference without model training or MLOps infrastructure. 20-50ms API response times. SQL-like queries return ML predictions instead of raw data.</p>
+
+        <p>Please <a href="https://aito.ai">visit aito.ai</a> for more information, or enable JavaScript to experience the interactive demo.</p>
+      </div>
     </noscript>
     <div id="root"></div>
   </body>

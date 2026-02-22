@@ -1,0 +1,9 @@
+{
+  "short_name": "Aito Demo",
+  "name": "Aito.ai Predictive Database Demo",
+  "description": "Interactive demo of 11 ML features powered by Aito.ai's predictive database",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#FF6B35",
+  "background_color": "#ffffff"
+}
