@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /cart
+Disallow: /data
+
+Sitemap: https://demo.aito.ai/sitemap.xml

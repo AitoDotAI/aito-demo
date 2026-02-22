@@ -82,7 +82,8 @@ class App extends Component {
     // Initialize analytics
     initAnalytics()
 
-    // Track initial page view
+    // Track initial page view and set browser tab title
+    document.title = getPageName(this.state.urlPath)
     trackPage(getPageName(this.state.urlPath), { path: this.state.urlPath })
 
     // Identify initial user persona
@@ -100,7 +101,8 @@ class App extends Component {
         urlPath,
       })
 
-      // Track page view on navigation
+      // Update browser tab title and track page view on navigation
+      document.title = getPageName(urlPath)
       trackPage(getPageName(urlPath), { path: urlPath })
     })
   }
