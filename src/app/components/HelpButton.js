@@ -1,15 +1,19 @@
 import React, { useState } from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
-import { FaQuestionCircle, FaExternalLinkAlt } from 'react-icons/fa'
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap'
+import { FaExternalLinkAlt } from 'react-icons/fa'
+import aitoFavicon from '../assets/aito-favicon.svg'
+import aitoLogo from '../assets/aito-logo-theme.svg'
+
+import './HelpButton.css'
 
 /**
  * Contextual help button component that shows feature descriptions and links to use cases
  */
-const HelpButton = ({ 
-  feature, 
-  title, 
-  description, 
-  useCaseLink, 
+const HelpButton = ({
+  feature,
+  title,
+  description,
+  useCaseLink,
   technicalDetails = null,
   size = 'sm',
   className = '',
@@ -25,54 +29,45 @@ const HelpButton = ({
     }
   }
 
+  const iconSize = size === 'sm' ? '1.4rem' : '1.7rem'
+
   return (
     <>
-      <Button
-        color="link"
-        size={size}
-        className={`p-0 ml-2 ${className}`}
+      <button
+        className={`HelpButton__trigger ${invertColors ? 'HelpButton__trigger--inverted' : ''} ${className}`}
         onClick={toggle}
         title={`Learn more about ${feature}`}
-        style={{ 
-          fontSize: size === 'sm' ? '1.1rem' : '1.3rem',
-          verticalAlign: 'middle',
-          lineHeight: 1,
-          color: invertColors ? 'white' : '#FF6B35',
-          backgroundColor: invertColors ? '#FF6B35' : 'transparent',
-          width: invertColors ? '1.5rem' : 'auto',
-          height: invertColors ? '1.5rem' : 'auto',
-          display: invertColors ? 'inline-flex' : 'inline',
-          alignItems: invertColors ? 'center' : 'normal',
-          justifyContent: invertColors ? 'center' : 'normal',
-          position: 'relative',
-          top: '-0.1rem'
-        }}
+        style={{ width: iconSize, height: iconSize }}
       >
-        <FaQuestionCircle />
-      </Button>
+        <img src={aitoFavicon} alt="Help" className="HelpButton__icon" />
+      </button>
 
-      <Modal isOpen={isOpen} toggle={toggle} size="lg">
-        <ModalHeader toggle={toggle}>
-          {title || `${feature} - How it works`}
-        </ModalHeader>
-        <ModalBody>
-          <div className="mb-3">
-            <h6 className="text-primary">Overview</h6>
-            <p>{description}</p>
+      <Modal isOpen={isOpen} toggle={toggle} size="lg" className="HelpButton__modal">
+        <div className="HelpButton__logoHeader">
+          <img className="HelpButton__logo" src={aitoLogo} alt="Aito.ai" />
+          <button className="HelpButton__close" onClick={toggle} aria-label="Close">&times;</button>
+        </div>
+        <div className="HelpButton__header">
+          <h5 className="HelpButton__title">{title || `${feature} - How it works`}</h5>
+        </div>
+        <ModalBody className="HelpButton__body">
+          <div className="HelpButton__section">
+            <h6 className="HelpButton__sectionLabel">Overview</h6>
+            <p className="HelpButton__text">{description}</p>
           </div>
-          
+
           {technicalDetails && (
-            <div className="mb-3">
-              <h6 className="text-primary">Technical Implementation</h6>
-              <div className="bg-light p-3 rounded">
-                <small className="text-muted">{technicalDetails}</small>
+            <div className="HelpButton__section">
+              <h6 className="HelpButton__sectionLabel">Technical Implementation</h6>
+              <div className="HelpButton__codeBlock">
+                <small>{technicalDetails}</small>
               </div>
             </div>
           )}
-          
-          <div className="mb-3">
-            <h6 className="text-primary">Key Benefits</h6>
-            <ul className="small">
+
+          <div className="HelpButton__section">
+            <h6 className="HelpButton__sectionLabel">Key Benefits</h6>
+            <ul className="HelpButton__list">
               {feature === 'Smart Search' && (
                 <>
                   <li>Personalized results based on user behavior</li>
@@ -132,14 +127,13 @@ const HelpButton = ({
             </ul>
           </div>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter className="HelpButton__footer">
           {useCaseLink && (
-            <Button color="primary" onClick={openUseCase}>
-              <FaExternalLinkAlt className="mr-2" />
-              View Detailed Use Case
-            </Button>
+            <button className="HelpButton__ctaLink" onClick={openUseCase}>
+              <FaExternalLinkAlt /> View Detailed Use Case
+            </button>
           )}
-          <Button color="secondary" onClick={toggle}>
+          <Button color="secondary" onClick={toggle} size="sm">
             Close
           </Button>
         </ModalFooter>

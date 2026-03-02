@@ -9,6 +9,7 @@ import { createBrowserHistory } from 'history';
 import * as data from './data'
 import { initAnalytics, trackPage, trackEvent, identifyUser } from '../analytics'
 import NavBar from './components/NavBar'
+import ContextPanel from './components/ContextPanel'
 import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
 import AnalyticsPage from './pages/AnalyticsPage'
@@ -334,14 +335,18 @@ class App extends Component {
           state={state}
         />
 
-        <div className="App__page">
-          <Page
-            selectedUserId={state.selectedUserId}
-            actions={actions}
-            dataFetchers={dataFetchers}
-            appState={state}
-          />
+        <div className="App__main">
+          <div className="App__page">
+            <Page
+              selectedUserId={state.selectedUserId}
+              actions={actions}
+              dataFetchers={dataFetchers}
+              appState={state}
+            />
+          </div>
         </div>
+
+        <ContextPanel urlPath={state.urlPath} />
 
         <Modal color="danger" isOpen={modalOpen} toggle={() => this.showError(null)}>
           <ModalHeader toggle={() => this.showError(null)}>Error</ModalHeader>

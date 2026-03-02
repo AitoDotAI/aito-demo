@@ -1,21 +1,51 @@
-.NavBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--aito-spacing-md) var(--aito-spacing-lg);
-  margin-bottom: 0;
-  background-color: var(--aito-background);
+/* ============================================================
+   NavBar — Desktop sidebar + Mobile top bar + drawer
+   ============================================================ */
+
+/* --- Desktop Sidebar --- */
+
+.NavBar__sidebar {
+  display: none; /* hidden on mobile, shown via media query */
 }
 
-.NavBar__left {
+@media (min-width: 769px) {
+  .NavBar__sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 230px;
+    height: 100vh;
+    background-color: var(--aito-background);
+    border-right: 1px solid var(--aito-border);
+    z-index: 1000;
+    overflow-y: auto;
+    transition: width 0.2s ease;
+  }
+
+  .NavBar__sidebar--collapsed {
+    width: 56px;
+  }
+}
+
+.NavBar__sidebarTop {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.NavBar__logoRow {
   display: flex;
   align-items: center;
-  gap: var(--aito-spacing-md);
+  justify-content: space-between;
+  padding: var(--aito-spacing-md);
+  border-bottom: 1px solid var(--aito-border);
+  min-height: 56px;
 }
 
 .NavBar__logo {
-  height: 35px;
+  height: 30px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -23,6 +53,284 @@
 .NavBar__logo:hover {
   transform: scale(1.05);
 }
+
+.NavBar__collapseBtn {
+  background: none;
+  border: none;
+  color: var(--aito-text-muted);
+  cursor: pointer;
+  padding: var(--aito-spacing-xs);
+  border-radius: var(--aito-radius-small);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.NavBar__collapseBtn:hover {
+  background-color: var(--aito-surface);
+  color: var(--aito-text-primary);
+}
+
+.NavBar__sidebar--collapsed .NavBar__collapseBtn {
+  margin: 0 auto;
+}
+
+/* --- Sidebar Navigation --- */
+
+.NavBar__sidebarNav {
+  padding: var(--aito-spacing-sm) 0;
+}
+
+.NavBar__section {
+  margin-bottom: var(--aito-spacing-xs);
+}
+
+.NavBar__sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--aito-spacing-sm);
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--aito-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.NavBar__sectionEmoji {
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.NavBar__sidebar--collapsed .NavBar__sectionHeader {
+  justify-content: center;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-xs);
+}
+
+.NavBar__menuItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  padding-left: calc(var(--aito-spacing-md) + var(--aito-spacing-sm));
+  font-size: 0.85rem;
+  color: var(--aito-text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 3px solid transparent;
+}
+
+.NavBar__menuItem:hover {
+  background-color: var(--aito-surface);
+  color: var(--aito-accent);
+}
+
+.NavBar__menuItem--active {
+  background-color: var(--aito-surface);
+  color: var(--aito-accent);
+  font-weight: 600;
+  border-left-color: var(--aito-accent);
+}
+
+.NavBar__sidebar--collapsed .NavBar__menuItem {
+  text-align: center;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-xs);
+  font-size: 0.75rem;
+  border-left: none;
+  border-bottom: 2px solid transparent;
+}
+
+.NavBar__sidebar--collapsed .NavBar__menuItem--active {
+  border-bottom-color: var(--aito-accent);
+}
+
+/* --- Sign-up CTA --- */
+
+.NavBar__signupCTA {
+  padding: var(--aito-spacing-md);
+  border-top: 1px solid var(--aito-border);
+  flex-shrink: 0;
+}
+
+.NavBar__signupLink,
+.NavBar__signupLink:visited,
+.NavBar__signupLink:hover,
+.NavBar__signupLink:active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--aito-spacing-xs);
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  background-color: var(--aito-accent);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--aito-radius-small);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.NavBar__signupLink:hover {
+  background-color: #e55a2b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.NavBar__signupArrow {
+  font-size: 1rem;
+}
+
+.NavBar__sidebar--collapsed .NavBar__signupLink {
+  padding: var(--aito-spacing-sm);
+  font-size: 0.9rem;
+}
+
+/* --- Desktop Top Bar (user/cart only, no hamburger) --- */
+
+.NavBar__desktopTopBar {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .NavBar__desktopTopBar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: var(--aito-spacing-sm) var(--aito-spacing-lg);
+    margin-left: 230px;
+    background-color: var(--aito-background);
+    border-bottom: 1px solid var(--aito-border);
+    transition: margin-left 0.2s ease, margin-right 0.2s ease;
+  }
+
+  .sidebar-collapsed .NavBar__desktopTopBar {
+    margin-left: 56px;
+  }
+
+  .contextpanel-expanded .NavBar__desktopTopBar {
+    margin-right: 340px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .contextpanel-expanded .NavBar__desktopTopBar {
+    margin-right: 220px;
+  }
+}
+
+/* --- Mobile Top Bar --- */
+
+.NavBar__mobile {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  background-color: var(--aito-background);
+  border-bottom: 1px solid var(--aito-border);
+}
+
+@media (min-width: 769px) {
+  .NavBar__mobile {
+    display: none;
+  }
+}
+
+.NavBar__mobileLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--aito-spacing-md);
+}
+
+.NavBar__hamburger {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--aito-accent);
+  padding: var(--aito-spacing-sm);
+  border-radius: var(--aito-radius-small);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.NavBar__hamburger:hover {
+  background-color: var(--aito-surface);
+  color: var(--aito-primary);
+}
+
+.NavBar__hamburger:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25);
+}
+
+/* --- Mobile Drawer (slide-out) --- */
+
+.NavBar__mobileOverlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1099;
+}
+
+@media (min-width: 769px) {
+  .NavBar__mobileOverlay {
+    display: none;
+  }
+}
+
+.NavBar__mobileDrawer {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background-color: var(--aito-background);
+  z-index: 1100;
+  overflow-y: auto;
+  transition: left 0.25s ease;
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.1);
+}
+
+.NavBar__mobileDrawer--open {
+  left: 0;
+}
+
+@media (min-width: 769px) {
+  .NavBar__mobileDrawer {
+    display: none;
+  }
+}
+
+.NavBar__mobileDrawerContent {
+  padding: var(--aito-spacing-lg) 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.NavBar__mobileDrawerContent .NavBar__signupCTA {
+  margin-top: auto;
+}
+
+/* --- Shared: Links list (user + cart) --- */
 
 .NavBar__links {
   list-style: none;
@@ -49,7 +357,8 @@
   transform: translateY(-1px);
 }
 
-.NavBar__cart-link, .NavBar__profile-link {
+.NavBar__cart-link,
+.NavBar__profile-link {
   margin: 0;
   padding: var(--aito-spacing-sm);
   position: relative;
@@ -57,9 +366,9 @@
   transition: all 0.2s ease;
 }
 
-.NavBar__cart-link:hover, .NavBar__profile-link:hover {
+.NavBar__cart-link:hover,
+.NavBar__profile-link:hover {
   background-color: var(--aito-surface);
-  transform: translateY(5x);
 }
 
 .NavBar__cart-link-text {
@@ -92,58 +401,23 @@
   letter-spacing: 0.5px;
 }
 
-.NavBar .dropdown-item {
+/* --- Shared: Dropdown items --- */
+
+.NavBar__desktopTopBar .dropdown-item,
+.NavBar__mobile .dropdown-item {
   font-size: 0.875rem;
   padding: var(--aito-spacing-sm) var(--aito-spacing-md);
   color: var(--aito-text-primary);
   transition: all 0.2s ease;
 }
 
-.NavBar .dropdown-item:hover {
+.NavBar__desktopTopBar .dropdown-item:hover,
+.NavBar__mobile .dropdown-item:hover {
   background-color: var(--aito-surface);
   color: var(--aito-primary);
 }
 
-.NavBar .dropdown-menu {
+.NavBar__desktopTopBar .dropdown-menu,
+.NavBar__mobile .dropdown-menu {
   z-index: 1050 !important;
-}
-
-.NavBar__hamburger {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  color: var(--aito-accent);
-  padding: var(--aito-spacing-sm);
-  border-radius: var(--aito-radius-small);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.NavBar__hamburger:hover {
-  background-color: var(--aito-surface);
-  color: var(--aito-primary);
-  transform: translateY(-1px);
-}
-
-.NavBar__hamburger:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25);
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .NavBar {
-    padding: var(--aito-spacing-sm) var(--aito-spacing-md);
-  }
-  
-  .NavBar__links {
-    gap: var(--aito-spacing-md);
-  }
-  
-  .NavBar__links li {
-    font-size: 1.25rem;
-  }
 }
