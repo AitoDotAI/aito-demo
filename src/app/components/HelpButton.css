@@ -1,0 +1,170 @@
+/* HelpButton — Aito-themed help trigger + modal */
+
+/* --- Trigger button --- */
+
+.HelpButton__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0c0f41;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+  vertical-align: middle;
+  position: relative;
+  top: -0.1rem;
+  margin-left: var(--aito-spacing-xs);
+  transition: transform 0.15s ease;
+}
+
+.HelpButton__trigger:hover {
+  transform: scale(1.15);
+}
+
+.HelpButton__trigger--inverted {
+  background-color: #0c0f41;
+}
+
+.HelpButton__icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* --- Modal theming --- */
+
+.HelpButton__modal .modal-content {
+  background-color: #0c0f41;
+  background-image: url('../assets/knowledge_garden_with_river.png');
+  background-position: bottom center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(93, 80, 255, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* --- Logo header --- */
+
+.HelpButton__logoHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--aito-spacing-md) var(--aito-spacing-lg);
+  border-bottom: 1px solid rgba(93, 80, 255, 0.2);
+  background-color: rgba(12, 15, 65, 0.92);
+}
+
+.HelpButton__logo {
+  height: 24px;
+  display: block;
+}
+
+/* --- Feature title header --- */
+
+.HelpButton__header {
+  padding: var(--aito-spacing-md) var(--aito-spacing-lg);
+  border-bottom: 1px solid rgba(93, 80, 255, 0.2);
+  background-color: rgba(12, 15, 65, 0.88);
+}
+
+.HelpButton__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.HelpButton__close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.HelpButton__close:hover {
+  color: #ffffff;
+}
+
+/* --- Body --- */
+
+.HelpButton__body {
+  background-color: rgba(12, 15, 65, 0.88);
+  padding: var(--aito-spacing-lg);
+}
+
+.HelpButton__section {
+  margin-bottom: var(--aito-spacing-lg);
+}
+
+.HelpButton__section:last-child {
+  margin-bottom: 0;
+}
+
+.HelpButton__sectionLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #9B69FF;
+  margin: 0 0 var(--aito-spacing-sm) 0;
+}
+
+.HelpButton__text {
+  font-size: 0.875rem;
+  color: #f0f0f0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.HelpButton__codeBlock {
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(93, 80, 255, 0.2);
+  border-radius: var(--aito-radius-small);
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  color: #f0f0f0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.HelpButton__list {
+  margin: 0;
+  padding-left: var(--aito-spacing-lg);
+  color: #f0f0f0;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+/* --- Footer --- */
+
+.HelpButton__footer {
+  background-color: rgba(12, 15, 65, 0.95);
+  border-top: 1px solid rgba(93, 80, 255, 0.2);
+  padding: var(--aito-spacing-md) var(--aito-spacing-lg);
+}
+
+.HelpButton__ctaLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aito-spacing-xs);
+  padding: var(--aito-spacing-xs) var(--aito-spacing-md);
+  background-color: #12B5AD;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--aito-radius-small);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.HelpButton__ctaLink:hover {
+  background-color: #0fa39b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 12px rgba(18, 181, 173, 0.4);
+}

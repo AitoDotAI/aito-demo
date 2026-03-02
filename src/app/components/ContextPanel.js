@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { FaChevronRight, FaBook, FaExternalLinkAlt, FaGithub, FaInfoCircle, FaTimes } from 'react-icons/fa'
+import { FaChevronRight, FaBook, FaExternalLinkAlt, FaGithub, FaTimes } from 'react-icons/fa'
 import { trackEvent } from '../../analytics'
 import { CONTEXT_PANEL_CONTENT, DEFAULT_CONTEXT } from '../constants/contextPanelContent'
+import aitoLogo from '../assets/aito-logo-theme.svg'
+import aitoFavicon from '../assets/aito-favicon.svg'
 
 import './ContextPanel.css'
 
@@ -88,6 +90,11 @@ class ContextPanel extends Component {
   renderPanelContent(content) {
     return (
       <>
+        <div className="ContextPanel__logoHeader">
+          <img className="ContextPanel__logo" src={aitoLogo} alt="Aito.ai" />
+          <span className="ContextPanel__logoTagline">The Predictive DB</span>
+        </div>
+
         <div className="ContextPanel__stats">
           {STATS.map((stat) => (
             <div key={stat.label} className="ContextPanel__stat">
@@ -179,7 +186,7 @@ class ContextPanel extends Component {
             rel="noopener noreferrer"
             onClick={this.onSignupClick}
           >
-            Try with your own data <span>&rarr;</span>
+            Start free trial <span>&rarr;</span>
           </a>
         </div>
       </>
@@ -199,8 +206,7 @@ class ContextPanel extends Component {
           aria-label={expanded ? 'Close info panel' : 'Open info panel'}
           title={expanded ? 'Close info panel' : 'Open info panel'}
         >
-          {expanded ? <FaChevronRight /> : <FaInfoCircle />}
-          {!expanded && <span className="ContextPanel__toggleLabel">i</span>}
+          {expanded ? <FaChevronRight /> : <img className="ContextPanel__toggleIcon" src={aitoFavicon} alt="Aito.ai" />}
         </button>
 
         {/* Desktop: right panel */}
@@ -215,7 +221,7 @@ class ContextPanel extends Component {
           aria-label="View page info"
           title="View page info"
         >
-          <FaInfoCircle />
+          <img className="ContextPanel__mobileToggleIcon" src={aitoFavicon} alt="Aito.ai" />
         </button>
 
         {/* Mobile: bottom sheet overlay */}

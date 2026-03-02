@@ -7,6 +7,8 @@
 /* Main content area — offset by sidebar (left) and context panel (right) on desktop */
 .App__main {
   width: 100%;
+  overflow-x: hidden;
+  background-color: var(--aito-background);
 }
 
 @media (min-width: 769px) {
@@ -24,14 +26,14 @@
 
   /* Context panel expanded */
   .contextpanel-expanded .App__main {
-    margin-right: 280px;
-    width: calc(100% - 230px - 280px);
+    margin-right: 340px;
+    width: calc(100% - 230px - 340px);
   }
 
   /* Both: sidebar collapsed + context panel expanded */
   .sidebar-collapsed.contextpanel-expanded .App__main {
-    margin-right: 280px;
-    width: calc(100% - 56px - 280px);
+    margin-right: 340px;
+    width: calc(100% - 56px - 340px);
   }
 }
 
