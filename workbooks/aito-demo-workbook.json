@@ -283,7 +283,7 @@
           "title": "Try Aito with Your Own Data",
           "size": "full",
           "config": {
-            "content": "## Want to try this with your own data?\n\nEverything you've seen above - recommendations, predictions, explainability, analytics - works on **any structured dataset**. Upload a CSV and start querying in minutes.\n\n**[Sign up free at aito.ai](https://aito.ai)**"
+            "content": "## Want to try this with your own data?\n\nEverything you've seen above - recommendations, predictions, explainability, analytics - works on **any structured dataset**. Upload a CSV and start querying in minutes.\n\n**[Create a free sandbox →](https://console.aito.ai/account/authentication/?signUp=true)**"
           }
         }
       ]
@@ -464,7 +464,7 @@
           "title": "Get Started with Aito",
           "size": "full",
           "config": {
-            "content": "## Ready to build with Aito?\n\nYou've seen recommendations, predictions with explainability, analytics, and model quality evaluation - all powered by a single predictive database.\n\n**[Sign up free at aito.ai](https://aito.ai)** and start querying your own data in minutes.\n\n**Resources:**\n- [API Documentation](https://aito.ai/docs/api/)\n- [Use Cases](https://aito.ai/docs/api/use-cases/)\n- [API Playground](https://aito.ai/docs/api/playground/)"
+            "content": "## Ready to build with Aito?\n\nYou've seen recommendations, predictions with explainability, analytics, and model quality evaluation - all powered by a single predictive database.\n\n**[Create a free sandbox →](https://console.aito.ai/account/authentication/?signUp=true)** and start querying your own data in minutes.\n\n**Resources:**\n- [API Documentation](https://aito.ai/docs/api/)\n- [Use Cases](https://aito.ai/docs/api/use-cases/)\n- [API Playground](https://aito.ai/docs/api/playground/)"
           }
         }
       ]

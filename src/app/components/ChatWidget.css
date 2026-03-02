@@ -3,7 +3,7 @@
 /* Floating Chat Button */
 .chat-widget-button {
   position: fixed;
-  bottom: 24px;
+  bottom: 88px;
   right: 24px;
   width: 60px;
   height: 60px;
@@ -19,6 +19,22 @@
   justify-content: center;
   transition: all 0.3s ease;
   z-index: 9998;
+}
+
+@media (min-width: 769px) {
+  .chat-widget-button {
+    bottom: 24px;
+  }
+
+  .contextpanel-expanded .chat-widget-button {
+    right: 304px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .contextpanel-expanded .chat-widget-button {
+    right: 244px;
+  }
 }
 
 .chat-widget-button:hover {
@@ -48,11 +64,11 @@
 /* Chat Window Container */
 .chat-widget-container {
   position: fixed;
-  bottom: 24px;
+  bottom: 88px;
   right: 24px;
   width: 380px;
   height: 600px;
-  max-height: calc(100vh - 48px);
+  max-height: calc(100vh - 112px);
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -61,6 +77,23 @@
   z-index: 9999;
   animation: slideUp 0.3s ease-out;
   overflow: hidden;
+}
+
+@media (min-width: 769px) {
+  .chat-widget-container {
+    bottom: 24px;
+    max-height: calc(100vh - 48px);
+  }
+
+  .contextpanel-expanded .chat-widget-container {
+    right: 304px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .contextpanel-expanded .chat-widget-container {
+    right: 244px;
+  }
 }
 
 @keyframes slideUp {
@@ -351,7 +384,7 @@
 /* Mobile Responsiveness */
 @media (max-width: 480px) {
   .chat-widget-button {
-    bottom: 16px;
+    bottom: 80px;
     right: 16px;
     width: 56px;
     height: 56px;
@@ -359,9 +392,9 @@
 
   .chat-widget-container {
     width: calc(100vw - 32px);
-    height: calc(100vh - 32px);
+    height: calc(100vh - 96px);
     max-height: none;
-    bottom: 16px;
+    bottom: 80px;
     right: 16px;
     left: 16px;
     border-radius: 12px;

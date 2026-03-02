@@ -1,22 +1,62 @@
 .App {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: linear-gradient(135deg, var(--aito-surface-light) 0%, var(--aito-background) 100%);
   min-height: 100vh;
+  background: linear-gradient(135deg, var(--aito-surface-light) 0%, var(--aito-background) 100%);
+}
+
+/* Main content area — offset by sidebar (left) and context panel (right) on desktop */
+.App__main {
+  width: 100%;
+}
+
+@media (min-width: 769px) {
+  .App__main {
+    margin-left: 230px;
+    width: calc(100% - 230px);
+    transition: margin-left 0.2s ease, width 0.2s ease, margin-right 0.2s ease;
+  }
+
+  /* Sidebar collapsed */
+  .sidebar-collapsed .App__main {
+    margin-left: 56px;
+    width: calc(100% - 56px);
+  }
+
+  /* Context panel expanded */
+  .contextpanel-expanded .App__main {
+    margin-right: 280px;
+    width: calc(100% - 230px - 280px);
+  }
+
+  /* Both: sidebar collapsed + context panel expanded */
+  .sidebar-collapsed.contextpanel-expanded .App__main {
+    margin-right: 280px;
+    width: calc(100% - 56px - 280px);
+  }
+}
+
+/* Narrow desktop: smaller context panel */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .contextpanel-expanded .App__main {
+    margin-right: 220px;
+    width: calc(100% - 230px - 220px);
+  }
+
+  .sidebar-collapsed.contextpanel-expanded .App__main {
+    margin-right: 220px;
+    width: calc(100% - 56px - 220px);
+  }
 }
 
 .App__page {
+  max-width: 1100px;
+  margin: 0 auto;
   padding: 0 var(--aito-spacing-md) var(--aito-spacing-xl) var(--aito-spacing-md);
   background-color: var(--aito-background);
 }
 
 /* Mobile-first responsive design */
 @media (min-width: 768px) {
-  .App {
-    max-width: 1200px;
-  }
-  
   .App__page {
     padding: 0 var(--aito-spacing-lg) var(--aito-spacing-xl) var(--aito-spacing-lg);
   }

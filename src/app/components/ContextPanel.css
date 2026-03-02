@@ -1,0 +1,435 @@
+/* ============================================================
+   ContextPanel — Desktop right panel + Mobile bottom sheet
+   ============================================================ */
+
+.ContextPanel {
+  display: none;
+}
+
+.ContextPanel__toggle {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  /* --- Panel container --- */
+  .ContextPanel {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--aito-background);
+    border-left: 1px solid var(--aito-border);
+    z-index: 999;
+    transform: translateX(100%);
+    transition: transform 0.2s ease;
+  }
+
+  .ContextPanel--expanded {
+    transform: translateX(0);
+  }
+
+  /* --- Toggle tab --- */
+  .ContextPanel__toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 80px;
+    background-color: var(--aito-surface);
+    border: 1px solid var(--aito-border);
+    border-right: none;
+    border-radius: var(--aito-radius-small) 0 0 var(--aito-radius-small);
+    cursor: pointer;
+    color: var(--aito-accent);
+    font-size: 0.7rem;
+    z-index: 1001;
+    transition: right 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    padding: 0;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .ContextPanel__toggle:hover {
+    background-color: var(--aito-background);
+    box-shadow: -2px 0 12px rgba(255, 107, 53, 0.15);
+  }
+
+  .ContextPanel__toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25);
+  }
+
+  .ContextPanel__toggleLabel {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    writing-mode: vertical-lr;
+    color: var(--aito-text-muted);
+  }
+
+  .contextpanel-expanded .ContextPanel__toggle {
+    right: 280px;
+  }
+}
+
+/* --- Stats row --- */
+
+.ContextPanel__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  padding: var(--aito-spacing-sm) var(--aito-spacing-sm);
+  border-bottom: 1px solid var(--aito-border);
+  background-color: var(--aito-surface);
+  flex-shrink: 0;
+}
+
+.ContextPanel__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--aito-spacing-xs) 0;
+}
+
+.ContextPanel__statValue {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--aito-accent);
+  line-height: 1;
+}
+
+.ContextPanel__statLabel {
+  font-size: 0.55rem;
+  color: var(--aito-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+/* --- Scrollable content --- */
+
+.ContextPanel__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--aito-spacing-md);
+}
+
+.ContextPanel__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--aito-text-primary);
+  margin: 0 0 var(--aito-spacing-sm) 0;
+}
+
+.ContextPanel__description {
+  font-size: 0.8rem;
+  color: var(--aito-text-secondary);
+  line-height: 1.5;
+  margin: 0 0 var(--aito-spacing-md) 0;
+}
+
+/* --- Endpoint badges --- */
+
+.ContextPanel__endpoints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--aito-spacing-xs);
+  margin-bottom: var(--aito-spacing-md);
+}
+
+.ContextPanel__badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  color: var(--aito-accent);
+  background-color: rgba(255, 107, 53, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-radius: 3px;
+}
+
+/* --- Section labels --- */
+
+.ContextPanel__sectionLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--aito-text-muted);
+  margin: 0 0 var(--aito-spacing-sm) 0;
+}
+
+/* --- Code block --- */
+
+.ContextPanel__querySection {
+  margin-bottom: var(--aito-spacing-md);
+}
+
+.ContextPanel__codeBlock {
+  background-color: var(--aito-surface);
+  border: 1px solid var(--aito-border);
+  border-radius: var(--aito-radius-small);
+  padding: var(--aito-spacing-sm);
+  margin: 0;
+  overflow-x: auto;
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: var(--aito-text-primary);
+}
+
+.ContextPanel__codeBlock code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  white-space: pre;
+}
+
+/* --- Resource links --- */
+
+.ContextPanel__links {
+  margin-bottom: var(--aito-spacing-md);
+}
+
+.ContextPanel__link {
+  display: flex;
+  align-items: center;
+  gap: var(--aito-spacing-sm);
+  padding: var(--aito-spacing-xs) 0;
+  font-size: 0.8rem;
+  color: var(--aito-text-primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.ContextPanel__link:hover {
+  color: var(--aito-accent);
+  text-decoration: none;
+}
+
+.ContextPanel__link svg {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--aito-text-muted);
+}
+
+.ContextPanel__link:hover svg {
+  color: var(--aito-accent);
+}
+
+/* --- Sign-up CTA --- */
+
+.ContextPanel__cta {
+  padding: var(--aito-spacing-md);
+  border-top: 1px solid var(--aito-border);
+  flex-shrink: 0;
+}
+
+.ContextPanel__ctaLink,
+.ContextPanel__ctaLink:visited,
+.ContextPanel__ctaLink:hover,
+.ContextPanel__ctaLink:active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--aito-spacing-xs);
+  padding: var(--aito-spacing-sm) var(--aito-spacing-md);
+  background-color: var(--aito-accent);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--aito-radius-small);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.ContextPanel__ctaLink:hover {
+  background-color: #e55a2b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+/* --- Narrow desktop: smaller panel --- */
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .ContextPanel {
+    width: 220px;
+  }
+
+  .contextpanel-expanded .ContextPanel__toggle {
+    right: 220px;
+  }
+
+  .ContextPanel__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================================
+   Mobile bottom sheet
+   ============================================================ */
+
+/* Hide mobile elements on desktop */
+.ContextPanel__mobileToggle,
+.ContextPanel__mobileOverlay,
+.ContextPanel__mobileSheet {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* --- Floating info button --- */
+  .ContextPanel__mobileToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--aito-accent);
+    color: #fff;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 1050;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .ContextPanel__mobileToggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+  }
+
+  .ContextPanel__mobileToggle:active {
+    transform: scale(0.95);
+  }
+
+  /* --- Overlay backdrop --- */
+  .ContextPanel__mobileOverlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1099;
+  }
+
+  /* --- Bottom sheet --- */
+  .ContextPanel__mobileSheet {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 85vh;
+    background-color: var(--aito-background);
+    border-radius: 16px 16px 0 0;
+    z-index: 1100;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .ContextPanel__mobileSheet--open {
+    transform: translateY(0);
+  }
+
+  /* --- Sheet header with close button --- */
+  .ContextPanel__mobileSheetHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--aito-spacing-md) var(--aito-spacing-lg);
+    border-bottom: 1px solid var(--aito-border);
+    flex-shrink: 0;
+  }
+
+  .ContextPanel__mobileSheetHeader::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    background-color: var(--aito-border);
+    border-radius: 2px;
+  }
+
+  .ContextPanel__mobileSheetTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--aito-text-primary);
+    margin: 0;
+  }
+
+  .ContextPanel__mobileSheetClose {
+    background: none;
+    border: none;
+    color: var(--aito-text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: var(--aito-spacing-xs);
+    border-radius: var(--aito-radius-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .ContextPanel__mobileSheetClose:hover {
+    background-color: var(--aito-surface);
+    color: var(--aito-text-primary);
+  }
+
+  /* --- Sheet body (scrollable) --- */
+  .ContextPanel__mobileSheetBody {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Inside the sheet, hide the duplicate title from renderPanelContent */
+  .ContextPanel__mobileSheetBody .ContextPanel__title {
+    display: none;
+  }
+
+  /* Slightly larger text for mobile readability */
+  .ContextPanel__mobileSheetBody .ContextPanel__description {
+    font-size: 0.875rem;
+  }
+
+  .ContextPanel__mobileSheetBody .ContextPanel__link {
+    font-size: 0.875rem;
+    padding: var(--aito-spacing-sm) 0;
+  }
+
+  .ContextPanel__mobileSheetBody .ContextPanel__badge {
+    font-size: 0.75rem;
+  }
+
+  .ContextPanel__mobileSheetBody .ContextPanel__codeBlock {
+    font-size: 0.75rem;
+    max-height: 160px;
+  }
+
+  .ContextPanel__mobileSheetBody .ContextPanel__stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
