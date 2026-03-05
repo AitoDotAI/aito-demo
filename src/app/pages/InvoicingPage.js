@@ -17,9 +17,6 @@ import {
   Tooltip
 } from 'reactstrap'
 import { FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-import HelpButton from '../components/HelpButton'
-import { HELP_CONTENT } from '../constants/helpContent'
-
 import { invoiceEvaluationData } from '../data/data'
 
 import './InvoicingPage.css'
@@ -461,12 +458,6 @@ class InvoicingPage extends Component {
         <div className="InvoicingPage__header">
           <h1 className="InvoicingPage__title">
             Invoice Processing
-            <HelpButton 
-              feature="Invoice Processing"
-              {...HELP_CONTENT['Invoice Processing']}
-              size="md"
-              className="ml-3"
-            />
           </h1>
           <p className="InvoicingPage__subtitle">
             Automatically classify and route invoices using AI-powered predictions. Enter invoice details to see intelligent suggestions for processor assignment, approval routing, and GL code classification.

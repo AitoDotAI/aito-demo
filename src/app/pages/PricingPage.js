@@ -11,9 +11,6 @@ import {
 } from 'reactstrap'
 import { ComposedChart, Scatter, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { FaToggleOn, FaToggleOff, FaSync } from 'react-icons/fa'
-import HelpButton from '../components/HelpButton'
-import { HELP_CONTENT } from '../constants/helpContent'
-
 import './PricingPage.css'
 
 // Field configuration with labels and types
@@ -1726,12 +1723,6 @@ class PricingPage extends Component {
         <div className="PricingPage__header">
           <h1 className="PricingPage__title">
             Price-Demand Analytics
-            <HelpButton
-              feature="Price Optimization"
-              {...HELP_CONTENT['Price Optimization']}
-              size="md"
-              className="ml-3"
-            />
           </h1>
           <p className="PricingPage__subtitle">
             Data-driven pricing decisions to maximize profitability. Estimate optimal prices and forecast demand using historical patterns.

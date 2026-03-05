@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import ProductList from './ProductList'
-import HelpButton from './HelpButton'
-import { HELP_CONTENT } from '../constants/helpContent'
-
 import './RecommendedProducts.css'
 
 const RECOMMENDED_ITEMS_COUNT = 5
@@ -72,12 +69,6 @@ class RecommendedProducts extends Component {
       <div className="RecommendedProducts">
         <h4>
           Recommended products
-          <HelpButton 
-            feature="Recommendations"
-            {...HELP_CONTENT['Recommendations']}
-            size="sm"
-            className="ml-2"
-          />
         </h4>
 
         <ProductList

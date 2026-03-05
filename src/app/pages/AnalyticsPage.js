@@ -15,9 +15,6 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap'
-import HelpButton from '../components/HelpButton'
-import { HELP_CONTENT } from '../constants/helpContent'
-
 import './AnalyticsPage.css'
 
 
@@ -136,12 +133,6 @@ class AnalyticsPage extends Component {
         <div className="AnalyticsPage__header">
           <h1 className="AnalyticsPage__title">
             Preference Analytics
-            <HelpButton
-              feature="Data Analytics"
-              {...HELP_CONTENT['Data Analytics']}
-              size="md"
-              className="ml-3"
-            />
           </h1>
           <p className="AnalyticsPage__subtitle">
             Discover how different customer segments relate to product preferences. Select an audience characteristic (age, gender, diet) or condition (day of week, time) to reveal which products they prefer and how strongly.

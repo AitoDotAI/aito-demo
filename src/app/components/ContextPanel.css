@@ -345,6 +345,19 @@
     transform: scale(0.95);
   }
 
+  .ContextPanel__mobileToggle--pulse {
+    animation: contextPulse 2s ease-in-out 3;
+  }
+
+  @keyframes contextPulse {
+    0%, 100% {
+      box-shadow: 0 4px 12px rgba(12, 15, 65, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 0 8px rgba(155, 105, 255, 0.25), 0 4px 12px rgba(12, 15, 65, 0.3);
+    }
+  }
+
   .ContextPanel__mobileToggleIcon {
     width: 28px;
     height: 28px;

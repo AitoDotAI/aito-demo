@@ -11,9 +11,6 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap'
-import HelpButton from '../components/HelpButton'
-import { HELP_CONTENT } from '../constants/helpContent'
-
 import './HelpPage.css'
 
 class HelpPage extends Component {
@@ -139,12 +136,6 @@ class HelpPage extends Component {
         <div className="HelpPage__header">
           <h1 className="HelpPage__title">
             Help
-            <HelpButton
-              feature="NLP Processing"
-              {...HELP_CONTENT['NLP Processing']}
-              size="md"
-              className="ml-3"
-            />
           </h1>
           <p className="HelpPage__subtitle">
             Ask questions about the grocery store or get help with AI-powered assistance. Our intelligent system can answer questions, process feedback, and create support tickets.
