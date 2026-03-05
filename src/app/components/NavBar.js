@@ -64,7 +64,8 @@ class NavBar extends Component {
     const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true'
 
     this.state = {
-      dropdownOpen: false,
+      desktopDropdownOpen: false,
+      mobileDropdownOpen: false,
       mobileMenuOpen: false,
       sidebarCollapsed,
     }
@@ -88,8 +89,12 @@ class NavBar extends Component {
     }
   }
 
-  toggle = () => {
-    this.setState({ dropdownOpen: !this.state.dropdownOpen })
+  toggleDesktopDropdown = () => {
+    this.setState({ desktopDropdownOpen: !this.state.desktopDropdownOpen })
+  }
+
+  toggleMobileDropdown = () => {
+    this.setState({ mobileDropdownOpen: !this.state.mobileDropdownOpen })
   }
 
   toggleMobileMenu = () => {
@@ -190,7 +195,7 @@ class NavBar extends Component {
           {showCartControls && (
             <ol className="NavBar__links">
               <li className="NavBar__profile-link">
-                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                <Dropdown isOpen={this.state.mobileDropdownOpen} toggle={this.toggleMobileDropdown}>
                   <DropdownToggle tag="a">
                     <FaUserCircle />
                     <span className="NavBar__profile-link-name">
@@ -232,7 +237,7 @@ class NavBar extends Component {
           <div className="NavBar__desktopTopBar">
             <ol className="NavBar__links">
               <li className="NavBar__profile-link">
-                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                <Dropdown isOpen={this.state.desktopDropdownOpen} toggle={this.toggleDesktopDropdown}>
                   <DropdownToggle tag="a">
                     <FaUserCircle />
                     <span className="NavBar__profile-link-name">

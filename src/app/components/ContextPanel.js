@@ -18,9 +18,11 @@ class ContextPanel extends Component {
   constructor(props) {
     super(props)
     const stored = localStorage.getItem('contextPanelExpanded')
+    const hasSeenMobilePanel = localStorage.getItem('hasSeenContextPanel') === 'true'
     this.state = {
       expanded: stored === null ? true : stored === 'true',
       mobileSheetOpen: false,
+      showPulse: !hasSeenMobilePanel,
     }
   }
 
@@ -54,7 +56,8 @@ class ContextPanel extends Component {
 
   toggleMobileSheet = () => {
     const open = !this.state.mobileSheetOpen
-    this.setState({ mobileSheetOpen: open })
+    this.setState({ mobileSheetOpen: open, showPulse: false })
+    localStorage.setItem('hasSeenContextPanel', 'true')
     trackEvent('demo_context_panel_toggled', {
       expanded: open,
       page: this.props.urlPath,
@@ -216,7 +219,7 @@ class ContextPanel extends Component {
 
         {/* Mobile: floating info button */}
         <button
-          className="ContextPanel__mobileToggle"
+          className={`ContextPanel__mobileToggle${this.state.showPulse ? ' ContextPanel__mobileToggle--pulse' : ''}`}
           onClick={this.toggleMobileSheet}
           aria-label="View page info"
           title="View page info"
