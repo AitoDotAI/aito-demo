@@ -239,6 +239,8 @@
   padding: var(--aito-spacing-sm) var(--aito-spacing-md);
   background-color: var(--aito-background);
   border-bottom: 1px solid var(--aito-border);
+  position: relative;
+  z-index: 1050;
 }
 
 @media (min-width: 769px) {
