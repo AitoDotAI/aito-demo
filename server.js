@@ -368,10 +368,23 @@ app.post('/api/assistant/customer', async (req, res) => {
       }
 
       // Get final response from OpenAI after tool execution
+      // Add explicit instruction to prevent JSON leaking into the response.
+      // Without this, the model sometimes tries to emit tool-call JSON as text
+      // (e.g. {"productIds":[...]}) instead of a natural-language summary.
+      messages.push({
+        role: 'system',
+        content: `CRITICAL INSTRUCTIONS FOR THIS RESPONSE:
+- You have already executed all necessary tools above. Do NOT attempt any more tool calls.
+- Do NOT output any JSON, code blocks, product IDs, or technical data in your response.
+- Summarize the tool results in friendly, natural language only.
+- If the tool returned products, list them by NAME and optionally price — never by raw ID.
+- Ask the customer if they would like to add these items to their cart.`
+      });
+
       const finalCompletion = await openai.chat.completions.create({
         model: AZURE_CONFIG.deploymentName,
         messages,
-          max_completion_tokens: 1000
+        max_completion_tokens: 1000
       });
 
       finalResponse = finalCompletion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
