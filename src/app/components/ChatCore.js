@@ -90,11 +90,17 @@ class ChatCore extends Component {
         const finalContextMessages = this.buildValidMessageContext(finalMessages);
         
         // Add a system message to guide the AI to provide a final response
+        // and explicitly prevent JSON leaking into the response
         const finalContextWithInstruction = [
           ...finalContextMessages,
           {
             role: 'system',
-            content: 'Based on the tool execution results above, provide a helpful response to the user. Do not call any more tools - just explain the results in a conversational way.'
+            content: `CRITICAL INSTRUCTIONS FOR THIS RESPONSE:
+- You have already executed all necessary tools above. Do NOT attempt any more tool calls.
+- Do NOT output any JSON, code blocks, product IDs, or technical data in your response.
+- Summarize the tool results in friendly, natural language only.
+- If the tool returned products, list them by NAME and optionally price — never by raw ID.
+- Ask the customer if they would like to add these items to their cart.`
           }
         ];
         

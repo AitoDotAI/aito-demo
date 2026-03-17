@@ -12,7 +12,7 @@ import {
   ModalFooter,
 } from 'reactstrap'
 import './ProductPage.css'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 class ProductPage extends Component {
   constructor(props) {
@@ -175,27 +175,29 @@ class ProductPage extends Component {
         <div className="AnalyticsGrid">
           <div className="AnalyticsCard AnalyticsCard--full-width">
             <h3 className="AnalyticsCard__title">Performance Trends</h3>
-            <LineChart width={800} height={300} data={this.state.analytics ? this.state.analytics[4].hits : []}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-              <XAxis dataKey="$value" tick={{ fill: '#6c757d' }} />
-              <YAxis tick={{ fill: '#6c757d' }} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: '1px solid #dee2e6',
-                  borderRadius: '8px'
-                }} 
-              />
-              <Legend />
-              <Line 
-                name="Purchases" 
-                type="monotone" 
-                dataKey="$sum" 
-                stroke="#FF6B35" 
-                strokeWidth={3}
-                activeDot={{ r: 6, fill: '#FF6B35' }} 
-              />
-            </LineChart>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={this.state.analytics ? this.state.analytics[4].hits : []}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                <XAxis dataKey="$value" tick={{ fill: '#6c757d' }} />
+                <YAxis tick={{ fill: '#6c757d' }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '8px'
+                  }}
+                />
+                <Legend />
+                <Line
+                  name="Purchases"
+                  type="monotone"
+                  dataKey="$sum"
+                  stroke="#FF6B35"
+                  strokeWidth={3}
+                  activeDot={{ r: 6, fill: '#FF6B35' }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
 
           <div className="AnalyticsCard">
