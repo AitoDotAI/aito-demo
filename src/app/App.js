@@ -10,6 +10,7 @@ import * as data from './data'
 import { initAnalytics, trackPage, trackEvent, identifyUser } from '../analytics'
 import NavBar from './components/NavBar'
 import ContextPanel from './components/ContextPanel'
+import LatencyPill from './components/LatencyPill'
 import LandingPage from './pages/LandingPage'
 import AdminPage from './pages/AdminPage'
 import AnalyticsPage from './pages/AnalyticsPage'
@@ -347,6 +348,11 @@ class App extends Component {
         </div>
 
         <ContextPanel urlPath={state.urlPath} />
+
+        {/* Corner badge showing the most-recent Aito call's endpoint +
+            wall time. Listens for `aito:calls` window events emitted by
+            the axios interceptor (src/services/aitoTiming.js). */}
+        <LatencyPill />
 
         <Modal color="danger" isOpen={modalOpen} toggle={() => this.showError(null)}>
           <ModalHeader toggle={() => this.showError(null)}>Error</ModalHeader>

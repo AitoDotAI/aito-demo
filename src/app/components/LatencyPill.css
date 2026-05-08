@@ -1,0 +1,62 @@
+/* Per-call Aito latency badge — fixed bottom-right corner, fades in
+   on every API response, auto-hides after 4 s. */
+.LatencyPill {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1200;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: rgba(12, 15, 65, 0.94);
+  color: #fff;
+  border-radius: 18px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 14px rgba(12, 15, 65, 0.18);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+.LatencyPill--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.LatencyPill__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #12B5AD;
+  box-shadow: 0 0 6px rgba(18, 181, 173, 0.6);
+}
+.LatencyPill__endpoint {
+  color: #12B5AD;
+  font-weight: 500;
+}
+.LatencyPill__ms {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+/* Error states — red accent so timeouts/4xx/5xx don't masquerade as
+   sub-50ms wins. */
+.LatencyPill--error .LatencyPill__dot {
+  background: #ff6b6b;
+  box-shadow: 0 0 6px rgba(255, 107, 107, 0.6);
+}
+.LatencyPill--error .LatencyPill__endpoint {
+  color: #ff6b6b;
+}
+
+/* Mobile: lift above the ContextPanel info button (bottom: 24px)
+   so they don't stack on the same pixel. */
+@media (max-width: 768px) {
+  .LatencyPill {
+    bottom: 80px;
+    right: 16px;
+  }
+}
