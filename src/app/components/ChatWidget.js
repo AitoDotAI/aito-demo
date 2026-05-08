@@ -27,12 +27,20 @@ class ChatWidget extends Component {
   }
 
   componentDidMount() {
+    // Mark the body so other fixed-position widgets (LatencyPill) can
+    // lift themselves above the chat button on pages that show it.
+    document.body.classList.add('has-chat-widget');
+
     // Show initial unread indicator after a delay
     setTimeout(() => {
       if (!this.state.isOpen) {
         this.setState({ unreadCount: 1 });
       }
     }, 3000);
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove('has-chat-widget');
   }
 
   componentDidUpdate(prevProps, prevState) {

@@ -75,15 +75,23 @@ export function getProductStats(id){
  */
 export function getProductAnalytics(id){
 
-  // Execute multiple analytics queries in parallel using batch API
-  return axios.post(`${config.aito.url}/api/v1/_batch`,
+  // First fetch the product so we can pass its full set of properties
+  // as the relate proposition. Passing the object lets Aito enumerate
+  // propositions on each property of THIS product (name, category, tags,
+  // cost, price, googleClicks, ...) without the duplicate-condition issue
+  // we got from `relate: {product: id}` after the proposition-selection
+  // change.
+  return getProductDetails(id).then(productResp => {
+    const product = (productResp.hits && productResp.hits[0]) || {}
+    const { id: _ignored, ...productProps } = product
+
+    return axios.post(`${config.aito.url}/api/v1/_batch`,
     [
-      { // Analyze which product properties correlate with purchases
+      { // Which of this product's properties are over-represented in
+        // purchases vs the baseline of all impressions?
         "from": "impressions",
         "where": {"purchase": true},
-        "relate": {
-          "product": id
-        },
+        "relate": {"product": productProps},
         "select": ["lift", "related"]
       },
       { // Analyze correlation between user demographics and this product
@@ -125,9 +133,8 @@ export function getProductAnalytics(id){
         ]
       }
     ], {
-    headers: { 'x-api-key': config.aito.apiKey },
-  })
-    .then(response => {
-      return response.data    
+      headers: { 'x-api-key': config.aito.apiKey },
+    })
+      .then(response => response.data)
   })
 }

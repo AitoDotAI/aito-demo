@@ -4,7 +4,9 @@
   position: fixed;
   bottom: 16px;
   right: 16px;
-  z-index: 1200;
+  /* Above the chat-widget button (z-index 9998) when present; on pages
+     without it the pill simply sits in the bottom-right corner. */
+  z-index: 9999;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -52,11 +54,25 @@
   color: #ff6b6b;
 }
 
-/* Mobile: lift above the ContextPanel info button (bottom: 24px)
+/* When the ChatWidget is on the page, lift the pill above its 60×60
+   button so it isn't covered. ChatWidget toggles `has-chat-widget` on
+   <body> in componentDidMount/Unmount. */
+.has-chat-widget .LatencyPill {
+  bottom: 92px;
+  right: 24px;
+}
+
+/* Mobile: lift above the ContextPanel info button (bottom:24, 48×48)
    so they don't stack on the same pixel. */
 @media (max-width: 768px) {
   .LatencyPill {
     bottom: 80px;
     right: 16px;
+  }
+  /* On mobile the chat button sits higher (bottom:88, 60×60), so the
+     pill needs to clear that instead. */
+  .has-chat-widget .LatencyPill {
+    bottom: 156px;
+    right: 24px;
   }
 }
