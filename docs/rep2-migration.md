@@ -121,11 +121,18 @@ Modules that need attention beyond the URL flip:
 - **`exclusiveness: false`** (used by some `_predict` payloads): not
   recognised by v2's strict Query2 parser. Drop the field for the v2
   path; default behaviour is the same.
-- **`_evaluate` / `_estimate` / `_similarity` / `_aggregate`**: not
-  yet operational against CollectionDb-typed tables on the server
-  side (rep1 dispatch hardcodes `aito.master.get[TableDb](...)`).
-  Tracked separately. For now, modules calling these endpoints will
-  get a 400 against the `rep2` env.
+- **`_evaluate` / `_estimate` / `_aggregate`**: not yet operational
+  against CollectionDb-typed tables on the server side (rep1
+  dispatch hardcodes `aito.master.get[TableDb](...)`). Tracked
+  separately. For now, modules calling these endpoints will get a
+  400 against the `rep2` env.
+- **`_similarity` (endpoint)**: deliberately not exposed on v2.
+  Similarity scoring on v2 is an in-query operator (`$similarity`
+  inside `_query`'s `orderBy` / `select` / `where`). Operator
+  wiring on Query2 is the v2 deliverable that replaces the
+  endpoint; tracked in `aito-core`'s gap-analysis doc. Demo
+  modules that called `/_similarity` will need to migrate to
+  `_query` once the operator lands.
 - **`_match`**: superseded by `_predict` (target-property priors do
   the same job). Not wired on v2.
 
@@ -134,9 +141,10 @@ Modules that need attention beyond the URL flip:
 These are server-side limitations being tracked in the
 `feature/rep2-api2-gap-analysis` branch on `aito-core`:
 
-- `_evaluate` / `_estimate` / `_similarity` / `_aggregate` against
-  CollectionDb tables return `400 failed to open '<table>'` — the
-  v1 query dispatch is rep1-only.
+- `_evaluate` / `_estimate` / `_aggregate` against CollectionDb
+  tables return `400 failed to open '<table>'` — the v1 query
+  dispatch is rep1-only. `_similarity` doesn't exist on v2 at all
+  (operator path replaces it).
 - `_recommend` with a `goal` proposition can run very slow on the
   full impressions dataset (16+ minutes observed). Demo flows
   hitting this may want a backoff / fallback.
