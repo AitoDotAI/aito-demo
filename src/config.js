@@ -21,6 +21,31 @@ if (!aitoApiKey) {
   throw new Error('REACT_APP_AITO_API_KEY is required')
 }
 
+// Rep2 / API v2 toggle.
+//
+// When `REACT_APP_USE_REP2=true`, the app routes through:
+//   <aitoUrl>/env/<envName>/api/v2/...
+// instead of the default Rep1 / v1 path:
+//   <aitoUrl>/api/v1/...
+//
+// The companion env is created and populated by `upload-data-rep2.js`
+// with the collection-typed `schema-rep2.json`, so both paths can
+// coexist on the same Aito instance — flip the env var to switch.
+const useRep2 = process.env.REACT_APP_USE_REP2 === 'true'
+const aitoEnvName = process.env.REACT_APP_AITO_ENV || (useRep2 ? 'rep2' : 'master')
+const aitoApiVersion = useRep2 ? 'v2' : 'v1'
+
+// `master` env paths use unprefixed `/api/...`; named envs use the
+// `/env/<name>/api/...` shape per the server's EnvRouting.
+const envPath = (aitoEnvName && aitoEnvName !== 'master')
+  ? `/env/${aitoEnvName}`
+  : ''
+
+// Full base path for application API calls. Modules that previously
+// hardcoded `${config.aito.url}/api/v1/...` should switch to
+// `${config.aito.apiBase}/...` so a single env var flips all routes.
+const apiBase = `${aitoUrl}${envPath}/api/${aitoApiVersion}`
+
 // Environment configuration
 const environment = process.env.REACT_APP_ENVIRONMENT || 'development'
 const isDevelopment = environment === 'development'
@@ -43,6 +68,11 @@ const config = {
   aito: {
     url: aitoUrl,
     apiKey: aitoApiKey,
+    // New (rep2-aware) routing surface.
+    apiBase,             // e.g. "https://.../api/v1" or "https://.../env/rep2/api/v2"
+    apiVersion: aitoApiVersion,  // 'v1' | 'v2'
+    envName: aitoEnvName,        // 'master' | 'rep2' | …
+    useRep2,
   },
   openai: openaiConfig,
   environment,
@@ -57,4 +87,3 @@ const config = {
 }
 
 module.exports = config
-  

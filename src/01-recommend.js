@@ -21,7 +21,10 @@ import config from './config'
 export function getRecommendedProducts(userId, currentShoppingBasket, count) {
   // Aito's _recommend endpoint uses machine learning to find items
   // that maximize the probability of achieving a specified goal
-  return axios.post(`${config.aito.url}/api/v1/_recommend`, {
+  // Use config.aito.apiBase so the same code targets either v1
+  // (Rep1, master env) or v2 (Rep2, named env) depending on
+  // REACT_APP_USE_REP2 / REACT_APP_AITO_ENV. See src/config.js.
+  return axios.post(`${config.aito.apiBase}/_recommend`, {
     from: 'impressions',  // Analyze product impression data
     
     where: {

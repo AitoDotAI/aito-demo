@@ -1,0 +1,210 @@
+{
+  "schema": {
+    "users": {
+      "type":"collection",
+      "columns": {
+        "id"       : { "type" : "String" },
+        "tags"     : { "type" : "String[]" }
+      }
+    },
+
+    "products": {
+      "type":"collection",
+      "columns": {
+        "id"          : { "type": "String" },
+        "name"        : { "type": "Text", "analyzer": "English" },
+        "category"    : { "type": "String" },
+        "price"       : { "type": "Decimal"},
+        "cost"        : { "type": "Decimal"},
+        "tags"        : { "type": "String[]" },
+        "googleImpressions": { "type": "Int" },
+        "googleClicks": { "type": "Int" }
+      }
+    },
+
+    "visits" : {
+      "type":"collection",
+      "columns": {
+        "id"         : { "type" : "String" },
+        "prev"       : { "type" : "String", "link":"this.id", "nullable": true },
+        "day"        : { "type" : "Int" },
+        "week"       : { "type" : "Int" },
+        "month"      : { "type" : "Int" },
+        "weekday"    : { "type" : "String" },
+        "user"       : { "type" : "String", "link":"users.id" },
+        "purchases"  : { "type" : "String[]" }
+      }
+    },
+
+    "contexts" : {
+      "type":"collection",
+      "columns": {
+         "id"          : { "type" : "String" },
+         "type"        : { "type" : "String" },
+         "visit"       : { "type" : "String", "link":"visits.id" },
+         "day"         : { "type" : "Int" },
+         "week"        : { "type" : "Int" },
+         "month"       : { "type" : "Int" },
+         "weekday"     : { "type" : "String" },
+         "user"        : { "type" : "String", "link":"users.id" },
+         "basket"      : { "type" : "String[]" },
+         "prevBasket"  : { "type" : "String[]" },
+         "query"       : { "type" : "Text", "analyzer" : "English" },
+         "queryPhrase" : { "type" : "String" }
+      }
+    },
+
+    "impressions" : {
+      "type":"collection",
+      "columns": {
+        "context" : { "type": "String", "link":"contexts.id" },
+        "product"  : { "type" : "String", "link":"products.id" },
+        "purchase" : { "type" : "Boolean" }
+      }
+    },
+
+    "prompts": {
+      "type":"collection",
+      "columns": {
+        "prompt"  : { "type" : "Text", "analyzer":"English" },
+        "type"  : { "type" : "String" },
+        "answer" : { "type" : "Int", "link":"answers.id", "nullable": true },
+        "sentiment" : { "type" : "String", "nullable": true },
+        "categories": { "type": "String[]", "nullable": true },
+        "tags": { "type": "String[]", "nullable": true },
+        "assignee": { "type": "String", "link": "employees.Name", "nullable": true },
+        "urgency": { "type" : "String", "nullable": true }
+      }
+    },
+
+    "answers": {
+      "type": "collection",
+      "columns": {
+        "id" : { "type": "Int" },
+        "answer"  : { "type" : "Text", "analyzer":"English" }
+      }
+    },
+    "employees": {
+      "type": "collection",
+      "columns": {
+        "Name": { "type": "String" },
+        "Role": { "type": "String" },
+        "Department": { "type": "String" },
+        "Superior": { "type": "String", "nullable": true }
+      }
+    },
+    "glCodes": {
+      "type": "collection",
+      "columns": {
+        "GLCode": { "type": "String" },
+        "Department": { "type": "String" },
+        "Name": { "type": "String" }
+      }
+    },
+    "invoices": {
+      "type": "collection",
+      "columns": {
+        "InvoiceID": {
+          "type": "string"
+        },
+        "InvoiceDate": {
+          "type": "string"
+        },
+        "InvoiceNumber": {
+          "type": "string"
+        },
+        "SenderName": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "SenderAddress": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "ReceiverName": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "ReceiverAddress": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "ProductName": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "Description": {
+          "type": "text",
+          "analyzer": "english"
+        },
+        "AccountNumber": {
+          "type": "string"
+        },
+        "PaymentMethod": {
+          "type": "string"
+        },
+        "TotalAmount": {
+          "type": "decimal"
+        },
+        "VATAmount": {
+          "type": "decimal"
+        },
+        "PaymentDueDate": {
+          "type": "string"
+        },
+        "Processor": {
+          "type": "string",
+          "nullable": true,
+          "link": "employees.Name"
+        },
+        "Acceptor": {
+          "type": "string",
+          "nullable": true,
+          "link": "employees.Name"
+        },
+        "InvoiceType": {
+          "type": "string",
+          "nullable": true
+        },
+        "GLCode": {
+          "type": "string",
+          "nullable": true,
+          "link": "glCodes.GLCode"
+        }
+      }
+    },
+    "price_history": {
+      "type": "collection",
+      "columns": {
+        "product_id": { "type": "String", "link": "products.id" },
+        "name": { "type": "Text", "analyzer": "English" },
+        "category": { "type": "String" },
+        "category_name": { "type": "String" },
+        "brand": { "type": "String" },
+        "tags": { "type": "string[]" },
+        "timestamp": { "type": "String" },
+        "date": { "type": "String" },
+        "week": { "type": "Int" },
+        "month": { "type": "Int" },
+        "year": { "type": "Int" },
+        "day_of_week": { "type": "String" },
+        "is_weekend": { "type": "Boolean" },
+        "list_price": { "type": "Decimal" },
+        "sale_price": { "type": "Decimal" },
+        "discount_percentage": { "type": "Decimal" },
+        "purchase_cost": { "type": "Decimal" },
+        "margin_percentage": { "type": "Decimal" },
+        "units_sold": { "type": "Int" },
+        "units_in_stock": { "type": "Int" },
+        "days_since_delivery": { "type": "Int" },
+        "days_until_expiry": { "type": "Int" },
+        "competitor_avg_price": { "type": "Decimal" },
+        "category_products_count": { "type": "Int" },
+        "similar_products_on_sale": { "type": "Int" },
+        "weather_temp": { "type": "Decimal" },
+        "is_holiday_week": { "type": "Boolean" },
+        "promotional_placement": { "type": "String" }
+      }
+    }
+  }
+}
