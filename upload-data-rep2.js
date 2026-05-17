@@ -80,7 +80,6 @@ function pathPrefix(envName) {
 const ENDPOINTS = {
   // /_envs is admin-level — never under /env/{name}.
   envs: '/api/v1/_envs',
-  health: '/api/v1/health',
   v2Schema: (envName) => `${pathPrefix(envName)}/api/v2/schema`,
   v2Batch: (envName, table) => `${pathPrefix(envName)}/api/v2/data/${table}/batch`,
   v2Stream: (envName, table) => `${pathPrefix(envName)}/api/v2/data/${table}/stream`,
@@ -125,21 +124,6 @@ function formatBytes(b) {
   const k = 1024, sizes = ['B', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(b) / Math.log(k));
   return `${(b / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
-}
-
-async function checkHealth() {
-  try {
-    const res = await apiClient.get(`${AITO_URL}${ENDPOINTS.health}`);
-    if (res.status === 200) {
-      log('✓ API healthy:', res.data);
-      return true;
-    }
-    error(`✗ Health check returned ${res.status}:`, res.data);
-    return false;
-  } catch (err) {
-    error('✗ Health check failed:', err.message);
-    return false;
-  }
 }
 
 /** Idempotent env create. */
@@ -307,9 +291,6 @@ async function main() {
     process.exit(1);
   }
 
-  if (!isDryRun && !(await checkHealth())) {
-    process.exit(1);
-  }
   if (!(await ensureEnv(ENV_NAME))) {
     process.exit(1);
   }
