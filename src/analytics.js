@@ -62,8 +62,11 @@ export function initAnalytics() {
   if (!isProductionHost()) return
   if (isBotUserAgent()) return
 
+  // GA4 measurement ID is public-by-design (was a literal in the prior
+  // public/index.html). Amplitude API key comes from env, provisioned at
+  // build time by aito-demo-server.
   const amplitudeKey = process.env.REACT_APP_AMPLITUDE_KEY
-  const ga4Id = process.env.REACT_APP_GA4_MEASUREMENT_ID
+  const ga4Id = 'G-FDTBRCMZWJ'
 
   if (amplitudeKey) {
     amplitude.init(amplitudeKey, {
@@ -84,11 +87,7 @@ export function initAnalytics() {
     console.warn('[analytics] REACT_APP_AMPLITUDE_KEY not set; Amplitude disabled.')
   }
 
-  if (ga4Id) {
-    loadGtag(ga4Id)
-  } else {
-    console.warn('[analytics] REACT_APP_GA4_MEASUREMENT_ID not set; GA4 disabled.')
-  }
+  loadGtag(ga4Id)
 
   initialized = true
 }
