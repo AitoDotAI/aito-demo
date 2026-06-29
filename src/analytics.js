@@ -1,119 +1,117 @@
 /**
- * Analytics utility for tracking demo interactions via Segment
- * Uses the same Segment write key as other Aito properties for unified tracking
+ * Amplitude + GA4 analytics for the Aito grocery-store demo.
+ *
+ * SURFACE identifies which Aito surface emitted the event so the
+ * shared Amplitude workspace can slice cross-surface funnels
+ * (landing → demo → console).
+ *
+ * API key and GA4 measurement ID are provisioned at build time via
+ * aito-demo-server's `env_secrets` (sourced from Azure Key Vault);
+ * they reach this bundle as `REACT_APP_*` env vars baked in by
+ * `react-scripts build`. Never read or commit literals here.
  */
 
-const SEGMENT_WRITE_KEY = 'xSGtwFjgKl3m5ZMGaVB3SENT0oUHPwJq'
+import * as amplitude from '@amplitude/analytics-browser'
 
-/**
- * Initialize Segment analytics
- * Called once when the app loads
- */
+const SURFACE = 'demo'
+
+let initialized = false
+
+function isProductionHost() {
+  if (typeof window === 'undefined') return false
+  const host = window.location.hostname
+  return host !== 'localhost' && host !== '127.0.0.1' && !host.endsWith('.local')
+}
+
+function isBotUserAgent() {
+  if (typeof navigator === 'undefined') return false
+  return /bot|crawler|spider|crawling|preview|headless/i.test(navigator.userAgent)
+}
+
+function gtagSafe(...args) {
+  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    window.gtag(...args)
+  }
+}
+
+function loadGtag(measurementId) {
+  if (typeof window === 'undefined') return
+  if (typeof window.gtag === 'function') return
+
+  const script = document.createElement('script')
+  script.async = true
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`
+  document.head.appendChild(script)
+
+  window.dataLayer = window.dataLayer || []
+  window.gtag = function () {
+    window.dataLayer.push(arguments)
+  }
+  window.gtag('js', new Date())
+  window.gtag('config', measurementId, {
+    anonymize_ip: true,
+    cookie_expires: 0,
+  })
+}
+
+/** Initialize Amplitude (and GA4). Idempotent — safe to call from
+ *  multiple components or React strict-mode double effects. */
 export function initAnalytics() {
-  if (typeof window === 'undefined' || window.analytics) return
+  if (initialized) return
+  if (typeof window === 'undefined') return
+  if (!isProductionHost()) return
+  if (isBotUserAgent()) return
 
-  // Segment analytics.js snippet
-  const analytics = (window.analytics = window.analytics || [])
-  if (!analytics.initialize) {
-    if (analytics.invoked) {
-      console.error('Segment snippet included twice.')
-    } else {
-      analytics.invoked = true
-      analytics.methods = [
-        'trackSubmit',
-        'trackClick',
-        'trackLink',
-        'trackForm',
-        'pageview',
-        'identify',
-        'reset',
-        'group',
-        'track',
-        'ready',
-        'alias',
-        'debug',
-        'page',
-        'once',
-        'off',
-        'on',
-        'addSourceMiddleware',
-        'addIntegrationMiddleware',
-        'setAnonymousId',
-        'addDestinationMiddleware',
-      ]
-      analytics.factory = function (method) {
-        return function () {
-          const args = Array.prototype.slice.call(arguments)
-          args.unshift(method)
-          analytics.push(args)
-          return analytics
-        }
-      }
-      for (let i = 0; i < analytics.methods.length; i++) {
-        const key = analytics.methods[i]
-        analytics[key] = analytics.factory(key)
-      }
-      analytics.load = function (key, options) {
-        const script = document.createElement('script')
-        script.type = 'text/javascript'
-        script.async = true
-        script.src =
-          'https://cdn.segment.com/analytics.js/v1/' + key + '/analytics.min.js'
-        const first = document.getElementsByTagName('script')[0]
-        first.parentNode.insertBefore(script, first)
-        analytics._loadOptions = options
-      }
-      analytics._writeKey = SEGMENT_WRITE_KEY
-      analytics.SNIPPET_VERSION = '4.15.3'
-      analytics.load(SEGMENT_WRITE_KEY, {
-        cookie: {
-          domain: '.aito.ai',
-          secure: true,
-          sameSite: 'Lax',
-        },
-      })
-    }
+  // GA4 measurement ID is public-by-design (was a literal in the prior
+  // public/index.html). Amplitude API key comes from env, provisioned at
+  // build time by aito-demo-server.
+  const amplitudeKey = process.env.REACT_APP_AMPLITUDE_KEY
+  const ga4Id = 'G-FDTBRCMZWJ'
+
+  if (amplitudeKey) {
+    amplitude.init(amplitudeKey, {
+      serverZone: 'EU',
+      cookieOptions: { domain: '.aito.ai' },
+      defaultTracking: {
+        // Disabled — `trackPage()` is the source of truth for page views
+        // (history listener in App.js fires it on URL change, and
+        // defaultTracking would produce a second event under a different
+        // name `[Amplitude] Page Viewed`).
+        pageViews: false,
+        sessions: true,
+        formInteractions: false,
+        fileDownloads: false,
+      },
+    })
+  } else {
+    console.warn('[analytics] REACT_APP_AMPLITUDE_KEY not set; Amplitude disabled.')
   }
+
+  loadGtag(ga4Id)
+
+  initialized = true
 }
 
-/**
- * Track a page view
- * @param {string} pageName - Name of the page
- * @param {Object} properties - Additional properties
- */
 export function trackPage(pageName, properties = {}) {
-  if (typeof window !== 'undefined' && window.analytics) {
-    window.analytics.page(pageName, {
-      ...properties,
-      surface: 'demo',
-    })
-  }
+  if (typeof window === 'undefined') return
+  const withSurface = { ...properties, surface: SURFACE }
+  amplitude.track(`Page View: ${pageName}`, withSurface)
+  gtagSafe('event', 'page_view', { page_title: pageName, ...withSurface })
 }
 
-/**
- * Track a custom event
- * @param {string} event - Event name
- * @param {Object} properties - Event properties
- */
 export function trackEvent(event, properties = {}) {
-  if (typeof window !== 'undefined' && window.analytics) {
-    window.analytics.track(event, {
-      ...properties,
-      surface: 'demo',
-    })
-  }
+  if (typeof window === 'undefined') return
+  const withSurface = { ...properties, surface: SURFACE }
+  amplitude.track(event, withSurface)
+  gtagSafe('event', event, withSurface)
 }
 
-/**
- * Identify a user (demo persona)
- * @param {string} userId - User/persona ID
- * @param {Object} traits - User traits
- */
 export function identifyUser(userId, traits = {}) {
-  if (typeof window !== 'undefined' && window.analytics) {
-    window.analytics.identify(userId, {
-      ...traits,
-      surface: 'demo',
-    })
-  }
+  if (!userId) return
+  if (typeof window === 'undefined') return
+  amplitude.setUserId(userId)
+  const id = new amplitude.Identify()
+  Object.entries(traits).forEach(([k, v]) => id.set(k, v))
+  amplitude.identify(id)
+  gtagSafe('set', { user_id: userId, ...traits })
 }

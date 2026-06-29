@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Predictive Application · Aito.ai — 12 patterns, one predictive database</title>
+<style>
+  /* ── Tokens ───────────────────────────────────────────────────── */
+  :root {
+    --aito-bg:    #0F1442;
+    --aito-bg2:   #1A2057;
+    --card-bg:    #EAF6F2;   /* pale mint — category card */
+    --card-bg2:   #F2FAF7;
+    --feature-bg: #FFFFFF;
+    --teal:       #12B5AD;
+    --orange:     #FF6B35;
+    --text:       #1A2233;
+    --muted:      #5A6378;
+    --line:       #E3E6EE;
+  }
+
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--aito-bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 1500px;
+    margin: 0 auto;
+    padding: 56px 64px 64px;
+    background: linear-gradient(180deg, var(--aito-bg) 0%, var(--aito-bg2) 100%);
+  }
+
+  /* ── Header ───────────────────────────────────────────────────── */
+  .hdr {
+    text-align: center;
+    margin-bottom: 44px;
+    color: #fff;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 18px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    margin-bottom: 22px;
+    background: rgba(255,255,255,0.04);
+  }
+  .brand .brand-mark {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.2px;
+  }
+  .brand .brand-mark .dot { color: var(--teal); }
+  .brand .brand-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+  .hdr h1 {
+    font-weight: 800;
+    font-size: 54px;
+    margin: 0 0 14px;
+    letter-spacing: -0.8px;
+    line-height: 1.05;
+  }
+  .hdr h1 .leading { color: rgba(255,255,255,0.78); font-weight: 600; }
+  .hdr h1 .title   { color: #fff; }
+  .hdr h1 .title em {
+    color: var(--orange);
+    font-style: italic;
+    font-weight: 800;
+  }
+  .hdr .sub {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 2.5px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin: 14px 0 18px;
+  }
+  .hdr p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.72);
+    max-width: 820px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+  .hdr p code {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+  }
+
+  /* ── Category grid (2x2 of category cards) ────────────────────── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .cat {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 44px 36px 36px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+  }
+
+  .cat-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px;
+    font-size: 44px;
+    line-height: 64px;
+    text-align: center;
+  }
+  .cat h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    text-align: center;
+  }
+  .cat .cat-tag {
+    color: var(--muted);
+    font-size: 14.5px;
+    margin: 0 0 28px;
+    line-height: 1.45;
+    text-align: center;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ── Feature cards inside each category ───────────────────────── */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .card {
+    background: var(--feature-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .card .thumb {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background-color: #F6F8FB;
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid var(--line);
+  }
+  .card .body {
+    padding: 16px 18px 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--text);
+    letter-spacing: -0.1px;
+  }
+  .card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0 0 12px;
+    flex: 1;
+  }
+  .card p code {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    color: var(--teal);
+    background: rgba(18,181,173,0.10);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  .card .link {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 1.4px;
+    color: var(--teal);
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  /* ── Foot ─────────────────────────────────────────────────────── */
+  .foot {
+    text-align: center;
+    margin-top: 44px;
+    color: rgba(255,255,255,0.62);
+    font-size: 13px;
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 1.5px;
+  }
+  .foot a { color: var(--teal); text-decoration: none; }
+  .foot strong { color: rgba(255,255,255,0.92); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hdr">
+    <div class="brand">
+      <span class="brand-mark">aito<span class="dot">..</span>ai</span>
+      <span class="brand-tag">The Predictive Application</span>
+    </div>
+    <h1>
+      <span class="leading">Applications that learn —</span><br>
+      <span class="title">12 patterns, <em>one predictive database.</em></span>
+    </h1>
+    <div class="sub">No ML pipeline · No retraining schedule · Acme grocery is the wrapper, the patterns are the point</div>
+    <p>
+      What changes about software when intelligence is a database query, not a project plan?
+      Personalisation, automation, conversation, analytics — every pattern in this reference
+      is one
+      <code>_predict</code>,
+      <code>_recommend</code>,
+      <code>_relate</code>,
+      <code>_estimate</code>, or
+      <code>_evaluate</code>
+      query against the same database the application already uses. Try it at
+      <code>demo.aito.ai</code>.
+    </p>
+  </header>
+
+  <main class="grid">
+
+    <!-- ── 1. Personalization Engine ────────────────────────────── -->
+    <section class="cat">
+      <div class="cat-icon">🎯</div>
+      <h2>Personalization Engine</h2>
+      <p class="cat-tag">Transform user experiences with intelligent personalization</p>
+      <div class="cards">
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/smart-search-milk-larry.png')"></div>
+          <div class="body">
+            <h3>Smart Search</h3>
+            <p>The same query returns a different top-5 per shopper — re-ranked by <code>$similarity × $p(purchase)</code> on the live impressions table.</p>
+            <a class="link" href="../docs/use-cases/03-smart-search.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/main-app-interface.png')"></div>
+          <div class="body">
+            <h3>Recommendations</h3>
+            <p>Goal-oriented suggestions driven by full purchase context. One <code>_recommend goal: {purchase: true}</code> per surface, ranked against everything the user did before.</p>
+            <a class="link" href="../docs/use-cases/01-recommendations.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/autocomplete-full.png')"></div>
+          <div class="body">
+            <h3>Smart Autocomplete</h3>
+            <p>Predictive query completion from live user patterns. <code>$startsWith</code> filters; <code>orderBy: $p</code> ranks by what this user actually searches for.</p>
+            <a class="link" href="../docs/use-cases/02-autocomplete.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/autofill-cart.png')"></div>
+          <div class="body">
+            <h3>Cart Autofill</h3>
+            <p>Pre-populate the basket with the shopper's most-likely next items — zero clicks to a usable cart. <code>_recommend</code> against their visit history.</p>
+            <a class="link" href="../docs/use-cases/05-autofill.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── 2. Intelligent Automation ────────────────────────────── -->
+    <section class="cat">
+      <div class="cat-icon">🤖</div>
+      <h2>Intelligent Automation</h2>
+      <p class="cat-tag">Automate complex workflows with AI-powered decision making</p>
+      <div class="cards">
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/invoice-processing-list.png')"></div>
+          <div class="body">
+            <h3>Invoice Processing</h3>
+            <p>GL code, approver, and routing predicted per invoice. Every decision carries a <code>$why</code> chain so Finance can audit any routing call without a meeting.</p>
+            <a class="link" href="../docs/use-cases/08-invoice-processing.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/nlp-processing-bananas-result.png')"></div>
+          <div class="body">
+            <h3>Ticket Classification</h3>
+            <p>Inbound support inquiries auto-classified into categories and tags via <code>_predict</code>. The application routes them; the agent answers them.</p>
+            <a class="link" href="../docs/use-cases/06-nlp-processing.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/tag-prediction.png')"></div>
+          <div class="body">
+            <h3>Tag Prediction</h3>
+            <p>Categories and tags suggested on every new product from name + brand. Confidence chips block low-quality guesses before they reach the catalog.</p>
+            <a class="link" href="../docs/use-cases/04-tag-prediction.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/nlp-processing-crash-result.png')"></div>
+          <div class="body">
+            <h3>Feedback Sentiment</h3>
+            <p>Sentiment scored on every inbound message via <code>_predict</code>. Negative-trending issues surface in the queue the moment they arrive, not at week's-end.</p>
+            <a class="link" href="../docs/use-cases/06-nlp-processing.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── 3. Conversational AI ─────────────────────────────────── -->
+    <section class="cat">
+      <div class="cat-icon">💬</div>
+      <h2>Conversational AI</h2>
+      <p class="cat-tag">Natural language interfaces that understand context and intent</p>
+      <div class="cards">
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/shopping-assistant-interface.png')"></div>
+          <div class="body">
+            <h3>AI Assistant</h3>
+            <p>Conversational shopping grounded in live <code>_recommend</code> and <code>_predict</code> tool calls. Every product the model mentions came from the live database — no hallucinated SKUs.</p>
+            <a class="link" href="../docs/use-cases/06-nlp-processing.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/admin-assistant-interface.png')"></div>
+          <div class="body">
+            <h3>Question Answering</h3>
+            <p>Natural-language Q&amp;A over the operational data — "which segment drove last week's milk uplift?" The same architecture as the shopper chat, different system prompt.</p>
+            <a class="link" href="../docs/use-cases/06-nlp-processing.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── 4. Predictive Analytics ──────────────────────────────── -->
+    <section class="cat">
+      <div class="cat-icon">📊</div>
+      <h2>Predictive Analytics</h2>
+      <p class="cat-tag">Transform data into actionable insights and forecasts</p>
+      <div class="cards">
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/product-analytics.png')"></div>
+          <div class="body">
+            <h3>Product Analytics</h3>
+            <p>Per-SKU dashboards: who buys it, when, alongside what. Batched <code>_query</code> + <code>_relate</code> render the whole panel at sub-100 ms — no warehouse hop, no nightly ETL.</p>
+            <a class="link" href="../docs/use-cases/09-product-analytics.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb" style="background-image:url('../docs/screenshots/features/pricing-analytics.png')"></div>
+          <div class="body">
+            <h3>Price-Demand Analytics</h3>
+            <p>Regression-based pricing from <code>_estimate</code> against the <code>price_history</code> table. Demand curve and elasticity per SKU, computed at query time with confidence bands.</p>
+            <a class="link" href="../docs/use-cases/11-price-optimization.md">VIEW IMPLEMENTATION →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <strong>github.com/AitoDotAI/aito-demo</strong>
+    &nbsp;·&nbsp; LIVE AT <a href="https://demo.aito.ai">demo.aito.ai</a>
+    &nbsp;·&nbsp; POWERED BY <a href="https://aito.ai">aito.ai</a>
+    &nbsp;·&nbsp; EU HOSTED &nbsp;·&nbsp; APACHE 2.0
+  </footer>
+
+</div>
+</body>
+</html>
