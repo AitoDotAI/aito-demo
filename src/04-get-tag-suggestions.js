@@ -1,4 +1,4 @@
-import { aitoPostRaw } from './aito-client'
+import { aitoPostRaw, nonExclusivePredict } from './aito-client'
 
 /**
  * Predicts relevant tags for a product based on its name
@@ -19,11 +19,9 @@ export function getTagSuggestions(productName) {
     where: {
       name: productName      // For products with this name
     },
-    predict: 'tags',         // Predict the 'tags' field
-    
-    // exclusiveness: false means tags are not mutually exclusive
-    // (a product can have multiple tags)
-    exclusiveness: false,
+    // Score each tag independently — a product can have several. The exact
+    // form differs per API version, so it comes from the client helper.
+    ...nonExclusivePredict('tags'),
     
     limit: 10               // Get top 10 tag predictions
   })

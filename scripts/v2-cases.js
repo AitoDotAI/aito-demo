@@ -56,10 +56,16 @@ const CASES = [
     },
   },
   {
+    // Non-exclusive multi-value prediction. v2 rejects `exclusiveness: false`
+    // ("contradicts the exclusive target 'tags'"), and on v1 `tags.$feature`
+    // returns materially different probabilities, so neither form is portable
+    // and the app branches via nonExclusivePredict(). Measured: v2's
+    // tags.$feature reproduces v1's exclusiveness:false closely.
     id: '04-tag-suggestions',
     source: 'src/04-get-tag-suggestions.js:18',
     endpoint: '_predict',
-    body: { from: 'products', where: { name: PRODUCT_NAME }, predict: 'tags', limit: 5 },
+    bodyV1: { from: 'products', where: { name: PRODUCT_NAME }, predict: 'tags', exclusiveness: false, limit: 5 },
+    bodyV2: { from: 'products', where: { name: PRODUCT_NAME }, predict: 'tags.$feature', limit: 5 },
   },
   {
     id: '05-autofill-query',
@@ -69,24 +75,68 @@ const CASES = [
   },
   {
     id: '05-autofill-predict',
-    source: 'src/05-autofill.js:54',
+    source: 'src/05-autofill.js:50',
     endpoint: '_predict',
-    body: {
-      from: 'impressions',
-      where: { 'context.user': USER },
-      predict: 'product.tags',
-      limit: 5,
+    bodyV1: {
+      from: 'visits',
+      where: { user: USER },
+      predict: 'purchases',
+      exclusiveness: false,
+      select: ['$p', '$value'],
+    },
+    bodyV2: {
+      from: 'visits',
+      where: { user: USER },
+      predict: 'purchases.$feature',
+      select: ['$p', '$value'],
     },
   },
   {
-    id: '06-prompt-predict',
-    source: 'src/06-prompt.js:14',
+    id: '06-prompt-categories',
+    source: 'src/06-prompt.js:93',
+    endpoint: '_predict',
+    bodyV1: {
+      from: 'prompts',
+      where: { prompt: 'where is my order' },
+      predict: 'categories',
+      exclusiveness: false,
+      limit: 1,
+    },
+    bodyV2: {
+      from: 'prompts',
+      where: { prompt: 'where is my order' },
+      predict: 'categories.$feature',
+      limit: 1,
+    },
+  },
+  {
+    id: '06-prompt-feedback-tags',
+    source: 'src/06-prompt.js:44',
+    endpoint: '_predict',
+    bodyV1: {
+      from: 'prompts',
+      where: { prompt: 'the app is slow', type: 'feedback' },
+      predict: 'tags',
+      exclusiveness: false,
+      limit: 1,
+    },
+    bodyV2: {
+      from: 'prompts',
+      where: { prompt: 'the app is slow', type: 'feedback' },
+      predict: 'tags.$feature',
+      limit: 1,
+    },
+  },
+  {
+    id: '06-prompt-sentiment',
+    source: 'src/06-prompt.js:44',
     endpoint: '_predict',
     body: {
       from: 'prompts',
-      where: { prompt: { $match: 'where is my order' } },
-      predict: 'categories',
-      limit: 3,
+      where: { prompt: 'the app is slow', type: 'feedback' },
+      predict: 'sentiment',
+      exclusiveness: true,
+      limit: 1,
     },
   },
   {

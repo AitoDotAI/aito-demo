@@ -1,4 +1,4 @@
-import { aitoPostRaw } from './aito-client'
+import { aitoPostRaw, nonExclusivePredict } from './aito-client'
 import config from './config'
 
 /**
@@ -50,10 +50,8 @@ export function getAutoFill(userId) {
   return aitoPostRaw('_predict', {
     "from": "visits",        // Analyze visit/session data
     "where" : where,         // Filter by user if specified
-    "predict":"purchases",   // Predict the purchases field (array of product IDs)
-    
-    // exclusiveness: false because users can buy multiple products
-    "exclusiveness" : false,
+    // Score each product independently — a user can buy several.
+    ...nonExclusivePredict('purchases'),
     
     // Return probability and product ID for each prediction
     "select": ["$p", "$value"]

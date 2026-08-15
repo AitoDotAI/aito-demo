@@ -37,6 +37,35 @@ export const isV2 = () => config.aito.apiVersion === 'v2'
 export const estimateSelect = () => (isV2() ? 'value' : 'estimate')
 
 /**
+ * Spread into a `_predict` body to score each member of a multi-valued field
+ * independently, rather than treating the whole array as one exclusive class.
+ *
+ *   ...nonExclusivePredict('tags')
+ *     v1 -> { predict: 'tags', exclusiveness: false }
+ *     v2 -> { predict: 'tags.$feature' }
+ *
+ * v2 rejects `exclusiveness: false` outright:
+ *
+ *   "'exclusiveness: false' is deprecated and contradicts the exclusive
+ *    target 'tags'. For non-exclusive per-member scoring, predict
+ *    'tags.$feature' instead."
+ *
+ * and the two forms are not interchangeable in the other direction either —
+ * on v1, `tags.$feature` returns materially different probabilities from
+ * `exclusiveness: false`, so each version keeps the form that matches its own
+ * semantics. Measured on `Pirkka banana`, v2's `tags.$feature` reproduces v1's
+ * `exclusiveness: false` closely: same tags, same order, p 0.969/0.831/0.722
+ * against 0.963/0.820/0.697.
+ *
+ * @param {string} field - the multi-valued field to predict, e.g. 'tags'
+ */
+export function nonExclusivePredict(field) {
+  return isV2()
+    ? { predict: `${field}.$feature` }
+    : { predict: field, exclusiveness: false }
+}
+
+/**
  * POST an Aito query and return the normalised response payload directly
  * (not the axios response), because every caller wants the body.
  *

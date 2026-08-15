@@ -255,12 +255,39 @@ const paint = v => ({
   VALUES: tint(v, 33), ACCEPTED: tint(v, 36), MISSING: tint(v, 31), BREAK: tint(v, 31), 'V1-BREAK': tint(v, 31),
 }[v] || v)
 
+/**
+ * Compare the number of Aito call sites in src/ against the number of cases.
+ *
+ * The cases are transcribed from the modules by hand, and a transcription that
+ * silently drifts is worse than no harness: an early version of this file
+ * omitted `exclusiveness: false` from three cases and reported them green,
+ * while the real bodies 400 on v2. This does not verify the bodies — only that
+ * no call site is entirely unrepresented — but that is the failure mode that
+ * actually occurred.
+ */
+function checkCoverage() {
+  const srcDir = path.join(__dirname, '..', 'src')
+  const modules = fs.readdirSync(srcDir).filter(f => /^\d\d-.*\.js$/.test(f))
+  let callSites = 0
+  for (const f of modules) {
+    const src = fs.readFileSync(path.join(srcDir, f), 'utf8')
+    callSites += (src.match(/aitoPostRaw\(|aitoPost\(/g) || []).length
+  }
+  if (CASES.length < callSites) {
+    console.log(`  NOTE: ${callSites} call sites in src/, ${CASES.length} cases — `
+      + `${callSites - CASES.length} call site(s) may be untested\n`)
+  } else {
+    console.log(`  ${callSites} call sites in src/, ${CASES.length} cases\n`)
+  }
+}
+
 async function main() {
   const cases = only ? CASES.filter(c => c.id.includes(only)) : CASES
   console.log(`aito-demo v1<->v2 parity   (${cases.length} cases)`)
   console.log(`  v1: ${V1}`)
   console.log(`  v2: ${V2}`)
-  console.log(`  READ-ONLY — no endpoint in this run mutates data\n`)
+  console.log(`  READ-ONLY — no endpoint in this run mutates data`)
+  if (!only) checkCoverage(); else console.log('')
 
   const results = []
   for (const c of cases) {

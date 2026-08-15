@@ -1,4 +1,4 @@
-import { aitoPostRaw } from './aito-client'
+import { aitoPostRaw, nonExclusivePredict } from './aito-client'
 
 /**
  * Analyzes a user prompt to determine its type and extract relevant information
@@ -41,14 +41,21 @@ export function prompt(question) {
           const fields = ["sentiment", "categories.$feature", "tags"]
           
           return Promise.all(fields.map(predicted => {
+            // `tags` is multi-valued and must be scored per member; the other
+            // two are exclusive. v2 rejects `exclusiveness: false` outright,
+            // so the non-exclusive case goes through the client helper while
+            // the exclusive one keeps the explicit flag (v2 accepts `true`).
+            const target = predicted === "tags"
+              ? nonExclusivePredict("tags")
+              : { predict: predicted, exclusiveness: true }
+
             return aitoPostRaw('_predict', {
               from: 'prompts',
               where: {
                 "prompt": question,
                 "type": "feedback"
               },
-              predict: predicted,
-              exclusiveness: predicted != "tags",
+              ...target,
               limit: 1
             }).then(response => response.data.hits[0])
           })).then(responses => {
@@ -90,8 +97,7 @@ export function prompt(question) {
             where: {
               "prompt": question
             },
-            predict: "categories",
-            exclusiveness: false,
+            ...nonExclusivePredict('categories'),
             limit: 1
           }).then(response => {
             const top = response.data.hits[0]

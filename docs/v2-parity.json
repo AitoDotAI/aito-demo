@@ -1,10 +1,10 @@
 {
-  "capturedAt": "2026-08-15T09:42:35.369Z",
+  "capturedAt": "2026-08-15T09:55:38.930Z",
   "coreBuild": "TODO:antti-wire",
   "v1Base": "https://shared.aito.ai/db/aito-demo/api/v1",
   "v2Base": "https://shared.aito.ai/db/aito-demo/env/v2/api/v2",
   "tally": {
-    "VALUES": 21,
+    "VALUES": 23,
     "ACCEPTED": 4
   },
   "cases": [
@@ -414,7 +414,7 @@
       "source": "src/04-get-tag-suggestions.js:18",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 34 value(s) differ (20 non-numeric)",
+      "detail": "all v1 fields present; 10 value(s) differ (5 non-numeric)",
       "note": null,
       "requestV1": {
         "from": "products",
@@ -422,6 +422,7 @@
           "name": "Pirkka banana"
         },
         "predict": "tags",
+        "exclusiveness": false,
         "limit": 5
       },
       "requestV2": {
@@ -429,32 +430,25 @@
         "where": {
           "name": "Pirkka banana"
         },
-        "predict": "tags",
+        "predict": "tags.$feature",
         "limit": 5
       },
-      "bodiesDiffer": false,
+      "bodiesDiffer": true,
       "v1": {
         "status": 200,
         "sample": {
           "offset": 0,
-          "total": 42,
+          "total": 25,
           "hits": [
             {
-              "$p": 0.976726391352358,
-              "$value": [
-                "fresh",
-                "fruit",
-                "pirkka"
-              ]
+              "$p": 0.9629779531704208,
+              "field": "tags",
+              "feature": "pirkka"
             },
             {
-              "$p": 0.0012055842303389521,
-              "$value": [
-                "fresh",
-                "vegetable",
-                "pirkka",
-                "tomato"
-              ]
+              "$p": 0.8199564465365032,
+              "field": "tags",
+              "feature": "fruit"
             }
           ],
           "_hitsTruncatedFrom": 5
@@ -464,22 +458,15 @@
         "status": 200,
         "sample": {
           "offset": 0,
-          "total": 28,
+          "total": 25,
           "hits": [
             {
-              "$p": 0.07973160310659706,
-              "$value": [
-                "gluten",
-                "bread"
-              ]
+              "$p": 0.9689285393765228,
+              "$value": "pirkka"
             },
             {
-              "$p": 0.0676008431702272,
-              "$value": [
-                "meat",
-                "food",
-                "protein"
-              ]
+              "$p": 0.8311978836893322,
+              "$value": "fruit"
             }
           ],
           "_hitsTruncatedFrom": 5
@@ -487,44 +474,44 @@
       },
       "valueDeltas": [
         {
-          "path": "hits[0].$value[0]",
-          "v1": "fresh",
-          "v2": "gluten"
+          "path": "hits[0].field",
+          "v1": "tags",
+          "v2": "tags.$feature"
         },
         {
-          "path": "hits[0].$value[1]",
-          "v1": "fruit",
-          "v2": "bread"
+          "path": "hits[1].field",
+          "v1": "tags",
+          "v2": "tags.$feature"
         },
         {
-          "path": "hits[0].feature[0]",
-          "v1": "fresh",
-          "v2": "gluten"
+          "path": "hits[2].field",
+          "v1": "tags",
+          "v2": "tags.$feature"
         },
         {
-          "path": "hits[0].feature[1]",
-          "v1": "fruit",
-          "v2": "bread"
+          "path": "hits[3].field",
+          "v1": "tags",
+          "v2": "tags.$feature"
         },
         {
-          "path": "hits[1].$value[0]",
-          "v1": "fresh",
-          "v2": "meat"
+          "path": "hits[4].field",
+          "v1": "tags",
+          "v2": "tags.$feature"
         },
         {
-          "path": "hits[1].$value[1]",
-          "v1": "vegetable",
-          "v2": "food"
+          "path": "hits[0].$p",
+          "v1": 0.9629779531704208,
+          "v2": 0.9689285393765228
         },
         {
-          "path": "hits[1].$value[2]",
-          "v1": "pirkka",
-          "v2": "protein"
+          "path": "hits[1].$p",
+          "v1": 0.8199564465365032,
+          "v2": 0.8311978836893322
         },
         {
-          "path": "hits[1].feature[0]",
-          "v1": "fresh",
-          "v2": "meat"
+          "path": "hits[2].$p",
+          "v1": 0.6965147966716518,
+          "v2": 0.722009268748344
         }
       ],
       "missingOnV2": null,
@@ -656,28 +643,35 @@
     },
     {
       "id": "05-autofill-predict",
-      "source": "src/05-autofill.js:54",
+      "source": "src/05-autofill.js:50",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 32 value(s) differ (20 non-numeric)",
+      "detail": "all v1 fields present; 20 value(s) differ (10 non-numeric)",
       "note": null,
       "requestV1": {
-        "from": "impressions",
+        "from": "visits",
         "where": {
-          "context.user": "larry"
+          "user": "larry"
         },
-        "predict": "product.tags",
-        "limit": 5
+        "predict": "purchases",
+        "exclusiveness": false,
+        "select": [
+          "$p",
+          "$value"
+        ]
       },
       "requestV2": {
-        "from": "impressions",
+        "from": "visits",
         "where": {
-          "context.user": "larry"
+          "user": "larry"
         },
-        "predict": "product.tags",
-        "limit": 5
+        "predict": "purchases.$feature",
+        "select": [
+          "$p",
+          "$value"
+        ]
       },
-      "bodiesDiffer": false,
+      "bodiesDiffer": true,
       "v1": {
         "status": 200,
         "sample": {
@@ -685,143 +679,118 @@
           "total": 42,
           "hits": [
             {
-              "$p": 0.029803594026015692,
-              "$value": [
-                "meat",
-                "sausage",
-                "with-bread"
-              ]
+              "$p": 0.4178316783501204,
+              "$value": "6410405093677"
             },
             {
-              "$p": 0.029803594026015692,
-              "$value": [
-                "meat",
-                "sausage",
-                "with-bread"
-              ]
+              "$p": 0.3934904939537229,
+              "$value": "2000818700008"
             }
           ],
-          "_hitsTruncatedFrom": 5
+          "_hitsTruncatedFrom": 10
         }
       },
       "v2": {
         "status": 200,
         "sample": {
           "offset": 0,
-          "total": 28,
+          "total": 42,
           "hits": [
             {
-              "$p": 0.1298554301550783,
-              "$value": [
-                "gluten",
-                "bread"
-              ]
+              "$p": 0.41679661347738184,
+              "$value": "6410405093677"
             },
             {
-              "$p": 0.11093158349320803,
-              "$value": [
-                "meat",
-                "food",
-                "protein"
-              ]
+              "$p": 0.39215842669690487,
+              "$value": "2000818700008"
             }
           ],
-          "_hitsTruncatedFrom": 5
+          "_hitsTruncatedFrom": 10
         }
       },
       "valueDeltas": [
         {
-          "path": "hits[0].$value[0]",
-          "v1": "meat",
-          "v2": "gluten"
+          "path": "hits[0].field",
+          "v1": "purchases",
+          "v2": "purchases.$feature"
         },
         {
-          "path": "hits[0].$value[1]",
-          "v1": "sausage",
-          "v2": "bread"
+          "path": "hits[1].field",
+          "v1": "purchases",
+          "v2": "purchases.$feature"
         },
         {
-          "path": "hits[0].feature[0]",
-          "v1": "meat",
-          "v2": "gluten"
+          "path": "hits[2].field",
+          "v1": "purchases",
+          "v2": "purchases.$feature"
         },
         {
-          "path": "hits[0].feature[1]",
-          "v1": "sausage",
-          "v2": "bread"
+          "path": "hits[3].field",
+          "v1": "purchases",
+          "v2": "purchases.$feature"
         },
         {
-          "path": "hits[1].$value[1]",
-          "v1": "sausage",
-          "v2": "food"
+          "path": "hits[4].field",
+          "v1": "purchases",
+          "v2": "purchases.$feature"
         },
         {
-          "path": "hits[1].$value[2]",
-          "v1": "with-bread",
-          "v2": "protein"
+          "path": "hits[5].field",
+          "v1": "purchases",
+          "v2": "purchases.$feature"
         },
         {
-          "path": "hits[1].feature[1]",
-          "v1": "sausage",
-          "v2": "food"
+          "path": "hits[6].field",
+          "v1": "purchases",
+          "v2": "purchases.$feature"
         },
         {
-          "path": "hits[1].feature[2]",
-          "v1": "with-bread",
-          "v2": "protein"
+          "path": "hits[7].field",
+          "v1": "purchases",
+          "v2": "purchases.$feature"
         }
       ],
       "missingOnV2": null,
       "accepted": null
     },
     {
-      "id": "06-prompt-predict",
-      "source": "src/06-prompt.js:14",
+      "id": "06-prompt-categories",
+      "source": "src/06-prompt.js:93",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 10 value(s) differ (6 non-numeric)",
+      "detail": "all v1 fields present; 3 value(s) differ (2 non-numeric)",
       "note": null,
       "requestV1": {
         "from": "prompts",
         "where": {
-          "prompt": {
-            "$match": "where is my order"
-          }
+          "prompt": "where is my order"
         },
         "predict": "categories",
-        "limit": 3
+        "exclusiveness": false,
+        "limit": 1
       },
       "requestV2": {
         "from": "prompts",
         "where": {
-          "prompt": {
-            "$match": "where is my order"
-          }
+          "prompt": "where is my order"
         },
-        "predict": "categories",
-        "limit": 3
+        "predict": "categories.$feature",
+        "limit": 1
       },
-      "bodiesDiffer": false,
+      "bodiesDiffer": true,
       "v1": {
         "status": 200,
         "sample": {
           "offset": 0,
-          "total": 350,
+          "total": 12,
           "hits": [
             {
-              "$p": 0.009165341934235611,
-              "$value": [
-                "finance issue"
-              ]
-            },
-            {
-              "$p": 0.009165341934235611,
-              "$value": [
-                "finance issue"
-              ]
+              "$p": 0.04385173731174175,
+              "field": "categories",
+              "feature": "operations issue"
             }
           ],
-          "_hitsTruncatedFrom": 3
+          "_hitsTruncatedFrom": 1
         }
       },
       "v2": {
@@ -831,61 +800,184 @@
           "total": 12,
           "hits": [
             {
-              "$p": 0.44475138121546964,
+              "$p": 0.877773332497415,
               "$value": [
                 "customer service"
               ]
-            },
-            {
-              "$p": 0.12983425414364644,
-              "$value": [
-                "usability"
-              ]
             }
           ],
-          "_hitsTruncatedFrom": 3
+          "_hitsTruncatedFrom": 1
         }
       },
       "valueDeltas": [
         {
-          "path": "hits[0].$value[0]",
-          "v1": "finance issue",
-          "v2": "customer service"
+          "path": "hits[0].field",
+          "v1": "categories",
+          "v2": "categories.$feature"
         },
         {
-          "path": "hits[0].feature[0]",
-          "v1": "finance issue",
-          "v2": "customer service"
-        },
-        {
-          "path": "hits[1].$value[0]",
-          "v1": "finance issue",
-          "v2": "usability"
-        },
-        {
-          "path": "hits[1].feature[0]",
-          "v1": "finance issue",
-          "v2": "usability"
-        },
-        {
-          "path": "hits[2].$value[0]",
-          "v1": "finance issue",
-          "v2": "operations issue"
-        },
-        {
-          "path": "hits[2].feature[0]",
-          "v1": "finance issue",
-          "v2": "operations issue"
-        },
-        {
-          "path": "total",
-          "v1": 350,
-          "v2": 12
+          "path": "hits[0].feature",
+          "v1": "operations issue",
+          "v2": [
+            "customer service"
+          ]
         },
         {
           "path": "hits[0].$p",
-          "v1": 0.009165341934235611,
-          "v2": 0.44475138121546964
+          "v1": 0.04385173731174175,
+          "v2": 0.877773332497415
+        }
+      ],
+      "missingOnV2": null,
+      "accepted": null
+    },
+    {
+      "id": "06-prompt-feedback-tags",
+      "source": "src/06-prompt.js:44",
+      "endpoint": "_predict",
+      "verdict": "VALUES",
+      "detail": "all v1 fields present; 3 value(s) differ (2 non-numeric)",
+      "note": null,
+      "requestV1": {
+        "from": "prompts",
+        "where": {
+          "prompt": "the app is slow",
+          "type": "feedback"
+        },
+        "predict": "tags",
+        "exclusiveness": false,
+        "limit": 1
+      },
+      "requestV2": {
+        "from": "prompts",
+        "where": {
+          "prompt": "the app is slow",
+          "type": "feedback"
+        },
+        "predict": "tags.$feature",
+        "limit": 1
+      },
+      "bodiesDiffer": true,
+      "v1": {
+        "status": 200,
+        "sample": {
+          "offset": 0,
+          "total": 14,
+          "hits": [
+            {
+              "$p": 0.6048152231046656,
+              "field": "tags",
+              "feature": "customer support"
+            }
+          ],
+          "_hitsTruncatedFrom": 1
+        }
+      },
+      "v2": {
+        "status": 200,
+        "sample": {
+          "offset": 0,
+          "total": 14,
+          "hits": [
+            {
+              "$p": 0.9871446778010176,
+              "$value": [
+                "customer support"
+              ]
+            }
+          ],
+          "_hitsTruncatedFrom": 1
+        }
+      },
+      "valueDeltas": [
+        {
+          "path": "hits[0].field",
+          "v1": "tags",
+          "v2": "tags.$feature"
+        },
+        {
+          "path": "hits[0].feature",
+          "v1": "customer support",
+          "v2": [
+            "customer support"
+          ]
+        },
+        {
+          "path": "hits[0].$p",
+          "v1": 0.6048152231046656,
+          "v2": 0.9871446778010176
+        }
+      ],
+      "missingOnV2": null,
+      "accepted": null
+    },
+    {
+      "id": "06-prompt-sentiment",
+      "source": "src/06-prompt.js:44",
+      "endpoint": "_predict",
+      "verdict": "VALUES",
+      "detail": "all v1 fields present; 2 value(s) differ (1 non-numeric)",
+      "note": null,
+      "requestV1": {
+        "from": "prompts",
+        "where": {
+          "prompt": "the app is slow",
+          "type": "feedback"
+        },
+        "predict": "sentiment",
+        "exclusiveness": true,
+        "limit": 1
+      },
+      "requestV2": {
+        "from": "prompts",
+        "where": {
+          "prompt": "the app is slow",
+          "type": "feedback"
+        },
+        "predict": "sentiment",
+        "exclusiveness": true,
+        "limit": 1
+      },
+      "bodiesDiffer": false,
+      "v1": {
+        "status": 200,
+        "sample": {
+          "offset": 0,
+          "total": 3,
+          "hits": [
+            {
+              "$p": 0.9351863150863385,
+              "field": "sentiment",
+              "feature": "negative"
+            }
+          ],
+          "_hitsTruncatedFrom": 1
+        }
+      },
+      "v2": {
+        "status": 200,
+        "sample": {
+          "offset": 0,
+          "total": 3,
+          "hits": [
+            {
+              "$p": 0.4292052432642505,
+              "$value": "neutral"
+            }
+          ],
+          "_hitsTruncatedFrom": 1
+        }
+      },
+      "valueDeltas": [
+        {
+          "path": "hits[0].feature",
+          "v1": "negative",
+          "v2": "neutral"
+        },
+        {
+          "path": "hits[0].$p",
+          "v1": 0.9351863150863385,
+          "v2": 0.4292052432642505
         }
       ],
       "missingOnV2": null,
