@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 /**
  * Analyzes statistical relationships between data fields
@@ -28,14 +27,13 @@ export function relate(field, value) {
   }
 
   // Step 1: Find statistical relationships using _relate endpoint
-  return axios.post(`${config.aito.url}/api/v1/_relate`, {
+  return aitoPostRaw('_relate', {
     "from": "visits",        // Analyze visitor session data
     "where": where,          // Filter by the specified field-value condition
-    "relate": "purchases"    // Find relationships with the purchases field
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
+    // Array form. v1 also accepts the bare string "purchases", but v2 only
+    // accepts the array — and both return an identical `related` shape, so
+    // one body serves either API version.
+    "relate": ["purchases"]  // Find relationships with the purchases field
   })
     .then(results => {
       // Extract product IDs from the relation results
@@ -45,7 +43,7 @@ export function relate(field, value) {
       })
 
       // Step 2: Get full product details for the related product IDs
-      return axios.post(`${config.aito.url}/api/v1/_query`, {
+      return aitoPostRaw('_query', {
         "from": "products",    // Query the products table
         "where": {
           "id": {
@@ -53,10 +51,6 @@ export function relate(field, value) {
           }
         },
         limit: ids.length
-      }, {
-        headers: {
-          'x-api-key': config.aito.apiKey
-        },
       }).then(products => {
         // Create a lookup map from product ID to product details
         var idsToProducts = {}

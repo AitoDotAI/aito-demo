@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 // Configuration for invoice prediction fields
 // Defines which related fields to return for each prediction type
@@ -44,16 +43,12 @@ export function predictInvoice(input, output) {
     })
 
     // Execute the prediction
-    return axios.post(`${config.aito.url}/api/v1/_predict`, {
+    return aitoPostRaw('_predict', {
       from: 'invoices',       // Analyze historical invoice data
       where: input,           // Use invoice details as input context
       predict: predicted,     // Field to predict (Processor/Acceptor/GLCode)
       select: select,         // Fields to return in results
       limit: 10              // Top 10 predictions
-    }, {
-      headers: {
-        'x-api-key': config.aito.apiKey
-      },
     }).then(response => response.data.hits)
   }))
 }

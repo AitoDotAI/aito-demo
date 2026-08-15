@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw, nonExclusivePredict } from './aito-client'
 
 /**
  * Analyzes a user prompt to determine its type and extract relevant information
@@ -11,22 +10,18 @@ import config from './config'
  */
 export function prompt(question) {
   // First, predict the type of prompt (question, feedback, or request)
-  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+  return aitoPostRaw('_predict', {
     "from": "prompts",
     "where" : {
       "prompt": question
     },
     "predict": "type",
     "limit": 1
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   }).then(result => {
       const top = result.data.hits[0]
       if (top.$p > 0.5) {
         if (top.feature === "question") {
-          return axios.post(`${config.aito.url}/api/v1/_query`, {
+          return aitoPostRaw('_query', {
             "from": "prompts",
             "where" : {
               "$nn": [{"prompt": question}]
@@ -34,10 +29,6 @@ export function prompt(question) {
             "orderBy": {"$sameness": {"prompt": question} },
             "limit": 1,
             "select": ["prompt", "type", "answer.answer"]
-          }, {
-            headers: {
-              'x-api-key': config.aito.apiKey
-            },
           }).then(result => {
             var match = null
       
@@ -50,19 +41,22 @@ export function prompt(question) {
           const fields = ["sentiment", "categories.$feature", "tags"]
           
           return Promise.all(fields.map(predicted => {
-            return axios.post(`${config.aito.url}/api/v1/_predict`, {
+            // `tags` is multi-valued and must be scored per member; the other
+            // two are exclusive. v2 rejects `exclusiveness: false` outright,
+            // so the non-exclusive case goes through the client helper while
+            // the exclusive one keeps the explicit flag (v2 accepts `true`).
+            const target = predicted === "tags"
+              ? nonExclusivePredict("tags")
+              : { predict: predicted, exclusiveness: true }
+
+            return aitoPostRaw('_predict', {
               from: 'prompts',
               where: {
                 "prompt": question,
                 "type": "feedback"
               },
-              predict: predicted,
-              exclusiveness: predicted != "tags",
+              ...target,
               limit: 1
-            }, {
-              headers: {
-                'x-api-key': config.aito.apiKey
-              },
             }).then(response => response.data.hits[0])
           })).then(responses => {
             var rv = {
@@ -79,7 +73,7 @@ export function prompt(question) {
             return rv
           })
         } else if (top.feature === "request") {
-          const assignee = axios.post(`${config.aito.url}/api/v1/_query`, {
+          const assignee = aitoPostRaw('_query', {
             from: 'prompts',
             where: {
               "prompt": question,
@@ -88,16 +82,12 @@ export function prompt(question) {
             get: "assignee",
             orderBy: "$p",
             limit: 1
-          }, {
-            headers: {
-              'x-api-key': config.aito.apiKey
-            },
           }).then(response => {
             const top = response.data.hits[0]
             return [top.$p, `${top.Name} (${top.Role})`]
           }) 
 
-          const categories = axios.post(`${config.aito.url}/api/v1/_predict`, {
+          const categories = aitoPostRaw('_predict', {
             from: {
               "from": 'prompts',
               "where": {
@@ -107,19 +97,14 @@ export function prompt(question) {
             where: {
               "prompt": question
             },
-            predict: "categories",
-            exclusiveness: false,
+            ...nonExclusivePredict('categories'),
             limit: 1
-          }, {
-            headers: {
-              'x-api-key': config.aito.apiKey
-            },
           }).then(response => {
             const top = response.data.hits[0]
             return [top.$p, top.feature]
           }) 
 
-          const urgency = axios.post(`${config.aito.url}/api/v1/_predict`, {
+          const urgency = aitoPostRaw('_predict', {
             from: 'prompts',
             where: {
               "prompt": question,
@@ -127,10 +112,6 @@ export function prompt(question) {
             },
             predict: "urgency",
             limit: 1
-          }, {
-            headers: {
-              'x-api-key': config.aito.apiKey
-            },
           }).then(response => {
             const top = response.data.hits[0]
             return [top.$p, top.feature]

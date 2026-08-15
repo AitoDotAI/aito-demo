@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 /**
  * Performs personalized product search using Aito.ai's intelligent query API
@@ -29,7 +28,7 @@ export function getProductSearchResults(userId, inputValue) {
   }
 
   // Execute Aito query with personalized ranking
-  return axios.post(`${config.aito.url}/api/v1/_query`, {
+  return aitoPostRaw('_query', {
     from: 'impressions',      // Query the impressions table (product views)
     where: where,             // Apply search and user filters
     get: 'product',           // Extract product information
@@ -50,11 +49,12 @@ export function getProductSearchResults(userId, inputValue) {
       ]
     },
     
-    // Select specific fields to return, including match highlights
-    select: ["name", "id", "tags", "price", "$matches"],
+    // Select the product fields the result list renders. `$matches` used to
+    // be requested here for match highlighting but nothing ever read it, and
+    // v2 has no equivalent ("'$matches' is not a supported computed select
+    // expression"), so it is dropped rather than made version-conditional.
+    select: ["name", "id", "tags", "price"],
     limit: 5  // Return top 5 results
-  }, {
-    headers: { 'x-api-key': config.aito.apiKey },
   })
     .then(response => {
       // Return the hits array containing matched products

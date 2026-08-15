@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 /**
  * Evaluate model performance using Aito's _evaluate endpoint
@@ -15,21 +14,14 @@ import config from './config'
  */
 export async function evaluateModel(query) {
   try {
-    const url = `${config.aito.url}/api/v1/_evaluate`
-    
     console.log('Evaluating model with query:', JSON.stringify(query, null, 2))
-    
-    const response = await axios.post(
-      url,
-      query,
-      {
-        headers: {
-          'x-api-key': config.aito.apiKey
-        },
-        timeout: 30000 // 30 second timeout for evaluation
-      }
-    )
-    
+
+    // v2 returns _evaluate wrapped in {kind, data}; aitoPostRaw unwraps it,
+    // so `response.data` is the metrics object on both API versions.
+    const response = await aitoPostRaw('_evaluate', query, {
+      timeout: 30000, // 30 second timeout for evaluation
+    })
+
     console.log('Evaluation response:', response.data)
     
     // Process the response to ensure consistent format

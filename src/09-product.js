@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 /**
  * Retrieves detailed information for a specific product by ID
@@ -8,14 +7,12 @@ import config from './config'
  * @returns {Promise<Object>} - Product details from the database
  */
 export function getProductDetails(id){
-  return axios.post(`${config.aito.url}/api/v1/_query`,
+  return aitoPostRaw('_query',
     {
       from: 'products',
       where: { id: id },
       limit: 1
-    }, {
-    headers: { 'x-api-key': config.aito.apiKey },
-  })
+    })
     .then(response => {
       return response.data
   })
@@ -27,13 +24,11 @@ export function getProductDetails(id){
  * @returns {Promise<Object>} - Array of all products with their details
  */
 export function getAllProducts(){
-  return axios.post(`${config.aito.url}/api/v1/_query`,
+  return aitoPostRaw('_query',
     {
       from: 'products',
       limit: 100
-    }, {
-    headers: { 'x-api-key': config.aito.apiKey },
-  })
+    })
     .then(response => {
       return response.data    
   })
@@ -47,18 +42,56 @@ export function getAllProducts(){
  */
 export function getProductStats(id){
 
-  return axios.post(`${config.aito.url}/api/v1/_aggregate`, 
+  return aitoPostRaw('_aggregate', 
     {
       "from": "impressions",
       "where": {
         "product.id": id
       },
       "aggregate": ["purchase.$sum", "purchase.$mean"]
-    }, {
-    headers: { 'x-api-key': config.aito.apiKey },
-  })
+    })
     .then(response => {
       return response.data    
+  })
+}
+
+/**
+ * Product fields whose values we correlate against purchase. Aito enumerates
+ * propositions across these fields; `narrowToProduct` below then keeps the
+ * ones describing the product actually being viewed.
+ */
+const PRODUCT_RELATE_FIELDS = [
+  'product.name',
+  'product.category',
+  'product.tags',
+  'product.price',
+]
+
+/**
+ * Keep only the relations whose value actually belongs to `product`, so the
+ * panel describes THIS product rather than the catalogue at large. `related`
+ * has already been normalised to `{field: {$has: value}}` by aito-client.
+ */
+function narrowToProduct(hits, product) {
+  if (!Array.isArray(hits)) return hits
+  return hits.filter(hit => {
+    const related = hit && hit.related
+    if (!related) return false
+    return Object.entries(related).some(([field, wrapped]) => {
+      const value = wrapped && wrapped.$has
+      const own = product[field.replace(/^product\./, '')]
+      if (own === undefined || value === undefined) return false
+      if (Array.isArray(own)) {
+        return Array.isArray(value)
+          ? value.some(v => own.includes(v))
+          : own.includes(value)
+      }
+      // `product.name` relates on tokens, so match on containment there.
+      if (typeof own === 'string' && typeof value === 'string') {
+        return own.toLowerCase().includes(value.toLowerCase())
+      }
+      return own === value
+    })
   })
 }
 
@@ -69,29 +102,32 @@ export function getProductStats(id){
  * - Shopping basket analysis
  * - Search query analysis
  * - Purchase trends over time
- * 
+ *
  * @param {string|number} id - The product ID to analyze
  * @returns {Promise<Object>} - Comprehensive analytics data
  */
 export function getProductAnalytics(id){
 
-  // First fetch the product so we can pass its full set of properties
-  // as the relate proposition. Passing the object lets Aito enumerate
-  // propositions on each property of THIS product (name, category, tags,
-  // cost, price, googleClicks, ...) without the duplicate-condition issue
-  // we got from `relate: {product: id}` after the proposition-selection
-  // change.
+  // Fetch the product first so its property values are available to narrow
+  // the relation results down to this product (see narrowToProduct).
   return getProductDetails(id).then(productResp => {
     const product = (productResp.hits && productResp.hits[0]) || {}
-    const { id: _ignored, ...productProps } = product
 
-    return axios.post(`${config.aito.url}/api/v1/_batch`,
+    return aitoPostRaw('_batch',
     [
-      { // Which of this product's properties are over-represented in
-        // purchases vs the baseline of all impressions?
+      { // Which product properties are over-represented in purchases vs the
+        // baseline of all impressions?
+        //
+        // This used to pass the nested proposition object
+        // `{"product": productProps}`, which v1 expands into one proposition
+        // per property. v2 rejects the nested form outright, and its flat
+        // dotted equivalent ANDs the properties into a single condition —
+        // a different question. The array-of-fields form asks the original
+        // question and is accepted by both versions, so it is used here and
+        // the results are narrowed to this product below.
         "from": "impressions",
         "where": {"purchase": true},
-        "relate": {"product": productProps},
+        "relate": PRODUCT_RELATE_FIELDS,
         "select": ["lift", "related"]
       },
       { // Analyze correlation between user demographics and this product
@@ -99,7 +135,7 @@ export function getProductAnalytics(id){
         "where": {
           "purchases": {"$has": id}
         },
-        "relate": "user.tags",
+        "relate": ["user.tags"],
         "select": ["lift", "related"]
       },
       { // Market basket analysis - what other products are bought together
@@ -107,7 +143,7 @@ export function getProductAnalytics(id){
         "where": {
           "purchases": {"$has": id}
         },
-        "relate": "purchases",
+        "relate": ["purchases"],
         "select": ["lift", "related"]
       },
       { // Analyze which search terms lead to this product being purchased
@@ -132,9 +168,16 @@ export function getProductAnalytics(id){
           {"$mean": {"$context": "purchase"}}
         ]
       }
-    ], {
-      headers: { 'x-api-key': config.aito.apiKey },
-    })
-      .then(response => response.data)
+    ])
+      .then(response => {
+        const results = response.data
+        // Batch result 0 is the product-property relation; narrow it to the
+        // product under analysis. The other results are already scoped by
+        // their own `where` clause.
+        if (Array.isArray(results) && results[0] && Array.isArray(results[0].hits)) {
+          results[0] = { ...results[0], hits: narrowToProduct(results[0].hits, product) }
+        }
+        return results
+      })
   })
 }

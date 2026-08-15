@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw, nonExclusivePredict } from './aito-client'
 
 /**
  * Predicts relevant tags for a product based on its name
@@ -15,22 +14,16 @@ import config from './config'
  */
 export function getTagSuggestions(productName) {
   // Use Aito's _predict endpoint to find likely tags
-  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+  return aitoPostRaw('_predict', {
     from: 'products',        // Look at the products table
     where: {
       name: productName      // For products with this name
     },
-    predict: 'tags',         // Predict the 'tags' field
-    
-    // exclusiveness: false means tags are not mutually exclusive
-    // (a product can have multiple tags)
-    exclusiveness: false,
+    // Score each tag independently — a product can have several. The exact
+    // form differs per API version, so it comes from the client helper.
+    ...nonExclusivePredict('tags'),
     
     limit: 10               // Get top 10 tag predictions
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   })
     .then(response => {
       return response.data.hits
