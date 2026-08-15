@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 /**
  * Predicts relevant tags for a product based on its name
@@ -15,7 +14,7 @@ import config from './config'
  */
 export function getTagSuggestions(productName) {
   // Use Aito's _predict endpoint to find likely tags
-  return axios.post(`${config.aito.apiBase}/_predict`, {
+  return aitoPostRaw('_predict', {
     from: 'products',        // Look at the products table
     where: {
       name: productName      // For products with this name
@@ -27,10 +26,6 @@ export function getTagSuggestions(productName) {
     exclusiveness: false,
     
     limit: 10               // Get top 10 tag predictions
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   })
     .then(response => {
       return response.data.hits

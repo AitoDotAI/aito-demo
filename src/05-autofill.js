@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { aitoPostRaw } from './aito-client'
 import config from './config'
 
 /**
@@ -11,7 +11,7 @@ import config from './config'
  * @returns {Promise<Array>} Array of complete product objects
  */
 export function getProductsByIds(ids) {
-  return axios.post(`${config.aito.apiBase}/_query`, {
+  return aitoPostRaw('_query', {
     "from": "products",     // Query the products table
     "where" : {
       "id": {
@@ -19,10 +19,6 @@ export function getProductsByIds(ids) {
         "$or": ids
       }
     }
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   })
     .then(result => {
       return result.data.hits
@@ -51,7 +47,7 @@ export function getAutoFill(userId) {
 
   // Predict future purchases based on historical patterns
   console.log(`getAutoFill: Making API call to ${config.aito.apiBase}/_predict`);
-  return axios.post(`${config.aito.apiBase}/_predict`, {
+  return aitoPostRaw('_predict', {
     "from": "visits",        // Analyze visit/session data
     "where" : where,         // Filter by user if specified
     "predict":"purchases",   // Predict the purchases field (array of product IDs)
@@ -61,10 +57,6 @@ export function getAutoFill(userId) {
     
     // Return probability and product ID for each prediction
     "select": ["$p", "$value"]
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   })
     .then(result => {
       console.log(`getAutoFill: API response received:`, result.data);

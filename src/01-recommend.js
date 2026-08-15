@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 /**
  * Get personalized product recommendations using Aito's _recommend endpoint
@@ -24,7 +23,7 @@ export function getRecommendedProducts(userId, currentShoppingBasket, count) {
   // Use config.aito.apiBase so the same code targets either v1
   // (Rep1, master env) or v2 (Rep2, named env) depending on
   // REACT_APP_USE_REP2 / REACT_APP_AITO_ENV. See src/config.js.
-  return axios.post(`${config.aito.apiBase}/_recommend`, {
+  return aitoPostRaw('_recommend', {
     from: 'impressions',  // Analyze product impression data
     
     where: {
@@ -44,10 +43,6 @@ export function getRecommendedProducts(userId, currentShoppingBasket, count) {
     // Fields to return for each recommendation
     select: ["name", "id", "tags", "price"],
     limit: count  // Number of recommendations
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   })
     .then(result => {
       // Return array of recommended products with their scores

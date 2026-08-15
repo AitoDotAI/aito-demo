@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 /**
  * Predicts category for a product based on its name
@@ -14,17 +13,13 @@ import config from './config'
  * @returns {Promise<Object|null>} Predicted category object with value and confidence, or null
  */
 export function predictCategory(productName) {
-  return axios.post(`${config.aito.apiBase}/_predict`, {
+  return aitoPostRaw('_predict', {
     from: 'products',
     where: {
       name: productName
     },
     predict: 'category',
     limit: 1
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   })
     .then(response => {
       const hits = response.data.hits
@@ -52,17 +47,13 @@ export function predictCategory(productName) {
  * @returns {Promise<Object|null>} Predicted price object with value and confidence, or null
  */
 export function predictPrice(productName) {
-  return axios.post(`${config.aito.apiBase}/_predict`, {
+  return aitoPostRaw('_predict', {
     from: 'products',
     where: {
       name: productName
     },
     predict: 'price',
     limit: 1
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   })
     .then(response => {
       const hits = response.data.hits

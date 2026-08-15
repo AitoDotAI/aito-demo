@@ -1,5 +1,4 @@
-import axios from 'axios'
-import config from './config'
+import { aitoPostRaw } from './aito-client'
 
 /**
  * Provides intelligent search query autocomplete suggestions
@@ -32,7 +31,7 @@ export function getAutoComplete(userId, prefix) {
   }
   
   // Query historical search contexts
-  return axios.post(`${config.aito.apiBase}/_query`, {
+  return aitoPostRaw('_query', {
     from: 'contexts',        // Table containing search history
     where: where,            // Apply prefix and user filters
     get: 'queryPhrase',      // Extract the search phrases
@@ -43,10 +42,6 @@ export function getAutoComplete(userId, prefix) {
     
     // Return probability score and the query phrase
     select: ["$p", "$value"]
-  }, {
-    headers: {
-      'x-api-key': config.aito.apiKey
-    },
   })
     .then(result => {
       // Return array of suggestions with their probability scores
