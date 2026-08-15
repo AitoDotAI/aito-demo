@@ -42,9 +42,11 @@ describe('predictedFieldOf', () => {
     expect(predictedFieldOf({ from: 'products', predict: 'category' })).toBe('category')
   })
 
-  it('reads the matched field from a _match request', () => {
+  it('reads the matched field from a _match request, minus the .$feature suffix', () => {
+    // v1 reports field: "user.tags" for exactly this request, so the logical
+    // field name is what gets restored — not the v2 spelling.
     expect(predictedFieldOf({ from: 'visits', match: 'user.tags.$feature' }))
-      .toBe('user.tags.$feature')
+      .toBe('user.tags')
   })
 
   it('returns undefined when the request predicts nothing', () => {
@@ -157,5 +159,37 @@ describe('normalize: safety', () => {
   it('passes through null and primitives untouched', () => {
     expect(normalize(null)).toBeNull()
     expect(normalize(7)).toBe(7)
+  })
+})
+
+describe('normalize: .$feature targets', () => {
+  // v2's spelling for v1's `predict: 'tags', exclusiveness: false`.
+  const request = { from: 'prompts', predict: 'tags.$feature', limit: 3 }
+
+  it('unwraps the single-element array v2 returns per member', () => {
+    // Real v2 shape; v1 gives feature: 'customer support' (a bare string).
+    const v2 = {
+      offset: 0,
+      total: 14,
+      hits: [{ $p: 0.9871446778010176, $value: ['customer support'] }],
+    }
+    expect(normalize(v2, request).hits[0].feature).toBe('customer support')
+  })
+
+  it('reports the logical field name, not the .$feature spelling', () => {
+    const v2 = { offset: 0, total: 14, hits: [{ $p: 0.98, $value: ['app'] }] }
+    expect(normalize(v2, request).hits[0].field).toBe('tags')
+  })
+
+  it('leaves $value itself as v2 returned it', () => {
+    const v2 = { offset: 0, total: 14, hits: [{ $p: 0.98, $value: ['app'] }] }
+    expect(normalize(v2, request).hits[0].$value).toEqual(['app'])
+  })
+
+  it('does not unwrap a genuinely multi-valued result', () => {
+    // Not a .$feature target, so the array is the answer, not a wrapper.
+    const v2 = { offset: 0, total: 1, hits: [{ $p: 0.08, $value: ['gluten', 'bread'] }] }
+    const out = normalize(v2, { from: 'products', predict: 'tags' })
+    expect(out.hits[0].feature).toEqual(['gluten', 'bread'])
   })
 })

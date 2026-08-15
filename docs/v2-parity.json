@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-08-15T09:55:38.930Z",
+  "capturedAt": "2026-08-15T20:05:02.832Z",
   "coreBuild": "TODO:antti-wire",
   "v1Base": "https://shared.aito.ai/db/aito-demo/api/v1",
   "v2Base": "https://shared.aito.ai/db/aito-demo/env/v2/api/v2",
@@ -414,7 +414,7 @@
       "source": "src/04-get-tag-suggestions.js:18",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 10 value(s) differ (5 non-numeric)",
+      "detail": "all v1 fields present; 5 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "products",
@@ -474,31 +474,6 @@
       },
       "valueDeltas": [
         {
-          "path": "hits[0].field",
-          "v1": "tags",
-          "v2": "tags.$feature"
-        },
-        {
-          "path": "hits[1].field",
-          "v1": "tags",
-          "v2": "tags.$feature"
-        },
-        {
-          "path": "hits[2].field",
-          "v1": "tags",
-          "v2": "tags.$feature"
-        },
-        {
-          "path": "hits[3].field",
-          "v1": "tags",
-          "v2": "tags.$feature"
-        },
-        {
-          "path": "hits[4].field",
-          "v1": "tags",
-          "v2": "tags.$feature"
-        },
-        {
           "path": "hits[0].$p",
           "v1": 0.9629779531704208,
           "v2": 0.9689285393765228
@@ -512,6 +487,16 @@
           "path": "hits[2].$p",
           "v1": 0.6965147966716518,
           "v2": 0.722009268748344
+        },
+        {
+          "path": "hits[3].$p",
+          "v1": 0.14370435585679084,
+          "v2": 0.16587161083238777
+        },
+        {
+          "path": "hits[4].$p",
+          "v1": 0.09933772210457549,
+          "v2": 0.1144065017775368
         }
       ],
       "missingOnV2": null,
@@ -646,7 +631,7 @@
       "source": "src/05-autofill.js:50",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 20 value(s) differ (10 non-numeric)",
+      "detail": "all v1 fields present; 10 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "visits",
@@ -710,44 +695,44 @@
       },
       "valueDeltas": [
         {
-          "path": "hits[0].field",
-          "v1": "purchases",
-          "v2": "purchases.$feature"
+          "path": "hits[0].$p",
+          "v1": 0.4178316783501204,
+          "v2": 0.41679661347738184
         },
         {
-          "path": "hits[1].field",
-          "v1": "purchases",
-          "v2": "purchases.$feature"
+          "path": "hits[1].$p",
+          "v1": 0.3934904939537229,
+          "v2": 0.39215842669690487
         },
         {
-          "path": "hits[2].field",
-          "v1": "purchases",
-          "v2": "purchases.$feature"
+          "path": "hits[2].$p",
+          "v1": 0.3707508107710922,
+          "v2": 0.3698975345343058
         },
         {
-          "path": "hits[3].field",
-          "v1": "purchases",
-          "v2": "purchases.$feature"
+          "path": "hits[3].$p",
+          "v1": 0.3607229858085075,
+          "v2": 0.35990814199066823
         },
         {
-          "path": "hits[4].field",
-          "v1": "purchases",
-          "v2": "purchases.$feature"
+          "path": "hits[4].$p",
+          "v1": 0.3492340861836696,
+          "v2": 0.3484640103609547
         },
         {
-          "path": "hits[5].field",
-          "v1": "purchases",
-          "v2": "purchases.$feature"
+          "path": "hits[5].$p",
+          "v1": 0.3468623674524652,
+          "v2": 0.3457870128059491
         },
         {
-          "path": "hits[6].field",
-          "v1": "purchases",
-          "v2": "purchases.$feature"
+          "path": "hits[6].$p",
+          "v1": 0.3434748700487042,
+          "v2": 0.3427277593213004
         },
         {
-          "path": "hits[7].field",
-          "v1": "purchases",
-          "v2": "purchases.$feature"
+          "path": "hits[7].$p",
+          "v1": 0.3384253581628884,
+          "v2": 0.33769880808683894
         }
       ],
       "missingOnV2": null,
@@ -758,7 +743,7 @@
       "source": "src/06-prompt.js:93",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 3 value(s) differ (2 non-numeric)",
+      "detail": "all v1 fields present; 2 value(s) differ (1 non-numeric)",
       "note": null,
       "requestV1": {
         "from": "prompts",
@@ -811,16 +796,9 @@
       },
       "valueDeltas": [
         {
-          "path": "hits[0].field",
-          "v1": "categories",
-          "v2": "categories.$feature"
-        },
-        {
           "path": "hits[0].feature",
           "v1": "operations issue",
-          "v2": [
-            "customer service"
-          ]
+          "v2": "customer service"
         },
         {
           "path": "hits[0].$p",
@@ -836,7 +814,7 @@
       "source": "src/06-prompt.js:44",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 3 value(s) differ (2 non-numeric)",
+      "detail": "all v1 fields present; 1 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "prompts",
@@ -890,18 +868,6 @@
         }
       },
       "valueDeltas": [
-        {
-          "path": "hits[0].field",
-          "v1": "tags",
-          "v2": "tags.$feature"
-        },
-        {
-          "path": "hits[0].feature",
-          "v1": "customer support",
-          "v2": [
-            "customer support"
-          ]
-        },
         {
           "path": "hits[0].$p",
           "v1": 0.6048152231046656,
@@ -1913,7 +1879,7 @@
       "source": "src/10-get-distinct-values.js:27",
       "endpoint": "_match",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 8 value(s) differ (4 non-numeric)",
+      "detail": "all v1 fields present; 4 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "visits",
@@ -1965,26 +1931,6 @@
         }
       },
       "valueDeltas": [
-        {
-          "path": "hits[0].field",
-          "v1": "user.tags",
-          "v2": "user.tags.$feature"
-        },
-        {
-          "path": "hits[1].field",
-          "v1": "user.tags",
-          "v2": "user.tags.$feature"
-        },
-        {
-          "path": "hits[2].field",
-          "v1": "user.tags",
-          "v2": "user.tags.$feature"
-        },
-        {
-          "path": "hits[3].field",
-          "v1": "user.tags",
-          "v2": "user.tags.$feature"
-        },
         {
           "path": "hits[0].$p",
           "v1": 0.32034294621979736,

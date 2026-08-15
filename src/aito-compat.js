@@ -64,9 +64,28 @@ function normalizeRelated(related) {
  */
 function predictedFieldOf(request) {
   if (!isObj(request)) return undefined
-  if (typeof request.predict === 'string') return request.predict
-  if (typeof request.match === 'string') return request.match
-  return undefined
+  const target = typeof request.predict === 'string'
+    ? request.predict
+    : (typeof request.match === 'string' ? request.match : undefined)
+  if (target === undefined) return undefined
+  // `tags.$feature` is v2's spelling for what v1 expressed as
+  // `predict: 'tags', exclusiveness: false`. v1 reports `field: 'tags'`, so
+  // the `.$feature` suffix is stripped to keep the logical field name.
+  return target.replace(/\.\$feature$/, '')
+}
+
+/**
+ * True when the request asks for per-member scoring of a multi-valued field.
+ * v2 then returns each hit's `$value` as a single-element array, where v1's
+ * `feature` is the bare member — so consumers doing string work on `feature`
+ * would silently receive an array.
+ */
+function isFeatureTarget(request) {
+  if (!isObj(request)) return false
+  const target = typeof request.predict === 'string'
+    ? request.predict
+    : (typeof request.match === 'string' ? request.match : undefined)
+  return typeof target === 'string' && target.endsWith('.$feature')
 }
 
 /**
@@ -94,6 +113,7 @@ function addV1Aliases(data, request) {
 
   let out = data
   const field = predictedFieldOf(request)
+  const featureTarget = isFeatureTarget(request)
 
   if (Array.isArray(out.hits)) {
     out = {
@@ -101,7 +121,15 @@ function addV1Aliases(data, request) {
       hits: out.hits.map(hit => {
         if (!isObj(hit)) return hit
         let h = hit
-        if (!('feature' in h) && '$value' in h) h = { ...h, feature: h.$value }
+        if (!('feature' in h) && '$value' in h) {
+          // For a `.$feature` target v2 wraps each member in a one-element
+          // array; v1's `feature` is the bare member. Unwrap so consumers
+          // doing string work on `feature` keep working.
+          const value = (featureTarget && Array.isArray(h.$value) && h.$value.length === 1)
+            ? h.$value[0]
+            : h.$value
+          h = { ...h, feature: value }
+        }
         if (field !== undefined && !('field' in h)) h = { ...h, field }
         if (isObj(h.related)) {
           const related = normalizeRelated(h.related)
@@ -133,6 +161,8 @@ function normalize(payload, request) {
 // reads `module.exports = <literal>` as a set of named exports with no
 // default, which breaks `import compat from './aito-compat'`. `src/config.js`
 // uses this same shape, and is the precedent being followed here.
-const aitoCompat = { normalize, unwrapEnvelope, addV1Aliases, predictedFieldOf, isObj }
+const aitoCompat = {
+  normalize, unwrapEnvelope, addV1Aliases, predictedFieldOf, isFeatureTarget, isObj,
+}
 
 module.exports = aitoCompat
