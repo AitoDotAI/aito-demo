@@ -24,7 +24,7 @@ export function getDistinctValues(field) {
   const matchField = isArrayField ? `${field}.$feature` : field
 
   // Query the visits table to get distinct values for the specified field
-  return axios.post(`${config.aito.url}/api/v1/_match`, {
+  return axios.post(`${config.aito.apiBase}/_match`, {
     from: 'visits',           // Table to query
     match: matchField,        // Field to extract values from (use $feature for array fields)
     limit: 50                 // Get up to 50 distinct values

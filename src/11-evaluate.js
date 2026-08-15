@@ -15,7 +15,7 @@ import config from './config'
  */
 export async function evaluateModel(query) {
   try {
-    const url = `${config.aito.url}/api/v1/_evaluate`
+    const url = `${config.aito.apiBase}/_evaluate`
     
     console.log('Evaluating model with query:', JSON.stringify(query, null, 2))
     

@@ -11,7 +11,7 @@ import config from './config'
  */
 export function prompt(question) {
   // First, predict the type of prompt (question, feedback, or request)
-  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+  return axios.post(`${config.aito.apiBase}/_predict`, {
     "from": "prompts",
     "where" : {
       "prompt": question
@@ -26,7 +26,7 @@ export function prompt(question) {
       const top = result.data.hits[0]
       if (top.$p > 0.5) {
         if (top.feature === "question") {
-          return axios.post(`${config.aito.url}/api/v1/_query`, {
+          return axios.post(`${config.aito.apiBase}/_query`, {
             "from": "prompts",
             "where" : {
               "$nn": [{"prompt": question}]
@@ -50,7 +50,7 @@ export function prompt(question) {
           const fields = ["sentiment", "categories.$feature", "tags"]
           
           return Promise.all(fields.map(predicted => {
-            return axios.post(`${config.aito.url}/api/v1/_predict`, {
+            return axios.post(`${config.aito.apiBase}/_predict`, {
               from: 'prompts',
               where: {
                 "prompt": question,
@@ -79,7 +79,7 @@ export function prompt(question) {
             return rv
           })
         } else if (top.feature === "request") {
-          const assignee = axios.post(`${config.aito.url}/api/v1/_query`, {
+          const assignee = axios.post(`${config.aito.apiBase}/_query`, {
             from: 'prompts',
             where: {
               "prompt": question,
@@ -97,7 +97,7 @@ export function prompt(question) {
             return [top.$p, `${top.Name} (${top.Role})`]
           }) 
 
-          const categories = axios.post(`${config.aito.url}/api/v1/_predict`, {
+          const categories = axios.post(`${config.aito.apiBase}/_predict`, {
             from: {
               "from": 'prompts',
               "where": {
@@ -119,7 +119,7 @@ export function prompt(question) {
             return [top.$p, top.feature]
           }) 
 
-          const urgency = axios.post(`${config.aito.url}/api/v1/_predict`, {
+          const urgency = axios.post(`${config.aito.apiBase}/_predict`, {
             from: 'prompts',
             where: {
               "prompt": question,

@@ -14,7 +14,7 @@ import config from './config'
  * @returns {Promise<Object|null>} Predicted category object with value and confidence, or null
  */
 export function predictCategory(productName) {
-  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+  return axios.post(`${config.aito.apiBase}/_predict`, {
     from: 'products',
     where: {
       name: productName
@@ -52,7 +52,7 @@ export function predictCategory(productName) {
  * @returns {Promise<Object|null>} Predicted price object with value and confidence, or null
  */
 export function predictPrice(productName) {
-  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+  return axios.post(`${config.aito.apiBase}/_predict`, {
     from: 'products',
     where: {
       name: productName

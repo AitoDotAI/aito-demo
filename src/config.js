@@ -28,11 +28,15 @@ if (!aitoApiKey) {
 // instead of the default Rep1 / v1 path:
 //   <aitoUrl>/api/v1/...
 //
-// The companion env is created and populated by `upload-data-rep2.js`
+// The companion env is created and populated by `upload-data-v2.js`
 // with the collection-typed `schema-rep2.json`, so both paths can
 // coexist on the same Aito instance — flip the env var to switch.
+//
+// The env is named `v2` on shared.aito.ai. `REACT_APP_AITO_ENV`
+// overrides it; the default below must match the deployed env name
+// or the toggle points at an env that does not exist.
 const useRep2 = process.env.REACT_APP_USE_REP2 === 'true'
-const aitoEnvName = process.env.REACT_APP_AITO_ENV || (useRep2 ? 'rep2' : 'master')
+const aitoEnvName = process.env.REACT_APP_AITO_ENV || (useRep2 ? 'v2' : 'master')
 const aitoApiVersion = useRep2 ? 'v2' : 'v1'
 
 // `master` env paths use unprefixed `/api/...`; named envs use the
@@ -41,9 +45,10 @@ const envPath = (aitoEnvName && aitoEnvName !== 'master')
   ? `/env/${aitoEnvName}`
   : ''
 
-// Full base path for application API calls. Modules that previously
-// hardcoded `${config.aito.url}/api/v1/...` should switch to
-// `${config.aito.apiBase}/...` so a single env var flips all routes.
+// Full base path for application API calls. All 13 API modules route
+// through this, so a single env var flips every call between
+// v1/Rep1/master and v2/Rep2/`v2`. Do not reintroduce a hardcoded
+// `/api/v1/` path in a module — it silently opts that call out.
 const apiBase = `${aitoUrl}${envPath}/api/${aitoApiVersion}`
 
 // Environment configuration
@@ -69,9 +74,9 @@ const config = {
     url: aitoUrl,
     apiKey: aitoApiKey,
     // New (rep2-aware) routing surface.
-    apiBase,             // e.g. "https://.../api/v1" or "https://.../env/rep2/api/v2"
+    apiBase,             // e.g. "https://.../api/v1" or "https://.../env/v2/api/v2"
     apiVersion: aitoApiVersion,  // 'v1' | 'v2'
-    envName: aitoEnvName,        // 'master' | 'rep2' | …
+    envName: aitoEnvName,        // 'master' | 'v2' | …
     useRep2,
   },
   openai: openaiConfig,

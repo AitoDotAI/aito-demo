@@ -8,7 +8,7 @@ import config from './config'
  * @returns {Promise<Object>} - Product details from the database
  */
 export function getProductDetails(id){
-  return axios.post(`${config.aito.url}/api/v1/_query`,
+  return axios.post(`${config.aito.apiBase}/_query`,
     {
       from: 'products',
       where: { id: id },
@@ -27,7 +27,7 @@ export function getProductDetails(id){
  * @returns {Promise<Object>} - Array of all products with their details
  */
 export function getAllProducts(){
-  return axios.post(`${config.aito.url}/api/v1/_query`,
+  return axios.post(`${config.aito.apiBase}/_query`,
     {
       from: 'products',
       limit: 100
@@ -47,7 +47,7 @@ export function getAllProducts(){
  */
 export function getProductStats(id){
 
-  return axios.post(`${config.aito.url}/api/v1/_aggregate`, 
+  return axios.post(`${config.aito.apiBase}/_aggregate`, 
     {
       "from": "impressions",
       "where": {
@@ -85,7 +85,7 @@ export function getProductAnalytics(id){
     const product = (productResp.hits && productResp.hits[0]) || {}
     const { id: _ignored, ...productProps } = product
 
-    return axios.post(`${config.aito.url}/api/v1/_batch`,
+    return axios.post(`${config.aito.apiBase}/_batch`,
     [
       { // Which of this product's properties are over-represented in
         // purchases vs the baseline of all impressions?

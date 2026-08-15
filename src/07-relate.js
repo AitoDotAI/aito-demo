@@ -28,7 +28,7 @@ export function relate(field, value) {
   }
 
   // Step 1: Find statistical relationships using _relate endpoint
-  return axios.post(`${config.aito.url}/api/v1/_relate`, {
+  return axios.post(`${config.aito.apiBase}/_relate`, {
     "from": "visits",        // Analyze visitor session data
     "where": where,          // Filter by the specified field-value condition
     "relate": "purchases"    // Find relationships with the purchases field
@@ -45,7 +45,7 @@ export function relate(field, value) {
       })
 
       // Step 2: Get full product details for the related product IDs
-      return axios.post(`${config.aito.url}/api/v1/_query`, {
+      return axios.post(`${config.aito.apiBase}/_query`, {
         "from": "products",    // Query the products table
         "where": {
           "id": {

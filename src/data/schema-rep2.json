@@ -172,6 +172,40 @@
           "link": "glCodes.GLCode"
         }
       }
+    },
+
+    "price_history": {
+      "type": "collection",
+      "columns": {
+        "product_id"              : { "type": "String", "link": "products.id" },
+        "name"                    : { "type": "Text", "analyzer": "English" },
+        "category"                : { "type": "String" },
+        "category_name"           : { "type": "String" },
+        "brand"                   : { "type": "String" },
+        "tags"                    : { "type": "String[]" },
+        "timestamp"               : { "type": "String" },
+        "date"                    : { "type": "String" },
+        "week"                    : { "type": "Int" },
+        "month"                   : { "type": "Int" },
+        "year"                    : { "type": "Int" },
+        "day_of_week"             : { "type": "String" },
+        "is_weekend"              : { "type": "Boolean" },
+        "list_price"              : { "type": "Decimal" },
+        "sale_price"              : { "type": "Decimal" },
+        "discount_percentage"     : { "type": "Decimal" },
+        "purchase_cost"           : { "type": "Decimal" },
+        "margin_percentage"       : { "type": "Decimal" },
+        "units_sold"              : { "type": "Int" },
+        "units_in_stock"          : { "type": "Int" },
+        "days_since_delivery"     : { "type": "Int" },
+        "days_until_expiry"       : { "type": "Int" },
+        "competitor_avg_price"    : { "type": "Decimal" },
+        "category_products_count" : { "type": "Int" },
+        "similar_products_on_sale": { "type": "Int" },
+        "weather_temp"            : { "type": "Decimal" },
+        "is_holiday_week"         : { "type": "Boolean" },
+        "promotional_placement"   : { "type": "String" }
+      }
     }
   }
 }

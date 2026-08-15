@@ -29,7 +29,7 @@ export function getProductSearchResults(userId, inputValue) {
   }
 
   // Execute Aito query with personalized ranking
-  return axios.post(`${config.aito.url}/api/v1/_query`, {
+  return axios.post(`${config.aito.apiBase}/_query`, {
     from: 'impressions',      // Query the impressions table (product views)
     where: where,             // Apply search and user filters
     get: 'product',           // Extract product information

@@ -23,7 +23,7 @@ import config from './config'
  * @returns {Promise<Array>} Array of products with id, name, category
  */
 export function getPriceProducts() {
-  return axios.post(`${config.aito.url}/api/v1/_query`,
+  return axios.post(`${config.aito.apiBase}/_query`,
     {
       from: 'price_history',
       get: 'product_id',
@@ -57,7 +57,7 @@ export function getPriceProducts() {
  * @returns {Promise<Array>} Array of distinct values
  */
 export function getPriceFieldValues(fieldName) {
-  return axios.post(`${config.aito.url}/api/v1/_query`,
+  return axios.post(`${config.aito.apiBase}/_query`,
     {
       from: 'price_history',
       get: fieldName,
@@ -79,7 +79,7 @@ export function getPriceFieldValues(fieldName) {
  * @returns {Promise<Object>} Product context with all fields
  */
 export function getProductPriceContext(productId) {
-  return axios.post(`${config.aito.url}/api/v1/_query`,
+  return axios.post(`${config.aito.apiBase}/_query`,
     {
       from: 'price_history',
       where: { product_id: productId },
@@ -108,7 +108,7 @@ export function getProductPriceContext(productId) {
  * @returns {Promise<Object>} Estimation result with neighbors
  */
 export function estimatePrice(whereConditions) {
-  return axios.post(`${config.aito.url}/api/v1/_estimate`,
+  return axios.post(`${config.aito.apiBase}/_estimate`,
     {
       from: 'price_history',
       where: whereConditions,
@@ -136,7 +136,7 @@ export function estimatePrice(whereConditions) {
  * @returns {Promise<Object>} Estimation result with neighbors
  */
 export function estimateDemand(whereConditions) {
-  return axios.post(`${config.aito.url}/api/v1/_estimate`,
+  return axios.post(`${config.aito.apiBase}/_estimate`,
     {
       from: 'price_history',
       where: whereConditions,
@@ -161,7 +161,7 @@ export function estimateDemand(whereConditions) {
  * @returns {Promise<Object>} Estimation result with regression explanation
  */
 export function estimatePriceRegression(whereConditions) {
-  return axios.post(`${config.aito.url}/api/v1/_estimate`,
+  return axios.post(`${config.aito.apiBase}/_estimate`,
     {
       from: 'price_history',
       where: whereConditions,
@@ -187,7 +187,7 @@ export function estimatePriceRegression(whereConditions) {
  * @returns {Promise<Object>} Estimation result with regression explanation
  */
 export function estimateDemandRegression(whereConditions) {
-  return axios.post(`${config.aito.url}/api/v1/_estimate`,
+  return axios.post(`${config.aito.apiBase}/_estimate`,
     {
       from: 'price_history',
       where: whereConditions,
@@ -211,7 +211,7 @@ export function estimateDemandRegression(whereConditions) {
  * @returns {Promise<Array>} Historical data points
  */
 export function getPriceHistory(productId, limit = 365) {
-  return axios.post(`${config.aito.url}/api/v1/_query`,
+  return axios.post(`${config.aito.apiBase}/_query`,
     {
       from: 'price_history',
       where: { product_id: productId },
@@ -243,7 +243,7 @@ export function getPriceHistory(productId, limit = 365) {
  * @returns {Promise<Object>} Statistics including avg price, demand, etc.
  */
 export function getPriceStats(productId) {
-  return axios.post(`${config.aito.url}/api/v1/_aggregate`,
+  return axios.post(`${config.aito.apiBase}/_aggregate`,
     {
       from: 'price_history',
       where: { product_id: productId },

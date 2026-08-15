@@ -15,7 +15,7 @@ import config from './config'
  */
 export function getTagSuggestions(productName) {
   // Use Aito's _predict endpoint to find likely tags
-  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+  return axios.post(`${config.aito.apiBase}/_predict`, {
     from: 'products',        // Look at the products table
     where: {
       name: productName      // For products with this name

@@ -11,7 +11,7 @@ import config from './config'
  * @returns {Promise<Array>} Array of complete product objects
  */
 export function getProductsByIds(ids) {
-  return axios.post(`${config.aito.url}/api/v1/_query`, {
+  return axios.post(`${config.aito.apiBase}/_query`, {
     "from": "products",     // Query the products table
     "where" : {
       "id": {
@@ -50,8 +50,8 @@ export function getAutoFill(userId) {
   console.log(`getAutoFill: Query where clause:`, where);
 
   // Predict future purchases based on historical patterns
-  console.log(`getAutoFill: Making API call to ${config.aito.url}/api/v1/_predict`);
-  return axios.post(`${config.aito.url}/api/v1/_predict`, {
+  console.log(`getAutoFill: Making API call to ${config.aito.apiBase}/_predict`);
+  return axios.post(`${config.aito.apiBase}/_predict`, {
     "from": "visits",        // Analyze visit/session data
     "where" : where,         // Filter by user if specified
     "predict":"purchases",   // Predict the purchases field (array of product IDs)

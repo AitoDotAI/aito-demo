@@ -44,7 +44,7 @@ export function predictInvoice(input, output) {
     })
 
     // Execute the prediction
-    return axios.post(`${config.aito.url}/api/v1/_predict`, {
+    return axios.post(`${config.aito.apiBase}/_predict`, {
       from: 'invoices',       // Analyze historical invoice data
       where: input,           // Use invoice details as input context
       predict: predicted,     // Field to predict (Processor/Acceptor/GLCode)

@@ -32,7 +32,7 @@ export function getAutoComplete(userId, prefix) {
   }
   
   // Query historical search contexts
-  return axios.post(`${config.aito.url}/api/v1/_query`, {
+  return axios.post(`${config.aito.apiBase}/_query`, {
     from: 'contexts',        // Table containing search history
     where: where,            // Apply prefix and user filters
     get: 'queryPhrase',      // Extract the search phrases
