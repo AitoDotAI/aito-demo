@@ -193,3 +193,25 @@ describe('normalize: .$feature targets', () => {
     expect(out.hits[0].feature).toEqual(['gluten', 'bread'])
   })
 })
+
+describe('normalize: server-supplied `field` (aito-core#1063)', () => {
+  // Since #1063, v2 _match returns `field` itself — but spelled with the v2
+  // suffix, where v1 reports the logical name. Real shapes:
+  //   v1 _match -> field: 'user.tags'
+  //   v2 _match -> field: 'user.tags.$feature'
+  it('normalises a server-supplied .$feature spelling to the v1 name', () => {
+    const v2 = {
+      offset: 0,
+      total: 4,
+      hits: [{ $p: 0.32, $value: 'male', feature: 'male', field: 'user.tags.$feature' }],
+    }
+    const out = normalize(v2, { from: 'visits', match: 'user.tags.$feature' })
+    expect(out.hits[0].field).toBe('user.tags')
+  })
+
+  it('leaves a v1 field alone', () => {
+    const v1 = { offset: 0, total: 4, hits: [{ $p: 0.32, feature: 'male', field: 'user.tags' }] }
+    expect(normalize(v1, { from: 'visits', match: 'user.tags.$feature' }).hits[0].field)
+      .toBe('user.tags')
+  })
+})

@@ -130,7 +130,15 @@ function addV1Aliases(data, request) {
             : h.$value
           h = { ...h, feature: value }
         }
-        if (field !== undefined && !('field' in h)) h = { ...h, field }
+        // `field` may be absent (v2 _predict) or present but spelled with the
+        // v2 `.$feature` suffix (v2 _match, since aito-core#1063). v1 reports
+        // the logical field name in both cases, so fill it when missing and
+        // normalise it when the server supplies the v2 spelling.
+        if (typeof h.field === 'string' && h.field.endsWith('.$feature')) {
+          h = { ...h, field: h.field.replace(/\.\$feature$/, '') }
+        } else if (field !== undefined && !('field' in h)) {
+          h = { ...h, field }
+        }
         if (isObj(h.related)) {
           const related = normalizeRelated(h.related)
           if (related !== h.related) h = { ...h, related }

@@ -66,6 +66,28 @@ export function nonExclusivePredict(field) {
 }
 
 /**
+ * `select` for a DEFAULT-model (KNN) `_estimate`.
+ *
+ * v1 returns a rich `why` whose `components[].value` are objects carrying
+ * `instance`, `hitScore`, `original` and `adjustments` — which PricingPage's
+ * extractNeighbors() renders as the neighbour table.
+ *
+ * v2 returns scalars there, so extractNeighbors' `component.value.instance`
+ * guard already skipped every component and the table came out empty. As of
+ * the 2026-08-31 build it is worse than useless: asking for `why` on a KNN
+ * estimate over `price_history` on rep2 returns 502 Bad Gateway (an nginx
+ * page, not the JSON error envelope) for every where-clause and every target
+ * column, while `products` and `invoices` answer 200. Filed upstream.
+ *
+ * So `why` is requested only where it can be rendered. The regression-model
+ * estimates keep asking for it on both versions — that path is not affected
+ * and its `why` is what the explanation tooltip parses.
+ */
+export function knnWhySelect() {
+  return isV2() ? [estimateSelect()] : [estimateSelect(), 'why']
+}
+
+/**
  * POST an Aito query and return the normalised response payload directly
  * (not the axios response), because every caller wants the body.
  *

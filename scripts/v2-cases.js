@@ -273,16 +273,20 @@ const CASES = [
       estimate: 'sale_price',
       select: ['estimate', 'why'],
     },
+    // v2 omits `why` here: its KNN components are scalars that PricingPage's
+    // extractNeighbors() already skipped, and as of the 2026-08-31 build
+    // asking for it over price_history on rep2 returns 502. Matches
+    // knnWhySelect() in src/aito-client.js.
     bodyV2: {
       from: 'price_history',
       where: { category: '100' },
       estimate: 'sale_price',
-      select: ['value', 'why'],
+      select: ['value'],
     },
     // The KNN why is a weightedAverage whose components are rich objects on
     // v1 and plain numbers on v2. Nothing parses this one (PricingPage parses
     // only the regression why), so the loss is recorded, not blocking.
-    accept: 'v2 KNN why components are scalars, not objects; unparsed by the app',
+    accept: 'v2 KNN why is not requested (502 on rep2/price_history); v1-only neighbour table',
   },
   {
     id: '12-estimate-demand',

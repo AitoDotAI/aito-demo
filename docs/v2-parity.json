@@ -1,11 +1,11 @@
 {
-  "capturedAt": "2026-08-15T20:05:02.832Z",
+  "capturedAt": "2026-09-06T08:32:05.153Z",
   "coreBuild": "TODO:antti-wire",
   "v1Base": "https://shared.aito.ai/db/aito-demo/api/v1",
   "v2Base": "https://shared.aito.ai/db/aito-demo/env/v2/api/v2",
   "tally": {
-    "VALUES": 23,
-    "ACCEPTED": 4
+    "VALUES": 24,
+    "ACCEPTED": 3
   },
   "cases": [
     {
@@ -13,7 +13,7 @@
       "source": "src/01-recommend.js:27",
       "endpoint": "_recommend",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 27 value(s) differ (17 non-numeric)",
+      "detail": "all v1 fields present; 28 value(s) differ (19 non-numeric)",
       "note": null,
       "requestV1": {
         "from": "impressions",
@@ -99,26 +99,25 @@
           "total": 42,
           "hits": [
             {
-              "name": "Ilta Sanomat weekend news",
-              "$p": 0.14300411522599948,
+              "name": "Lotus Soft Embo 8 rll toilet paper",
+              "$p": 0.10520023909105977,
               "tags": [
-                "news"
+                "toilet-paper"
               ],
-              "price": 2.3,
-              "id": "6414880021620",
-              "$value": "6414880021620"
+              "price": 3.35,
+              "id": "6413200330206",
+              "$value": "6413200330206"
             },
             {
-              "name": "Pirkka banana",
-              "$p": 0.11433447098953686,
+              "name": "Pirkka paper towel 4 rl",
+              "$p": 0.10417892878124956,
               "tags": [
-                "fresh",
-                "fruit",
+                "paper-towels",
                 "pirkka"
               ],
-              "price": 0.166,
-              "id": "2000818700008",
-              "$value": "2000818700008"
+              "price": 1.95,
+              "id": "6410405207722",
+              "$value": "6410405207722"
             }
           ],
           "_hitsTruncatedFrom": 5
@@ -128,42 +127,42 @@
         {
           "path": "hits[0].name",
           "v1": "Pirkka banana",
-          "v2": "Ilta Sanomat weekend news"
+          "v2": "Lotus Soft Embo 8 rll toilet paper"
         },
         {
           "path": "hits[0].id",
           "v1": "2000818700008",
-          "v2": "6414880021620"
+          "v2": "6413200330206"
         },
         {
           "path": "hits[0].tags[0]",
           "v1": "fresh",
-          "v2": "news"
+          "v2": "toilet-paper"
         },
         {
           "path": "hits[1].name",
           "v1": "Lotus Soft Embo 8 rll toilet paper",
-          "v2": "Pirkka banana"
+          "v2": "Pirkka paper towel 4 rl"
         },
         {
           "path": "hits[1].id",
           "v1": "6413200330206",
-          "v2": "2000818700008"
+          "v2": "6410405207722"
         },
         {
           "path": "hits[1].tags[0]",
           "v1": "toilet-paper",
-          "v2": "fresh"
+          "v2": "paper-towels"
         },
         {
           "path": "hits[2].name",
           "v1": "Pirkka paper towel 4 rl",
-          "v2": "Lotus Soft Embo 8 rll toilet paper"
+          "v2": "Chiquita banana"
         },
         {
           "path": "hits[2].id",
           "v1": "6410405207722",
-          "v2": "6413200330206"
+          "v2": "2000503600002"
         }
       ],
       "missingOnV2": null,
@@ -234,11 +233,11 @@
           "total": 118,
           "hits": [
             {
-              "$p": 0.5834667619934205,
+              "$p": 0.9528291456720507,
               "$value": "soft drink"
             },
             {
-              "$p": 0.39593492670097463,
+              "$p": 0.033981327839731255,
               "$value": "soda"
             }
           ],
@@ -259,12 +258,12 @@
         {
           "path": "hits[0].$p",
           "v1": 0.8498709425919861,
-          "v2": 0.5834667619934205
+          "v2": 0.9528291456720507
         },
         {
           "path": "hits[1].$p",
           "v1": 0.15012905740801394,
-          "v2": 0.39593492670097463
+          "v2": 0.033981327839731255
         }
       ],
       "missingOnV2": null,
@@ -882,7 +881,7 @@
       "source": "src/06-prompt.js:44",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 2 value(s) differ (1 non-numeric)",
+      "detail": "all v1 fields present; 1 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "prompts",
@@ -912,7 +911,7 @@
           "total": 3,
           "hits": [
             {
-              "$p": 0.9351863150863385,
+              "$p": 0.9353155953859524,
               "field": "sentiment",
               "feature": "negative"
             }
@@ -927,8 +926,8 @@
           "total": 3,
           "hits": [
             {
-              "$p": 0.4292052432642505,
-              "$value": "neutral"
+              "$p": 0.9395196002105684,
+              "$value": "negative"
             }
           ],
           "_hitsTruncatedFrom": 1
@@ -936,14 +935,9 @@
       },
       "valueDeltas": [
         {
-          "path": "hits[0].feature",
-          "v1": "negative",
-          "v2": "neutral"
-        },
-        {
           "path": "hits[0].$p",
-          "v1": 0.9351863150863385,
-          "v2": 0.4292052432642505
+          "v1": 0.9353155953859524,
+          "v2": 0.9395196002105684
         }
       ],
       "missingOnV2": null,
@@ -984,12 +978,12 @@
           "total": 3,
           "hits": [
             {
-              "$p": 0.375264341612712,
+              "$p": 0.37384632021785924,
               "field": "urgency",
               "feature": "low"
             },
             {
-              "$p": 0.32347074914654717,
+              "$p": 0.3224863953304342,
               "field": "urgency",
               "feature": "medium"
             }
@@ -1004,11 +998,11 @@
           "total": 3,
           "hits": [
             {
-              "$p": 0.34951456310679613,
+              "$p": 0.39867703535669274,
               "$value": "high"
             },
             {
-              "$p": 0.34951456310679613,
+              "$p": 0.30587864578604684,
               "$value": "medium"
             }
           ],
@@ -1028,18 +1022,18 @@
         },
         {
           "path": "hits[0].$p",
-          "v1": 0.375264341612712,
-          "v2": 0.34951456310679613
+          "v1": 0.37384632021785924,
+          "v2": 0.39867703535669274
         },
         {
           "path": "hits[1].$p",
-          "v1": 0.32347074914654717,
-          "v2": 0.34951456310679613
+          "v1": 0.3224863953304342,
+          "v2": 0.30587864578604684
         },
         {
           "path": "hits[2].$p",
-          "v1": 0.3012649092407409,
-          "v2": 0.30097087378640774
+          "v1": 0.3036672844517066,
+          "v2": 0.2954443188572605
         }
       ],
       "missingOnV2": null,
@@ -1186,6 +1180,12 @@
             {
               "n": 733,
               "info": 0.0014352117728345382,
+              "ps": {
+                "p": 0.13233287858117326,
+                "pOnCondition": 0.07784431137724551,
+                "pOnNotCondition": 0.14840989399293286,
+                "pCondition": 0.22783083219645292
+              },
               "condition": {
                 "user.tags": {
                   "$has": "young"
@@ -1208,6 +1208,12 @@
             {
               "n": 733,
               "info": 0.0010378553492037847,
+              "ps": {
+                "p": 0.07094133697135062,
+                "pOnCondition": 0.10778443113772455,
+                "pOnNotCondition": 0.06007067137809187,
+                "pCondition": 0.22783083219645292
+              },
               "condition": {
                 "user.tags": {
                   "$has": "young"
@@ -1233,10 +1239,10 @@
       },
       "valueDeltas": null,
       "missingOnV2": [
-        "hits[0].ps",
         "hits[0].info (v2 is not an object)",
         "hits[0].relation",
-        "hits[1].ps"
+        "hits[1].info (v2 is not an object)",
+        "hits[1].relation"
       ],
       "accepted": "v2 omits ps/relation/info-object; no consumer reads them"
     },
@@ -1652,6 +1658,12 @@
             {
               "n": 90325,
               "info": 0.0029191424504184478,
+              "ps": {
+                "p": 0.05878771104345419,
+                "pOnCondition": 0.13447537473233404,
+                "pOnNotCondition": 0.05466114062226373,
+                "pCondition": 0.05170218654857459
+              },
               "condition": {
                 "purchase": true
               },
@@ -1670,6 +1682,12 @@
             {
               "n": 90325,
               "info": 0.002738233741426137,
+              "ps": {
+                "p": 0.15938001660669804,
+                "pOnCondition": 0.2657387580299786,
+                "pOnNotCondition": 0.1535812270153523,
+                "pCondition": 0.05170218654857459
+              },
               "condition": {
                 "purchase": true
               },
@@ -1771,6 +1789,12 @@
             {
               "n": 733,
               "info": 0.0016177033276203933,
+              "ps": {
+                "p": 0.17871759890859482,
+                "pOnCondition": 0.09,
+                "pOnNotCondition": 0.19273301737756715,
+                "pCondition": 0.1364256480218281
+              },
               "condition": {
                 "purchases": {
                   "$has": "6410405082657"
@@ -1793,6 +1817,12 @@
             {
               "n": 733,
               "info": 0.0012174040175623613,
+              "ps": {
+                "p": 0.22237380627557982,
+                "pOnCondition": 0.31,
+                "pOnNotCondition": 0.20853080568720378,
+                "pCondition": 0.1364256480218281
+              },
               "condition": {
                 "purchases": {
                   "$has": "6410405082657"
@@ -1920,11 +1950,15 @@
           "hits": [
             {
               "$p": 0.5523574000014585,
-              "$value": "male"
+              "$value": "male",
+              "feature": "male",
+              "field": "user.tags.$feature"
             },
             {
               "$p": 0.5106223702799423,
-              "$value": "club-member"
+              "$value": "club-member",
+              "feature": "club-member",
+              "field": "user.tags.$feature"
             }
           ],
           "_hitsTruncatedFrom": 4
@@ -2032,7 +2066,7 @@
           "accuracy": 1,
           "baseAccuracy": 0.12903225806451613,
           "accuracyGain": 0.8709677419354839,
-          "meanRank": 1
+          "meanRank": 0
         }
       },
       "valueDeltas": [
@@ -2054,7 +2088,7 @@
         {
           "path": "meanRank",
           "v1": 1.1818181818181819,
-          "v2": 1
+          "v2": 0
         }
       ],
       "missingOnV2": null,
@@ -2065,7 +2099,7 @@
       "source": "src/11-evaluate.js:18",
       "endpoint": "_evaluate",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 3 numeric value(s) differ",
+      "detail": "all v1 fields present; 2 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "test": {
@@ -2137,7 +2171,7 @@
           "accuracy": 1,
           "baseAccuracy": 0.4933333333333334,
           "accuracyGain": 0.5066666666666666,
-          "meanRank": 1
+          "meanRank": 0
         }
       },
       "valueDeltas": [
@@ -2150,11 +2184,6 @@
           "path": "accuracyGain",
           "v1": 0.5,
           "v2": 0.5066666666666666
-        },
-        {
-          "path": "meanRank",
-          "v1": 0,
-          "v2": 1
         }
       ],
       "missingOnV2": null,
@@ -2165,7 +2194,7 @@
       "source": "src/12-price-estimation.js:111",
       "endpoint": "_estimate",
       "verdict": "ACCEPTED",
-      "detail": "v2 KNN why components are scalars, not objects; unparsed by the app",
+      "detail": "v2 KNN why is not requested (502 on rep2/price_history); v1-only neighbour table",
       "note": null,
       "requestV1": {
         "from": "price_history",
@@ -2185,8 +2214,7 @@
         },
         "estimate": "sale_price",
         "select": [
-          "value",
-          "why"
+          "value"
         ]
       },
       "bodiesDiffer": true,
@@ -82305,50 +82333,21 @@
       "v2": {
         "status": 200,
         "sample": {
-          "value": 1.5646392649872496,
-          "why": {
-            "type": "weightedAverage",
-            "value": 1.5646392649872496,
-            "components": [
-              {
-                "weight": 0.0029093720703136025,
-                "value": 0.13
-              },
-              {
-                "weight": 0.0022282991754641376,
-                "value": 0.14
-              },
-              {
-                "weight": 0.0017930126089037593,
-                "value": 0.22
-              },
-              {
-                "weight": 0.0015622770669669528,
-                "value": 1.02
-              },
-              {
-                "weight": 0.0015390636876817167,
-                "value": 0.73
-              }
-            ]
-          }
+          "value": 0.5653166966475585
         }
       },
       "valueDeltas": null,
       "missingOnV2": [
-        "why.components[0].value (v2 is not an object)",
-        "why.components[1].value (v2 is not an object)",
-        "why.components[2].value (v2 is not an object)",
-        "why.components[3].value (v2 is not an object)"
+        "why"
       ],
-      "accepted": "v2 KNN why components are scalars, not objects; unparsed by the app"
+      "accepted": "v2 KNN why is not requested (502 on rep2/price_history); v1-only neighbour table"
     },
     {
       "id": "12-estimate-demand",
       "source": "src/12-price-estimation.js:139",
       "endpoint": "_estimate",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 1 numeric value(s) differ",
+      "detail": "all v1 fields present; 0 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "price_history",
@@ -82382,16 +82381,10 @@
       "v2": {
         "status": 200,
         "sample": {
-          "value": 172.4577615762113
+          "value": 180.02598428215978
         }
       },
-      "valueDeltas": [
-        {
-          "path": "estimate",
-          "v1": 180.02598428215978,
-          "v2": 172.4577615762113
-        }
-      ],
+      "valueDeltas": [],
       "missingOnV2": null,
       "accepted": null
     },
@@ -82399,8 +82392,8 @@
       "id": "12-estimate-price-regression",
       "source": "src/12-price-estimation.js:153 (estimatePriceRegression)",
       "endpoint": "_estimate",
-      "verdict": "ACCEPTED",
-      "detail": "v2 why lacks power.terms; tooltip is suppressed by the existing render guard",
+      "verdict": "VALUES",
+      "detail": "all v1 fields present; 0 numeric value(s) differ",
       "note": "estimates agree; v2 why has no per-field terms (explainability gap)",
       "requestV1": {
         "from": "price_history",
@@ -82483,38 +82476,52 @@
         "sample": {
           "value": 0.5639507229956915,
           "why": {
-            "type": "regression",
+            "type": "exponent",
             "value": 0.5639507229956915,
-            "neighbours": [
-              {
-                "value": 0.1725748013498833,
-                "adjusted": 0.17257480134988334
-              },
-              {
-                "value": 0.17051417094871676,
-                "adjusted": 0.17009158343133202
-              },
-              {
-                "value": 0.1603744338471435,
-                "adjusted": 0.1602863460602223
-              },
-              {
-                "value": 0.1832698061267497,
-                "adjusted": 0.1822359555102992
-              },
-              {
-                "value": 0.16185244225621184,
-                "adjusted": 0.16125889647401412
-              }
-            ]
+            "base": {
+              "type": "constant",
+              "value": 2.718281828459045
+            },
+            "power": {
+              "type": "sum",
+              "terms": [
+                {
+                  "type": "input",
+                  "name": "residual",
+                  "value": 0
+                },
+                {
+                  "type": "regression",
+                  "proposition": {
+                    "day_of_week": "Monday"
+                  },
+                  "value": -0.0024192220448732995,
+                  "regressionType": "categorical",
+                  "residual": null,
+                  "operation": "restoration"
+                },
+                {
+                  "type": "regression",
+                  "proposition": {
+                    "category": "100"
+                  },
+                  "value": -0.8273437954234466,
+                  "regressionType": "categorical",
+                  "residual": null,
+                  "operation": "restoration"
+                },
+                {
+                  "type": "mean centering",
+                  "name": "mean",
+                  "value": 0.2569746155921957
+                }
+              ]
+            }
           }
         }
       },
-      "valueDeltas": null,
-      "missingOnV2": [
-        "why.base",
-        "why.power"
-      ],
+      "valueDeltas": [],
+      "missingOnV2": null,
       "accepted": "v2 why lacks power.terms; tooltip is suppressed by the existing render guard"
     },
     {
@@ -82781,7 +82788,7 @@
       "source": "src/13-product-predictions.js:17",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 6 value(s) differ (3 non-numeric)",
+      "detail": "all v1 fields present; 4 value(s) differ (1 non-numeric)",
       "note": null,
       "requestV1": {
         "from": "products",
@@ -82831,12 +82838,12 @@
           "total": 11,
           "hits": [
             {
-              "$p": 0.11320754716981135,
-              "$value": "100"
+              "$p": 0.6004437339673327,
+              "$value": "104"
             },
             {
-              "$p": 0.11320754716981135,
-              "$value": "101"
+              "$p": 0.16367151319545786,
+              "$value": "109"
             }
           ],
           "_hitsTruncatedFrom": 3
@@ -82844,34 +82851,24 @@
       },
       "valueDeltas": [
         {
-          "path": "hits[0].feature",
-          "v1": "104",
-          "v2": "100"
-        },
-        {
-          "path": "hits[1].feature",
-          "v1": "109",
-          "v2": "101"
-        },
-        {
           "path": "hits[2].feature",
           "v1": "100",
-          "v2": "102"
+          "v2": "101"
         },
         {
           "path": "hits[0].$p",
           "v1": 0.6304223622031753,
-          "v2": 0.11320754716981135
+          "v2": 0.6004437339673327
         },
         {
           "path": "hits[1].$p",
           "v1": 0.14015376361777845,
-          "v2": 0.11320754716981135
+          "v2": 0.16367151319545786
         },
         {
           "path": "hits[2].$p",
           "v1": 0.02747220787905368,
-          "v2": 0.11320754716981135
+          "v2": 0.030022722609709965
         }
       ],
       "missingOnV2": null,
@@ -82882,7 +82879,7 @@
       "source": "src/13-product-predictions.js:55",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 6 numeric value(s) differ",
+      "detail": "all v1 fields present; 3 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "products",
@@ -82932,12 +82929,12 @@
           "total": 32,
           "hits": [
             {
-              "$p": 0.054054054054054036,
-              "$value": 1.29
+              "$p": 0.058126566729715945,
+              "$value": 1.95
             },
             {
-              "$p": 0.054054054054054036,
-              "$value": 1.69
+              "$p": 0.05307003299198432,
+              "$value": 1.29
             }
           ],
           "_hitsTruncatedFrom": 3
@@ -82947,32 +82944,17 @@
         {
           "path": "hits[0].$p",
           "v1": 0.05719791252307779,
-          "v2": 0.054054054054054036
-        },
-        {
-          "path": "hits[0].feature",
-          "v1": 1.95,
-          "v2": 1.29
+          "v2": 0.058126566729715945
         },
         {
           "path": "hits[1].$p",
           "v1": 0.05215372050321439,
-          "v2": 0.054054054054054036
-        },
-        {
-          "path": "hits[1].feature",
-          "v1": 1.29,
-          "v2": 1.69
+          "v2": 0.05307003299198432
         },
         {
           "path": "hits[2].$p",
           "v1": 0.05215372050321439,
-          "v2": 0.054054054054054036
-        },
-        {
-          "path": "hits[2].feature",
-          "v1": 1.69,
-          "v2": 1.95
+          "v2": 0.05307003299198432
         }
       ],
       "missingOnV2": null,
