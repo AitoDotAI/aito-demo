@@ -8,11 +8,7 @@
  * and a fabricated fixture could not demonstrate that.
  */
 
-const {
-  normalize,
-  unwrapEnvelope,
-  predictedFieldOf,
-} = require('../../aito-compat')
+import { normalize, unwrapEnvelope, predictedFieldOf } from '../../aito-compat.mjs'
 
 describe('unwrapEnvelope', () => {
   it('unwraps the {kind, data} envelope v2 puts on scalar endpoints', () => {

@@ -40,7 +40,7 @@ const { CASES } = require('./v2-cases')
 // payloads is the question that matters: not "do the two APIs agree", but
 // "does the app see the same thing on either". Sharing the module means the
 // harness cannot certify a normalisation the app does not actually perform.
-const { normalize } = require('../src/aito-compat')
+const { normalize } = require('../src/aito-compat.mjs')
 
 const MARKER = 'TODO:antti-wire'
 

@@ -1,18 +1,27 @@
 /**
  * v1 <-> v2 response normalisation, shared by the app and the parity harness.
  *
- * CommonJS on purpose: `src/aito-client.js` imports it as an ES module (CRA
- * handles the interop, same as `src/config.js`), and `scripts/v2-parity.js`
- * requires it directly under plain Node. Both therefore exercise the exact
- * same code, so the harness verifies the normalisation the app actually
- * performs rather than a second implementation that could drift from it.
+ * `.mjs`, and unambiguously an ES module, on purpose. It has three consumers
+ * with three module systems, and leaving it as a `.js` CommonJS file made
+ * webpack apply ESM semantics to it anyway — `module.exports =` then threw
+ * "ES Modules may not assign module.exports" in the browser at runtime, which
+ * `npm run build` compiles without complaint. The explicit extension makes
+ * every loader agree:
+ *
+ *   webpack  `import { normalize } from './aito-compat.mjs'`
+ *   jest     the CRA transform covers .mjs; the explicit path resolves
+ *   node     `require()` of an ES module, supported on Node >= 22.12
+ *            (this repo's shell.nix pins nodejs_22)
+ *
+ * Sharing one module means the harness verifies the normalisation the app
+ * actually performs, rather than a second implementation that could drift.
  *
  * The direction is always v2 -> v1: the app was written against v1, so v2
  * responses are given back their v1 field names. Aliases are additive, never
  * destructive — the v2 names survive alongside them.
  */
 
-const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v)
+export const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v)
 
 /**
  * v2 wraps the scalar-returning endpoints (`_aggregate`, `_estimate`,
@@ -23,7 +32,7 @@ const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v)
  * Detected structurally rather than by endpoint name, so an endpoint that
  * gains or loses the wrapper later needs no change here.
  */
-function unwrapEnvelope(payload) {
+export function unwrapEnvelope(payload) {
   if (isObj(payload)
     && typeof payload.kind === 'string'
     && Object.prototype.hasOwnProperty.call(payload, 'data')
@@ -39,7 +48,7 @@ function unwrapEnvelope(payload) {
  * the single accessor `related[field].$has` working on both — which is what
  * the pages already read.
  */
-function normalizeRelated(related) {
+export function normalizeRelated(related) {
   const out = {}
   let changed = false
   for (const [field, value] of Object.entries(related)) {
@@ -62,7 +71,7 @@ function normalizeRelated(related) {
  * Returns undefined for requests that have no such parameter, in which case
  * no `field` is added.
  */
-function predictedFieldOf(request) {
+export function predictedFieldOf(request) {
   if (!isObj(request)) return undefined
   const target = typeof request.predict === 'string'
     ? request.predict
@@ -80,7 +89,7 @@ function predictedFieldOf(request) {
  * `feature` is the bare member — so consumers doing string work on `feature`
  * would silently receive an array.
  */
-function isFeatureTarget(request) {
+export function isFeatureTarget(request) {
   if (!isObj(request)) return false
   const target = typeof request.predict === 'string'
     ? request.predict
@@ -101,7 +110,7 @@ function isFeatureTarget(request) {
  * @param {object|Array} [request] - the request body, used only to restore
  *   `field`. Omit it and `field` is simply not added.
  */
-function addV1Aliases(data, request) {
+export function addV1Aliases(data, request) {
   // `_batch` returns an array of results, one per request in the batch.
   if (Array.isArray(data)) {
     return data.map((entry, i) => addV1Aliases(
@@ -161,16 +170,7 @@ function addV1Aliases(data, request) {
  * @param {*} payload - the raw response body
  * @param {object|Array} [request] - the request body that produced it
  */
-function normalize(payload, request) {
+export function normalize(payload, request) {
   return addV1Aliases(unwrapEnvelope(payload), request)
 }
 
-// Exported via a named binding rather than an inline object literal: webpack
-// reads `module.exports = <literal>` as a set of named exports with no
-// default, which breaks `import compat from './aito-compat'`. `src/config.js`
-// uses this same shape, and is the precedent being followed here.
-const aitoCompat = {
-  normalize, unwrapEnvelope, addV1Aliases, predictedFieldOf, isFeatureTarget, isObj,
-}
-
-module.exports = aitoCompat

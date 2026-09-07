@@ -1,11 +1,6 @@
 import axios from 'axios'
 import config from './config'
-// `aito-compat` is CommonJS so that `scripts/v2-parity.js` can require it
-// under plain Node. Webpack's ESM interop will not give it a default export,
-// so it is pulled in with `require` rather than `import` — the app and the
-// harness then run byte-identical normalisation code.
-// eslint-disable-next-line
-const { normalize } = require('./aito-compat')
+import { normalize } from './aito-compat.mjs'
 
 /**
  * Transport + v1/v2 compatibility layer for every Aito call in the app.
