@@ -61,6 +61,47 @@ export function nonExclusivePredict(field) {
 }
 
 /**
+ * The `_relate` arguments for "which of THIS product's property values are
+ * over-represented in purchases, against the baseline of all impressions".
+ *
+ * v1 answers that question directly: given the nested proposition object
+ * `{product: {...its properties}}` it enumerates one proposition per property
+ * value of that product. Cheap, exact, and it is what the deployed demo has
+ * always shown.
+ *
+ * v2 rejects the nested form, and its flat dotted equivalent ANDs the
+ * properties into a single condition — a different question. The closest v2
+ * form is the array of FIELD names, but that ranks propositions across the
+ * whole population, so the product being viewed has to be found in the
+ * ranking and the caller must narrow to it. The default limit of 10 does not
+ * reach it: on `Pirkka Finnish semi-skimmed milk 1l` the product's own
+ * propositions appear only past rank ~100, so `limit` is raised here.
+ *
+ * Where both forms could be measured on v1 they agree exactly — pirkka 1.11,
+ * semi/skim 0.95, finnish 0.96, drink 1.02 — so the array form is a faithful
+ * approximation, just an expensive and rank-dependent one. v1 therefore keeps
+ * the direct form rather than paying for it.
+ *
+ * @param {object} productProps - the product's own fields, minus `id`
+ * @returns {{relate: object|string[], limit?: number, narrow: boolean}}
+ *   `narrow` says whether the caller must filter the hits down to this
+ *   product; the v1 form already returns only its propositions.
+ */
+export function productPropertyRelate(productProps) {
+  return isV2()
+    ? { relate: PRODUCT_RELATE_FIELDS, limit: 200, narrow: true }
+    : { relate: { product: productProps }, narrow: false }
+}
+
+/** Fields the v2 form ranks over. Exported for the parity harness. */
+export const PRODUCT_RELATE_FIELDS = [
+  'product.name',
+  'product.category',
+  'product.tags',
+  'product.price',
+]
+
+/**
  * `select` for a DEFAULT-model (KNN) `_estimate`.
  *
  * v1 returns a rich `why` whose `components[].value` are objects carrying

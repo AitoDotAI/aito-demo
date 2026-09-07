@@ -1,4 +1,4 @@
-import { aitoPostRaw } from './aito-client'
+import { aitoPostRaw, productPropertyRelate } from './aito-client'
 
 /**
  * Retrieves detailed information for a specific product by ID
@@ -56,18 +56,6 @@ export function getProductStats(id){
 }
 
 /**
- * Product fields whose values we correlate against purchase. Aito enumerates
- * propositions across these fields; `narrowToProduct` below then keeps the
- * ones describing the product actually being viewed.
- */
-const PRODUCT_RELATE_FIELDS = [
-  'product.name',
-  'product.category',
-  'product.tags',
-  'product.price',
-]
-
-/**
  * Keep only the relations whose value actually belongs to `product`, so the
  * panel describes THIS product rather than the catalogue at large. `related`
  * has already been normalised to `{field: {$has: value}}` by aito-client.
@@ -108,27 +96,24 @@ function narrowToProduct(hits, product) {
  */
 export function getProductAnalytics(id){
 
-  // Fetch the product first so its property values are available to narrow
-  // the relation results down to this product (see narrowToProduct).
+  // Fetch the product first: v1 relates on its property values directly, and
+  // v2 needs them to narrow a population-wide ranking back down to it.
   return getProductDetails(id).then(productResp => {
     const product = (productResp.hits && productResp.hits[0]) || {}
+    const { id: _ignored, ...productProps } = product
+    const { relate, limit, narrow } = productPropertyRelate(productProps)
 
     return aitoPostRaw('_batch',
     [
-      { // Which product properties are over-represented in purchases vs the
-        // baseline of all impressions?
-        //
-        // This used to pass the nested proposition object
-        // `{"product": productProps}`, which v1 expands into one proposition
-        // per property. v2 rejects the nested form outright, and its flat
-        // dotted equivalent ANDs the properties into a single condition —
-        // a different question. The array-of-fields form asks the original
-        // question and is accepted by both versions, so it is used here and
-        // the results are narrowed to this product below.
+      { // Which of THIS product's property values are over-represented in
+        // purchases, against the baseline of all impressions? Feeds the
+        // "CTR by Product Property" panel. The argument shape differs per API
+        // version — see productPropertyRelate() for why.
         "from": "impressions",
         "where": {"purchase": true},
-        "relate": PRODUCT_RELATE_FIELDS,
-        "select": ["lift", "related"]
+        "relate": relate,
+        "select": ["lift", "related"],
+        ...(limit ? { limit } : {})
       },
       { // Analyze correlation between user demographics and this product
         "from": "visits",
@@ -171,10 +156,11 @@ export function getProductAnalytics(id){
     ])
       .then(response => {
         const results = response.data
-        // Batch result 0 is the product-property relation; narrow it to the
-        // product under analysis. The other results are already scoped by
-        // their own `where` clause.
-        if (Array.isArray(results) && results[0] && Array.isArray(results[0].hits)) {
+        // Batch result 0 is the product-property relation. On v2 it is a
+        // population-wide ranking and must be narrowed to this product; on v1
+        // it already contains only this product's propositions, so narrowing
+        // there would only risk dropping valid rows.
+        if (narrow && Array.isArray(results) && results[0] && Array.isArray(results[0].hits)) {
           results[0] = { ...results[0], hits: narrowToProduct(results[0].hits, product) }
         }
         return results
