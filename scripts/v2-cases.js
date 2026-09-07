@@ -197,25 +197,31 @@ const CASES = [
     },
   },
   {
-    // v1 enumerates propositions across each property of the nested object.
-    // v2 rejects the nested form; the flat dotted form ANDs the properties
-    // into a single condition, which is a different question. Recorded as a
-    // per-version body so the harness surfaces the semantic gap.
+    // The "CTR by Product Property" panel. v1 answers it with the nested
+    // proposition object, returning one row per property value of THIS
+    // product:  condition {purchase}, related {product.name: {$has:"banana"}},
+    // lift 1.91.
+    //
+    // v2 has no form that asks this, so the app does not send it there at all
+    // (src/aito-client.js productPropertyRelate -> {supported:false}). Both
+    // v2 spellings answer something else on the same data:
+    //   - the field array ranks propositions population-wide; this product
+    //     first appears around rank 100
+    //   - the object condition INVERTS the relation, ANDing the argument with
+    //     the where onto the related side and enumerating conditions across
+    //     products, giving lift 7.71 against v1's 1.91
+    // That is aito-core#1064. The case keeps the v1 body on both sides so the
+    // gap stays visible in the run rather than disappearing with the query.
     id: '09-relate-purchase-props',
-    source: 'src/09-product.js:88 (batch query 1)',
+    source: 'src/09-product.js (batch query 1) — v1 only',
     endpoint: '_relate',
     body: {
       from: 'impressions',
       where: { purchase: true },
-      relate: ['product.name', 'product.category', 'product.tags', 'product.price'],
+      relate: { product: { name: PRODUCT_NAME, category: '100' } },
       select: ['lift', 'related'],
     },
-    note: 'ported off the nested-object proposition form, which v2 rejects',
-    // _relate returns a ranked list of propositions, and the two engines rank
-    // a different set. Comparing hits[i] to hits[i] therefore reports absent
-    // keys that are really just a different proposition in that slot — an
-    // artefact of positional comparison, not a missing field.
-    accept: 'ranked proposition lists differ between engines; positional diff is not meaningful',
+    accept: 'v2 has no form for per-product proposition lift (aito-core#1064); the app sends this on v1 only',
   },
   {
     id: '09-relate-demographics',

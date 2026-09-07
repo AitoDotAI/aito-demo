@@ -10,7 +10,7 @@
  * not before against after.
  */
 
-import { productPropertyRelate, PRODUCT_RELATE_FIELDS } from '../../aito-client'
+import { productPropertyRelate } from '../../aito-client'
 
 // Real product from the demo dataset (id stripped, as the caller does).
 const PRODUCT_PROPS = {
@@ -29,15 +29,15 @@ describe('productPropertyRelate on v1 (the deployed default)', () => {
     expect(relate).toEqual({ product: PRODUCT_PROPS })
   })
 
-  it('does not narrow — v1 already returns only this product s propositions', () => {
-    expect(productPropertyRelate(PRODUCT_PROPS).narrow).toBe(false)
-  })
-
   it('sets no limit, matching the deployed query', () => {
     expect(productPropertyRelate(PRODUCT_PROPS).limit).toBeUndefined()
   })
 
-  it('never sends the bare field array on v1 — that is what emptied the panel', () => {
-    expect(productPropertyRelate(PRODUCT_PROPS).relate).not.toEqual(PRODUCT_RELATE_FIELDS)
+  it('reports the question as answerable on v1', () => {
+    expect(productPropertyRelate(PRODUCT_PROPS).supported).toBe(true)
+  })
+
+  it('never sends a bare field array — that global ranking is what emptied the panel', () => {
+    expect(Array.isArray(productPropertyRelate(PRODUCT_PROPS).relate)).toBe(false)
   })
 })

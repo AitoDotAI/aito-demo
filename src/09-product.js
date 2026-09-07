@@ -56,34 +56,6 @@ export function getProductStats(id){
 }
 
 /**
- * Keep only the relations whose value actually belongs to `product`, so the
- * panel describes THIS product rather than the catalogue at large. `related`
- * has already been normalised to `{field: {$has: value}}` by aito-client.
- */
-function narrowToProduct(hits, product) {
-  if (!Array.isArray(hits)) return hits
-  return hits.filter(hit => {
-    const related = hit && hit.related
-    if (!related) return false
-    return Object.entries(related).some(([field, wrapped]) => {
-      const value = wrapped && wrapped.$has
-      const own = product[field.replace(/^product\./, '')]
-      if (own === undefined || value === undefined) return false
-      if (Array.isArray(own)) {
-        return Array.isArray(value)
-          ? value.some(v => own.includes(v))
-          : own.includes(value)
-      }
-      // `product.name` relates on tokens, so match on containment there.
-      if (typeof own === 'string' && typeof value === 'string') {
-        return own.toLowerCase().includes(value.toLowerCase())
-      }
-      return own === value
-    })
-  })
-}
-
-/**
  * Performs comprehensive analytics for a product including:
  * - Related product properties
  * - User demographics correlation
@@ -101,19 +73,24 @@ export function getProductAnalytics(id){
   return getProductDetails(id).then(productResp => {
     const product = (productResp.hits && productResp.hits[0]) || {}
     const { id: _ignored, ...productProps } = product
-    const { relate, limit, narrow } = productPropertyRelate(productProps)
+    const propertyRelate = productPropertyRelate(productProps)
 
     return aitoPostRaw('_batch',
     [
       { // Which of THIS product's property values are over-represented in
         // purchases, against the baseline of all impressions? Feeds the
-        // "CTR by Product Property" panel. The argument shape differs per API
-        // version — see productPropertyRelate() for why.
+        // "CTR by Product Property" panel.
+        //
+        // v2 has no form that asks this — see productPropertyRelate(). When
+        // unsupported, a `limit: 0` stand-in keeps the batch indices aligned
+        // (the page reads results[0..4] positionally) and the panel renders
+        // empty rather than showing figures from a different question.
         "from": "impressions",
         "where": {"purchase": true},
-        "relate": relate,
-        "select": ["lift", "related"],
-        ...(limit ? { limit } : {})
+        ...(propertyRelate.supported
+          ? { "relate": propertyRelate.relate }
+          : { "limit": 0 }),
+        "select": ["lift", "related"]
       },
       { // Analyze correlation between user demographics and this product
         "from": "visits",
@@ -156,12 +133,10 @@ export function getProductAnalytics(id){
     ])
       .then(response => {
         const results = response.data
-        // Batch result 0 is the product-property relation. On v2 it is a
-        // population-wide ranking and must be narrowed to this product; on v1
-        // it already contains only this product's propositions, so narrowing
-        // there would only risk dropping valid rows.
-        if (narrow && Array.isArray(results) && results[0] && Array.isArray(results[0].hits)) {
-          results[0] = { ...results[0], hits: narrowToProduct(results[0].hits, product) }
+        // Where v2 cannot ask the question, hand back an empty, explicitly
+        // marked result rather than anything that could be read as an answer.
+        if (!propertyRelate.supported && Array.isArray(results) && results[0]) {
+          results[0] = { ...results[0], hits: [], unsupported: 'aito-core#1064' }
         }
         return results
       })
