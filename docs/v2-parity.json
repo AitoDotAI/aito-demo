@@ -1,11 +1,13 @@
 {
-  "capturedAt": "2026-09-06T08:32:05.153Z",
+  "capturedAt": "2026-09-08T18:17:27.194Z",
   "coreBuild": "TODO:antti-wire",
   "v1Base": "https://shared.aito.ai/db/aito-demo/api/v1",
   "v2Base": "https://shared.aito.ai/db/aito-demo/env/v2/api/v2",
   "tally": {
-    "VALUES": 24,
-    "ACCEPTED": 3
+    "VALUES": 23,
+    "ACCEPTED": 2,
+    "V2-GAP": 1,
+    "NORMALISED": 1
   },
   "cases": [
     {
@@ -233,11 +235,11 @@
           "total": 118,
           "hits": [
             {
-              "$p": 0.9528291456720507,
+              "$p": 0.9380969932162687,
               "$value": "soft drink"
             },
             {
-              "$p": 0.033981327839731255,
+              "$p": 0.048691657205450205,
               "$value": "soda"
             }
           ],
@@ -258,12 +260,12 @@
         {
           "path": "hits[0].$p",
           "v1": 0.8498709425919861,
-          "v2": 0.9528291456720507
+          "v2": 0.9380969932162687
         },
         {
           "path": "hits[1].$p",
           "v1": 0.15012905740801394,
-          "v2": 0.033981327839731255
+          "v2": 0.048691657205450205
         }
       ],
       "missingOnV2": null,
@@ -911,7 +913,7 @@
           "total": 3,
           "hits": [
             {
-              "$p": 0.9353155953859524,
+              "$p": 0.9352480998686422,
               "field": "sentiment",
               "feature": "negative"
             }
@@ -926,7 +928,7 @@
           "total": 3,
           "hits": [
             {
-              "$p": 0.9395196002105684,
+              "$p": 0.9394637662855571,
               "$value": "negative"
             }
           ],
@@ -936,8 +938,8 @@
       "valueDeltas": [
         {
           "path": "hits[0].$p",
-          "v1": 0.9353155953859524,
-          "v2": 0.9395196002105684
+          "v1": 0.9352480998686422,
+          "v2": 0.9394637662855571
         }
       ],
       "missingOnV2": null,
@@ -948,7 +950,7 @@
       "source": "src/06-prompt.js:122",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 5 value(s) differ (2 non-numeric)",
+      "detail": "all v1 fields present; 6 value(s) differ (3 non-numeric)",
       "note": null,
       "requestV1": {
         "from": "prompts",
@@ -978,12 +980,12 @@
           "total": 3,
           "hits": [
             {
-              "$p": 0.37384632021785924,
+              "$p": 0.3730424055430943,
               "field": "urgency",
               "feature": "low"
             },
             {
-              "$p": 0.3224863953304342,
+              "$p": 0.3229004335354135,
               "field": "urgency",
               "feature": "medium"
             }
@@ -998,12 +1000,12 @@
           "total": 3,
           "hits": [
             {
-              "$p": 0.39867703535669274,
+              "$p": 0.38179351520913485,
               "$value": "high"
             },
             {
-              "$p": 0.30587864578604684,
-              "$value": "medium"
+              "$p": 0.32528145263399566,
+              "$value": "low"
             }
           ],
           "_hitsTruncatedFrom": 3
@@ -1016,24 +1018,29 @@
           "v2": "high"
         },
         {
-          "path": "hits[2].feature",
-          "v1": "high",
+          "path": "hits[1].feature",
+          "v1": "medium",
           "v2": "low"
         },
         {
+          "path": "hits[2].feature",
+          "v1": "high",
+          "v2": "medium"
+        },
+        {
           "path": "hits[0].$p",
-          "v1": 0.37384632021785924,
-          "v2": 0.39867703535669274
+          "v1": 0.3730424055430943,
+          "v2": 0.38179351520913485
         },
         {
           "path": "hits[1].$p",
-          "v1": 0.3224863953304342,
-          "v2": 0.30587864578604684
+          "v1": 0.3229004335354135,
+          "v2": 0.32528145263399566
         },
         {
           "path": "hits[2].$p",
-          "v1": 0.3036672844517066,
-          "v2": 0.2954443188572605
+          "v1": 0.3040571609214922,
+          "v2": 0.29292503215686955
         }
       ],
       "missingOnV2": null,
@@ -1178,6 +1185,20 @@
           "total": 10,
           "hits": [
             {
+              "relation": {
+                "n": 733,
+                "varFs": [
+                  167,
+                  97
+                ],
+                "stateFs": [
+                  482,
+                  154,
+                  84,
+                  13
+                ],
+                "mi": 0.006097600466817111
+              },
               "n": 733,
               "info": 0.0014352117728345382,
               "ps": {
@@ -1206,6 +1227,20 @@
               "lift": 0.7909703274215553
             },
             {
+              "relation": {
+                "n": 733,
+                "varFs": [
+                  167,
+                  52
+                ],
+                "stateFs": [
+                  532,
+                  149,
+                  34,
+                  18
+                ],
+                "mi": 0.004001886630945296
+              },
               "n": 733,
               "info": 0.0010378553492037847,
               "ps": {
@@ -1240,9 +1275,9 @@
       "valueDeltas": null,
       "missingOnV2": [
         "hits[0].info (v2 is not an object)",
-        "hits[0].relation",
         "hits[1].info (v2 is not an object)",
-        "hits[1].relation"
+        "hits[2].info (v2 is not an object)",
+        "hits[3].info (v2 is not an object)"
       ],
       "accepted": "v2 omits ps/relation/info-object; no consumer reads them"
     },
@@ -1333,7 +1368,7 @@
       "source": "src/08-predict-invoice.js:47",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 4 numeric value(s) differ",
+      "detail": "all v1 fields present; 3 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "invoices",
@@ -1394,16 +1429,16 @@
         "status": 200,
         "sample": {
           "offset": 0,
-          "total": 4,
+          "total": 10,
           "hits": [
             {
-              "$p": 0.4857142857142857,
+              "$p": 0.29720279720279713,
               "$value": "R001",
               "Department": "Retail",
               "Name": "Grocery Store Products"
             },
             {
-              "$p": 0.2,
+              "$p": 0.12237762237762236,
               "$value": "E001",
               "Department": "IT & Infrastructure",
               "Name": "ECommerce Consultation"
@@ -1414,24 +1449,19 @@
       },
       "valueDeltas": [
         {
-          "path": "total",
-          "v1": 10,
-          "v2": 4
-        },
-        {
           "path": "hits[0].$p",
           "v1": 0.2972027972027972,
-          "v2": 0.4857142857142857
+          "v2": 0.29720279720279713
         },
         {
           "path": "hits[1].$p",
           "v1": 0.12237762237762237,
-          "v2": 0.2
+          "v2": 0.12237762237762236
         },
         {
           "path": "hits[2].$p",
           "v1": 0.12237762237762237,
-          "v2": 0.2
+          "v2": 0.12237762237762236
         }
       ],
       "missingOnV2": null,
@@ -1585,22 +1615,22 @@
     },
     {
       "id": "09-relate-purchase-props",
-      "source": "src/09-product.js:88 (batch query 1)",
+      "source": "src/09-product.js (batch query 1) — v1 only",
       "endpoint": "_relate",
-      "verdict": "ACCEPTED",
-      "detail": "ranked proposition lists differ between engines; positional diff is not meaningful",
-      "note": "ported off the nested-object proposition form, which v2 rejects",
+      "verdict": "V2-GAP",
+      "detail": "v2 has no form for per-product proposition lift (aito-core#1064); the app sends this on v1 only — v2 answers: 1:58: format query: field 'relate' must be of type 'Null|an array of field names [\"product.id\",\"purchase\"] or an object condition {\"purchase\": true}'",
+      "note": null,
       "requestV1": {
         "from": "impressions",
         "where": {
           "purchase": true
         },
-        "relate": [
-          "product.name",
-          "product.category",
-          "product.tags",
-          "product.price"
-        ],
+        "relate": {
+          "product": {
+            "name": "Pirkka banana",
+            "category": "100"
+          }
+        },
         "select": [
           "lift",
           "related"
@@ -1611,12 +1641,12 @@
         "where": {
           "purchase": true
         },
-        "relate": [
-          "product.name",
-          "product.category",
-          "product.tags",
-          "product.price"
-        ],
+        "relate": {
+          "product": {
+            "name": "Pirkka banana",
+            "category": "100"
+          }
+        },
         "select": [
           "lift",
           "related"
@@ -1627,94 +1657,35 @@
         "status": 200,
         "sample": {
           "offset": 0,
-          "total": 10,
+          "total": 3,
           "hits": [
             {
-              "lift": 1.9885709933249704,
+              "lift": 1.9726169156030304,
               "related": {
-                "product.category": {
-                  "$has": "111"
+                "product.name": {
+                  "$has": "banana"
                 }
               }
             },
             {
-              "lift": 2.604783764692057,
+              "lift": 1.6478305837111227,
               "related": {
-                "product.price": {
-                  "$has": 2.3
+                "product.category": {
+                  "$has": "100"
                 }
               }
             }
           ],
-          "_hitsTruncatedFrom": 10
+          "_hitsTruncatedFrom": 3
         }
       },
       "v2": {
-        "status": 200,
-        "sample": {
-          "offset": 0,
-          "total": 10,
-          "hits": [
-            {
-              "n": 90325,
-              "info": 0.0029191424504184478,
-              "ps": {
-                "p": 0.05878771104345419,
-                "pOnCondition": 0.13447537473233404,
-                "pOnNotCondition": 0.05466114062226373,
-                "pCondition": 0.05170218654857459
-              },
-              "condition": {
-                "purchase": true
-              },
-              "related": {
-                "product.category": "111"
-              },
-              "fs": {
-                "fOnNotCondition": 4682,
-                "n": 90325,
-                "fOnCondition": 628,
-                "f": 5310,
-                "fCondition": 4670
-              },
-              "lift": 2.2437713840458713
-            },
-            {
-              "n": 90325,
-              "info": 0.002738233741426137,
-              "ps": {
-                "p": 0.15938001660669804,
-                "pOnCondition": 0.2657387580299786,
-                "pOnNotCondition": 0.1535812270153523,
-                "pCondition": 0.05170218654857459
-              },
-              "condition": {
-                "purchase": true
-              },
-              "related": {
-                "product.category": "100"
-              },
-              "fs": {
-                "fOnNotCondition": 13155,
-                "n": 90325,
-                "fOnCondition": 1241,
-                "f": 14396,
-                "fCondition": 4670
-              },
-              "lift": 1.6472552402105944
-            }
-          ],
-          "_hitsTruncatedFrom": 10
-        }
+        "status": 400,
+        "error": "1:58: format query: field 'relate' must be of type 'Null|an array of field names [\"product.id\",\"purchase\"] or an object condition {\"purchase\": true}'"
       },
       "valueDeltas": null,
-      "missingOnV2": [
-        "hits[1].related.product.price",
-        "hits[2].related.product.name",
-        "hits[3].related.product.name",
-        "hits[5].related.product.name"
-      ],
-      "accepted": "ranked proposition lists differ between engines; positional diff is not meaningful"
+      "missingOnV2": null,
+      "accepted": null
     },
     {
       "id": "09-relate-demographics",
@@ -1787,6 +1758,20 @@
           "total": 8,
           "hits": [
             {
+              "relation": {
+                "n": 733,
+                "varFs": [
+                  100,
+                  131
+                ],
+                "stateFs": [
+                  511,
+                  91,
+                  122,
+                  9
+                ],
+                "mi": 0.007037983244998269
+              },
               "n": 733,
               "info": 0.0016177033276203933,
               "ps": {
@@ -1815,6 +1800,20 @@
               "lift": 0.7487642181680652
             },
             {
+              "relation": {
+                "n": 733,
+                "varFs": [
+                  100,
+                  163
+                ],
+                "stateFs": [
+                  501,
+                  69,
+                  132,
+                  31
+                ],
+                "mi": 0.0047344367024677175
+              },
               "n": 733,
               "info": 0.0012174040175623613,
               "ps": {
@@ -2064,8 +2063,8 @@
         "sample": {
           "n": 11,
           "accuracy": 1,
-          "baseAccuracy": 0.12903225806451613,
-          "accuracyGain": 0.8709677419354839,
+          "baseAccuracy": 0.18181818181818182,
+          "accuracyGain": 0.8181818181818181,
           "meanRank": 0
         }
       },
@@ -2078,12 +2077,12 @@
         {
           "path": "baseAccuracy",
           "v1": 0.09090909090909091,
-          "v2": 0.12903225806451613
+          "v2": 0.18181818181818182
         },
         {
           "path": "accuracyGain",
           "v1": 0.6363636363636364,
-          "v2": 0.8709677419354839
+          "v2": 0.8181818181818181
         },
         {
           "path": "meanRank",
@@ -2098,8 +2097,8 @@
       "id": "11-evaluate-invoices",
       "source": "src/11-evaluate.js:18",
       "endpoint": "_evaluate",
-      "verdict": "VALUES",
-      "detail": "all v1 fields present; 2 numeric value(s) differ",
+      "verdict": "NORMALISED",
+      "detail": "raw responses differ ({kind,data} envelope); identical after src/aito-compat",
       "note": null,
       "requestV1": {
         "test": {
@@ -2169,23 +2168,12 @@
         "sample": {
           "n": 26,
           "accuracy": 1,
-          "baseAccuracy": 0.4933333333333334,
-          "accuracyGain": 0.5066666666666666,
+          "baseAccuracy": 0.5,
+          "accuracyGain": 0.5,
           "meanRank": 0
         }
       },
-      "valueDeltas": [
-        {
-          "path": "baseAccuracy",
-          "v1": 0.5,
-          "v2": 0.4933333333333334
-        },
-        {
-          "path": "accuracyGain",
-          "v1": 0.5,
-          "v2": 0.5066666666666666
-        }
-      ],
+      "valueDeltas": null,
       "missingOnV2": null,
       "accepted": null
     },
@@ -82788,7 +82776,7 @@
       "source": "src/13-product-predictions.js:17",
       "endpoint": "_predict",
       "verdict": "VALUES",
-      "detail": "all v1 fields present; 4 value(s) differ (1 non-numeric)",
+      "detail": "all v1 fields present; 3 numeric value(s) differ",
       "note": null,
       "requestV1": {
         "from": "products",
@@ -82838,11 +82826,11 @@
           "total": 11,
           "hits": [
             {
-              "$p": 0.6004437339673327,
+              "$p": 0.6304223622031752,
               "$value": "104"
             },
             {
-              "$p": 0.16367151319545786,
+              "$p": 0.14015376361777843,
               "$value": "109"
             }
           ],
@@ -82851,24 +82839,19 @@
       },
       "valueDeltas": [
         {
-          "path": "hits[2].feature",
-          "v1": "100",
-          "v2": "101"
-        },
-        {
           "path": "hits[0].$p",
           "v1": 0.6304223622031753,
-          "v2": 0.6004437339673327
+          "v2": 0.6304223622031752
         },
         {
           "path": "hits[1].$p",
           "v1": 0.14015376361777845,
-          "v2": 0.16367151319545786
+          "v2": 0.14015376361777843
         },
         {
           "path": "hits[2].$p",
           "v1": 0.02747220787905368,
-          "v2": 0.030022722609709965
+          "v2": 0.027472207879053693
         }
       ],
       "missingOnV2": null,
@@ -82929,11 +82912,11 @@
           "total": 32,
           "hits": [
             {
-              "$p": 0.058126566729715945,
+              "$p": 0.05719791252307786,
               "$value": 1.95
             },
             {
-              "$p": 0.05307003299198432,
+              "$p": 0.05215372050321434,
               "$value": 1.29
             }
           ],
@@ -82944,17 +82927,17 @@
         {
           "path": "hits[0].$p",
           "v1": 0.05719791252307779,
-          "v2": 0.058126566729715945
+          "v2": 0.05719791252307786
         },
         {
           "path": "hits[1].$p",
           "v1": 0.05215372050321439,
-          "v2": 0.05307003299198432
+          "v2": 0.05215372050321434
         },
         {
           "path": "hits[2].$p",
           "v1": 0.05215372050321439,
-          "v2": 0.05307003299198432
+          "v2": 0.05215372050321434
         }
       ],
       "missingOnV2": null,

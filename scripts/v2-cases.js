@@ -221,7 +221,7 @@ const CASES = [
       relate: { product: { name: PRODUCT_NAME, category: '100' } },
       select: ['lift', 'related'],
     },
-    accept: 'v2 has no form for per-product proposition lift (aito-core#1064); the app sends this on v1 only',
+    expectV2Error: 'v2 has no form for per-product proposition lift (aito-core#1064); the app sends this on v1 only',
   },
   {
     id: '09-relate-demographics',

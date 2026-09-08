@@ -143,6 +143,7 @@ function coverage(a, b, prefix = '', acc = { missing: [], differing: [] }) {
 /**
  * Verdicts, worst to best:
  *   BREAK       v2 returned an error
+ *   V2-GAP      v2 errors, and the case declares that as a known missing form
  *   MISSING     v2 omits a field v1 supplied — the app would read undefined
  *   ACCEPTED    a MISSING that the case declares as a known, checked-off gap
  *   NORMALISED  raw responses differ, but src/aito-compat makes them identical
@@ -151,7 +152,16 @@ function coverage(a, b, prefix = '', acc = { missing: [], differing: [] }) {
  *   IDENTICAL   byte-for-byte equal
  */
 function classify(c, r1, r2) {
-  if (!r2.ok) return { verdict: 'BREAK', detail: r2.error }
+  if (!r2.ok) {
+    // A case may declare `expectV2Error` when v2 has NO form for the question
+    // and the app therefore does not send it there. Keeping the v1 body on
+    // both sides leaves the gap visible in every run — reporting it as a BREAK
+    // would instead train the reader to ignore a red line.
+    if (c.expectV2Error) {
+      return { verdict: 'V2-GAP', detail: `${c.expectV2Error} — v2 answers: ${r2.error}` }
+    }
+    return { verdict: 'BREAK', detail: r2.error }
+  }
   if (!r1.ok) return { verdict: 'V1-BREAK', detail: r1.error }
 
   // Raw payloads, to detect a difference the app's normaliser papers over.
@@ -252,7 +262,7 @@ const COLOR = process.stdout.isTTY
 const tint = (s, c) => (COLOR ? `[${c}m${s}[0m` : s)
 const paint = v => ({
   IDENTICAL: tint(v, 32), NORMALISED: tint(v, 32), 'BODY-DIFF': tint(v, 36),
-  VALUES: tint(v, 33), ACCEPTED: tint(v, 36), MISSING: tint(v, 31), BREAK: tint(v, 31), 'V1-BREAK': tint(v, 31),
+  VALUES: tint(v, 33), ACCEPTED: tint(v, 36), 'V2-GAP': tint(v, 36), MISSING: tint(v, 31), BREAK: tint(v, 31), 'V1-BREAK': tint(v, 31),
 }[v] || v)
 
 /**
