@@ -100,6 +100,29 @@ export function productPropertyRelate(productProps) {
 }
 
 /**
+ * Whether per-candidate aggregates over a `get` candidate query can be
+ * trusted — `$f` (candidate frequency), `{$sum: {$context: …}}` and
+ * `{$mean: {$context: …}}`.
+ *
+ * v1 computes them. v2 accepts the same select, answers 200, and returns
+ * ZERO for every candidate. Measured on impressions/context.week for
+ * product 2000818700008:
+ *
+ *   v1  wk0 f=150 sum=15 | wk1 f=315 sum=30 | wk2 f=354 sum=37
+ *   v2  wk0 f=0   sum=0  | wk1 f=0   sum=0  | wk2 f=0   sum=0
+ *
+ * The data is there — the same env reports 334 purchase impressions for
+ * that product. v2 also requires an `orderBy` before it will accept `$f`
+ * or `$sum` in `select` at all, which `_ops` does not mention; supplying
+ * one gets past the 400 but the values are still zero.
+ *
+ * So the aggregates are unavailable rather than merely differently spelled,
+ * and a panel driven by them renders zeros that look like real measurements.
+ * Callers should omit those panels on v2 instead.
+ */
+export const perCandidateAggregates = () => !isV2()
+
+/**
  * `select` for a DEFAULT-model (KNN) `_estimate`.
  *
  * v1 returns a rich `why` whose `components[].value` are objects carrying

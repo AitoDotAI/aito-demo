@@ -235,6 +235,55 @@ const CASES = [
     },
   },
   {
+    // Two of the five call sites the harness never covered. Both read
+    // per-candidate aggregates over a `get` query, and v2 answers 200 with
+    // ZERO for every candidate while v1 returns real counts. A silent
+    // wrong-number, which is exactly what this harness exists to catch —
+    // it only missed it because these cases did not exist.
+    id: '09-query-phrase-aggregate',
+    source: 'src/09-product.js (batch query 3)',
+    endpoint: '_query',
+    bodyV1: {
+      from: 'impressions',
+      where: { 'product.id': PRODUCT_ID },
+      get: 'context.queryPhrase',
+      orderBy: { $sum: { $context: 'purchase' } },
+      select: ['$score', '$value'],
+    },
+    // v2 rejects $sum in orderBy ("expected one of field, desc") and refuses
+    // $f/$sum in select without an orderBy, so this is the closest v2 will
+    // accept — and it still returns zeros.
+    bodyV2: {
+      from: 'impressions',
+      where: { 'product.id': PRODUCT_ID },
+      get: 'context.queryPhrase',
+      orderBy: '$f',
+      select: ['$value', { $sum: { $context: 'purchase' } }],
+    },
+    note: 'v2 per-candidate aggregates return 0; panel omitted on v2',
+    accept: 'v2 $f/$sum/$mean over a `get` query return 0 for every candidate — the app omits this panel on v2 rather than charting zeros',
+  },
+  {
+    id: '09-weekly-trend-aggregate',
+    source: 'src/09-product.js (batch query 4)',
+    endpoint: '_query',
+    bodyV1: {
+      from: 'impressions',
+      where: { 'product.id': PRODUCT_ID },
+      get: 'context.week',
+      select: ['$value', '$f', { $sum: { $context: 'purchase' } }],
+    },
+    bodyV2: {
+      from: 'impressions',
+      where: { 'product.id': PRODUCT_ID },
+      get: 'context.week',
+      orderBy: '$f',
+      select: ['$value', '$f', { $sum: { $context: 'purchase' } }],
+    },
+    note: 'v1 wk0 f=150 sum=15; v2 f=0 sum=0 for every week',
+    accept: 'same per-candidate aggregate defect as 09-query-phrase-aggregate; the app omits this panel on v2',
+  },
+  {
     id: '10-distinct-values',
     source: 'src/10-get-distinct-values.js:27',
     endpoint: '_match',

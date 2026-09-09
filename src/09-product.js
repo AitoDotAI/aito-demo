@@ -1,4 +1,4 @@
-import { aitoPostRaw, productPropertyRelate } from './aito-client'
+import { aitoPostRaw, productPropertyRelate, perCandidateAggregates } from './aito-client'
 
 /**
  * Retrieves detailed information for a specific product by ID
@@ -74,6 +74,9 @@ export function getProductAnalytics(id){
     const product = (productResp.hits && productResp.hits[0]) || {}
     const { id: _ignored, ...productProps } = product
     const propertyRelate = productPropertyRelate(productProps)
+    // $f / $sum / $mean over a `get` query return 0 on v2 — see
+    // perCandidateAggregates(). Those two panels are omitted there.
+    const aggregates = perCandidateAggregates()
 
     return aitoPostRaw('_batch',
     [
@@ -110,27 +113,37 @@ export function getProductAnalytics(id){
         "relate": ["purchases"],
         "select": ["lift", "related"]
       },
-      { // Analyze which search terms lead to this product being purchased
+      { // Analyze which search terms lead to this product being purchased.
+        // Ranked by purchases per phrase, which v2 cannot compute (zeros).
         "from": "impressions",
         "where": {
           "product.id": id
         },
-        "get": "context.queryPhrase",
-        "orderBy": { "$sum": {"$context": "purchase" } },
-        "select": ["$score", "$value"]
+        ...(aggregates
+          ? {
+            "get": "context.queryPhrase",
+            "orderBy": { "$sum": {"$context": "purchase" } },
+            "select": ["$score", "$value"],
+          }
+          : { "limit": 0 }),
       },
-      { // Time-series analysis of purchase patterns
+      { // Time-series analysis of purchase patterns. Same aggregate
+        // limitation as the panel above.
         "from": "impressions",
         "where": {
           "product.id": id
-        }, 
-        "get": "context.week",
-        "select": [
-          "$value",
-          "$f",
-          {"$sum": {"$context": "purchase"}},
-          {"$mean": {"$context": "purchase"}}
-        ]
+        },
+        ...(aggregates
+          ? {
+            "get": "context.week",
+            "select": [
+              "$value",
+              "$f",
+              {"$sum": {"$context": "purchase"}},
+              {"$mean": {"$context": "purchase"}}
+            ],
+          }
+          : { "limit": 0 }),
       }
     ])
       .then(response => {
@@ -139,6 +152,13 @@ export function getProductAnalytics(id){
         // marked result rather than anything that could be read as an answer.
         if (!propertyRelate.supported && Array.isArray(results) && results[0]) {
           results[0] = { ...results[0], hits: [], unsupported: 'aito-core#1064' }
+        }
+        // Panels 3 and 4 read per-candidate aggregates, which v2 returns as
+        // zeros. Empty beats a chart of flat zeroes that reads as real data.
+        if (!aggregates && Array.isArray(results)) {
+          for (const i of [3, 4]) {
+            if (results[i]) results[i] = { ...results[i], hits: [], unsupported: 'v2-per-candidate-aggregates' }
+          }
         }
         return results
       })

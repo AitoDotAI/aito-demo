@@ -1,11 +1,11 @@
 {
-  "capturedAt": "2026-09-08T18:17:27.194Z",
+  "capturedAt": "2026-09-09T07:04:28.856Z",
   "coreBuild": "TODO:antti-wire",
   "v1Base": "https://shared.aito.ai/db/aito-demo/api/v1",
   "v2Base": "https://shared.aito.ai/db/aito-demo/env/v2/api/v2",
   "tally": {
     "VALUES": 23,
-    "ACCEPTED": 2,
+    "ACCEPTED": 4,
     "V2-GAP": 1,
     "NORMALISED": 1
   },
@@ -1902,6 +1902,183 @@
       ],
       "missingOnV2": null,
       "accepted": null
+    },
+    {
+      "id": "09-query-phrase-aggregate",
+      "source": "src/09-product.js (batch query 3)",
+      "endpoint": "_query",
+      "verdict": "ACCEPTED",
+      "detail": "v2 $f/$sum/$mean over a `get` query return 0 for every candidate — the app omits this panel on v2 rather than charting zeros",
+      "note": "v2 per-candidate aggregates return 0; panel omitted on v2",
+      "requestV1": {
+        "from": "impressions",
+        "where": {
+          "product.id": "6410405082657"
+        },
+        "get": "context.queryPhrase",
+        "orderBy": {
+          "$sum": {
+            "$context": "purchase"
+          }
+        },
+        "select": [
+          "$score",
+          "$value"
+        ]
+      },
+      "requestV2": {
+        "from": "impressions",
+        "where": {
+          "product.id": "6410405082657"
+        },
+        "get": "context.queryPhrase",
+        "orderBy": "$f",
+        "select": [
+          "$value",
+          {
+            "$sum": {
+              "$context": "purchase"
+            }
+          }
+        ]
+      },
+      "bodiesDiffer": true,
+      "v1": {
+        "status": 200,
+        "sample": {
+          "offset": 0,
+          "total": 118,
+          "hits": [
+            {
+              "$score": 29,
+              "$value": ""
+            },
+            {
+              "$score": 12,
+              "$value": "semi-skimmed"
+            }
+          ],
+          "_hitsTruncatedFrom": 10
+        }
+      },
+      "v2": {
+        "status": 200,
+        "sample": {
+          "offset": 0,
+          "total": 118,
+          "hits": [
+            {
+              "$sum": 0,
+              "$value": ""
+            },
+            {
+              "$sum": 0,
+              "$value": "1l"
+            }
+          ],
+          "_hitsTruncatedFrom": 10
+        }
+      },
+      "valueDeltas": null,
+      "missingOnV2": [
+        "hits[0].$score",
+        "hits[1].$score",
+        "hits[2].$score",
+        "hits[3].$score"
+      ],
+      "accepted": "v2 $f/$sum/$mean over a `get` query return 0 for every candidate — the app omits this panel on v2 rather than charting zeros"
+    },
+    {
+      "id": "09-weekly-trend-aggregate",
+      "source": "src/09-product.js (batch query 4)",
+      "endpoint": "_query",
+      "verdict": "ACCEPTED",
+      "detail": "same per-candidate aggregate defect as 09-query-phrase-aggregate; the app omits this panel on v2",
+      "note": "v1 wk0 f=150 sum=15; v2 f=0 sum=0 for every week",
+      "requestV1": {
+        "from": "impressions",
+        "where": {
+          "product.id": "6410405082657"
+        },
+        "get": "context.week",
+        "select": [
+          "$value",
+          "$f",
+          {
+            "$sum": {
+              "$context": "purchase"
+            }
+          }
+        ]
+      },
+      "requestV2": {
+        "from": "impressions",
+        "where": {
+          "product.id": "6410405082657"
+        },
+        "get": "context.week",
+        "orderBy": "$f",
+        "select": [
+          "$value",
+          "$f",
+          {
+            "$sum": {
+              "$context": "purchase"
+            }
+          }
+        ]
+      },
+      "bodiesDiffer": true,
+      "v1": {
+        "status": 200,
+        "sample": {
+          "offset": 0,
+          "total": 10,
+          "hits": [
+            {
+              "$value": 0,
+              "$f": 107,
+              "$sum": 3,
+              "$sum.samples": 107
+            },
+            {
+              "$value": 1,
+              "$f": 226,
+              "$sum": 7,
+              "$sum.samples": 226
+            }
+          ],
+          "_hitsTruncatedFrom": 10
+        }
+      },
+      "v2": {
+        "status": 200,
+        "sample": {
+          "offset": 0,
+          "total": 10,
+          "hits": [
+            {
+              "$f": 0,
+              "$sum": 0,
+              "$value": 0
+            },
+            {
+              "$f": 0,
+              "$sum": 0,
+              "$value": 1
+            }
+          ],
+          "_hitsTruncatedFrom": 10
+        }
+      },
+      "valueDeltas": null,
+      "missingOnV2": [
+        "hits[0].$sum.samples",
+        "hits[1].$sum.samples",
+        "hits[2].$sum.samples",
+        "hits[3].$sum.samples"
+      ],
+      "accepted": "same per-candidate aggregate defect as 09-query-phrase-aggregate; the app omits this panel on v2"
     },
     {
       "id": "10-distinct-values",
