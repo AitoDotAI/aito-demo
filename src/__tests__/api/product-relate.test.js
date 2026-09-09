@@ -5,12 +5,13 @@
  * array-of-fields form on BOTH versions. The array form ranks propositions
  * across the whole population and defaults to 10 hits, so the product being
  * viewed never appeared and the client-side narrowing filtered every row
- * away: the panel rendered SIX rows before and ZERO after, on the live v1
- * path. The parity harness could not catch it — it compares v1 against v2,
- * not before against after.
+ * away: the panel rendered SIX rows before and ZERO after, on the live path.
+ * The parity harness could not catch it — it compares v1 against v2, not
+ * before against after.
+ *
+ * Each case pins the version explicitly instead of relying on the ambient
+ * default, which has itself changed once (v1 -> v2, 2026-09-09).
  */
-
-import { productPropertyRelate } from '../../aito-client'
 
 // Real product from the demo dataset (id stripped, as the caller does).
 const PRODUCT_PROPS = {
@@ -23,21 +24,40 @@ const PRODUCT_PROPS = {
   tags: ['lactose', 'drink', 'pirkka'],
 }
 
-describe('productPropertyRelate on v1 (the deployed default)', () => {
-  it('sends the nested proposition form, unchanged from what is deployed', () => {
-    const { relate } = productPropertyRelate(PRODUCT_PROPS)
-    expect(relate).toEqual({ product: PRODUCT_PROPS })
+const relateOn = (version) => {
+  jest.resetModules()
+  const saved = process.env
+  process.env = { ...saved, REACT_APP_USE_REP2: version === 'v2' ? 'true' : 'false' }
+  // eslint-disable-next-line global-require
+  const { productPropertyRelate } = require('../../aito-client')
+  const result = productPropertyRelate(PRODUCT_PROPS)
+  process.env = saved
+  return result
+}
+
+describe('productPropertyRelate on v1', () => {
+  it('sends the nested proposition form, matching what v1 has always shown', () => {
+    expect(relateOn('v1').relate).toEqual({ product: PRODUCT_PROPS })
   })
 
-  it('sets no limit, matching the deployed query', () => {
-    expect(productPropertyRelate(PRODUCT_PROPS).limit).toBeUndefined()
-  })
-
-  it('reports the question as answerable on v1', () => {
-    expect(productPropertyRelate(PRODUCT_PROPS).supported).toBe(true)
+  it('reports the question as answerable', () => {
+    expect(relateOn('v1').supported).toBe(true)
   })
 
   it('never sends a bare field array — that global ranking is what emptied the panel', () => {
-    expect(Array.isArray(productPropertyRelate(PRODUCT_PROPS).relate)).toBe(false)
+    expect(Array.isArray(relateOn('v1').relate)).toBe(false)
+  })
+})
+
+describe('productPropertyRelate on v2', () => {
+  it('reports the question as unanswerable rather than approximating it', () => {
+    // v2 inverts the relation (lift 7.71 against v1's 1.91) and has no form
+    // for per-product proposition lift — aito-core#1064. Showing numbers that
+    // look like the v1 ones and are not is worse than showing none.
+    expect(relateOn('v2').supported).toBe(false)
+  })
+
+  it('sends no relate argument at all', () => {
+    expect(relateOn('v2').relate).toBeUndefined()
   })
 })

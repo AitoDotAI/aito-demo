@@ -87,10 +87,12 @@ export function getProductAnalytics(id){
         // empty rather than showing figures from a different question.
         "from": "impressions",
         "where": {"purchase": true},
+        // `lift` and `related` only exist on a relate result. The stand-in
+        // must therefore drop them too, or the whole _batch 400s with
+        // "no such field 'lift'" and every panel on the page goes blank.
         ...(propertyRelate.supported
-          ? { "relate": propertyRelate.relate }
-          : { "limit": 0 }),
-        "select": ["lift", "related"]
+          ? { "relate": propertyRelate.relate, "select": ["lift", "related"] }
+          : { "limit": 0 })
       },
       { // Analyze correlation between user demographics and this product
         "from": "visits",
