@@ -49,15 +49,25 @@ describe('productPropertyRelate on v1', () => {
   })
 })
 
-describe('productPropertyRelate on v2', () => {
-  it('reports the question as unanswerable rather than approximating it', () => {
-    // v2 inverts the relation (lift 7.71 against v1's 1.91) and has no form
-    // for per-product proposition lift — aito-core#1064. Showing numbers that
-    // look like the v1 ones and are not is worse than showing none.
-    expect(relateOn('v2').supported).toBe(false)
+describe('productPropertyRelate on v2 (since aito-core 2.8.1)', () => {
+  // 2.8.1 added the `$props` carrier and made v1's nested spelling an alias
+  // for it, so the question is answerable on v2 again — see aito-core#1064.
+  it('sends the nested proposition form, the same shape as v1', () => {
+    expect(relateOn('v2').supported).toBe(true)
+    expect(relateOn('v2').relate.product).toBeDefined()
   })
 
-  it('sends no relate argument at all', () => {
-    expect(relateOn('v2').relate).toBeUndefined()
+  it('drops array-valued properties, which $props cannot match', () => {
+    // `tags: [...]`, `tags: "fruit"` and `{$has: "fruit"}` all fail with
+    // "relate $props: no rows carry { product.tags:fruit }", while the scalar
+    // properties in the same request answer fine.
+    const sent = relateOn('v2').relate.product
+    expect(sent.tags).toBeUndefined()
+    expect(sent.name).toBe(PRODUCT_PROPS.name)
+    expect(sent.category).toBe(PRODUCT_PROPS.category)
+  })
+
+  it('v1 keeps the array properties', () => {
+    expect(relateOn('v1').relate.product.tags).toEqual(PRODUCT_PROPS.tags)
   })
 })

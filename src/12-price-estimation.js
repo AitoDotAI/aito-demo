@@ -1,4 +1,4 @@
-import { aitoPostRaw, estimateSelect, knnWhySelect } from './aito-client'
+import { aitoPostRaw, estimateSelect } from './aito-client'
 
 /**
  * Price Estimation API Functions
@@ -106,7 +106,7 @@ export function estimatePrice(whereConditions) {
       from: 'price_history',
       where: whereConditions,
       estimate: 'sale_price',
-      select: knnWhySelect()
+      select: [estimateSelect(), 'why']
     })
     .then(response => {
       return response.data
@@ -132,7 +132,7 @@ export function estimateDemand(whereConditions) {
       from: 'price_history',
       where: whereConditions,
       estimate: 'units_sold',
-      select: knnWhySelect()
+      select: [estimateSelect(), 'why']
     })
     .then(response => {
       return response.data

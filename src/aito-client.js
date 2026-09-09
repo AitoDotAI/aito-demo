@@ -65,38 +65,38 @@ export function nonExclusivePredict(field) {
  * over-represented in purchases, against the baseline of all impressions" —
  * the "CTR by Product Property" panel.
  *
- * v1 answers it directly. Given the nested proposition object
- * `{product: {...its properties}}` it returns one row per property value with
+ * v1 answers it with the nested proposition object, one row per property
+ * value:  condition {purchase}, related {product.name: {$has: "banana"}}.
  *
- *   condition = {purchase: {$has: true}}          (the `where`)
- *   related   = {product.name: {$has: "banana"}}  (the proposition)
- *   lift      = P(proposition | purchase) / P(proposition)
+ * v2 could not ask it at all until aito-core 2.8.1, which added the `$props`
+ * carrier — `_ops` now lists it as "relate: one entity's property values,
+ * related to the `where`" — and made v1's nested spelling an accepted alias
+ * for it. So the same body works on both again.
  *
- * v2 HAS NO FORM THAT ASKS THIS. Both spellings its parser accepts answer
- * something else, measured against the same data:
+ * TWO DIFFERENCES REMAIN, both measured on 2.8.1:
  *
- *   relate: ["product.name", …]  ranks propositions across the WHOLE
- *     population. The viewed product does not appear until rank ~100, so it
- *     answers "what predicts purchase in general", not "what about this one".
+ *  1. Granularity. v1 tokenises Text and relates each token
+ *     ({$has: "banana"}, lift 1.9106); v2 relates the whole value
+ *     ("Pirkka banana", lift 2.0942). Fewer, coarser rows on v2.
  *
- *   relate: {product.name: {$has: "banana"}}  INVERTS the relation. v2 ANDs
- *     the argument with the `where` onto the *related* side and enumerates
- *     conditions across products:
- *       condition = {product: "2000818700008"}
- *       related   = {$on: [{product.name: {$has: "banana"}}, {purchase: true}]}
- *     giving lift 7.71 where v1 gives 1.91 — a different question, not a
- *     different estimate. That is aito-core#1064, still open.
- *
- * So on v2 the panel is left EMPTY rather than filled with numbers that look
- * like the v1 ones and are not. A visible gap beats an invented figure.
+ *  2. Array-valued properties are rejected. `tags: ["fresh","fruit"]` — and
+ *     equally `tags: "fruit"` or `{$has: "fruit"}` — fail with
+ *     "relate $props: no rows carry { product.tags:fruit }", while the scalar
+ *     properties in the same request answer fine. So array props are dropped
+ *     on v2 and the panel loses its Tag rows there.
  *
  * @param {object} productProps - the product's own fields, minus `id`
  * @returns {{supported: boolean, relate?: object}}
  */
 export function productPropertyRelate(productProps) {
-  return isV2()
-    ? { supported: false }
-    : { supported: true, relate: { product: productProps } }
+  if (!isV2()) return { supported: true, relate: { product: productProps } }
+  // Drop array-valued props; v2's $props carrier cannot match a set member.
+  const scalars = Object.fromEntries(
+    Object.entries(productProps).filter(([, v]) => !Array.isArray(v)),
+  )
+  return Object.keys(scalars).length
+    ? { supported: true, relate: { product: scalars } }
+    : { supported: false }
 }
 
 /**
@@ -121,28 +121,6 @@ export function productPropertyRelate(productProps) {
  * Callers should omit those panels on v2 instead.
  */
 export const perCandidateAggregates = () => !isV2()
-
-/**
- * `select` for a DEFAULT-model (KNN) `_estimate`.
- *
- * v1 returns a rich `why` whose `components[].value` are objects carrying
- * `instance`, `hitScore`, `original` and `adjustments` — which PricingPage's
- * extractNeighbors() renders as the neighbour table.
- *
- * v2 returns scalars there, so extractNeighbors' `component.value.instance`
- * guard already skipped every component and the table came out empty. As of
- * the 2026-08-31 build it is worse than useless: asking for `why` on a KNN
- * estimate over `price_history` on rep2 returns 502 Bad Gateway (an nginx
- * page, not the JSON error envelope) for every where-clause and every target
- * column, while `products` and `invoices` answer 200. Filed upstream.
- *
- * So `why` is requested only where it can be rendered. The regression-model
- * estimates keep asking for it on both versions — that path is not affected
- * and its `why` is what the explanation tooltip parses.
- */
-export function knnWhySelect() {
-  return isV2() ? [estimateSelect()] : [estimateSelect(), 'why']
-}
 
 /**
  * POST an Aito query and return the normalised response payload directly

@@ -84,10 +84,10 @@ export function getProductAnalytics(id){
         // purchases, against the baseline of all impressions? Feeds the
         // "CTR by Product Property" panel.
         //
-        // v2 has no form that asks this — see productPropertyRelate(). When
-        // unsupported, a `limit: 0` stand-in keeps the batch indices aligned
-        // (the page reads results[0..4] positionally) and the panel renders
-        // empty rather than showing figures from a different question.
+        // Answerable on both since aito-core 2.8.1 (the `$props` carrier).
+        // The `limit: 0` stand-in remains for the case where a product has no
+        // scalar properties at all: it keeps the batch indices aligned, since
+        // the page reads results[0..4] positionally.
         "from": "impressions",
         "where": {"purchase": true},
         // `lift` and `related` only exist on a relate result. The stand-in

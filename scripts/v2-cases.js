@@ -197,23 +197,16 @@ const CASES = [
     },
   },
   {
-    // The "CTR by Product Property" panel. v1 answers it with the nested
-    // proposition object, returning one row per property value of THIS
-    // product:  condition {purchase}, related {product.name: {$has:"banana"}},
-    // lift 1.91.
+    // The "CTR by Product Property" panel. Was a hard v2 gap (aito-core#1064)
+    // until 2.8.1 added the `$props` carrier and made v1's nested spelling an
+    // alias for it. Both versions now answer the same question.
     //
-    // v2 has no form that asks this, so the app does not send it there at all
-    // (src/aito-client.js productPropertyRelate -> {supported:false}). Both
-    // v2 spellings answer something else on the same data:
-    //   - the field array ranks propositions population-wide; this product
-    //     first appears around rank 100
-    //   - the object condition INVERTS the relation, ANDing the argument with
-    //     the where onto the related side and enumerating conditions across
-    //     products, giving lift 7.71 against v1's 1.91
-    // That is aito-core#1064. The case keeps the v1 body on both sides so the
-    // gap stays visible in the run rather than disappearing with the query.
+    // Two differences remain and are expected: v1 tokenises Text and relates
+    // each token ({$has:"banana"}, lift 1.9106) where v2 relates the whole
+    // value ("Pirkka banana", lift 2.0942); and v2 rejects array-valued
+    // properties, so the app drops them there.
     id: '09-relate-purchase-props',
-    source: 'src/09-product.js (batch query 1) — v1 only',
+    source: 'src/09-product.js (batch query 1)',
     endpoint: '_relate',
     body: {
       from: 'impressions',
@@ -221,7 +214,7 @@ const CASES = [
       relate: { product: { name: PRODUCT_NAME, category: '100' } },
       select: ['lift', 'related'],
     },
-    expectV2Error: 'v2 has no form for per-product proposition lift (aito-core#1064); the app sends this on v1 only',
+    accept: 'v1 relates Text per token, v2 relates the whole value — same question, coarser rows on v2',
   },
   {
     id: '09-relate-demographics',
@@ -336,12 +329,12 @@ const CASES = [
       from: 'price_history',
       where: { category: '100' },
       estimate: 'sale_price',
-      select: ['value'],
+      select: ['value', 'why'],
     },
     // The KNN why is a weightedAverage whose components are rich objects on
     // v1 and plain numbers on v2. Nothing parses this one (PricingPage parses
     // only the regression why), so the loss is recorded, not blocking.
-    accept: 'v2 KNN why is not requested (502 on rep2/price_history); v1-only neighbour table',
+    accept: 'KNN why numeric values differ between engines; structure matches since 2.8.1',
   },
   {
     id: '12-estimate-demand',
