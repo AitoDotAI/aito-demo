@@ -29,12 +29,25 @@ export function getRecommendedProducts(userId, currentShoppingBasket, count) {
     where: {
       // Filter recommendations for specific user
       'context.user': String(userId),
-      
-      // Exclude products already in basket using $not operator
-      // This creates an AND condition of NOT conditions for each basket item
-      'product.id': {
-        $and: currentShoppingBasket.map(item => ({ $not: item.id })),
-      }
+
+      // Exclude products already in the basket: an AND of NOT conditions,
+      // one per basket item.
+      //
+      // Omitted entirely when the basket is empty. An empty `$and: []` is a
+      // no-op that v1 accepts, but v2 answers 501 "empty.reduceLeft" — an
+      // unguarded fold over the empty clause list. The basket IS empty on
+      // first load, so sending it would fail the store landing page for
+      // every new visitor on v2 while working the moment anything is added
+      // to the cart. Filed upstream; this guard is correct on both versions
+      // regardless, since the clause says nothing when there is nothing to
+      // exclude.
+      ...(currentShoppingBasket.length
+        ? {
+          'product.id': {
+            $and: currentShoppingBasket.map(item => ({ $not: item.id })),
+          },
+        }
+        : {}),
     },
     
     recommend: 'product',       // Field to recommend (product details)
