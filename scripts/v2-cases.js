@@ -228,11 +228,12 @@ const CASES = [
     },
   },
   {
-    // Two of the five call sites the harness never covered. Both read
-    // per-candidate aggregates over a `get` query, and v2 answers 200 with
-    // ZERO for every candidate while v1 returns real counts. A silent
-    // wrong-number, which is exactly what this harness exists to catch —
-    // it only missed it because these cases did not exist.
+    // Two of the five call sites the harness never covered. Both `get`
+    // THROUGH a link, where v2 answers 200 with ZERO for every candidate
+    // while v1 returns real counts. Own fields and the link field itself
+    // are fine on v2 — it is the extra hop that loses the aggregate. A
+    // silent wrong-number, which is exactly what this harness exists to
+    // catch; it only missed it because these cases did not exist.
     id: '09-query-phrase-aggregate',
     source: 'src/09-product.js (batch query 3)',
     endpoint: '_query',
@@ -254,7 +255,7 @@ const CASES = [
       select: ['$value', { $sum: { $context: 'purchase' } }],
     },
     note: 'v2 per-candidate aggregates return 0; panel omitted on v2',
-    accept: 'v2 $f/$sum/$mean over a `get` query return 0 for every candidate — the app omits this panel on v2 rather than charting zeros',
+    accept: 'v2 zeroes $f/$sum when the `get` traverses a link (context.queryPhrase) — the app omits this panel on v2 rather than charting zeros',
   },
   {
     id: '09-weekly-trend-aggregate',
@@ -274,7 +275,7 @@ const CASES = [
       select: ['$value', '$f', { $sum: { $context: 'purchase' } }],
     },
     note: 'v1 wk0 f=150 sum=15; v2 f=0 sum=0 for every week',
-    accept: 'same per-candidate aggregate defect as 09-query-phrase-aggregate; the app omits this panel on v2',
+    accept: 'same linked-get aggregate defect as 09-query-phrase-aggregate (context.week); the app omits this panel on v2',
   },
   {
     id: '10-distinct-values',

@@ -100,27 +100,33 @@ export function productPropertyRelate(productProps) {
 }
 
 /**
- * Whether per-candidate aggregates over a `get` candidate query can be
- * trusted — `$f` (candidate frequency), `{$sum: {$context: …}}` and
- * `{$mean: {$context: …}}`.
+ * Whether a per-candidate aggregate — `$f`, `{$sum: {$context: …}}`,
+ * `{$mean: {$context: …}}` — can be trusted for a given `get` path.
  *
- * v1 computes them. v2 accepts the same select, answers 200, and returns
- * ZERO for every candidate. Measured on impressions/context.week for
- * product 2000818700008:
+ * On v2 these compute correctly for a table's OWN fields and for a link
+ * field itself, and collapse to ZERO when the candidate is reached THROUGH
+ * a link. Measured on 2.8.1, v1 against v2:
  *
- *   v1  wk0 f=150 sum=15 | wk1 f=315 sum=30 | wk2 f=354 sum=37
- *   v2  wk0 f=0   sum=0  | wk1 f=0   sum=0  | wk2 f=0   sum=0
+ *   impressions / purchase          own    2594  vs  2594   ok
+ *   impressions / product           link   334   vs  334    ok
+ *   contexts    / weekday           own    41    vs  41     ok
+ *   impressions / context.week      thru   354   vs  0      wrong
+ *   impressions / product.name      thru   1733  vs  0      wrong
+ *   visits      / user.tags         thru   51    vs  0      wrong
  *
- * The data is there — the same env reports 334 purchase impressions for
- * that product. v2 also requires an `orderBy` before it will accept `$f`
- * or `$sum` in `select` at all, which `_ops` does not mention; supplying
- * one gets past the 400 but the values are still zero.
+ * It is silent — 200 OK, every number zero — so a panel driven by one of
+ * these charts a flat line that reads as a real measurement. The data is
+ * present (334 purchase impressions for that product) and the candidates
+ * enumerate correctly; only the aggregate is lost.
  *
- * So the aggregates are unavailable rather than merely differently spelled,
- * and a panel driven by them renders zeros that look like real measurements.
- * Callers should omit those panels on v2 instead.
+ * v2 additionally refuses `$f`/`$sum` in `select` without an `orderBy`,
+ * which `_ops` does not mention, and rejects `orderBy: {$sum: …}` outright
+ * so candidates cannot be ranked BY an aggregate at all.
+ *
+ * @param {string} getPath - the `get` path, e.g. 'context.week'
  */
-export const perCandidateAggregates = () => !isV2()
+export const perCandidateAggregates = (getPath) =>
+  !isV2() || String(getPath).split('.').length < 2
 
 /**
  * POST an Aito query and return the normalised response payload directly

@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-09-09T08:04:29.536Z",
+  "capturedAt": "2026-09-09T08:29:04.009Z",
   "coreBuild": "TODO:antti-wire",
   "v1Base": "https://shared.aito.ai/db/aito-demo/api/v1",
   "v2Base": "https://shared.aito.ai/db/aito-demo/env/v2/api/v2",
@@ -1992,7 +1992,7 @@
       "source": "src/09-product.js (batch query 3)",
       "endpoint": "_query",
       "verdict": "ACCEPTED",
-      "detail": "v2 $f/$sum/$mean over a `get` query return 0 for every candidate — the app omits this panel on v2 rather than charting zeros",
+      "detail": "v2 zeroes $f/$sum when the `get` traverses a link (context.queryPhrase) — the app omits this panel on v2 rather than charting zeros",
       "note": "v2 per-candidate aggregates return 0; panel omitted on v2",
       "requestV1": {
         "from": "impressions",
@@ -2070,14 +2070,14 @@
         "hits[2].$score",
         "hits[3].$score"
       ],
-      "accepted": "v2 $f/$sum/$mean over a `get` query return 0 for every candidate — the app omits this panel on v2 rather than charting zeros"
+      "accepted": "v2 zeroes $f/$sum when the `get` traverses a link (context.queryPhrase) — the app omits this panel on v2 rather than charting zeros"
     },
     {
       "id": "09-weekly-trend-aggregate",
       "source": "src/09-product.js (batch query 4)",
       "endpoint": "_query",
       "verdict": "ACCEPTED",
-      "detail": "same per-candidate aggregate defect as 09-query-phrase-aggregate; the app omits this panel on v2",
+      "detail": "same linked-get aggregate defect as 09-query-phrase-aggregate (context.week); the app omits this panel on v2",
       "note": "v1 wk0 f=150 sum=15; v2 f=0 sum=0 for every week",
       "requestV1": {
         "from": "impressions",
@@ -2162,7 +2162,7 @@
         "hits[2].$sum.samples",
         "hits[3].$sum.samples"
       ],
-      "accepted": "same per-candidate aggregate defect as 09-query-phrase-aggregate; the app omits this panel on v2"
+      "accepted": "same linked-get aggregate defect as 09-query-phrase-aggregate (context.week); the app omits this panel on v2"
     },
     {
       "id": "10-distinct-values",

@@ -74,9 +74,10 @@ export function getProductAnalytics(id){
     const product = (productResp.hits && productResp.hits[0]) || {}
     const { id: _ignored, ...productProps } = product
     const propertyRelate = productPropertyRelate(productProps)
-    // $f / $sum / $mean over a `get` query return 0 on v2 — see
-    // perCandidateAggregates(). Those two panels are omitted there.
-    const aggregates = perCandidateAggregates()
+    // Both panels below `get` through a link (context.queryPhrase,
+    // context.week), where v2's per-candidate aggregates come back zero.
+    // See perCandidateAggregates(); omitted there rather than charted.
+    const aggregates = perCandidateAggregates('context.week')
 
     return aitoPostRaw('_batch',
     [
