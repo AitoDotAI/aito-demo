@@ -228,12 +228,11 @@ const CASES = [
     },
   },
   {
-    // Two of the five call sites the harness never covered. Both `get`
-    // THROUGH a link, where v2 answers 200 with ZERO for every candidate
-    // while v1 returns real counts. Own fields and the link field itself
-    // are fine on v2 — it is the extra hop that loses the aggregate. A
-    // silent wrong-number, which is exactly what this harness exists to
-    // catch; it only missed it because these cases did not exist.
+    // Two of the five call sites the harness never covered. Through 2.8.1
+    // both returned ZERO on v2 for every candidate (a `get` across a link
+    // lost the aggregate) while v1 returned real counts — a silent
+    // wrong-number. aito-core 2.8.2 fixed it; both now agree. Kept as cases
+    // because they are the shape that produced it.
     id: '09-query-phrase-aggregate',
     source: 'src/09-product.js (batch query 3)',
     endpoint: '_query',
@@ -251,31 +250,25 @@ const CASES = [
       from: 'impressions',
       where: { 'product.id': PRODUCT_ID },
       get: 'context.queryPhrase',
-      orderBy: '$f',
+      orderBy: { $sum: { $context: 'purchase' } },
       select: ['$value', { $sum: { $context: 'purchase' } }],
     },
     note: 'v2 per-candidate aggregates return 0; panel omitted on v2',
-    accept: 'v2 zeroes $f/$sum when the `get` traverses a link (context.queryPhrase) — the app omits this panel on v2 rather than charting zeros',
+    note: 'v2 rejects `$score` in select on this shape; the aggregate is selected by name and aliased back (rankedCandidateSelect/aliasScore)',
   },
   {
     id: '09-weekly-trend-aggregate',
     source: 'src/09-product.js (batch query 4)',
     endpoint: '_query',
-    bodyV1: {
+    body: {
       from: 'impressions',
       where: { 'product.id': PRODUCT_ID },
       get: 'context.week',
       select: ['$value', '$f', { $sum: { $context: 'purchase' } }],
     },
-    bodyV2: {
-      from: 'impressions',
-      where: { 'product.id': PRODUCT_ID },
-      get: 'context.week',
-      orderBy: '$f',
-      select: ['$value', '$f', { $sum: { $context: 'purchase' } }],
-    },
-    note: 'v1 wk0 f=150 sum=15; v2 f=0 sum=0 for every week',
-    accept: 'same linked-get aggregate defect as 09-query-phrase-aggregate (context.week); the app omits this panel on v2',
+    note: 'identical body on both since 2.8.2; was v1 f=150 vs v2 f=0 before',
+    accept: 'v1 adds $sum.samples per hit, v2 does not — the LineChart reads $value and $sum only',
+
   },
   {
     id: '10-distinct-values',

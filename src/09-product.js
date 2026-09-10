@@ -1,4 +1,4 @@
-import { aitoPostRaw, productPropertyRelate, perCandidateAggregates } from './aito-client'
+import { aitoPostRaw, productPropertyRelate, rankedCandidateSelect } from './aito-client'
 
 /**
  * Retrieves detailed information for a specific product by ID
@@ -74,10 +74,6 @@ export function getProductAnalytics(id){
     const product = (productResp.hits && productResp.hits[0]) || {}
     const { id: _ignored, ...productProps } = product
     const propertyRelate = productPropertyRelate(productProps)
-    // Both panels below `get` through a link (context.queryPhrase,
-    // context.week), where v2's per-candidate aggregates come back zero.
-    // See perCandidateAggregates(); omitted there rather than charted.
-    const aggregates = perCandidateAggregates('context.week')
 
     return aitoPostRaw('_batch',
     [
@@ -114,37 +110,32 @@ export function getProductAnalytics(id){
         "relate": ["purchases"],
         "select": ["lift", "related"]
       },
-      { // Analyze which search terms lead to this product being purchased.
-        // Ranked by purchases per phrase, which v2 cannot compute (zeros).
+      { // Which search phrases lead to this product being purchased, ranked
+        // by purchases per phrase. Both versions compute this since 2.8.2;
+        // only the select name of the ranking value differs — see
+        // rankedCandidateSelect(), and aito-compat aliases it back to
+        // `$score` so the page reads one field.
         "from": "impressions",
         "where": {
           "product.id": id
         },
-        ...(aggregates
-          ? {
-            "get": "context.queryPhrase",
-            "orderBy": { "$sum": {"$context": "purchase" } },
-            "select": ["$score", "$value"],
-          }
-          : { "limit": 0 }),
+        "get": "context.queryPhrase",
+        "orderBy": { "$sum": {"$context": "purchase" } },
+        "select": rankedCandidateSelect({ "$sum": {"$context": "purchase"} })
       },
-      { // Time-series analysis of purchase patterns. Same aggregate
-        // limitation as the panel above.
+      { // Time-series analysis of purchase patterns. Identical body on both
+        // versions since 2.8.2 restored linked-`get` aggregates.
         "from": "impressions",
         "where": {
           "product.id": id
         },
-        ...(aggregates
-          ? {
-            "get": "context.week",
-            "select": [
-              "$value",
-              "$f",
-              {"$sum": {"$context": "purchase"}},
-              {"$mean": {"$context": "purchase"}}
-            ],
-          }
-          : { "limit": 0 }),
+        "get": "context.week",
+        "select": [
+          "$value",
+          "$f",
+          {"$sum": {"$context": "purchase"}},
+          {"$mean": {"$context": "purchase"}}
+        ]
       }
     ])
       .then(response => {
@@ -153,13 +144,6 @@ export function getProductAnalytics(id){
         // marked result rather than anything that could be read as an answer.
         if (!propertyRelate.supported && Array.isArray(results) && results[0]) {
           results[0] = { ...results[0], hits: [], unsupported: 'aito-core#1064' }
-        }
-        // Panels 3 and 4 read per-candidate aggregates, which v2 returns as
-        // zeros. Empty beats a chart of flat zeroes that reads as real data.
-        if (!aggregates && Array.isArray(results)) {
-          for (const i of [3, 4]) {
-            if (results[i]) results[i] = { ...results[i], hits: [], unsupported: 'v2-per-candidate-aggregates' }
-          }
         }
         return results
       })

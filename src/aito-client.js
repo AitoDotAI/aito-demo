@@ -100,33 +100,26 @@ export function productPropertyRelate(productProps) {
 }
 
 /**
- * Whether a per-candidate aggregate — `$f`, `{$sum: {$context: …}}`,
- * `{$mean: {$context: …}}` — can be trusted for a given `get` path.
+ * `select` for a `get` candidate query ranked by a per-candidate aggregate.
  *
- * On v2 these compute correctly for a table's OWN fields and for a link
- * field itself, and collapse to ZERO when the candidate is reached THROUGH
- * a link. Measured on 2.8.1, v1 against v2:
+ * v1 exposes the ranking value as `$score` ("select: the orderBy value").
+ * v2 rejects `$score` in select on this query shape, so the aggregate is
+ * selected by name instead and aliased back to `$score` by the caller, which
+ * keeps the page reading one field.
  *
- *   impressions / purchase          own    2594  vs  2594   ok
- *   impressions / product           link   334   vs  334    ok
- *   contexts    / weekday           own    41    vs  41     ok
- *   impressions / context.week      thru   354   vs  0      wrong
- *   impressions / product.name      thru   1733  vs  0      wrong
- *   visits      / user.tags         thru   51    vs  0      wrong
+ * Everything else about this query converged in aito-core 2.8.2: linked-`get`
+ * aggregates return real values again (they were zero through 2.8.1), the
+ * undocumented "`$f`/`$sum` in select need an orderBy" constraint is gone, and
+ * `orderBy: {$sum: {$context: …}}` is accepted. Measured on 2.8.2, both
+ * versions now return banana=77, fruit=37, pirkka=35, vegetable=32.
  *
- * It is silent — 200 OK, every number zero — so a panel driven by one of
- * these charts a flat line that reads as a real measurement. The data is
- * present (334 purchase impressions for that product) and the candidates
- * enumerate correctly; only the aggregate is lost.
- *
- * v2 additionally refuses `$f`/`$sum` in `select` without an `orderBy`,
- * which `_ops` does not mention, and rejects `orderBy: {$sum: …}` outright
- * so candidates cannot be ranked BY an aggregate at all.
- *
- * @param {string} getPath - the `get` path, e.g. 'context.week'
+ * @param {object} aggregate - e.g. { $sum: { $context: 'purchase' } }
  */
-export const perCandidateAggregates = (getPath) =>
-  !isV2() || String(getPath).split('.').length < 2
+export function rankedCandidateSelect(aggregate) {
+  return isV2() ? ['$value', aggregate] : ['$score', '$value']
+}
+
+
 
 /**
  * POST an Aito query and return the normalised response payload directly

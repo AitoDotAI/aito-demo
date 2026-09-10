@@ -130,6 +130,10 @@ export function addV1Aliases(data, request) {
       hits: out.hits.map(hit => {
         if (!isObj(hit)) return hit
         let h = hit
+        // v1 exposes a `get` query's ranking value as `$score` ("the orderBy
+        // value"). v2 rejects `$score` in select on that shape, so the caller
+        // selects the aggregate by name; alias it back so pages read one field.
+        if (!('$score' in h) && '$sum' in h) h = { ...h, $score: h.$sum }
         if (!('feature' in h) && '$value' in h) {
           // For a `.$feature` target v2 wraps each member in a one-element
           // array; v1's `feature` is the bare member. Unwrap so consumers

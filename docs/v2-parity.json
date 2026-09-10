@@ -1,11 +1,11 @@
 {
-  "capturedAt": "2026-09-09T08:29:04.009Z",
+  "capturedAt": "2026-09-10T17:57:43.416Z",
   "coreBuild": "TODO:antti-wire",
   "v1Base": "https://shared.aito.ai/db/aito-demo/api/v1",
   "v2Base": "https://shared.aito.ai/db/aito-demo/env/v2/api/v2",
   "tally": {
-    "VALUES": 23,
-    "ACCEPTED": 5,
+    "VALUES": 24,
+    "ACCEPTED": 4,
     "NORMALISED": 1
   },
   "cases": [
@@ -1991,9 +1991,9 @@
       "id": "09-query-phrase-aggregate",
       "source": "src/09-product.js (batch query 3)",
       "endpoint": "_query",
-      "verdict": "ACCEPTED",
-      "detail": "v2 zeroes $f/$sum when the `get` traverses a link (context.queryPhrase) — the app omits this panel on v2 rather than charting zeros",
-      "note": "v2 per-candidate aggregates return 0; panel omitted on v2",
+      "verdict": "VALUES",
+      "detail": "all v1 fields present; 0 numeric value(s) differ",
+      "note": "v2 rejects `$score` in select on this shape; the aggregate is selected by name and aliased back (rankedCandidateSelect/aliasScore)",
       "requestV1": {
         "from": "impressions",
         "where": {
@@ -2016,7 +2016,11 @@
           "product.id": "6410405082657"
         },
         "get": "context.queryPhrase",
-        "orderBy": "$f",
+        "orderBy": {
+          "$sum": {
+            "$context": "purchase"
+          }
+        },
         "select": [
           "$value",
           {
@@ -2052,33 +2056,28 @@
           "total": 118,
           "hits": [
             {
-              "$sum": 0,
+              "$sum": 29,
               "$value": ""
             },
             {
-              "$sum": 0,
-              "$value": "1l"
+              "$sum": 12,
+              "$value": "semi-skimmed"
             }
           ],
           "_hitsTruncatedFrom": 10
         }
       },
-      "valueDeltas": null,
-      "missingOnV2": [
-        "hits[0].$score",
-        "hits[1].$score",
-        "hits[2].$score",
-        "hits[3].$score"
-      ],
-      "accepted": "v2 zeroes $f/$sum when the `get` traverses a link (context.queryPhrase) — the app omits this panel on v2 rather than charting zeros"
+      "valueDeltas": [],
+      "missingOnV2": null,
+      "accepted": null
     },
     {
       "id": "09-weekly-trend-aggregate",
       "source": "src/09-product.js (batch query 4)",
       "endpoint": "_query",
       "verdict": "ACCEPTED",
-      "detail": "same linked-get aggregate defect as 09-query-phrase-aggregate (context.week); the app omits this panel on v2",
-      "note": "v1 wk0 f=150 sum=15; v2 f=0 sum=0 for every week",
+      "detail": "v1 adds $sum.samples per hit, v2 does not — the LineChart reads $value and $sum only",
+      "note": "identical body on both since 2.8.2; was v1 f=150 vs v2 f=0 before",
       "requestV1": {
         "from": "impressions",
         "where": {
@@ -2101,7 +2100,6 @@
           "product.id": "6410405082657"
         },
         "get": "context.week",
-        "orderBy": "$f",
         "select": [
           "$value",
           "$f",
@@ -2112,7 +2110,7 @@
           }
         ]
       },
-      "bodiesDiffer": true,
+      "bodiesDiffer": false,
       "v1": {
         "status": 200,
         "sample": {
@@ -2142,13 +2140,13 @@
           "total": 10,
           "hits": [
             {
-              "$f": 0,
-              "$sum": 0,
+              "$f": 107,
+              "$sum": 3,
               "$value": 0
             },
             {
-              "$f": 0,
-              "$sum": 0,
+              "$f": 226,
+              "$sum": 7,
               "$value": 1
             }
           ],
@@ -2162,7 +2160,7 @@
         "hits[2].$sum.samples",
         "hits[3].$sum.samples"
       ],
-      "accepted": "same linked-get aggregate defect as 09-query-phrase-aggregate (context.week); the app omits this panel on v2"
+      "accepted": "v1 adds $sum.samples per hit, v2 does not — the LineChart reads $value and $sum only"
     },
     {
       "id": "10-distinct-values",
@@ -2210,15 +2208,11 @@
           "hits": [
             {
               "$p": 0.5523574000014585,
-              "$value": "male",
-              "feature": "male",
-              "field": "user.tags.$feature"
+              "$value": "male"
             },
             {
               "$p": 0.5106223702799423,
-              "$value": "club-member",
-              "feature": "club-member",
-              "field": "user.tags.$feature"
+              "$value": "club-member"
             }
           ],
           "_hitsTruncatedFrom": 4
