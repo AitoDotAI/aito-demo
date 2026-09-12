@@ -77,6 +77,25 @@ const CASES = [
       select: ['$p', '$value'],
       limit: 5,
     },
+    // v2 does not use the `$startsWith` to narrow the CANDIDATE SET for a `get`:
+    // it considers every distinct queryPhrase in the table (118) where v1
+    // considers the 3 that match. As a plain row filter the operator is exact on
+    // both (49 rows each), so it is the candidate universe that falls open --
+    // the same shape as _recommend's pool in td-20260909113425698997.
+    //
+    // The user-visible result is junk autocomplete: typing "milk" offers
+    // "nuggets" and "iceberg salad". Filed as td-20260912103747417143.
+    //
+    // This case reported `total: v1=2 v2=118` as a plain VALUES diff for weeks
+    // and I read it as engine drift. A 59x difference in a count was the defect
+    // in plain sight, which is exactly what an invariant is for.
+    invariant: {
+      name: 'every suggested value starts with the requested prefix',
+      holds: payload => {
+        const hits = (payload && payload.hits) || []
+        return hits.every(h => typeof h.$value === 'string' && h.$value.startsWith('so'))
+      },
+    },
   },
   {
     id: '03-search',
@@ -338,6 +357,42 @@ const CASES = [
         predict: 'GLCode',
       },
       select: ['n', 'accuracy', 'baseAccuracy', 'accuracyGain', 'meanRank'],
+    },
+  },
+  {
+    // What the Model Quality page actually sends -- note `cases` in the select.
+    // The two evaluate cases above ask only for metrics, which is why the
+    // harness never saw this: the per-case detail is a different response shape
+    // and nothing exercised it.
+    //
+    // v2 answers 200 with the same top-level keys and the same case keys, but
+    // two fields inside each case are impoverished:
+    //
+    //   testCase  v1 = the WHOLE row (18 fields on invoices)
+    //             v2 = ONLY the fields the query named (Description, Processor)
+    //   top/correct
+    //             v1 = the RESOLVED link target {Name, Role, Department, ...}
+    //             v2 = the raw key {$value, $p, rank}
+    //
+    // So the page's ID / SENDER / PRODUCT / ACCOUNT columns render blank (it
+    // reads testCase.InvoiceID etc.) and PREDICTED / ACTUAL render "-" (it reads
+    // prediction.Name || prediction.feature). Measured on 2.8.3; production v1
+    // fills every column.
+    //
+    // Deliberately NOT marked `accept`: this is an open defect that blocks the
+    // v2 default, so it should stay fatal under --ci rather than become one more
+    // amber line a reader learns to scroll past.
+    id: '11-evaluate-cases',
+    source: 'src/app/pages/EvaluationPage.js:107',
+    endpoint: '_evaluate',
+    body: {
+      test: { $or: [{ $index: 3 }, { $index: 13 }, { $index: 21 }] },
+      evaluate: {
+        from: 'invoices',
+        where: { Description: { $get: 'Description' } },
+        predict: 'Processor',
+      },
+      select: ['accuracy', 'meanRank', 'meanMs', 'trainSamples', 'testSamples', 'cases'],
     },
   },
   {
