@@ -360,28 +360,38 @@ const CASES = [
     },
   },
   {
-    // What the Model Quality page actually sends -- note `cases` in the select.
-    // The two evaluate cases above ask only for metrics, which is why the
-    // harness never saw this: the per-case detail is a different response shape
-    // and nothing exercised it.
+    // What the Model Quality page sends, with every display field BOUND.
     //
-    // v2 answers 200 with the same top-level keys and the same case keys, but
-    // two fields inside each case are impoverished:
+    // An earlier version of this case bound only `Description` -- what the page
+    // defaults to -- and reported 64 missing fields, which I read as a v2
+    // defect. It is not. Checked against the v2 docs and the engine:
     //
-    //   testCase  v1 = the WHOLE row (18 fields on invoices)
-    //             v2 = ONLY the fields the query named (Description, Processor)
+    //  * `cases` is a valid v2 select. `_evaluate` enumerates its select
+    //    vocabulary on an unknown name, and it lists cases, accurateCases and
+    //    errorCases alongside the scalar metrics. (The published v2 evaluation
+    //    page documents only the scalars -- that gap is worth a docs ticket,
+    //    but the operator is real.)
+    //  * The case keys are IDENTICAL on both versions: offset, testCase, top,
+    //    correct, accurate.
+    //  * `testCase` echoes exactly the fields the query BOUND via `$get`. Bind
+    //    five and v2 returns five (plus the predict target); bind one and it
+    //    returns one. v1 returns all 18 columns of the row regardless of what
+    //    was asked. So the page's blank ID/SENDER/PRODUCT/ACCOUNT cells were
+    //    the page rendering columns it never asked for and v1 covering for it.
+    //    Fixed in the page, which now renders one column per selected input.
+    //
+    // WHAT GENUINELY DIFFERS, and why this stays ACCEPTED rather than fatal:
+    //
+    //   testCase  v1 = all 18 row fields   v2 = the 6 the query named
     //   top/correct
-    //             v1 = the RESOLVED link target {Name, Role, Department, ...}
-    //             v2 = the raw key {$value, $p, rank}
+    //             v1 = the RESOLVED link target {Name, Role, Department,
+    //                  Superior, $p}
+    //             v2 = the value {$value, $p, rank}
     //
-    // So the page's ID / SENDER / PRODUCT / ACCOUNT columns render blank (it
-    // reads testCase.InvoiceID etc.) and PREDICTED / ACTUAL render "-" (it reads
-    // prediction.Name || prediction.feature). Measured on 2.8.3; production v1
-    // fills every column.
-    //
-    // Deliberately NOT marked `accept`: this is an open defect that blocks the
-    // v2 default, so it should stay fatal under --ci rather than become one more
-    // amber line a reader learns to scroll past.
+    // `$value` is v2's name for a predicted value throughout, so aito-compat
+    // aliases it to `feature` (as it already does for hits[]), which is what
+    // the page reads. The resolved-link fields have no v2 counterpart in this
+    // response; a consumer that wants Role or Department has to fetch them.
     id: '11-evaluate-cases',
     source: 'src/app/pages/EvaluationPage.js:107',
     endpoint: '_evaluate',
@@ -389,11 +399,21 @@ const CASES = [
       test: { $or: [{ $index: 3 }, { $index: 13 }, { $index: 21 }] },
       evaluate: {
         from: 'invoices',
-        where: { Description: { $get: 'Description' } },
+        where: {
+          Description: { $get: 'Description' },
+          SenderName: { $get: 'SenderName' },
+          ProductName: { $get: 'ProductName' },
+          AccountNumber: { $get: 'AccountNumber' },
+          InvoiceID: { $get: 'InvoiceID' },
+        },
         predict: 'Processor',
       },
       select: ['accuracy', 'meanRank', 'meanMs', 'trainSamples', 'testSamples', 'cases'],
     },
+    accept:
+      'v1 echoes the whole test row and resolves the predicted link; v2 echoes the '
+      + 'bound evidence and returns {$value,$p,rank}. Both display fields and the '
+      + 'predicted value survive (aito-compat aliases $value -> feature).',
   },
   {
     // v1 selects `estimate`; v2 renamed the field to `value`.

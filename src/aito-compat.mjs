@@ -165,6 +165,37 @@ export function addV1Aliases(data, request) {
     out = { ...out, estimate: out.value }
   }
 
+  // `_evaluate` with `cases` in the select returns one entry per test row. The
+  // entry keys are the same on both versions (offset/testCase/top/correct/
+  // accurate), but `top` and `correct` name the predicted value differently:
+  //
+  //   v1  { Name: "David Green", Role: …, Department: …, $p }  (the link target,
+  //                                                             RESOLVED)
+  //   v2  { $value: "David Green", $p, rank }                   (the value)
+  //
+  // `$value` is v2's name for a predicted value everywhere else too, which is
+  // why `hits[].$value` is aliased above; this is the same rename one level
+  // deeper. Without it the Model Quality table renders "-" for every PREDICTED
+  // and ACTUAL cell, because the page reads `.Name || .feature`.
+  //
+  // NOTE the v1 shape is richer, not merely differently named: it resolves the
+  // link and hands back the whole employee row. Anything wanting `Role` or
+  // `Department` has to fetch them; only the value itself is aliased here.
+  if (Array.isArray(out.cases)) {
+    const aliasValue = v => (isObj(v) && !('feature' in v) && '$value' in v)
+      ? { ...v, feature: v.$value }
+      : v
+    out = {
+      ...out,
+      cases: out.cases.map(c => {
+        if (!isObj(c)) return c
+        const top = aliasValue(c.top)
+        const correct = aliasValue(c.correct)
+        return (top === c.top && correct === c.correct) ? c : { ...c, top, correct }
+      }),
+    }
+  }
+
   return out
 }
 
