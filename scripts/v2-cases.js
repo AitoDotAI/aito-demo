@@ -30,6 +30,42 @@ const CASES = [
     },
   },
   {
+    // The basket-exclusion shape, with ids that ARE in the unfiltered top 5.
+    //
+    // 01-recommend above excludes PRODUCT_ID, which never ranks that high, so
+    // the exclusion is a no-op there and a version that drops the filter
+    // entirely still matches. This case is the opposite: both excluded ids are
+    // in the baseline answer, so honouring the filter is observable.
+    //
+    // Measured on aito-core 2.8.3 (a4d4903c): v1 drops both; v2 returns both,
+    // at ranks 1 and 5. `_query` applies the same `$not` exactly on both
+    // versions (90325/88654 rows, identical), so the defect is specific to
+    // _recommend's candidate pool. 2.8.3's b7d052706 fixed the `$match` form
+    // of this and left negation. Filed as td-20260909113425698997.
+    id: '01-recommend-exclusion',
+    source: 'src/01-recommend.js:44',
+    endpoint: '_recommend',
+    body: {
+      from: 'impressions',
+      where: {
+        'context.user': USER,
+        'product.id': { $and: [{ $not: '2000818700008' }, { $not: '6413200330206' }] },
+      },
+      recommend: 'product',
+      goal: { purchase: true },
+      select: ['name', 'id', 'tags', 'price'],
+      limit: 5,
+    },
+    invariant: {
+      name: 'no excluded product appears in the recommendations',
+      holds: payload => {
+        const excluded = ['2000818700008', '6413200330206']
+        const hits = (payload && payload.hits) || []
+        return !hits.some(h => excluded.includes(h.id))
+      },
+    },
+  },
+  {
     id: '02-autocomplete',
     source: 'src/02-autocomplete.js:35',
     endpoint: '_query',
