@@ -12,7 +12,26 @@ import {
   ModalFooter,
 } from 'reactstrap'
 import './ProductPage.css'
+
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+/**
+ * Render the value side of a `_relate` proposition as a label.
+ *
+ * v1 always relates a SET MEMBER, so the value is a string. v2 does too for a
+ * Set column read directly, but for one reached THROUGH A LINK it relates the
+ * whole array and the value is e.g. ["male","club-member","young"] — a
+ * different question (which exact tag-SET predicts purchase, rather than which
+ * tag does). Filed as td-20260909113225686871.
+ *
+ * Handed an array, React renders its elements adjacent with no separator, so
+ * that row read "maleclub-memberyoung". Joining explicitly is not a workaround
+ * for the engine difference — the rows are still combinations — it just stops
+ * us from presenting a combination as though it were one mangled tag.
+ */
+function relationLabel(value) {
+  return Array.isArray(value) ? value.join(' + ') : value
+}
 
 class ProductPage extends Component {
   constructor(props) {
@@ -208,11 +227,11 @@ class ProductPage extends Component {
                 .map((a, index) => {
                   let label = "";
                   if (a.related["product.name"]) {
-                    label = `Title: ${a.related["product.name"]["$has"]}`;
+                    label = `Title: ${relationLabel(a.related["product.name"]["$has"])}`;
                   } else if (a.related["product.category"]) {
-                    label = `Category: ${a.related["product.category"]["$has"]}`;
+                    label = `Category: ${relationLabel(a.related["product.category"]["$has"])}`;
                   } else {
-                    label = `Tag: ${a.related["product.tags"]["$has"]}`;
+                    label = `Tag: ${relationLabel(a.related["product.tags"]["$has"])}`;
                   }
                   return (
                     <li key={index} className="InsightsList__item">
@@ -231,7 +250,7 @@ class ProductPage extends Component {
             <ul className="InsightsList">
               {this.state.analytics && this.state.analytics[1].hits.map((a, index) => (
                 <li key={index} className="InsightsList__item">
-                  <span className="InsightsList__label">{a.related["user.tags"]["$has"]}</span>
+                  <span className="InsightsList__label">{relationLabel(a.related["user.tags"]["$has"])}</span>
                   <span className={`InsightsList__value ${a.lift > 1 ? 'InsightsList__value--positive' : 'InsightsList__value--negative'}`}>
                     {a.lift.toFixed(2)}x
                   </span>
