@@ -54,7 +54,8 @@
     "screenshots:placeholders": "node scripts/screenshot/create-placeholder-screenshots.js",
     "screenshots:specific": "npx playwright test scripts/screenshot/screenshots.spec.js --project=chromium --grep 'Specific Feature Screenshots'",
     "screenshots:verify": "node scripts/screenshot/verify-screenshots.js",
-    "screenshots:docker": "./scripts/screenshot/docker-screenshots.sh"
+    "screenshots:docker": "./scripts/screenshot/docker-screenshots.sh",
+    "v2:quality": "node scripts/v2-quality.js"
   },
   "eslintConfig": {
     "extends": "react-app"
