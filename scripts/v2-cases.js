@@ -256,10 +256,19 @@ const CASES = [
     // until 2.8.1 added the `$props` carrier and made v1's nested spelling an
     // alias for it. Both versions now answer the same question.
     //
-    // Two differences remain and are expected: v1 tokenises Text and relates
+    // ONE difference remains and is expected: v1 tokenises Text and relates
     // each token ({$has:"banana"}, lift 1.9106) where v2 relates the whole
-    // value ("Pirkka banana", lift 2.0942); and v2 rejects array-valued
-    // properties, so the app drops them there.
+    // value ("Pirkka banana", lift 2.0942).
+    //
+    // The Tag rows used to be the other half of this note. They are no longer
+    // lost: v2 cannot name a linked SET member on the relate side, so the app
+    // asks each one from the other end (tag in the `where`, the direct
+    // `purchase` column as the relate target) and folds the results back in.
+    // Lift is symmetric and the engine agrees to the digit — `category` is the
+    // one proposition both forms support, and both give 1.6473 on 2.8.4.
+    // That recovery is NOT modelled by this case, which pins the raw $props
+    // request; setMemberLiftQueries/mergeSetMemberLifts are unit-tested in
+    // src/__tests__/api/product-relate.test.js instead.
     id: '09-relate-purchase-props',
     source: 'src/09-product.js (batch query 1)',
     endpoint: '_relate',
@@ -269,7 +278,9 @@ const CASES = [
       relate: { product: { name: PRODUCT_NAME, category: '100' } },
       select: ['lift', 'related'],
     },
-    accept: 'v1 relates Text per token, v2 relates the whole value — same question, coarser rows on v2',
+    accept:
+      'v1 relates Text per token, v2 relates the whole value — one fewer row on v2. '
+      + 'The Tag rows this note used to cover are recovered separately; see the comment.',
   },
   {
     id: '09-relate-demographics',

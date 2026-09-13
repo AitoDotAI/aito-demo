@@ -1,4 +1,10 @@
-import { aitoPostRaw, productPropertyRelate, rankedCandidateSelect } from './aito-client'
+import {
+  aitoPostRaw,
+  productPropertyRelate,
+  rankedCandidateSelect,
+  setMemberLiftQueries,
+  mergeSetMemberLifts,
+} from './aito-client'
 
 /**
  * Retrieves detailed information for a specific product by ID
@@ -74,6 +80,11 @@ export function getProductAnalytics(id){
     const product = (productResp.hits && productResp.hits[0]) || {}
     const { id: _ignored, ...productProps } = product
     const propertyRelate = productPropertyRelate(productProps)
+    // v2 cannot name a linked SET member on the relate side, so each tag is
+    // asked from the other end instead. Empty on v1, which needs no such help.
+    // These ride in the SAME batch, after the five the page reads positionally,
+    // so recovering them costs no extra round trip and cannot shift an index.
+    const memberQueries = setMemberLiftQueries(productProps)
 
     return aitoPostRaw('_batch',
     [
@@ -136,14 +147,23 @@ export function getProductAnalytics(id){
           {"$sum": {"$context": "purchase"}},
           {"$mean": {"$context": "purchase"}}
         ]
-      }
+      },
+      ...memberQueries.map(q => q.body)
     ])
       .then(response => {
-        const results = response.data
+        const all = response.data
+        // The page reads results[0..4] positionally; the member queries are
+        // everything after that.
+        const results = Array.isArray(all) ? all.slice(0, 5) : all
+        const memberResults = Array.isArray(all) ? all.slice(5) : []
+
         // Where v2 cannot ask the question, hand back an empty, explicitly
         // marked result rather than anything that could be read as an answer.
         if (!propertyRelate.supported && Array.isArray(results) && results[0]) {
           results[0] = { ...results[0], hits: [], unsupported: 'aito-core#1064' }
+        }
+        if (Array.isArray(results) && results[0]) {
+          results[0] = mergeSetMemberLifts(results[0], memberQueries, memberResults)
         }
         return results
       })
