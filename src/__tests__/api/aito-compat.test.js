@@ -211,3 +211,57 @@ describe('normalize: server-supplied `field` (aito-core#1063)', () => {
       .toBe('user.tags')
   })
 })
+
+describe('normalize: _evaluate cases[].top / .correct', () => {
+  // Real shapes, captured from shared.aito.ai on aito-core 2.8.3 for
+  // predict: 'Processor' (a link to `employees`):
+  //   v1 top -> { Name: 'David Green', Role: …, Department: …, Superior: …, $p }
+  //   v2 top -> { $value: 'David Green', $p, rank }
+  // EvaluationPage reads `prediction.Name || prediction.feature`, so without the
+  // alias every PREDICTED and ACTUAL cell renders '-' on v2.
+  const v2Cases = {
+    kind: 'evaluate',
+    data: {
+      accuracy: 1,
+      cases: [{
+        offset: 0,
+        testCase: { Description: 'Purchase of Grocery Store Products', Processor: 'David Green' },
+        accurate: true,
+        top: { $value: 'David Green', $p: 0.94 },
+        correct: { $value: 'David Green', $p: 0.94, rank: 0 },
+      }],
+    },
+  }
+
+  it('aliases $value to feature on both top and correct', () => {
+    const out = normalize(v2Cases, {})
+    expect(out.cases[0].top.feature).toBe('David Green')
+    expect(out.cases[0].correct.feature).toBe('David Green')
+  })
+
+  it('keeps the v2 names alongside the alias', () => {
+    const out = normalize(v2Cases, {})
+    expect(out.cases[0].top.$value).toBe('David Green')
+    expect(out.cases[0].correct.rank).toBe(0)
+  })
+
+  it('leaves a v1 payload untouched — it has no $value to alias', () => {
+    const v1 = {
+      accuracy: 1,
+      cases: [{
+        offset: 0,
+        testCase: { InvoiceID: 'INV-8003' },
+        accurate: true,
+        top: { Name: 'David Green', Role: 'Store Manager', $p: 0.94 },
+        correct: { Name: 'David Green', Role: 'Store Manager', $p: 0.94 },
+      }],
+    }
+    const out = normalize(v1, {})
+    expect(out.cases[0].top).toEqual(v1.cases[0].top)
+    expect(out.cases[0].top.feature).toBeUndefined()
+  })
+
+  it('does not invent a cases array when the response has none', () => {
+    expect(normalize({ kind: 'evaluate', data: { accuracy: 1 } }, {}).cases).toBeUndefined()
+  })
+})

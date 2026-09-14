@@ -143,6 +143,8 @@ function coverage(a, b, prefix = '', acc = { missing: [], differing: [] }) {
 /**
  * Verdicts, worst to best:
  *   BREAK       v2 returned an error
+ *   VIOLATED    a case invariant failed — the answer is wrong on its own terms,
+ *               independently of what the other version said
  *   V2-GAP      v2 errors, and the case declares that as a known missing form
  *   MISSING     v2 omits a field v1 supplied — the app would read undefined
  *   ACCEPTED    a MISSING that the case declares as a known, checked-off gap
@@ -152,6 +154,15 @@ function coverage(a, b, prefix = '', acc = { missing: [], differing: [] }) {
  *   IDENTICAL   byte-for-byte equal
  */
 function classify(c, r1, r2) {
+  // Neither engine answered on its merits, so there is nothing to compare and
+  // nothing to conclude. THROTTLED is not a pass: the run is incomplete, and
+  // the summary says so rather than quietly scoring it.
+  if (r1.rateLimited || r2.rateLimited) {
+    return {
+      verdict: 'THROTTLED',
+      detail: 'rate limited (HTTP 429) — back off and re-run; this case was not compared',
+    }
+  }
   if (!r2.ok) {
     // A case may declare `expectV2Error` when v2 has NO form for the question
     // and the app therefore does not send it there. Keeping the v1 body on
@@ -163,6 +174,30 @@ function classify(c, r1, r2) {
     return { verdict: 'BREAK', detail: r2.error }
   }
   if (!r1.ok) return { verdict: 'V1-BREAK', detail: r1.error }
+
+  // A case may declare `invariant: {name, holds(payload)}` — a property the
+  // answer must satisfy ON ITS OWN, with no reference to the other version.
+  //
+  // This exists because a v1<->v2 diff cannot see a defect both versions share,
+  // and cannot tell "the filter was applied and changed nothing" from "the
+  // filter was dropped". The basket-exclusion case is exactly that: it excluded
+  // a product that was never in the top 5, so v2 silently ignoring the filter
+  // produced no diff at all and the harness reported the case as fine while the
+  // live demo recommended products already in the cart. See
+  // td-20260907223814485293.
+  if (c.invariant) {
+    const failed = [
+      ['v1', unwrap(r1.data).value],
+      ['v2', unwrap(r2.data).value],
+    ].filter(([, payload]) => !c.invariant.holds(payload))
+     .map(([version]) => version)
+    if (failed.length) {
+      return {
+        verdict: 'VIOLATED',
+        detail: `${failed.join(' and ')} violate(s): ${c.invariant.name}`,
+      }
+    }
+  }
 
   // Raw payloads, to detect a difference the app's normaliser papers over.
   const rawEnvelopeDiff = unwrap(r2.data).wrapped && !unwrap(r1.data).wrapped
@@ -242,8 +277,16 @@ async function call(baseUrl, endpoint, body) {
     return { ok: true, status: res.status, data: res.data }
   } catch (e) {
     const d = e.response && e.response.data
+    const status = e.response && e.response.status
     const msg = (d && d.data && d.data.message) || (d && d.message) || e.message
-    return { ok: false, status: e.response && e.response.status, error: msg, data: d }
+    // 429 is the shared instance throttling US, not a defect in either engine.
+    // Reporting it as BREAK sends the reader hunting for a bug that is not
+    // there — which it did, after a run of heavy _evaluate calls saturated the
+    // instance. Named explicitly so the next reader backs off instead.
+    if (status === 429) {
+      return { ok: false, status, rateLimited: true, error: 'rate limited (HTTP 429)', data: d }
+    }
+    return { ok: false, status, error: msg, data: d }
   }
 }
 
@@ -262,7 +305,7 @@ const COLOR = process.stdout.isTTY
 const tint = (s, c) => (COLOR ? `[${c}m${s}[0m` : s)
 const paint = v => ({
   IDENTICAL: tint(v, 32), NORMALISED: tint(v, 32), 'BODY-DIFF': tint(v, 36),
-  VALUES: tint(v, 33), ACCEPTED: tint(v, 36), 'V2-GAP': tint(v, 36), MISSING: tint(v, 31), BREAK: tint(v, 31), 'V1-BREAK': tint(v, 31),
+  VALUES: tint(v, 33), ACCEPTED: tint(v, 36), 'V2-GAP': tint(v, 36), MISSING: tint(v, 31), BREAK: tint(v, 31), 'V1-BREAK': tint(v, 31), VIOLATED: tint(v, 31), THROTTLED: tint(v, 35),
 }[v] || v)
 
 /**
@@ -359,7 +402,17 @@ async function main() {
     console.log(`\nwrote ${path.relative(process.cwd(), outFile)}`)
   }
 
-  const fatal = results.filter(r => ['BREAK', 'MISSING', 'V1-BREAK'].includes(r.verdict.verdict)).length
+  const throttled = results.filter(r => r.verdict.verdict === 'THROTTLED').length
+  if (throttled) {
+    console.log(`\n${throttled} case(s) were RATE LIMITED and not compared. `
+      + 'This run is incomplete — wait a few minutes and re-run before reading anything into it.')
+  }
+  const fatal = results.filter(r => ['BREAK', 'MISSING', 'V1-BREAK', 'VIOLATED'].includes(r.verdict.verdict)).length
+  if (ciMode && throttled) {
+    console.error(`\nFAIL: ${throttled} case(s) rate limited — the run did not complete, `
+      + 'so it cannot be read as a pass')
+    process.exit(1)
+  }
   if (ciMode && fatal) {
     console.error(`\nFAIL: ${fatal} case(s) error on v2 or drop a field the app reads`)
     process.exit(1)

@@ -30,6 +30,42 @@ const CASES = [
     },
   },
   {
+    // The basket-exclusion shape, with ids that ARE in the unfiltered top 5.
+    //
+    // 01-recommend above excludes PRODUCT_ID, which never ranks that high, so
+    // the exclusion is a no-op there and a version that drops the filter
+    // entirely still matches. This case is the opposite: both excluded ids are
+    // in the baseline answer, so honouring the filter is observable.
+    //
+    // Measured on aito-core 2.8.3 (a4d4903c): v1 drops both; v2 returns both,
+    // at ranks 1 and 5. `_query` applies the same `$not` exactly on both
+    // versions (90325/88654 rows, identical), so the defect is specific to
+    // _recommend's candidate pool. 2.8.3's b7d052706 fixed the `$match` form
+    // of this and left negation. Filed as td-20260909113425698997.
+    id: '01-recommend-exclusion',
+    source: 'src/01-recommend.js:44',
+    endpoint: '_recommend',
+    body: {
+      from: 'impressions',
+      where: {
+        'context.user': USER,
+        'product.id': { $and: [{ $not: '2000818700008' }, { $not: '6413200330206' }] },
+      },
+      recommend: 'product',
+      goal: { purchase: true },
+      select: ['name', 'id', 'tags', 'price'],
+      limit: 5,
+    },
+    invariant: {
+      name: 'no excluded product appears in the recommendations',
+      holds: payload => {
+        const excluded = ['2000818700008', '6413200330206']
+        const hits = (payload && payload.hits) || []
+        return !hits.some(h => excluded.includes(h.id))
+      },
+    },
+  },
+  {
     id: '02-autocomplete',
     source: 'src/02-autocomplete.js:35',
     endpoint: '_query',
@@ -40,6 +76,25 @@ const CASES = [
       orderBy: '$p',
       select: ['$p', '$value'],
       limit: 5,
+    },
+    // v2 does not use the `$startsWith` to narrow the CANDIDATE SET for a `get`:
+    // it considers every distinct queryPhrase in the table (118) where v1
+    // considers the 3 that match. As a plain row filter the operator is exact on
+    // both (49 rows each), so it is the candidate universe that falls open --
+    // the same shape as _recommend's pool in td-20260909113425698997.
+    //
+    // The user-visible result is junk autocomplete: typing "milk" offers
+    // "nuggets" and "iceberg salad". Filed as td-20260912103747417143.
+    //
+    // This case reported `total: v1=2 v2=118` as a plain VALUES diff for weeks
+    // and I read it as engine drift. A 59x difference in a count was the defect
+    // in plain sight, which is exactly what an invariant is for.
+    invariant: {
+      name: 'every suggested value starts with the requested prefix',
+      holds: payload => {
+        const hits = (payload && payload.hits) || []
+        return hits.every(h => typeof h.$value === 'string' && h.$value.startsWith('so'))
+      },
     },
   },
   {
@@ -197,23 +252,25 @@ const CASES = [
     },
   },
   {
-    // The "CTR by Product Property" panel. v1 answers it with the nested
-    // proposition object, returning one row per property value of THIS
-    // product:  condition {purchase}, related {product.name: {$has:"banana"}},
-    // lift 1.91.
+    // The "CTR by Product Property" panel. Was a hard v2 gap (aito-core#1064)
+    // until 2.8.1 added the `$props` carrier and made v1's nested spelling an
+    // alias for it. Both versions now answer the same question.
     //
-    // v2 has no form that asks this, so the app does not send it there at all
-    // (src/aito-client.js productPropertyRelate -> {supported:false}). Both
-    // v2 spellings answer something else on the same data:
-    //   - the field array ranks propositions population-wide; this product
-    //     first appears around rank 100
-    //   - the object condition INVERTS the relation, ANDing the argument with
-    //     the where onto the related side and enumerating conditions across
-    //     products, giving lift 7.71 against v1's 1.91
-    // That is aito-core#1064. The case keeps the v1 body on both sides so the
-    // gap stays visible in the run rather than disappearing with the query.
+    // ONE difference remains and is expected: v1 tokenises Text and relates
+    // each token ({$has:"banana"}, lift 1.9106) where v2 relates the whole
+    // value ("Pirkka banana", lift 2.0942).
+    //
+    // The Tag rows used to be the other half of this note. They are no longer
+    // lost: v2 cannot name a linked SET member on the relate side, so the app
+    // asks each one from the other end (tag in the `where`, the direct
+    // `purchase` column as the relate target) and folds the results back in.
+    // Lift is symmetric and the engine agrees to the digit — `category` is the
+    // one proposition both forms support, and both give 1.6473 on 2.8.4.
+    // That recovery is NOT modelled by this case, which pins the raw $props
+    // request; setMemberLiftQueries/mergeSetMemberLifts are unit-tested in
+    // src/__tests__/api/product-relate.test.js instead.
     id: '09-relate-purchase-props',
-    source: 'src/09-product.js (batch query 1) — v1 only',
+    source: 'src/09-product.js (batch query 1)',
     endpoint: '_relate',
     body: {
       from: 'impressions',
@@ -221,7 +278,9 @@ const CASES = [
       relate: { product: { name: PRODUCT_NAME, category: '100' } },
       select: ['lift', 'related'],
     },
-    expectV2Error: 'v2 has no form for per-product proposition lift (aito-core#1064); the app sends this on v1 only',
+    accept:
+      'v1 relates Text per token, v2 relates the whole value — one fewer row on v2. '
+      + 'The Tag rows this note used to cover are recovered separately; see the comment.',
   },
   {
     id: '09-relate-demographics',
@@ -233,6 +292,49 @@ const CASES = [
       relate: ['user.tags'],
       select: ['lift', 'related'],
     },
+  },
+  {
+    // Two of the five call sites the harness never covered. Through 2.8.1
+    // both returned ZERO on v2 for every candidate (a `get` across a link
+    // lost the aggregate) while v1 returned real counts — a silent
+    // wrong-number. aito-core 2.8.2 fixed it; both now agree. Kept as cases
+    // because they are the shape that produced it.
+    id: '09-query-phrase-aggregate',
+    source: 'src/09-product.js (batch query 3)',
+    endpoint: '_query',
+    bodyV1: {
+      from: 'impressions',
+      where: { 'product.id': PRODUCT_ID },
+      get: 'context.queryPhrase',
+      orderBy: { $sum: { $context: 'purchase' } },
+      select: ['$score', '$value'],
+    },
+    // v2 rejects $sum in orderBy ("expected one of field, desc") and refuses
+    // $f/$sum in select without an orderBy, so this is the closest v2 will
+    // accept — and it still returns zeros.
+    bodyV2: {
+      from: 'impressions',
+      where: { 'product.id': PRODUCT_ID },
+      get: 'context.queryPhrase',
+      orderBy: { $sum: { $context: 'purchase' } },
+      select: ['$value', { $sum: { $context: 'purchase' } }],
+    },
+    note: 'v2 per-candidate aggregates return 0; panel omitted on v2',
+    note: 'v2 rejects `$score` in select on this shape; the aggregate is selected by name and aliased back (rankedCandidateSelect/aliasScore)',
+  },
+  {
+    id: '09-weekly-trend-aggregate',
+    source: 'src/09-product.js (batch query 4)',
+    endpoint: '_query',
+    body: {
+      from: 'impressions',
+      where: { 'product.id': PRODUCT_ID },
+      get: 'context.week',
+      select: ['$value', '$f', { $sum: { $context: 'purchase' } }],
+    },
+    note: 'identical body on both since 2.8.2; was v1 f=150 vs v2 f=0 before',
+    accept: 'v1 adds $sum.samples per hit, v2 does not — the LineChart reads $value and $sum only',
+
   },
   {
     id: '10-distinct-values',
@@ -269,6 +371,62 @@ const CASES = [
     },
   },
   {
+    // What the Model Quality page sends, with every display field BOUND.
+    //
+    // An earlier version of this case bound only `Description` -- what the page
+    // defaults to -- and reported 64 missing fields, which I read as a v2
+    // defect. It is not. Checked against the v2 docs and the engine:
+    //
+    //  * `cases` is a valid v2 select. `_evaluate` enumerates its select
+    //    vocabulary on an unknown name, and it lists cases, accurateCases and
+    //    errorCases alongside the scalar metrics. (The published v2 evaluation
+    //    page documents only the scalars -- that gap is worth a docs ticket,
+    //    but the operator is real.)
+    //  * The case keys are IDENTICAL on both versions: offset, testCase, top,
+    //    correct, accurate.
+    //  * `testCase` echoes exactly the fields the query BOUND via `$get`. Bind
+    //    five and v2 returns five (plus the predict target); bind one and it
+    //    returns one. v1 returns all 18 columns of the row regardless of what
+    //    was asked. So the page's blank ID/SENDER/PRODUCT/ACCOUNT cells were
+    //    the page rendering columns it never asked for and v1 covering for it.
+    //    Fixed in the page, which now renders one column per selected input.
+    //
+    // WHAT GENUINELY DIFFERS, and why this stays ACCEPTED rather than fatal:
+    //
+    //   testCase  v1 = all 18 row fields   v2 = the 6 the query named
+    //   top/correct
+    //             v1 = the RESOLVED link target {Name, Role, Department,
+    //                  Superior, $p}
+    //             v2 = the value {$value, $p, rank}
+    //
+    // `$value` is v2's name for a predicted value throughout, so aito-compat
+    // aliases it to `feature` (as it already does for hits[]), which is what
+    // the page reads. The resolved-link fields have no v2 counterpart in this
+    // response; a consumer that wants Role or Department has to fetch them.
+    id: '11-evaluate-cases',
+    source: 'src/app/pages/EvaluationPage.js:107',
+    endpoint: '_evaluate',
+    body: {
+      test: { $or: [{ $index: 3 }, { $index: 13 }, { $index: 21 }] },
+      evaluate: {
+        from: 'invoices',
+        where: {
+          Description: { $get: 'Description' },
+          SenderName: { $get: 'SenderName' },
+          ProductName: { $get: 'ProductName' },
+          AccountNumber: { $get: 'AccountNumber' },
+          InvoiceID: { $get: 'InvoiceID' },
+        },
+        predict: 'Processor',
+      },
+      select: ['accuracy', 'meanRank', 'meanMs', 'trainSamples', 'testSamples', 'cases'],
+    },
+    accept:
+      'v1 echoes the whole test row and resolves the predicted link; v2 echoes the '
+      + 'bound evidence and returns {$value,$p,rank}. Both display fields and the '
+      + 'predicted value survive (aito-compat aliases $value -> feature).',
+  },
+  {
     // v1 selects `estimate`; v2 renamed the field to `value`.
     id: '12-estimate-price',
     source: 'src/12-price-estimation.js:111',
@@ -287,12 +445,12 @@ const CASES = [
       from: 'price_history',
       where: { category: '100' },
       estimate: 'sale_price',
-      select: ['value'],
+      select: ['value', 'why'],
     },
     // The KNN why is a weightedAverage whose components are rich objects on
     // v1 and plain numbers on v2. Nothing parses this one (PricingPage parses
     // only the regression why), so the loss is recorded, not blocking.
-    accept: 'v2 KNN why is not requested (502 on rep2/price_history); v1-only neighbour table',
+    accept: 'KNN why numeric values differ between engines; structure matches since 2.8.1',
   },
   {
     id: '12-estimate-demand',

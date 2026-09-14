@@ -23,19 +23,22 @@ if (!aitoApiKey) {
 
 // Rep2 / API v2 toggle.
 //
-// When `REACT_APP_USE_REP2=true`, the app routes through:
+// v2 IS NOW THE DEFAULT. The app routes through:
 //   <aitoUrl>/env/<envName>/api/v2/...
-// instead of the default Rep1 / v1 path:
+// and falls back to the Rep1 / v1 path:
 //   <aitoUrl>/api/v1/...
+// only when `REACT_APP_USE_REP2=false` is set explicitly.
 //
-// The companion env is created and populated by `upload-data-v2.js`
-// with the collection-typed `schema-rep2.json`, so both paths can
-// coexist on the same Aito instance — flip the env var to switch.
+// Both paths still work and both are covered by `npm run v2:parity`, so
+// setting that one variable is a complete revert with no rebuild of the
+// data. The v1 env (`master`) is left populated on purpose for exactly
+// that reason — do not delete it.
 //
-// The env is named `v2` on shared.aito.ai. `REACT_APP_AITO_ENV`
-// overrides it; the default below must match the deployed env name
-// or the toggle points at an env that does not exist.
-const useRep2 = process.env.REACT_APP_USE_REP2 === 'true'
+// The env is named `v2` on shared.aito.ai, created and populated by
+// `upload-data-v2.js` with the collection-typed `schema-rep2.json`.
+// `REACT_APP_AITO_ENV` overrides the name; the default below must match
+// the deployed env or the app points at an env that does not exist.
+const useRep2 = process.env.REACT_APP_USE_REP2 !== 'false'
 const aitoEnvName = process.env.REACT_APP_AITO_ENV || (useRep2 ? 'v2' : 'master')
 const aitoApiVersion = useRep2 ? 'v2' : 'v1'
 

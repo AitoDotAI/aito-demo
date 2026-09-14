@@ -24,6 +24,9 @@ import {
 import { FaCheckCircle, FaTimesCircle, FaSync, FaCog } from 'react-icons/fa'
 import './EvaluationPage.css'
 
+// Fields rendered in a monospace column: identifiers rather than prose.
+const MONOSPACE_FIELDS = new Set(['InvoiceID', 'AccountNumber'])
+
 class EvaluationPage extends Component {
   constructor(props) {
     super(props)
@@ -40,7 +43,8 @@ class EvaluationPage extends Component {
       
       // Results
       metrics: null,
-      cases: []
+      cases: [],
+      casesFields: ['Description']
     }
   }
   
@@ -138,6 +142,12 @@ class EvaluationPage extends Component {
       this.setState({
         metrics,
         cases: cases || [],
+        // The fields THIS run bound as evidence. The table's columns follow
+        // these, not the live checkbox selection: `testCase` on v2 carries
+        // exactly the bound fields, so a header driven by the current selection
+        // would promise a column the returned cases cannot fill until the user
+        // presses Evaluate again.
+        casesFields: this.state.selectedFields,
         loading: false
       })
     } catch (error) {
@@ -350,7 +360,7 @@ class EvaluationPage extends Component {
   }
   
   renderCasesTable = () => {
-    const { cases, loading } = this.state
+    const { cases, loading, casesFields } = this.state
     
     if (loading) {
       return (
@@ -376,11 +386,18 @@ class EvaluationPage extends Component {
           <thead>
             <tr>
               <th style={{ width: '40px' }}>Status</th>
-              <th>ID</th>
-              <th>Sender</th>
-              <th>Product</th>
-              <th>Account</th>
-              <th>Description</th>
+              {/*
+                One column per INPUT FIELD actually used as evidence, rather than
+                a fixed five. v1 echoes the whole test row in `testCase` no
+                matter what the query asked for, so a fixed header happened to
+                fill up; v2 echoes exactly the fields the query bound via `$get`,
+                so every unbound column rendered "-". Following the selection is
+                the honest fix on both: the table then shows the evidence the
+                model was actually given.
+              */}
+              {casesFields.map(field => (
+                <th key={field}>{field}</th>
+              ))}
               <th>Predicted</th>
               <th>Confidence</th>
               <th>Actual</th>
@@ -402,19 +419,17 @@ class EvaluationPage extends Component {
                       <FaTimesCircle className="text-danger" />
                     )}
                   </td>
-                  <td className="font-monospace small">{testCase.InvoiceID}</td>
-                  <td className="text-truncate" style={{ maxWidth: '150px' }}>
-                    {testCase.SenderName}
-                  </td>
-                  <td className="text-truncate" style={{ maxWidth: '150px' }}>
-                    {testCase.ProductName}
-                  </td>
-                  <td className="font-monospace small">
-                    {testCase.AccountNumber?.slice(-8) || '-'}
-                  </td>
-                  <td className="text-truncate" style={{ maxWidth: '200px' }}>
-                    {testCase.Description}
-                  </td>
+                  {casesFields.map(field => (
+                    <td
+                      key={field}
+                      className={MONOSPACE_FIELDS.has(field) ? 'font-monospace small' : 'text-truncate'}
+                      style={MONOSPACE_FIELDS.has(field) ? undefined : { maxWidth: '200px' }}
+                    >
+                      {field === 'AccountNumber'
+                        ? (testCase[field]?.slice(-8) || '-')
+                        : (testCase[field] ?? '-')}
+                    </td>
+                  ))}
                   <td className={!isCorrect ? 'text-danger font-weight-bold' : ''}>
                     {this.formatPredictedValue(prediction)}
                   </td>

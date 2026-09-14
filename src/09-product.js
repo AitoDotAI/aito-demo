@@ -1,4 +1,10 @@
-import { aitoPostRaw, productPropertyRelate } from './aito-client'
+import {
+  aitoPostRaw,
+  productPropertyRelate,
+  rankedCandidateSelect,
+  setMemberLiftQueries,
+  mergeSetMemberLifts,
+} from './aito-client'
 
 /**
  * Retrieves detailed information for a specific product by ID
@@ -95,6 +101,11 @@ export function getProductAnalytics(id){
     const product = (productResp.hits && productResp.hits[0]) || {}
     const { id: _ignored, ...productProps } = product
     const propertyRelate = productPropertyRelate(productProps)
+    // v2 cannot name a linked SET member on the relate side, so each tag is
+    // asked from the other end instead. Empty on v1, which needs no such help.
+    // These ride in the SAME batch, after the five the page reads positionally,
+    // so recovering them costs no extra round trip and cannot shift an index.
+    const memberQueries = setMemberLiftQueries(productProps)
 
     return aitoPostRaw('_batch',
     [
@@ -102,16 +113,18 @@ export function getProductAnalytics(id){
         // purchases, against the baseline of all impressions? Feeds the
         // "CTR by Product Property" panel.
         //
-        // v2 has no form that asks this — see productPropertyRelate(). When
-        // unsupported, a `limit: 0` stand-in keeps the batch indices aligned
-        // (the page reads results[0..4] positionally) and the panel renders
-        // empty rather than showing figures from a different question.
+        // Answerable on both since aito-core 2.8.1 (the `$props` carrier).
+        // The `limit: 0` stand-in remains for the case where a product has no
+        // scalar properties at all: it keeps the batch indices aligned, since
+        // the page reads results[0..4] positionally.
         "from": "impressions",
         "where": {"purchase": true},
+        // `lift` and `related` only exist on a relate result. The stand-in
+        // must therefore drop them too, or the whole _batch 400s with
+        // "no such field 'lift'" and every panel on the page goes blank.
         ...(propertyRelate.supported
-          ? { "relate": propertyRelate.relate }
-          : { "limit": 0 }),
-        "select": ["lift", "related"]
+          ? { "relate": propertyRelate.relate, "select": ["lift", "related"] }
+          : { "limit": 0 })
       },
       { // Analyze correlation between user demographics and this product
         "from": "visits",
@@ -129,20 +142,25 @@ export function getProductAnalytics(id){
         "relate": ["purchases"],
         "select": ["lift", "related"]
       },
-      { // Analyze which search terms lead to this product being purchased
+      { // Which search phrases lead to this product being purchased, ranked
+        // by purchases per phrase. Both versions compute this since 2.8.2;
+        // only the select name of the ranking value differs — see
+        // rankedCandidateSelect(), and aito-compat aliases it back to
+        // `$score` so the page reads one field.
         "from": "impressions",
         "where": {
           "product.id": id
         },
         "get": "context.queryPhrase",
         "orderBy": { "$sum": {"$context": "purchase" } },
-        "select": ["$score", "$value"]
+        "select": rankedCandidateSelect({ "$sum": {"$context": "purchase"} })
       },
-      { // Time-series analysis of purchase patterns
+      { // Time-series analysis of purchase patterns. Identical body on both
+        // versions since 2.8.2 restored linked-`get` aggregates.
         "from": "impressions",
         "where": {
           "product.id": id
-        }, 
+        },
         "get": "context.week",
         "select": [
           "$value",
@@ -150,14 +168,23 @@ export function getProductAnalytics(id){
           {"$sum": {"$context": "purchase"}},
           {"$mean": {"$context": "purchase"}}
         ]
-      }
+      },
+      ...memberQueries.map(q => q.body)
     ])
       .then(response => {
-        const results = response.data
+        const all = response.data
+        // The page reads results[0..4] positionally; the member queries are
+        // everything after that.
+        const results = Array.isArray(all) ? all.slice(0, 5) : all
+        const memberResults = Array.isArray(all) ? all.slice(5) : []
+
         // Where v2 cannot ask the question, hand back an empty, explicitly
         // marked result rather than anything that could be read as an answer.
         if (!propertyRelate.supported && Array.isArray(results) && results[0]) {
           results[0] = { ...results[0], hits: [], unsupported: 'aito-core#1064' }
+        }
+        if (Array.isArray(results) && results[0]) {
+          results[0] = mergeSetMemberLifts(results[0], memberQueries, memberResults)
         }
         return results
       })
