@@ -159,15 +159,15 @@ class ProductPage extends Component {
         </div>
         <div className="MetricsRow">
           <div className="MetricCard">
-            <div className="MetricCard__value">{this.state.stats["sum.samples"] || 0}</div>
+            <div className="MetricCard__value">{this.state.stats.impressions || 0}</div>
             <div className="MetricCard__label">Impressions</div>
           </div>
           <div className="MetricCard MetricCard--highlight">
-            <div className="MetricCard__value">{this.state.stats.sum || 0}</div>
+            <div className="MetricCard__value">{this.state.stats.purchases || 0}</div>
             <div className="MetricCard__label">Purchases</div>
           </div>
           <div className="MetricCard">
-            <div className="MetricCard__value">{(100 * (this.state.stats.mean || 0)).toFixed(1)}%</div>
+            <div className="MetricCard__value">{(100 * (this.state.stats.ctr || 0)).toFixed(1)}%</div>
             <div className="MetricCard__label">CTR</div>
           </div>
         </div>

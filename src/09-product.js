@@ -35,10 +35,25 @@ export function getAllProducts(){
 }
 
 /**
- * Retrieves statistical data for a specific product including purchase metrics
- * 
+ * Retrieves statistical data for a specific product including purchase metrics.
+ *
+ * `_aggregate` names its results after the field and the operator, so the
+ * response is keyed `purchase.$sum`, `purchase.$sum.samples` and
+ * `purchase.$mean` — on BOTH API versions, identically. The three headline
+ * tiles on the product page read `sum`, `sum.samples` and `mean`, which no
+ * response has ever contained, so all three have rendered their `|| 0`
+ * fallback since the page was written: 0 IMPRESSIONS, 0 PURCHASES, 0.0% CTR.
+ * Nothing was wrong with the query or the data — `Pirkka banana` has had
+ * 2928 impressions, 334 purchases and an 11.4% CTR throughout.
+ *
+ * The named fields below are that response under the names the page means, so
+ * the tiles read something that exists. No arithmetic: `impressions` is the
+ * sample count the sum was taken over, `purchases` is the sum, and `ctr` is
+ * the mean of a Boolean, which IS the click-through rate. The raw keys are
+ * kept alongside so nothing that reads them breaks.
+ *
  * @param {string|number} id - The product ID to get statistics for
- * @returns {Promise<Object>} - Aggregated purchase statistics (sum and mean)
+ * @returns {Promise<Object>} - the raw aggregate, plus impressions/purchases/ctr
  */
 export function getProductStats(id){
 
@@ -51,7 +66,13 @@ export function getProductStats(id){
       "aggregate": ["purchase.$sum", "purchase.$mean"]
     })
     .then(response => {
-      return response.data    
+      const stats = response.data || {}
+      return {
+        ...stats,
+        impressions: stats["purchase.$sum.samples"],
+        purchases: stats["purchase.$sum"],
+        ctr: stats["purchase.$mean"],
+      }
   })
 }
 
