@@ -154,6 +154,15 @@ function coverage(a, b, prefix = '', acc = { missing: [], differing: [] }) {
  *   IDENTICAL   byte-for-byte equal
  */
 function classify(c, r1, r2) {
+  // Neither engine answered on its merits, so there is nothing to compare and
+  // nothing to conclude. THROTTLED is not a pass: the run is incomplete, and
+  // the summary says so rather than quietly scoring it.
+  if (r1.rateLimited || r2.rateLimited) {
+    return {
+      verdict: 'THROTTLED',
+      detail: 'rate limited (HTTP 429) — back off and re-run; this case was not compared',
+    }
+  }
   if (!r2.ok) {
     // A case may declare `expectV2Error` when v2 has NO form for the question
     // and the app therefore does not send it there. Keeping the v1 body on
@@ -268,8 +277,16 @@ async function call(baseUrl, endpoint, body) {
     return { ok: true, status: res.status, data: res.data }
   } catch (e) {
     const d = e.response && e.response.data
+    const status = e.response && e.response.status
     const msg = (d && d.data && d.data.message) || (d && d.message) || e.message
-    return { ok: false, status: e.response && e.response.status, error: msg, data: d }
+    // 429 is the shared instance throttling US, not a defect in either engine.
+    // Reporting it as BREAK sends the reader hunting for a bug that is not
+    // there — which it did, after a run of heavy _evaluate calls saturated the
+    // instance. Named explicitly so the next reader backs off instead.
+    if (status === 429) {
+      return { ok: false, status, rateLimited: true, error: 'rate limited (HTTP 429)', data: d }
+    }
+    return { ok: false, status, error: msg, data: d }
   }
 }
 
@@ -288,7 +305,7 @@ const COLOR = process.stdout.isTTY
 const tint = (s, c) => (COLOR ? `[${c}m${s}[0m` : s)
 const paint = v => ({
   IDENTICAL: tint(v, 32), NORMALISED: tint(v, 32), 'BODY-DIFF': tint(v, 36),
-  VALUES: tint(v, 33), ACCEPTED: tint(v, 36), 'V2-GAP': tint(v, 36), MISSING: tint(v, 31), BREAK: tint(v, 31), 'V1-BREAK': tint(v, 31), VIOLATED: tint(v, 31),
+  VALUES: tint(v, 33), ACCEPTED: tint(v, 36), 'V2-GAP': tint(v, 36), MISSING: tint(v, 31), BREAK: tint(v, 31), 'V1-BREAK': tint(v, 31), VIOLATED: tint(v, 31), THROTTLED: tint(v, 35),
 }[v] || v)
 
 /**
@@ -385,7 +402,17 @@ async function main() {
     console.log(`\nwrote ${path.relative(process.cwd(), outFile)}`)
   }
 
+  const throttled = results.filter(r => r.verdict.verdict === 'THROTTLED').length
+  if (throttled) {
+    console.log(`\n${throttled} case(s) were RATE LIMITED and not compared. `
+      + 'This run is incomplete — wait a few minutes and re-run before reading anything into it.')
+  }
   const fatal = results.filter(r => ['BREAK', 'MISSING', 'V1-BREAK', 'VIOLATED'].includes(r.verdict.verdict)).length
+  if (ciMode && throttled) {
+    console.error(`\nFAIL: ${throttled} case(s) rate limited — the run did not complete, `
+      + 'so it cannot be read as a pass')
+    process.exit(1)
+  }
   if (ciMode && fatal) {
     console.error(`\nFAIL: ${fatal} case(s) error on v2 or drop a field the app reads`)
     process.exit(1)

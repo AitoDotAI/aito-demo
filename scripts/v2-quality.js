@@ -218,6 +218,13 @@ async function evaluate(baseUrl, task, version) {
   } catch (e) {
     const d = e.response && e.response.data
     const inner = d && d.data ? d.data : d
+    // 429 is the shared instance throttling US — these are heavy queries and a
+    // full run of them will saturate it. It is not a property of either engine,
+    // so it must not read as UNMEASURABLE alongside a genuine "v2 cannot do
+    // this", which is what it did the first time it happened here.
+    if (e.response && e.response.status === 429) {
+      return { ok: false, rateLimited: true, error: 'rate limited (HTTP 429)' }
+    }
     return { ok: false, error: (inner && inner.message) || e.message }
   }
 }
@@ -230,6 +237,9 @@ async function evaluate(baseUrl, task, version) {
  * would be worse than no verdict.
  */
 function verdict(a, b) {
+  if (a.rateLimited || b.rateLimited) {
+    return { v: 'THROTTLED', why: 'rate limited (HTTP 429) — not measured; back off and re-run' }
+  }
   if (!a.ok || !b.ok) return { v: 'UNMEASURABLE', why: (a.ok ? b.error : a.error) }
   if (a.n !== b.n) {
     return { v: 'INCOMPARABLE', why: `different test populations (v1 n=${a.n}, v2 n=${b.n})` }
@@ -270,7 +280,7 @@ function verdict(a, b) {
 }
 
 const COLOUR = {
-  BETTER: 32, SAME: 32, WORSE: 33, REGRESSION: 31, INCOMPARABLE: 36, UNMEASURABLE: 36,
+  BETTER: 32, SAME: 32, WORSE: 33, REGRESSION: 31, INCOMPARABLE: 36, UNMEASURABLE: 36, THROTTLED: 35,
 }
 const tint = (s, c) => (process.stdout.isTTY ? `[${c}m${s}[0m` : s)
 
@@ -321,6 +331,11 @@ async function main() {
   }, {})
   console.log('summary: ' + Object.entries(tally).map(([k, n]) => `${k}=${n}`).join('  '))
 
+  const throttled = results.filter(r => r.v.v === 'THROTTLED').length
+  if (throttled) {
+    console.log(`\n${throttled} task(s) were RATE LIMITED and not measured. `
+      + 'These are heavy queries; wait a few minutes and re-run.')
+  }
   const regressions = results.filter(r => r.v.v === 'REGRESSION')
   if (regressions.length) {
     console.log('\nREGRESSIONS:')
@@ -332,7 +347,7 @@ async function main() {
     console.log('\nNothing was comparable — no quality claim can be made from this run.')
   }
 
-  if (args.includes('--ci') && regressions.length) process.exit(1)
+  if (args.includes('--ci') && (regressions.length || throttled)) process.exit(1)
 }
 
 main().catch(e => { console.error(e); process.exit(1) })
