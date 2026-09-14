@@ -36,9 +36,27 @@ export function getAllProducts(){
 
 /**
  * Retrieves statistical data for a specific product including purchase metrics
- * 
+ *
+ * `_aggregate` takes either form:
+ *
+ *   ARRAY    ["purchase.$sum", "purchase.$mean"]
+ *            -> keys are the spec strings: `purchase.$sum`,
+ *               `purchase.$sum.samples`, `purchase.$mean`, …
+ *   ALIASED  {"sum": "purchase.$sum", "mean": "purchase.$mean"}
+ *            -> keys are the names you chose: `sum`, `sum.samples`, `mean`, …
+ *
+ * The page reads `sum`, `sum.samples` and `mean`, so it was written against the
+ * ALIASED form — but this query has sent the ARRAY form since the first commit
+ * that added the page (f379435). The keys therefore never matched, all three
+ * tiles fell through to their `|| 0` and Product Analytics has shown
+ * 0 IMPRESSIONS / 0 PURCHASES / 0.0% CTR ever since, on every API version.
+ *
+ * Aliasing here rather than renaming in the client, because the names the page
+ * wants are a property of the question it is asking. Both forms, and the alias
+ * suffixes, behave identically on v1 and v2 — measured, not assumed.
+ *
  * @param {string|number} id - The product ID to get statistics for
- * @returns {Promise<Object>} - Aggregated purchase statistics (sum and mean)
+ * @returns {Promise<Object>} - {sum, sum.samples, mean, mean.variance, …}
  */
 export function getProductStats(id){
 
@@ -48,7 +66,10 @@ export function getProductStats(id){
       "where": {
         "product.id": id
       },
-      "aggregate": ["purchase.$sum", "purchase.$mean"]
+      "aggregate": {
+        "sum": "purchase.$sum",
+        "mean": "purchase.$mean"
+      }
     })
     .then(response => {
       return response.data    
