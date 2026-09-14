@@ -45,59 +45,94 @@ describe('productPropertyRelate on v1 (the deployed default)', () => {
 /**
  * The three headline tiles on the product page.
  *
- * `_aggregate` keys its response after the field and operator — `purchase.$sum`,
- * `purchase.$sum.samples`, `purchase.$mean` — identically on both API versions.
- * The page read `sum`, `sum.samples` and `mean`, which no response has ever
- * contained, so every tile rendered its `|| 0` fallback: 0 IMPRESSIONS,
- * 0 PURCHASES, 0.0% CTR, on production and locally, on v1 and v2 alike.
+ * `_aggregate` accepts two forms, and they key the response differently:
  *
- * Real captured response for Pirkka banana (2000818700008), same on both.
+ *   ARRAY    ["purchase.$sum", "purchase.$mean"]
+ *              -> purchase.$sum, purchase.$sum.samples, purchase.$mean, …
+ *   ALIASED  {"sum": "purchase.$sum", "mean": "purchase.$mean"}
+ *              -> sum, sum.samples, mean, mean.variance, …
+ *
+ * The page reads `sum`, `sum.samples` and `mean`, so it was written against the
+ * aliased form — but the query sent the array form from the first commit that
+ * added the page. The keys never matched, every tile fell through to `|| 0`,
+ * and Product Analytics showed 0 / 0 / 0.0% on every API version until the
+ * query was aliased.
+ *
+ * Both objects below are REAL captured responses for Pirkka banana
+ * (2000818700008), byte-identical on v1 and v2 apart from float noise.
  */
-const AGGREGATE_RESPONSE = {
+const AGGREGATE_ALIASED = {
+  sum: 334.0,
+  'sum.samples': 2928,
+  mean: 0.11407103825136612,
+  'mean.samples': 2928,
+  'mean.variance': 0.10105883648362149,
+  'mean.standardDeviation': 0.3178975251297523,
+  'mean.standardError': 0.005874915313993218,
+}
+
+const AGGREGATE_ARRAY_FORM = {
   'purchase.$sum': 334.0,
   'purchase.$sum.samples': 2928,
   'purchase.$mean': 0.11407103825136612,
-  'purchase.$mean.samples': 2928,
-  'purchase.$mean.variance': 0.10105883648362149,
-  'purchase.$mean.standardDeviation': 0.3178975251297523,
-  'purchase.$mean.standardError': 0.005874915313993218,
 }
 
-const namedStats = (raw) => ({
-  ...raw,
-  impressions: raw['purchase.$sum.samples'],
-  purchases: raw['purchase.$sum'],
-  ctr: raw['purchase.$mean'],
+// Exactly what ProductPage renders into the three MetricCards.
+const tiles = stats => ({
+  impressions: stats['sum.samples'] || 0,
+  purchases: stats.sum || 0,
+  ctr: `${(100 * (stats.mean || 0)).toFixed(1)}%`,
 })
 
 describe('product KPI tiles', () => {
-  it('names the fields the page actually reads', () => {
-    const s = namedStats(AGGREGATE_RESPONSE)
-    expect(s.impressions).toBe(2928)
-    expect(s.purchases).toBe(334)
-    expect(s.ctr).toBeCloseTo(0.11407, 5)
+  it('fills all three tiles from the aliased response', () => {
+    expect(tiles(AGGREGATE_ALIASED)).toEqual({
+      impressions: 2928,
+      purchases: 334.0,
+      ctr: '11.4%',
+    })
   })
 
-  it('renders 11.4% rather than 0.0% for CTR', () => {
-    const s = namedStats(AGGREGATE_RESPONSE)
-    expect((100 * (s.ctr || 0)).toFixed(1)).toBe('11.4')
+  it('pins the bug: the array form keys NONE of what the page reads', () => {
+    expect(tiles(AGGREGATE_ARRAY_FORM)).toEqual({
+      impressions: 0,
+      purchases: 0,
+      ctr: '0.0%',
+    })
   })
 
-  it('pins the bug: the old key names are absent from a real response', () => {
-    expect(AGGREGATE_RESPONSE.sum).toBeUndefined()
-    expect(AGGREGATE_RESPONSE.mean).toBeUndefined()
-    expect(AGGREGATE_RESPONSE['sum.samples']).toBeUndefined()
+  it('carries the alias suffixes too, not just the bare names', () => {
+    expect(AGGREGATE_ALIASED['sum.samples']).toBe(2928)
+    expect(AGGREGATE_ALIASED['mean.standardError']).toBeCloseTo(0.0058749, 6)
   })
 
-  it('keeps the raw keys, so anything reading them still works', () => {
-    const s = namedStats(AGGREGATE_RESPONSE)
-    expect(s['purchase.$sum']).toBe(334.0)
-    expect(s['purchase.$mean.standardError']).toBeCloseTo(0.0058749, 6)
+  it('shows 0 rather than NaN when the response is empty', () => {
+    expect(tiles({})).toEqual({ impressions: 0, purchases: 0, ctr: '0.0%' })
   })
+})
 
-  it('falls back to 0 without inventing a number when the response is empty', () => {
-    const s = namedStats({})
-    expect(s.impressions || 0).toBe(0)
-    expect((100 * (s.ctr || 0)).toFixed(1)).toBe('0.0')
+describe('getProductStats request', () => {
+  it('asks for the aliased object form, which is what keys the response', async () => {
+    jest.resetModules()
+    const sent = []
+    jest.doMock('../../aito-client', () => ({
+      aitoPostRaw: (endpoint, body) => {
+        sent.push({ endpoint, body })
+        return Promise.resolve({ data: AGGREGATE_ALIASED })
+      },
+      productPropertyRelate: () => ({ supported: false }),
+      rankedCandidateSelect: () => [],
+    }))
+    // eslint-disable-next-line global-require
+    const { getProductStats } = require('../../09-product')
+    await getProductStats('2000818700008')
+    jest.dontMock('../../aito-client')
+
+    expect(sent[0].endpoint).toBe('_aggregate')
+    expect(sent[0].body.aggregate).toEqual({
+      sum: 'purchase.$sum',
+      mean: 'purchase.$mean',
+    })
+    expect(Array.isArray(sent[0].body.aggregate)).toBe(false)
   })
 })

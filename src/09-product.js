@@ -35,25 +35,28 @@ export function getAllProducts(){
 }
 
 /**
- * Retrieves statistical data for a specific product including purchase metrics.
+ * Retrieves statistical data for a specific product including purchase metrics
  *
- * `_aggregate` names its results after the field and the operator, so the
- * response is keyed `purchase.$sum`, `purchase.$sum.samples` and
- * `purchase.$mean` — on BOTH API versions, identically. The three headline
- * tiles on the product page read `sum`, `sum.samples` and `mean`, which no
- * response has ever contained, so all three have rendered their `|| 0`
- * fallback since the page was written: 0 IMPRESSIONS, 0 PURCHASES, 0.0% CTR.
- * Nothing was wrong with the query or the data — `Pirkka banana` has had
- * 2928 impressions, 334 purchases and an 11.4% CTR throughout.
+ * `_aggregate` takes either form:
  *
- * The named fields below are that response under the names the page means, so
- * the tiles read something that exists. No arithmetic: `impressions` is the
- * sample count the sum was taken over, `purchases` is the sum, and `ctr` is
- * the mean of a Boolean, which IS the click-through rate. The raw keys are
- * kept alongside so nothing that reads them breaks.
+ *   ARRAY    ["purchase.$sum", "purchase.$mean"]
+ *            -> keys are the spec strings: `purchase.$sum`,
+ *               `purchase.$sum.samples`, `purchase.$mean`, …
+ *   ALIASED  {"sum": "purchase.$sum", "mean": "purchase.$mean"}
+ *            -> keys are the names you chose: `sum`, `sum.samples`, `mean`, …
+ *
+ * The page reads `sum`, `sum.samples` and `mean`, so it was written against the
+ * ALIASED form — but this query has sent the ARRAY form since the first commit
+ * that added the page (f379435). The keys therefore never matched, all three
+ * tiles fell through to their `|| 0` and Product Analytics has shown
+ * 0 IMPRESSIONS / 0 PURCHASES / 0.0% CTR ever since, on every API version.
+ *
+ * Aliasing here rather than renaming in the client, because the names the page
+ * wants are a property of the question it is asking. Both forms, and the alias
+ * suffixes, behave identically on v1 and v2 — measured, not assumed.
  *
  * @param {string|number} id - The product ID to get statistics for
- * @returns {Promise<Object>} - the raw aggregate, plus impressions/purchases/ctr
+ * @returns {Promise<Object>} - {sum, sum.samples, mean, mean.variance, …}
  */
 export function getProductStats(id){
 
@@ -63,16 +66,13 @@ export function getProductStats(id){
       "where": {
         "product.id": id
       },
-      "aggregate": ["purchase.$sum", "purchase.$mean"]
+      "aggregate": {
+        "sum": "purchase.$sum",
+        "mean": "purchase.$mean"
+      }
     })
     .then(response => {
-      const stats = response.data || {}
-      return {
-        ...stats,
-        impressions: stats["purchase.$sum.samples"],
-        purchases: stats["purchase.$sum"],
-        ctr: stats["purchase.$mean"],
-      }
+      return response.data    
   })
 }
 
