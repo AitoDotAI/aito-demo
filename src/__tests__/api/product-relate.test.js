@@ -49,123 +49,44 @@ describe('productPropertyRelate on v1', () => {
   })
 })
 
-describe('productPropertyRelate on v2 (since aito-core 2.8.1)', () => {
-  // 2.8.1 added the `$props` carrier and made v1's nested spelling an alias
-  // for it, so the question is answerable on v2 again — see aito-core#1064.
-  it('sends the nested proposition form, the same shape as v1', () => {
-    expect(relateOn('v2').supported).toBe(true)
-    expect(relateOn('v2').relate.product).toBeDefined()
-  })
-
-  it('drops array-valued properties, which $props cannot match', () => {
-    // `tags: [...]`, `tags: "fruit"` and `{$has: "fruit"}` all fail with
-    // "relate $props: no rows carry { product.tags:fruit }", while the scalar
-    // properties in the same request answer fine.
-    const sent = relateOn('v2').relate.product
-    expect(sent.tags).toBeUndefined()
-    expect(sent.name).toBe(PRODUCT_PROPS.name)
-    expect(sent.category).toBe(PRODUCT_PROPS.category)
-  })
-
-  it('v1 keeps the array properties', () => {
+describe('productPropertyRelate: v1 keeps its own spelling', () => {
+  it('v1 keeps the array properties in the nested form', () => {
     expect(relateOn('v1').relate.product.tags).toEqual(PRODUCT_PROPS.tags)
   })
 })
 
 /**
- * The Tag rows of the same panel.
+ * Tag rows of the same panel, on v2.
  *
- * v2 cannot name a linked SET member on the `relate` side, so `tags` is dropped
- * from the $props request and the panel lost its three Tag rows. Lift is
- * symmetric, so each member is asked from the other end instead: the tag goes
- * in the `where` (which works through a link) and `purchase` — a direct column
- * — becomes the relate target.
+ * Until aito-core 2.9.0 the app could not name a linked SET member on the
+ * relate side at all, and recovered each tag with a separate swapped query
+ * (tag in the `where`, the direct `purchase` column as the relate target).
+ * 2.9.0 made `$props` relate each MEMBER of a list through a link, so that
+ * workaround is gone and the tags ride in the one request again.
  *
- * The equivalence is not assumed. Measured on aito-core 2.8.4 with `category`,
- * the one proposition BOTH forms support:
- *   native   where {purchase:true},           relate {$props:{product.category:"100"}} -> 1.6473
- *   swapped  where {product.category:"100"},  relate {$props:{purchase:true}}          -> 1.6473
+ * Captured on 2.9.2 for Pirkka banana:
+ *   {"$props": {"product.tags": ["fresh","fruit","pirkka"], …}}
+ *     -> {"product.tags": {"$has": "fresh"}}  1.6473
+ *        {"product.tags": {"$has": "fruit"}}  1.9720
+ *        {"product.tags": {"$has": "pirkka"}} 1.0648
  */
-const memberQueriesOn = (version) => {
-  jest.resetModules()
-  const saved = process.env
-  process.env = { ...saved, REACT_APP_USE_REP2: version === 'v2' ? 'true' : 'false' }
-  // eslint-disable-next-line global-require
-  const { setMemberLiftQueries, mergeSetMemberLifts } = require('../../aito-client')
-  const queries = setMemberLiftQueries(PRODUCT_PROPS)
-  process.env = saved
-  return { queries, mergeSetMemberLifts }
-}
-
-describe('setMemberLiftQueries on v1', () => {
-  it('asks for nothing — v1 relates set members directly', () => {
-    expect(memberQueriesOn('v1').queries).toEqual([])
+describe('productPropertyRelate on v2', () => {
+  it('sends every property, arrays included, through the dotted $props form', () => {
+    const { relate } = relateOn('v2')
+    expect(relate.$props['product.tags']).toEqual(['lactose', 'drink', 'pirkka'])
+    expect(relate.$props['product.category']).toBe('104')
+    expect(relate.$props['product.name']).toBe('Pirkka Finnish semi-skimmed milk 1l')
   })
 
-  it('leaves the relate result untouched, so the v1 batch is byte-identical', () => {
-    const { queries, mergeSetMemberLifts } = memberQueriesOn('v1')
-    const relateResult = { hits: [{ lift: 1.9106, related: { 'product.name': { $has: 'banana' } } }] }
-    expect(mergeSetMemberLifts(relateResult, queries, [])).toBe(relateResult)
-  })
-})
-
-describe('setMemberLiftQueries on v2', () => {
-  it('asks one query per set member, and none for scalars', () => {
-    const { queries } = memberQueriesOn('v2')
-    expect(queries.map(q => q.member)).toEqual(['lactose', 'drink', 'pirkka'])
-    expect(queries.every(q => q.field === 'product.tags')).toBe(true)
+  it('does NOT use the nested alias on v2 — it refuses an array-valued prop', () => {
+    const { relate } = relateOn('v2')
+    expect(relate.product).toBeUndefined()
+    expect(Object.keys(relate)).toEqual(['$props'])
   })
 
-  it('puts the member in the where and relates the DIRECT purchase column', () => {
-    const { queries } = memberQueriesOn('v2')
-    expect(queries[0].body).toEqual({
-      from: 'impressions',
-      where: { 'product.tags': { $has: 'lactose' } },
-      relate: { $props: { purchase: true } },
-      select: ['lift', 'related'],
-      limit: 1,
-    })
-  })
-
-  it('never sends the form v2 rejects — no set member on the relate side', () => {
-    const { queries } = memberQueriesOn('v2')
-    const relateSides = JSON.stringify(queries.map(q => q.body.relate))
-    expect(relateSides).not.toContain('product.tags')
-  })
-})
-
-describe('mergeSetMemberLifts', () => {
-  const { queries, mergeSetMemberLifts } = memberQueriesOn('v2')
-  const relateResult = {
-    hits: [
-      { lift: 1.6473, related: { 'product.category': '104' } },
-      { lift: 2.0942, related: { 'product.name': 'Pirkka Finnish semi-skimmed milk 1l' } },
-    ],
-  }
-  const responses = [
-    { hits: [{ lift: 1.11, related: { purchase: true } }] },
-    { hits: [{ lift: 2.5, related: { purchase: true } }] },
-    { hits: [{ lift: 0.9, related: { purchase: true } }] },
-  ]
-
-  it('reshapes each member row the way v1 reports it, so the page needs no branch', () => {
-    const out = mergeSetMemberLifts(relateResult, queries, responses)
-    expect(out.hits).toContainEqual({ lift: 2.5, related: { 'product.tags': { $has: 'drink' } } })
-  })
-
-  it('returns every row strongest-first, as v1 does', () => {
-    const out = mergeSetMemberLifts(relateResult, queries, responses)
-    expect(out.hits.map(h => h.lift)).toEqual([2.5, 2.0942, 1.6473, 1.11, 0.9])
-  })
-
-  it('drops a member whose query failed rather than reporting it as zero', () => {
-    const out = mergeSetMemberLifts(relateResult, queries, [
-      responses[0],
-      { error: 'boom' },
-      { hits: [] },
-    ])
-    const tags = out.hits.filter(h => h.related['product.tags']).map(h => h.related['product.tags'].$has)
-    expect(tags).toEqual(['lactose'])
+  it('prefixes every field with the link path', () => {
+    const { relate } = relateOn('v2')
+    expect(Object.keys(relate.$props).every(k => k.startsWith('product.'))).toBe(true)
   })
 })
 

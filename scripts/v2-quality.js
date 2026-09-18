@@ -79,19 +79,24 @@ const TASKS = [
     what: 'Product Catalog: suggest tags from the product name',
     source: 'src/04-get-tag-suggestions.js',
     test: { $index: { $mod: [3, 0] } },
-    evaluate: {
+    // THE FORMS THE APP ACTUALLY SHIPS, which differ by version because each
+    // engine requires its own spelling for non-exclusive per-member prediction.
+    // Until aito-core 2.9.0 this could not be measured at all: v2's `_evaluate`
+    // rejected `tags.$feature` even though `_predict` accepted it. 2.9.0 added
+    // it, so the shipped forms are finally comparable and this no longer falls
+    // back to the exclusive form neither app path uses.
+    evaluateV1: {
       from: 'products',
       where: { name: { $get: 'name' } },
       predict: 'tags',
+      exclusiveness: false,
     },
-    // The app does NOT send this form. It sends the version-appropriate
-    // non-exclusive spelling (v1 `exclusiveness:false`, v2 `tags.$feature`),
-    // and those cannot be compared here: v2's `_evaluate` rejects
-    // `tags.$feature` with "no test row carries the predicted field", although
-    // `_predict` accepts it. So this row measures the EXCLUSIVE form on both —
-    // the same question on both engines, but not the one the app asks.
-    // Filed as a measurability gap; see the note printed at the end.
-    caveat: 'exclusive form on both; the app uses the non-exclusive one, which v2 _evaluate rejects',
+    evaluateV2: {
+      from: 'products',
+      where: { name: { $get: 'name' } },
+      predict: 'tags.$feature',
+    },
+    caveat: 'n=14 — a two-item difference moves accuracy by 0.14, so read meanRank here',
   },
   {
     id: 'invoices-glcode',
@@ -171,14 +176,12 @@ const TASKS = [
     // Scoped to rows that record a purchase, so the truth is the product the
     // user actually bought and meanRank measures recommendation quality.
     //
-    // The two engines need different spellings for that scope and this is the
-    // one place the script sends different bodies. v1 takes a compound `test`;
-    // v2 refuses one ("evaluate on collections supports literal test/where
-    // values (string/number/boolean)") and wants the documented `testSource`.
-    // Both select the same 4670 rows — the printed n is the check on that, and
-    // the script will not render a verdict if they diverge.
-    testV1: { purchase: true },
-    testV2: { purchase: true },
+    // Both engines now take the same compound selector. Until aito-core 2.9.0
+    // v2 refused one ("evaluate on collections supports literal test/where
+    // values") and this task had to scope with a literal on both; 2.9.0 added
+    // combined `test` selectors, so the two sides send one identical body
+    // again. The printed n is the check that they select the same rows.
+    test: { purchase: true },
     evaluate: {
       from: 'impressions',
       where: { 'context.user': { $get: 'context.user' } },
@@ -191,7 +194,8 @@ const SELECT = ['n', 'accuracy', 'baseAccuracy', 'meanRank']
 
 async function evaluate(baseUrl, task, version) {
   const test = (version === 'v1' ? task.testV1 : task.testV2) || task.test
-  const body = { test, evaluate: task.evaluate, select: SELECT }
+  const ev = (version === 'v1' ? task.evaluateV1 : task.evaluateV2) || task.evaluate
+  const body = { test, evaluate: ev, select: SELECT }
   try {
     const res = await axios.post(`${baseUrl}/_evaluate`, body, {
       headers: { 'x-api-key': AITO_API_KEY, 'content-type': 'application/json' },
@@ -340,9 +344,18 @@ async function main() {
   if (regressions.length) {
     console.log('\nREGRESSIONS:')
     regressions.forEach(r => console.log(`  ${r.task.id}: ${r.v.why}`))
-  } else if (results.some(r => r.v.v === 'REGRESSION' || r.v.v === 'WORSE'
-      || r.v.v === 'SAME' || r.v.v === 'BETTER')) {
-    console.log('\nNo task is materially worse on v2.')
+  } else if (results.some(r => ['REGRESSION', 'WORSE', 'SAME', 'BETTER'].includes(r.v.v))) {
+    const worse = results.filter(r => r.v.v === 'WORSE')
+    if (worse.length) {
+      // Not a REGRESSION by the thresholds at the top, but saying "nothing is
+      // worse" while a WORSE line sits above it is how a summary starts lying.
+      console.log(`\nNo REGRESSION (nothing is worse on both metrics), but ${worse.length} `
+        + 'task(s) lost ground on one:')
+      worse.forEach(r => console.log(`  ${r.task.id}: ${r.v.why}`
+        + (r.task.caveat ? `\n    caveat: ${r.task.caveat}` : '')))
+    } else {
+      console.log('\nNo task is materially worse on v2.')
+    }
   } else {
     console.log('\nNothing was comparable — no quality claim can be made from this run.')
   }
