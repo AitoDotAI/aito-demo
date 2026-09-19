@@ -81,6 +81,18 @@ export function prompt(question) {
             },
             get: "assignee",
             orderBy: "$p",
+            // `assignee` links to employees.Name, and the two versions project a
+            // `get` over a link differently when nothing is selected:
+            //   v1 -> the RESOLVED target row {Name, Role, Department, Superior}
+            //   v2 -> the value {$value: "Frank Wilson"}
+            // Both identify the same person; only v1 hands back the fields this
+            // caller reads, so on v2 the page rendered "undefined (undefined)".
+            //
+            // Naming them explicitly resolves the link on BOTH versions and is
+            // the more honest query anyway — the default projection was never
+            // something to rely on. v2 also returns `$value` alongside, which
+            // nothing here reads.
+            select: ["$p", "Name", "Role"],
             limit: 1
           }).then(response => {
             const top = response.data.hits[0]

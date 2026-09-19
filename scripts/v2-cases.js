@@ -147,6 +147,36 @@ const CASES = [
     },
   },
   {
+    // The Help page's auto-assignment. `assignee` links to employees.Name, and
+    // with no `select` the two versions project a `get` over a link differently
+    // — v1 returns the resolved target row, v2 returns {$value}. The page reads
+    // `.Name` and `.Role`, so on v2 it rendered "undefined (undefined)".
+    //
+    // None of the four other prompt cases covers this call, which is how it
+    // reached a merged v2 default unnoticed: the Help page needs a submitted
+    // question to reach it, so walking the UI did not exercise it either.
+    //
+    // Naming the fields resolves the link on both versions; this case pins that.
+    id: '06-prompt-assignee',
+    source: 'src/06-prompt.js:76',
+    endpoint: '_query',
+    body: {
+      from: 'prompts',
+      where: { prompt: 'my order never arrived and I want a refund', type: 'request' },
+      get: 'assignee',
+      orderBy: '$p',
+      select: ['$p', 'Name', 'Role'],
+      limit: 1,
+    },
+    invariant: {
+      name: 'the assignee hit carries the employee fields the page renders',
+      holds: payload => {
+        const hits = (payload && payload.hits) || []
+        return hits.length > 0 && hits.every(h => typeof h.Name === 'string' && typeof h.Role === 'string')
+      },
+    },
+  },
+  {
     id: '06-prompt-categories',
     source: 'src/06-prompt.js:93',
     endpoint: '_predict',

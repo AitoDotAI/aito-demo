@@ -65,123 +65,44 @@ export function nonExclusivePredict(field) {
  * over-represented in purchases, against the baseline of all impressions" —
  * the "CTR by Product Property" panel.
  *
- * v1 answers it with the nested proposition object, one row per property
- * value:  condition {purchase}, related {product.name: {$has: "banana"}}.
+ * v1 answers it with the nested proposition object, one row per property value:
+ * condition {purchase}, related {product.name: {$has: "banana"}}.
  *
- * v2 could not ask it at all until aito-core 2.8.1, which added the `$props`
- * carrier — `_ops` now lists it as "relate: one entity's property values,
- * related to the `where`" — and made v1's nested spelling an accepted alias
- * for it. So the same body works on both again.
+ * v2 takes the same question through the explicit `$props` carrier with dotted
+ * paths. Since aito-core 2.9.0 a LIST on a set field relates each MEMBER — the
+ * shape v1 has always returned — so one request now covers scalars and sets
+ * alike:
  *
- * TWO DIFFERENCES REMAIN, both measured on 2.8.1:
+ *   {"$props": {"product.tags": ["fresh","fruit","pirkka"],
+ *               "product.category": "100", "product.name": "Pirkka banana"}}
+ *     -> {"product.tags": {"$has": "fresh"}}  1.6473
+ *        {"product.tags": {"$has": "fruit"}}  1.9720
+ *        {"product.category": "100"}          1.6473
+ *        {"product.name": "Pirkka banana"}    2.0942
  *
- *  1. Granularity. v1 tokenises Text and relates each token
- *     ({$has: "banana"}, lift 1.9106); v2 relates the whole value
- *     ("Pirkka banana", lift 2.0942). Fewer, coarser rows on v2.
+ * NOT the nested `{product: {...}}` alias on v2: it still refuses an
+ * array-valued prop at the format check ("field 'relateProps' must be of type
+ * …"), so the dotted `$props` form is the one that takes the whole product.
  *
- *  2. A SET property cannot be named here at all. `tags: ["fresh","fruit"]` —
- *     and equally `tags: "fruit"` or `{$has: "fruit"}` — fail with
- *     "relate $props: no rows carry { product.tags:fruit }" even though 602
- *     rows plainly carry it, while the scalar properties in the same request
- *     answer fine. It is specifically SET THROUGH A LINK: `$props` on a direct
- *     Set column works. Filed as td-20260909113225686871.
- *
- *     So array props are dropped from THIS request. They are asked separately
- *     and equivalently — see setMemberLiftQueries below — rather than lost.
+ * ONE DIFFERENCE REMAINS. v1 tokenises Text and relates each token — `banana`
+ * 1.9106 and `pirkka` 1.1119 — where v2 relates the whole value, `Pirkka
+ * banana` 2.0942. Six rows against five. v2.9.2 added `product.name.$token`,
+ * which does relate per token, but it must be GIVEN the tokens: passing the
+ * whole name is refused, and deriving them would mean reimplementing the
+ * column's `english` analyzer here. Left alone deliberately; tracked in
+ * td-20260909113225686871.
  *
  * @param {object} productProps - the product's own fields, minus `id`
  * @returns {{supported: boolean, relate?: object}}
  */
 export function productPropertyRelate(productProps) {
   if (!isV2()) return { supported: true, relate: { product: productProps } }
-  // Drop array-valued props; v2's $props carrier cannot match a set member
-  // through a link. setMemberLiftQueries() recovers them.
-  const scalars = Object.fromEntries(
-    Object.entries(productProps).filter(([, v]) => !Array.isArray(v)),
+  const props = Object.fromEntries(
+    Object.entries(productProps).map(([field, value]) => [`product.${field}`, value]),
   )
-  return Object.keys(scalars).length
-    ? { supported: true, relate: { product: scalars } }
+  return Object.keys(props).length
+    ? { supported: true, relate: { $props: props } }
     : { supported: false }
-}
-
-/**
- * Recover the Tag rows of the "CTR by Product Property" panel on v2.
- *
- * v2 cannot put a linked SET member on the `relate` side (see above), but it
- * can put one in the `where`. Lift is symmetric, so the same association can be
- * asked from the other end:
- *
- *   v1 / v2 native   where {purchase: true}
- *                    relate {$props: {product.tags: "fruit"}}      <- v2: 400
- *
- *   v2 swapped       where {product.tags: {$has: "fruit"}}
- *                    relate {$props: {purchase: true}}             <- direct, works
- *
- * THIS IS NOT A RE-DERIVATION AND NOT AN APPROXIMATION. It is the same question
- * put the other way round, and the engine confirms it returns the same number.
- * Measured on 2.8.4 with `category` — the one proposition BOTH forms support,
- * so the two can be compared directly:
- *
- *   v2 native   where {purchase:true}, relate {$props:{product.category:"100"}}
- *                 -> lift 1.6473
- *   v2 swapped  where {product.category:"100"}, relate {$props:{purchase:true}}
- *                 -> lift 1.6473        (exactly, not approximately)
- *
- * And the recovered tag rows land where v1 puts them: v1 reports `fresh` and
- * `category:100` at the same lift (1.6317 each); v2 reports swapped `fresh`
- * at 1.6473 and native `category:100` at 1.6473. The engines differ from each
- * other by the usual drift; the two FORMULATIONS do not differ at all.
- *
- * Returns [] on v1, which needs none of this — it relates set members directly.
- *
- * @param {object} productProps - the product's own fields, minus `id`
- * @param {string} [entity='product'] - the link path prefix from the `from` table
- * @returns {Array<{field: string, member: *, body: object}>}
- */
-export function setMemberLiftQueries(productProps, entity = 'product') {
-  if (!isV2()) return []
-  return Object.entries(productProps).flatMap(([field, value]) => (
-    Array.isArray(value)
-      ? value.map(member => ({
-        field: `${entity}.${field}`,
-        member,
-        body: {
-          from: 'impressions',
-          where: { [`${entity}.${field}`]: { $has: member } },
-          relate: { $props: { purchase: true } },
-          select: ['lift', 'related'],
-          limit: 1,
-        },
-      }))
-      : []
-  ))
-}
-
-/**
- * Fold the per-member results from `setMemberLiftQueries` back into the
- * property-relate result, shaped exactly as v1 would have returned them, so the
- * page reads one list and needs no version branch.
- *
- * Rows whose query failed or returned nothing are dropped rather than shown as
- * zero — an absent row is honest, a 0.0x row is a claim.
- *
- * @param {object} relateResult - the `$props` relate result (hits[])
- * @param {Array} queries - what setMemberLiftQueries returned
- * @param {Array} responses - the batch entries for those queries, in order
- */
-export function mergeSetMemberLifts(relateResult, queries, responses) {
-  if (!queries.length) return relateResult
-  const recovered = queries.map((q, i) => {
-    const hit = responses[i] && responses[i].hits && responses[i].hits[0]
-    if (!hit || typeof hit.lift !== 'number') return null
-    return { lift: hit.lift, related: { [q.field]: { $has: q.member } } }
-  }).filter(Boolean)
-
-  const hits = (relateResult && relateResult.hits ? relateResult.hits : []).concat(recovered)
-  // v1 returns these strongest-first; v2's own rows come back unordered, so
-  // sorting here makes the panel read the same on both.
-  hits.sort((a, b) => (b.lift || 0) - (a.lift || 0))
-  return { ...relateResult, hits }
 }
 
 /**
