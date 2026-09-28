@@ -5,7 +5,9 @@ The dataset goes into a separate environment (default `graph`) branched off
 the database's master, never into master itself: master serves the v1 docs
 and demo.aito.ai. The branch starts as a copy-on-write view of master, so
 this script drops the tables it inherited *inside the branch only* and
-creates the graph collections there.
+creates the graph collections there. An existing env is reloaded only if it
+holds nothing but these collections, so a mistyped `--env` (say `v2`) stops
+instead of dropping someone else's tables.
 
     pip install aitoai                      # 0.7.0 or newer
     python3 generate.py                     # writes data/
@@ -65,6 +67,13 @@ def main():
         inherited = names_in(root.get_schema())    # a new branch starts with master's tables
     else:
         inherited = names_in(Client(args.db, key, env=args.env).get_schema())
+        # An existing env is only safe to reload if it holds nothing but this
+        # dataset: `--env v2` must not drop the grocery tables the v2 docs use.
+        foreign = sorted(inherited - set(ORDER))
+        if foreign:
+            sys.exit(f"refusing: env '{args.env}' already exists and holds other tables "
+                     f"({', '.join(foreign)}). Pick a new --env; this script only "
+                     "branches a fresh one or reloads its own.")
     for name in sorted(inherited - set(ORDER)):
         plan.append(f"drop '{name}' in env '{args.env}' (inherited from master; master is untouched)")
     for name in ORDER:
