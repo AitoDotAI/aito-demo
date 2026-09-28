@@ -1,5 +1,9 @@
 # Graph sandbox dataset
 
+> **Synthetic data.** Every company, person, outlet, claim and outcome here
+> is generated. The effects in it are planted on purpose (listed below with
+> their measured lifts), so nothing in it describes the real world.
+
 A small, deterministic, entirely synthetic knowledge graph for the public
 sandbox, so the graph examples in the v2 docs and the playground can run
 against real data (and the docs checker can guard them).
@@ -17,8 +21,8 @@ companies ──< contacts        company_id  (a company's people)
 | companies | 120 | `company_id` | `parent_id → companies.company_id` (nullable self-link) |
 | contacts | 337 | `contact_id` | `company_id → companies.company_id` |
 | deals | 800 | `deal_id` | `company_id → companies`, `champion_id → contacts` (nullable) |
-| claims | 400 | `claim_id` | `subject → companies`, `target → companies` |
-| evidence | 966 | `evidence_id` | `claim → claims.claim_id` |
+| claims | 400 | `claim_id` | `subject → companies`, `target → companies`; `verdict` confirmed / refuted / unreviewed |
+| evidence | 1084 | `evidence_id` | `claim → claims.claim_id` |
 
 What it exercises on purpose:
 
@@ -27,13 +31,29 @@ What it exercises on purpose:
   claims; three parent groups (`co-005`–`co-007`) own the subsidiaries;
 - a **nullable link** (`deals.champion_id`) and a **self-link**
   (`companies.parent_id`), the latter a known v2.10.x gap;
-- **corroboration**: 97 of 400 claims have evidence refiled by the same
+- **corroboration**: 138 of 400 claims have evidence refiled by the same
   crawler, so `$length` and `$distinctLength` differ.
 
-Planted, honest signal: a hidden company type drives both the claims a
-company is the subject of and its `segment` (15% label noise), and a deal's
-`outcome` follows the company's industry and size and the champion's
-seniority (win rate 0.35 with no champion, about 0.68 with an exec).
+## Planted causes, and the lifts they produce
+
+Where a story needs a cause, the cause is in `generate.py`, not just a
+correlation. That's the difference from a dataset where child rows pick
+their parent uniformly at random, whose links carry no signal about any
+outcome. `python3 lifts.py` measures each effect from the written files
+alone (never the hidden truth), and these are its numbers for the default
+seed:
+
+| story | what the generator does | measured |
+|---|---|---|
+| corroboration | a claim is true (75%, hidden) or false; true claims are reported by several independent sources, false ones mostly by one crawler that refiles them | P(confirmed): 0.42 with 1 distinct source, 0.89 with ≥ 2, 1.00 with ≥ 3 (base 0.72); ≥ 3 filings from 1 source: 0.22, so `$length` misleads where `$distinctLength` doesn't |
+| link prediction | a company's industry picks the vendor it `uses` (35% noise) | lift 1.9–3.3 for the industry's vendor, e.g. software → Hooli 0.76 vs 0.26 |
+| linked event → outcome | really using Initech (our integration partner) adds 0.15 to a deal's win probability, really using Globex (a bundled suite) takes 0.15 off; only TRUE claims count | P(won) base 0.49; Initech claim corroborated 0.61, single-source 0.43; Globex corroborated 0.35 |
+| champion | an exec champion helps, no champion hurts | P(won) 0.63 with an exec, 0.28 with none |
+| segment | a hidden company type drives both its claims and its `segment` (15% label noise) | P(supplier \| subject of a `supplies` claim) 0.51 vs 0.27 |
+
+`verdict` is the analyst label on 60% of the claims (`confirmed` /
+`refuted`); the other 40% are `unreviewed`, which is what a corroboration
+view is for.
 
 No real person or company appears: names come from the synthetic namespace
 of aito-company-ai's seed generator ("Acme Oy", "Bob Stone"), and there are
@@ -44,6 +64,7 @@ no emails, phone numbers or addresses.
 ```bash
 pip install aitoai                                  # 0.7.0+
 python3 generate.py                                 # writes data/ (byte-identical every run)
+python3 lifts.py                                    # measure the planted effects, before loading
 AITO_API_KEY=<read key> python3 load.py             # dry run: prints the plan
 AITO_API_KEY=<read-write key> python3 load.py --apply
 AITO_API_KEY=<read key> python3 examples.py         # run the docs examples against it

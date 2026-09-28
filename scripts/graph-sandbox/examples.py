@@ -45,6 +45,8 @@ def examples(d):
     uses_of_subj0 = sorted(c["target"] for c in cl if c["subject"] == subj0 and c["relation"] == "uses")
     no_champion = sum(1 for x in dl if x["champion_id"] is None)
     subsidiaries = sum(1 for c in co if c["parent_id"])
+    # generate.py plants it: software companies mostly use Hooli
+    software_vendor = next(c["company_id"] for c in co if c["name"].split(" ")[0] == "Hooli")
 
     def total(n):
         return lambda r: r.get("total") == n or f"total {r.get('total')} != {n}"
@@ -88,7 +90,7 @@ def examples(d):
         dict(page="graphs#predicting-over-the-graph", what="Edge prediction: which vendor a software subject uses",
              ep="_predict", body={"from": "claims", "where": {"subject.industry": "software", "relation": "uses"},
                                   "predict": "target", "limit": 3},
-             check=lambda r: r["hits"][0]["$value"] in {c["company_id"] for c in co[:4]} or "top is not a vendor hub"),
+             check=top(software_vendor)),
         dict(page="graphs#predicting-over-the-graph", what="basedOn: rank candidate targets by their attributes",
              ep="_predict", body={"from": "claims", "where": {"subject.segment": "digital", "relation": "uses"},
                                   "predict": "target", "basedOn": ["industry", "size"], "limit": 3},

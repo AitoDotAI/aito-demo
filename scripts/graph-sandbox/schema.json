@@ -38,7 +38,8 @@
       "claim_id": { "type": "String" },
       "subject": { "type": "String", "link": "companies.company_id" },
       "relation": { "type": "String" },
-      "target": { "type": "String", "link": "companies.company_id" }
+      "target": { "type": "String", "link": "companies.company_id" },
+      "verdict": { "type": "String" }
     }
   },
   "evidence": {

@@ -21,9 +21,23 @@ The shape exercises what the graph docs teach, including the known edges:
   by the same crawler, so `$length` and `$distinctLength` differ.
 
 It also carries planted, honest signal so predictions have something to
-find: a company's segment follows the claims it is the subject of, and a
-deal's outcome follows the company's industry and size and whether a
-senior champion exists.
+find, and where a story needs a cause the cause is in the generator, not
+only the correlation:
+
+- a company's segment follows the claims it is the subject of;
+- which vendor a company `uses` follows its industry (link prediction);
+- a claim is true or false (hidden), and that decides its evidence: a true
+  claim is reported by several independent sources, a false one mostly by
+  a single crawler that refiles it. So `$distinctLength` over the sources
+  tracks truth and `$length` does not. Analysts have reviewed 60% of the
+  claims (`verdict`), the rest are `unreviewed`;
+- a deal's outcome follows the company's industry and size, whether a
+  senior champion exists, and what the company really uses: our integration
+  partner Initech helps, the bundled Globex suite hurts. Only TRUE `uses`
+  claims move the outcome, so an uncorroborated edge is weaker evidence.
+
+The data is SYNTHETIC and says so; `lifts.py` measures every planted
+effect from the written files before anything is loaded.
 
     python3 generate.py [--out data] [--seed 20260927]
 """
@@ -82,6 +96,11 @@ RELATION_WEIGHTS = {
 }
 
 VENDOR_HUBS = ["Hooli", "Initech", "Cyberdyne", "Globex"]
+#: the vendor each industry mostly `uses` (link prediction has a cause to find)
+PREFERRED_HUB = {"manufacturing": "Cyberdyne", "logistics": "Globex", "retail": "Globex",
+                 "finance": "Initech", "healthcare": "Initech", "software": "Hooli"}
+#: what really using a vendor does to a deal's win probability
+HUB_EFFECT_ON_WIN = {"Initech": 0.15, "Globex": -0.15}
 PARENT_GROUPS = ["Umbrella", "Weyland", "Tyrell"]
 
 AS_OF = date(2026, 9, 1)  # fixed, so dates never depend on the run date
@@ -140,21 +159,28 @@ def contact_rows(rng, companies, per_company=(1, 5)):
     return rows
 
 
-def claim_rows(rng, companies, hubs, n):
+def claim_rows(rng, companies, hub_by_name, n):
     ids = [c["company_id"] for c in companies]
     kind = {c["company_id"]: c["_kind"] for c in companies}
+    industry = {c["company_id"]: c["industry"] for c in companies}
+    hubs = sorted(hub_by_name.values())
     rows = []
     for i in range(1, n + 1):
         subject = rng.choice(ids)
         relation = rng.choices(RELATIONS, weights=RELATION_WEIGHTS[kind[subject]])[0]
-        if relation == "uses":
-            target = rng.choice(hubs) if rng.random() < 0.85 else rng.choice(ids)
+        if relation == "uses" and rng.random() < 0.85:
+            # Planted cause: the industry picks the vendor, with 35% noise.
+            preferred = hub_by_name[PREFERRED_HUB[industry[subject]]]
+            target = preferred if rng.random() < 0.65 else rng.choice(hubs)
         else:
             target = rng.choice(ids)
         if target == subject:
             target = ids[(ids.index(subject) + 1) % len(ids)]
+        true = rng.random() < 0.75
+        verdict = ("confirmed" if true else "refuted") if rng.random() < 0.6 else "unreviewed"
         rows.append({"claim_id": f"cl-{i:04d}", "subject": subject,
-                     "relation": relation, "target": target})
+                     "relation": relation, "target": target, "verdict": verdict,
+                     "_true": true})  # hidden: dropped before writing
     return rows
 
 
@@ -163,10 +189,22 @@ def evidence_rows(rng, claims, companies):
     phrase = {"uses": "uses", "partner_of": "partners with", "competes_with": "competes with",
               "supplies": "supplies", "acquired": "acquired"}
     rows, n = [], 0
+    crawlers = [s for s in SOURCES if s.startswith("crawler:")]
     for cl in claims:
-        sources = rng.sample(SOURCES, rng.choices([1, 2, 3, 4], weights=[4, 3, 2, 1])[0])
+        # Planted cause: truth decides the evidence. A true claim is reported
+        # independently by several sources; a false one mostly by one crawler
+        # that refiles it, so it has volume ($length) without breadth
+        # ($distinctLength).
+        if cl["_true"]:
+            sources = rng.sample(SOURCES, rng.choices([1, 2, 3, 4], weights=[2, 3, 3, 2])[0])
+            p_refile = 0.4
+        else:
+            first = rng.choice(crawlers) if rng.random() < 0.7 else rng.choice(SOURCES)
+            extra = rng.choices([0, 1], weights=[8, 2])[0]
+            sources = [first] + rng.sample([s for s in SOURCES if s != first], extra)
+            p_refile = 0.8
         for source in sources:
-            refiles = rng.choice([2, 3]) if source.startswith("crawler:") and rng.random() < 0.5 else 1
+            refiles = rng.choice([2, 3]) if source.startswith("crawler:") and rng.random() < p_refile else 1
             for _ in range(refiles):
                 n += 1
                 published = AS_OF - timedelta(days=rng.randint(0, 540))
@@ -181,7 +219,13 @@ def evidence_rows(rng, claims, companies):
     return rows
 
 
-def deal_rows(rng, companies, contacts, n):
+def deal_rows(rng, companies, contacts, claims, hub_by_name, n):
+    # What each company REALLY uses: only true claims change an outcome.
+    hub_name = {cid: name for name, cid in hub_by_name.items()}
+    really_uses = {}
+    for cl in claims:
+        if cl["relation"] == "uses" and cl["_true"] and cl["target"] in hub_name:
+            really_uses.setdefault(cl["subject"], set()).add(hub_name[cl["target"]])
     contacts_of = {}
     for ct in contacts:
         contacts_of.setdefault(ct["company_id"], []).append(ct)
@@ -197,6 +241,8 @@ def deal_rows(rng, companies, contacts, n):
         p += {"S": -0.1, "M": 0.0, "L": 0.05, "XL": 0.1}[c["size"]]
         p += 0.1 if c["segment"] == "digital" else 0.0
         p += {"exec": 0.2, "manager": 0.08, "ic": -0.05}[champion["seniority"]] if champion else -0.15
+        # Planted cause: the vendor stack the company really runs.
+        p += sum(HUB_EFFECT_ON_WIN.get(h, 0.0) for h in really_uses.get(c["company_id"], ()))
         won = rng.random() < max(0.05, min(0.95, p))
         rows.append({
             "deal_id": f"dl-{i:04d}",
@@ -217,12 +263,16 @@ def main():
     rng = random.Random(args.seed)
 
     companies, hubs, parents = company_rows(rng, 120)
+    hub_by_name = {c["name"].split(" ")[0]: c["company_id"] for c in companies
+                   if c["company_id"] in hubs}
     contacts = contact_rows(rng, companies)
-    claims = claim_rows(rng, companies, hubs, 400)
+    claims = claim_rows(rng, companies, hub_by_name, 400)
     evidence = evidence_rows(rng, claims, companies)
-    deals = deal_rows(rng, companies, contacts, 800)
+    deals = deal_rows(rng, companies, contacts, claims, hub_by_name, 800)
     for c in companies:
         del c["_kind"]
+    for cl in claims:
+        del cl["_true"]
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
