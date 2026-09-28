@@ -47,6 +47,8 @@ def examples(d):
     subsidiaries = sum(1 for c in co if c["parent_id"])
     # generate.py plants it: software companies mostly use Hooli
     software_vendor = next(c["company_id"] for c in co if c["name"].split(" ")[0] == "Hooli")
+    initech = next(c["company_id"] for c in co if c["name"].split(" ")[0] == "Initech")
+    corroborated_initech = {c["company_id"] for c in co if c["initech_use"] == "corroborated"}
 
     def total(n):
         return lambda r: r.get("total") == n or f"total {r.get('total')} != {n}"
@@ -133,6 +135,17 @@ def examples(d):
         dict(page="graphs#limits", limit=True, what="Self-link: subsidiaries via parent_id",
              ep="_query", body={"from": "companies", "where": {"parent_id.size": "XL"}, "limit": 0},
              check=total(subsidiaries)),
+        # The one-query form of `companies.initech_use`, which is precomputed
+        # today. Waits for path-model Stage 3 (nested $exists / $refs as
+        # filters, td-20260927120731197939). The syntax is a best guess at
+        # Stage 3: align it with what ships. When this reports FIXED, drop the
+        # derived column and teach the query instead.
+        dict(page="graphs#limits", limit=True, what="Nested $refs filter: deals of companies with corroborated Initech use",
+             ep="_query", body={"from": "deals", "where": {"company_id.$refs.claims.subject": {"$exists": {
+                                    "relation": "uses", "target": initech,
+                                    "$refs.evidence.claim.source": {"$distinctLength": {"$gte": 2}}}}},
+                                "limit": 0},
+             check=total(sum(1 for x in dl if x["company_id"] in corroborated_initech))),
         dict(page="graphs#limits", limit=True, what="$examine on a link to a non-`id` key",
              ep="_predict", body={"from": "deals", "where": {"company_id": {"$examine": {"at": "co-011", "basedOn": ["industry", "size"]}}},
                                   "predict": "outcome", "limit": 2},
