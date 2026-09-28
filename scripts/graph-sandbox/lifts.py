@@ -76,6 +76,11 @@ def main():
              rate([x for x in deals if x["company_id"] in corroborated], won), base)
         line(f"  ... claim single-source only",
              rate([x for x in deals if x["company_id"] in users - corroborated], won), base)
+    print("deal outcome by the derived company column (what one _predict over deals sees)")
+    for col in ("initech_use", "globex_use"):
+        for level in ("corroborated", "single_source", "none"):
+            line(f"company_id.{col} = {level}",
+                 rate([x for x in deals if company[x["company_id"]][col] == level], won), base)
     line("exec champion", rate([x for x in deals if x["champion_id"]
                                 and contact[x["champion_id"]]["seniority"] == "exec"], won), base)
     line("no champion", rate([x for x in deals if not x["champion_id"]], won), base)

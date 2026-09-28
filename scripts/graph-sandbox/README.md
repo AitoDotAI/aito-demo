@@ -51,6 +51,15 @@ seed:
 | champion | an exec champion helps, no champion hurts | P(won) 0.63 with an exec, 0.28 with none |
 | segment | a hidden company type drives both its claims and its `segment` (15% label noise) | P(supplier \| subject of a `supplies` claim) 0.51 vs 0.27 |
 
+`companies.initech_use` / `globex_use` (`corroborated` / `single_source` /
+`none`) are derived from the WRITTEN evidence, never the hidden truth:
+`corroborated` means some `uses` claim on that vendor has ≥ 2 distinct
+sources. They exist because v2.10.x can't filter deals → companies →
+`$refs` claims → `$refs` evidence → `$distinctLength` in one query. With
+them, `{"from": "deals", "where": {"company_id.initech_use": "corroborated"},
+"predict": "outcome"}` reproduces the 0.61, and `lifts.py` measures the same
+number from the column.
+
 `verdict` is the analyst label on 60% of the claims (`confirmed` /
 `refuted`); the other 40% are `unreviewed`, which is what a corroboration
 view is for.

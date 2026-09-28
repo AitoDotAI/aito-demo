@@ -8,7 +8,9 @@
       "country": { "type": "String" },
       "size": { "type": "String" },
       "segment": { "type": "String" },
-      "parent_id": { "type": "String", "link": "companies.company_id", "nullable": true }
+      "parent_id": { "type": "String", "link": "companies.company_id", "nullable": true },
+      "initech_use": { "type": "String" },
+      "globex_use": { "type": "String" }
     }
   },
   "contacts": {

@@ -255,6 +255,31 @@ def deal_rows(rng, companies, contacts, claims, hub_by_name, n):
     return rows
 
 
+def vendor_use_columns(companies, claims, evidence, hub_by_name):
+    """Derived `<vendor>_use` columns on companies, from the WRITTEN evidence.
+
+    "corroborated" if some `uses` claim on that vendor has >= 2 distinct
+    evidence sources, "single_source" if it has only single-source ones,
+    "none" otherwise. Never reads the hidden truth: this is what an analyst
+    could compute from the data, denormalised because v2.10.x cannot filter
+    deals -> companies -> $refs claims -> $refs evidence -> $distinctLength
+    in one query. So `{"from": "deals", "where": {"company_id.initech_use":
+    "corroborated"}, "predict": "outcome"}` shows the planted effect.
+    """
+    sources = {}
+    for e in evidence:
+        sources.setdefault(e["claim"], set()).add(e["source"])
+    for vendor in HUB_EFFECT_ON_WIN:
+        use = {}
+        for cl in claims:
+            if cl["relation"] == "uses" and cl["target"] == hub_by_name[vendor]:
+                level = "corroborated" if len(sources.get(cl["claim_id"], ())) >= 2 else "single_source"
+                if use.get(cl["subject"]) != "corroborated":
+                    use[cl["subject"]] = level
+        for c in companies:
+            c[f"{vendor.lower()}_use"] = use.get(c["company_id"], "none")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--out", default=str(Path(__file__).with_name("data")))
@@ -273,6 +298,7 @@ def main():
         del c["_kind"]
     for cl in claims:
         del cl["_true"]
+    vendor_use_columns(companies, claims, evidence, hub_by_name)
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
