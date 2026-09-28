@@ -1,0 +1,57 @@
+{
+  "companies": {
+    "type": "collection",
+    "columns": {
+      "company_id": { "type": "String" },
+      "name": { "type": "Text", "analyzer": "english" },
+      "industry": { "type": "String" },
+      "country": { "type": "String" },
+      "size": { "type": "String" },
+      "segment": { "type": "String" },
+      "parent_id": { "type": "String", "link": "companies.company_id", "nullable": true },
+      "initech_use": { "type": "String" },
+      "globex_use": { "type": "String" }
+    }
+  },
+  "contacts": {
+    "type": "collection",
+    "columns": {
+      "contact_id": { "type": "String" },
+      "name": { "type": "Text", "analyzer": "english" },
+      "role": { "type": "String" },
+      "seniority": { "type": "String" },
+      "company_id": { "type": "String", "link": "companies.company_id" }
+    }
+  },
+  "deals": {
+    "type": "collection",
+    "columns": {
+      "deal_id": { "type": "String" },
+      "company_id": { "type": "String", "link": "companies.company_id" },
+      "champion_id": { "type": "String", "link": "contacts.contact_id", "nullable": true },
+      "product": { "type": "String" },
+      "amount": { "type": "Int" },
+      "outcome": { "type": "String" }
+    }
+  },
+  "claims": {
+    "type": "collection",
+    "columns": {
+      "claim_id": { "type": "String" },
+      "subject": { "type": "String", "link": "companies.company_id" },
+      "relation": { "type": "String" },
+      "target": { "type": "String", "link": "companies.company_id" },
+      "verdict": { "type": "String" }
+    }
+  },
+  "evidence": {
+    "type": "collection",
+    "columns": {
+      "evidence_id": { "type": "String" },
+      "claim": { "type": "String", "link": "claims.claim_id" },
+      "source": { "type": "String" },
+      "published": { "type": "String" },
+      "snippet": { "type": "Text", "analyzer": "english" }
+    }
+  }
+}
