@@ -1,4 +1,5 @@
 import { aitoPostRaw } from './aito-client'
+import { categoryLabel } from './constants/categories'
 
 /**
  * Predicts category for a product based on its name
@@ -27,6 +28,8 @@ export function predictCategory(productName) {
         const prediction = hits[0]
         return {
           value: prediction.feature,
+          // the dataset stores ids ("101"); a person reads the name
+          label: categoryLabel(prediction.feature),
           confidence: prediction.$p
         }
       }

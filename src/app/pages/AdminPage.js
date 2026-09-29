@@ -82,7 +82,9 @@ class AdminPage extends Component {
           categoryPrediction,
           pricePrediction,
           // Auto-fill the input fields with predictions
-          categoryInputValue: categoryPrediction ? categoryPrediction.value : '',
+          categoryInputValue: categoryPrediction
+            ? `${categoryPrediction.label} (${categoryPrediction.value})`
+            : '',
           priceInputValue: pricePrediction ? pricePrediction.value.toFixed(2) : ''
         })
       })

@@ -10,6 +10,7 @@ const {
   executeCustomerTool, 
   CUSTOMER_SYSTEM_PROMPT 
 } = require('./shared/tools/customerTools.cjs');
+const { completeWithHeadroom, fallbackReply } = require('./shared/llm/completion.cjs');
 
 // Load environment variables
 dotenv.config();
@@ -240,7 +241,7 @@ app.post('/api/assistant/customer', async (req, res) => {
     });
 
     // First OpenAI call with tools
-    const completion = await openai.chat.completions.create({
+    const completion = await completeWithHeadroom(openai, {
       model: AZURE_CONFIG.deploymentName,
       messages,
       tools: CUSTOMER_TOOLS,
@@ -250,6 +251,8 @@ app.post('/api/assistant/customer', async (req, res) => {
 
     const assistantMessage = completion.choices[0]?.message;
     let finalResponse = '';
+    // what the tools returned, for a reply built from them if the model gives no text
+    const toolResults = [];
 
     // Debug: Log the initial assistant response to understand what's happening
     console.log('Initial assistant response content:', assistantMessage?.content);
@@ -340,6 +343,7 @@ app.post('/api/assistant/customer', async (req, res) => {
             tool_call_id: toolCall.id,
             content: JSON.stringify(toolResult)
           });
+          toolResults.push(toolResult);
         } catch (toolError) {
           console.error(`Tool execution error for ${toolCall.function.name}:`, toolError);
           
@@ -381,17 +385,17 @@ app.post('/api/assistant/customer', async (req, res) => {
 - Ask the customer if they would like to add these items to their cart.`
       });
 
-      const finalCompletion = await openai.chat.completions.create({
+      const finalCompletion = await completeWithHeadroom(openai, {
         model: AZURE_CONFIG.deploymentName,
         messages,
         max_completion_tokens: 1000
       });
 
-      finalResponse = finalCompletion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
+      finalResponse = finalCompletion.choices[0]?.message?.content || fallbackReply(toolResults);
       console.log('Final response after tool execution:', finalResponse);
     } else {
       // No tool calls, use the original response but ensure it's clean
-      finalResponse = assistantMessage?.content || 'I apologize, but I was unable to generate a response.';
+      finalResponse = assistantMessage?.content || fallbackReply(toolResults);
       console.log('Using original response (no tools):', finalResponse);
     }
 
@@ -494,7 +498,7 @@ app.post('/api/assistant/admin', async (req, res) => {
       }
     ];
 
-    const completion = await openai.chat.completions.create({
+    const completion = await completeWithHeadroom(openai, {
       model: AZURE_CONFIG.deploymentName,
       messages,
       max_completion_tokens: 1000

@@ -13,6 +13,13 @@ import {
 } from 'reactstrap'
 import './HelpPage.css'
 
+// "medium confidence · 51%": the probability Aito gave this field, shown next to it.
+const Confidence = ({ of }) => of
+  ? <span className={`HelpPage__confidence HelpPage__confidence--${of.tier}`}>
+      {of.tier} confidence · {Math.round(of.p * 100)}%
+    </span>
+  : null
+
 class HelpPage extends Component {
   constructor(props) {
     super(props)
@@ -80,11 +87,11 @@ class HelpPage extends Component {
               </div>
               <div className="HelpPage__metadata-item">
                 <div className="HelpPage__metadata-label">Detected Sentiment</div>
-                <div className="HelpPage__metadata-value">{match.sentiment}</div>
+                <div className="HelpPage__metadata-value">{match.sentiment} <Confidence of={match.confidence && match.confidence.sentiment} /></div>
               </div>
               <div className="HelpPage__metadata-item">
                 <div className="HelpPage__metadata-label">Category</div>
-                <div className="HelpPage__metadata-value">{match.categories}</div>
+                <div className="HelpPage__metadata-value">{match.categories} <Confidence of={match.confidence && match.confidence.categories} /></div>
               </div>
               {match.tags && (
                 <div className="HelpPage__metadata-item">
@@ -116,15 +123,15 @@ class HelpPage extends Component {
               </div>
               <div className="HelpPage__metadata-item">
                 <div className="HelpPage__metadata-label">Suggested Assignee</div>
-                <div className="HelpPage__metadata-value">{match.assignee}</div>
+                <div className="HelpPage__metadata-value">{match.assignee} <Confidence of={match.confidence && match.confidence.assignee} /></div>
               </div>
               <div className="HelpPage__metadata-item">
                 <div className="HelpPage__metadata-label">Category</div>
-                <div className="HelpPage__metadata-value">{match.categories}</div>
+                <div className="HelpPage__metadata-value">{match.categories} <Confidence of={match.confidence && match.confidence.categories} /></div>
               </div>
               <div className="HelpPage__metadata-item">
                 <div className="HelpPage__metadata-label">Priority Level</div>
-                <div className="HelpPage__metadata-value">{match.urgency}</div>
+                <div className="HelpPage__metadata-value">{match.urgency} <Confidence of={match.confidence && match.confidence.urgency} /></div>
               </div>
             </div>
             <button className="HelpPage__button">Create Ticket</button>
