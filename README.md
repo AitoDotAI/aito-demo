@@ -12,16 +12,22 @@ The Aito.ai demo highlights 13 production-ready ML features that can be build ex
 ## Try It Now
 
 ```bash
-# Test the API instantly (no signup required)
-curl -X POST https://shared.aito.ai/db/aito-demo/api/v1/_predict \
-  -H "X-API-Key: bvss2i2dIkaWUfBCdzEO89LpPNhqjD" \
+# Test the API instantly (no signup required; a public read-only key)
+curl -X POST https://shared.aito.ai/db/aito-demo/env/v2/api/v2/_predict \
+  -H "x-api-key: yg4rTlXkqDzm4y8gPeY75HCKaNwfbTQ2si64ONTi" \
   -H "Content-Type: application/json" \
   -d '{
     "from": "products",
     "where": {"name": {"$match": "milk"}},
-    "predict": "tags"
+    "predict": "tags.$feature",
+    "select": ["$value", "$p"],
+    "limit": 3
   }'
 ```
+
+The answer ranks each tag by how likely it is for a product called "milk":
+`drink`, `lactose`, then `pirkka`. See the [v2 quickstart](https://aito.ai/docs/api/v2/quickstart/)
+for more queries against the same sandbox.
 
 ## What I Built
 

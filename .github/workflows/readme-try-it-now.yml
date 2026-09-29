@@ -1,0 +1,39 @@
+name: README "Try It Now" still works
+
+# The README's first curl is what a visitor runs before anything else. It went
+# stale once (a mangled key answered 405 for everyone), so this runs it as
+# written, on every push that touches the README and daily against the live
+# sandbox, and fails unless it returns hits.
+
+on:
+  push:
+    paths: ['README.md', '.github/workflows/readme-try-it-now.yml']
+  pull_request:
+    paths: ['README.md', '.github/workflows/readme-try-it-now.yml']
+  schedule:
+    - cron: '30 5 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  try-it-now:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the README curl exactly as written
+        run: |
+          set -euo pipefail
+          # Take the first ```bash block under "## Try It Now" and run it.
+          awk '/^## Try It Now/{f=1} f&&/^```bash/{b=1;next} b&&/^```/{exit} b' README.md > try.sh
+          test -s try.sh
+          sed -i 's/^curl /curl -sS --fail-with-body --max-time 30 /' try.sh
+          bash try.sh > out.json
+          cat out.json
+          python3 - <<'EOF'
+          import json
+          d = json.load(open('out.json'))
+          hits = d.get('hits') or []
+          assert hits, f"no hits: {d}"
+          assert all('$p' in h and '$value' in h for h in hits), hits
+          print('ok:', [(h['$value'], round(h['$p'], 3)) for h in hits])
+          EOF
