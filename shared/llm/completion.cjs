@@ -34,16 +34,23 @@ async function completeWithHeadroom(openai, params) {
   return response
 }
 
+const CART_TOOLS = new Set(['add_to_cart', 'remove_from_cart'])
+
+// `toolResults`: what each tool returned, with the tool's name as `tool`.
+// Failed results are left out: their messages ("Unknown tool: X", "Please
+// provide either productIds or productNames") are for the model, not a shopper.
 function fallbackReply(toolResults) {
-  const results = (toolResults || []).filter(Boolean)
-  const products = results.flatMap(r => (Array.isArray(r.products) ? r.products : []))
-  const firstMessage = results.map(r => r.message).find(m => typeof m === 'string' && m.trim())
-  if (products.length) {
-    const lines = products.slice(0, 8).map(p =>
+  const results = (toolResults || []).filter(r => r && r.success !== false)
+  const found = results.find(r => Array.isArray(r.products) && r.products.length)
+  const changedCart = results.some(r => CART_TOOLS.has(r.tool))
+  if (found) {
+    const lines = found.products.slice(0, 8).map(p =>
       `- ${p.name}${typeof p.price === 'number' ? ` — €${p.price.toFixed(2)}` : ''}`)
-    return `${firstMessage || 'Here is what I found:'}\n\n${lines.join('\n')}\n\n` +
-           'Would you like me to add any of these to your cart?'
+    const header = (typeof found.message === 'string' && found.message.trim()) || 'Here is what I found:'
+    const ask = changedCart ? '' : '\n\nWould you like me to add any of these to your cart?'
+    return `${header}\n\n${lines.join('\n')}${ask}`
   }
+  const firstMessage = results.map(r => r.message).find(m => typeof m === 'string' && m.trim())
   if (firstMessage) return firstMessage
   return "I couldn't put an answer together for that one. Could you rephrase it, " +
          'or ask about a specific product or your usual shopping?'

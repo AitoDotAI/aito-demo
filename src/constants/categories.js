@@ -14,9 +14,9 @@ export const CATEGORY_LABELS = {
   '104': 'Milk & dairy',
   '106': 'Baking',
   '107': 'Frozen food',
-  '108': 'Coffee',
+  '108': 'Coffee & drinks',
   '109': 'Sweets & chocolate',
-  '111': 'Household & paper',
+  '111': 'Household & other',
   '115': 'Pantry',
 }
 

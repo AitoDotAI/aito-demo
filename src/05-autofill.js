@@ -25,17 +25,6 @@ export function getProductsByIds(ids) {
     })
 }
 
-/**
- * Predicts products a user is likely to purchase for cart pre-filling
- * 
- * This advanced feature demonstrates predictive shopping behavior:
- * - Analyzes user's purchase history and patterns
- * - Predicts items they're likely to buy on their next visit
- * - Can be used for "quick reorder" or "smart shopping list" features
- * 
- * @param {string} userId - User identifier for prediction
- * @returns {Promise<Array>} Array of product IDs likely to be purchased
- */
 // Every product at or above CONFIDENT goes in. If that leaves the cart short of
 // MIN_ITEMS, it is topped up with the next most likely products, but never below
 // FLOOR, so a weak guess is still not added.
@@ -54,6 +43,17 @@ export function pickAutoFill(hits, { CONFIDENT, FLOOR, MIN_ITEMS } = AUTOFILL) {
   return [...confident, ...topUp].map(h => h.$value)
 }
 
+/**
+ * Predicts products a user is likely to purchase for cart pre-filling
+ * 
+ * This advanced feature demonstrates predictive shopping behavior:
+ * - Analyzes user's purchase history and patterns
+ * - Predicts items they're likely to buy on their next visit
+ * - Can be used for "quick reorder" or "smart shopping list" features
+ * 
+ * @param {string} userId - User identifier for prediction
+ * @returns {Promise<Array>} Array of product IDs likely to be purchased
+ */
 export function getAutoFill(userId) {
   console.log(`getAutoFill: Starting prediction for userId: ${userId}`);
   

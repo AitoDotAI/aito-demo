@@ -343,7 +343,7 @@ app.post('/api/assistant/customer', async (req, res) => {
             tool_call_id: toolCall.id,
             content: JSON.stringify(toolResult)
           });
-          toolResults.push(toolResult);
+          toolResults.push({ ...toolResult, tool: toolCall.function.name });
         } catch (toolError) {
           console.error(`Tool execution error for ${toolCall.function.name}:`, toolError);
           

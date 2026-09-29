@@ -56,3 +56,13 @@ test('with nothing found either, the reply asks for a rephrase instead of apolog
   assert.doesNotMatch(text, /unable to generate/)
   assert.match(text, /rephras/)
 })
+
+test('failed tool results never reach the shopper, and no cart question after a cart change', () => {
+  const failed = fallbackReply([{ success: false, message: 'Unknown tool: frobnicate' }])
+  assert.doesNotMatch(failed, /Unknown tool/)
+  const afterAdd = fallbackReply([
+    { tool: 'add_to_cart', success: true, message: 'Added 1 item to your cart', products: [{ name: 'Pirkka banana', price: 0.17 }] },
+  ])
+  assert.match(afterAdd, /Added 1 item/)
+  assert.doesNotMatch(afterAdd, /Would you like me to add/)
+})
