@@ -77,3 +77,22 @@ describe('help form', () => {
     expect(result.confidence.assignee.p).toBe(0.61)
   })
 })
+
+describe('search suggestions', () => {
+  it('never suggests the empty phrase (Larry\'s top "suggestion" at p 0.436)', async () => {
+    const { getAutoComplete } = require('../../02-autocomplete')
+    aitoPostRaw.mockReturnValueOnce(respond(hit('', 0.436), hit('bread', 0.038), hit('pirkka', 0.035)))
+    const hits = await getAutoComplete('larry', '')
+    expect(hits.map(h => h.$value)).toEqual(['bread', 'pirkka'])
+  })
+})
+
+describe('chat waiting state', () => {
+  const { waitingMessage } = require('../../app/components/chatWaiting')
+  it('tells a waiting visitor that work is going on, then how long it can take', () => {
+    expect(waitingMessage(2)).toBe('Thinking...')
+    expect(waitingMessage(12)).toMatch(/Searching/)
+    expect(waitingMessage(37)).toMatch(/37 s/)
+    expect(waitingMessage(37)).toMatch(/60 s/)
+  })
+})

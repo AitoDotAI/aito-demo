@@ -10,7 +10,7 @@ const {
   executeCustomerTool, 
   CUSTOMER_SYSTEM_PROMPT 
 } = require('./shared/tools/customerTools.cjs');
-const { completeWithHeadroom, fallbackReply } = require('./shared/llm/completion.cjs');
+const { completeWithHeadroom, fallbackReply, timeoutReply, CHAT_DEADLINE_MS } = require('./shared/llm/completion.cjs');
 
 // Load environment variables
 dotenv.config();
@@ -162,6 +162,17 @@ app.post('/api/chat/completions', async (req, res) => {
  * Handles customer chat with tool execution server-side
  */
 app.post('/api/assistant/customer', async (req, res) => {
+  // what the tools returned, for a reply built from them if the model gives no
+  // text or the deadline passes
+  const toolResults = [];
+  // One deadline for the whole request (model AND Aito tools). Past it the
+  // visitor gets a plain answer instead of waiting on in silence; whatever is
+  // still running finishes unobserved.
+  const deadline = setTimeout(() => {
+    if (res.headersSent) return;
+    console.warn(`Customer assistant: ${CHAT_DEADLINE_MS} ms deadline passed`);
+    res.json({ response: timeoutReply(toolResults), timedOut: true, toolsUsed: [], cartOperations: [] });
+  }, CHAT_DEADLINE_MS);
   try {
     if (!openai) {
       return res.status(500).json({
@@ -251,8 +262,6 @@ app.post('/api/assistant/customer', async (req, res) => {
 
     const assistantMessage = completion.choices[0]?.message;
     let finalResponse = '';
-    // what the tools returned, for a reply built from them if the model gives no text
-    const toolResults = [];
 
     // Debug: Log the initial assistant response to understand what's happening
     console.log('Initial assistant response content:', assistantMessage?.content);
@@ -431,6 +440,8 @@ app.post('/api/assistant/customer', async (req, res) => {
       }
     ];
 
+    clearTimeout(deadline);
+    if (res.headersSent) return;   // the deadline already answered
     res.json({
       response: finalResponse,
       usage: completion.usage,
@@ -441,7 +452,9 @@ app.post('/api/assistant/customer', async (req, res) => {
     });
 
   } catch (error) {
+    clearTimeout(deadline);
     console.error('Customer assistant error:', error);
+    if (res.headersSent) return;
     res.status(500).json({
       error: 'Failed to process customer request',
       message: error.message

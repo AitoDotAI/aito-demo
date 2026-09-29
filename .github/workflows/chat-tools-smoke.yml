@@ -1,0 +1,32 @@
+name: Chat tools answer on the live demo data
+
+# The customer chat's product search failed on every call for nine months
+# (2025-12-18 to 2026-09-29) and nothing noticed. This runs every tool the model
+# can call against the live demo database, with the public read-only key the
+# tools default to, daily and on every change to the tools, and fails if any
+# tool errors or comes back empty. It writes nothing.
+
+on:
+  push:
+    paths: ['shared/tools/**', 'scripts/smoke-chat-tools.cjs', '.github/workflows/chat-tools-smoke.yml']
+  pull_request:
+    paths: ['shared/tools/**', 'scripts/smoke-chat-tools.cjs', '.github/workflows/chat-tools-smoke.yml']
+  schedule:
+    - cron: '40 5 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # The tools need only axios; installing the whole React toolchain for this
+      # would take minutes. NODE_PATH lets shared/tools resolve it.
+      - name: Install axios only
+        run: npm install --prefix "$RUNNER_TEMP/deps" --no-audit --no-fund axios@1
+      - name: Run every chat tool against the live data
+        run: NODE_PATH="$RUNNER_TEMP/deps/node_modules" node scripts/smoke-chat-tools.cjs

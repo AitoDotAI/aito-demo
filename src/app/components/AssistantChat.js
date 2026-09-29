@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Input, Alert, Spinner, Badge } from 'reactstrap';
 import { FaPaperPlane, FaRobot, FaUser, FaTools } from 'react-icons/fa';
 import './Chat.css';
+import { waitingMessage } from './chatWaiting';
 
 class AssistantChat extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class AssistantChat extends Component {
       inputValue: '',
       messages: [],
       isLoading: false,
+      waitingSeconds: 0,
       error: null
     };
     
@@ -27,6 +29,10 @@ class AssistantChat extends Component {
           : "Hi! 👋 I'm your shopping assistant. How can I help you today?"
       }]
     });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.waitTimer);
   }
 
   componentDidUpdate() {
@@ -61,8 +67,14 @@ class AssistantChat extends Component {
     this.setState(prevState => ({
       messages: [...prevState.messages, { role: 'user', content: userMessage }],
       isLoading: true,
+      waitingSeconds: 0,
       error: null
     }));
+    // count the wait, so the loading line can say that work is going on
+    const startedAt = Date.now();
+    clearInterval(this.waitTimer);
+    this.waitTimer = setInterval(
+      () => this.setState({ waitingSeconds: (Date.now() - startedAt) / 1000 }), 1000);
 
     try {
       // Pass current conversation history to the sendMessage prop
@@ -71,6 +83,7 @@ class AssistantChat extends Component {
       };
 
       const result = await this.props.sendMessage(userMessage, context);
+      clearInterval(this.waitTimer);
       
       // Handle cart operations if any were returned
       if (result.cartOperations && result.cartOperations.length > 0) {
@@ -98,6 +111,7 @@ class AssistantChat extends Component {
         }));
       }
     } catch (error) {
+      clearInterval(this.waitTimer);
       console.error('Message handling error:', error);
       this.setState(prevState => ({
         messages: [...prevState.messages, { 
@@ -223,7 +237,7 @@ class AssistantChat extends Component {
                 </div>
               </div>
               <div className="message-content">
-                <Spinner size="sm" /> Thinking...
+                <Spinner size="sm" /> {waitingMessage(this.state.waitingSeconds)}
               </div>
             </div>
           )}

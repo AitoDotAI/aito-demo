@@ -66,3 +66,13 @@ test('failed tool results never reach the shopper, and no cart question after a 
   assert.match(afterAdd, /Added 1 item/)
   assert.doesNotMatch(afterAdd, /Would you like me to add/)
 })
+
+test('a timed-out chat says so plainly, and still shows what the tools found', () => {
+  const { timeoutReply } = require('./completion.cjs')
+  const nothing = timeoutReply([])
+  assert.match(nothing, /taking longer than it should/)
+  assert.match(nothing, /work without it/)
+  const some = timeoutReply([{ success: true, message: 'Found 1 products', products: [{ name: 'Pirkka banana', price: 0.17 }] }])
+  assert.match(some, /here is what I found so far/)
+  assert.match(some, /Pirkka banana — €0\.17/)
+})

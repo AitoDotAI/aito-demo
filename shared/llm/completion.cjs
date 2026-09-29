@@ -56,4 +56,22 @@ function fallbackReply(toolResults) {
          'or ask about a specific product or your usual shopping?'
 }
 
-module.exports = { completeWithHeadroom, fallbackReply, RETRY_BUDGET }
+// The customer chat's whole-request deadline. A reply came back after 37 s on
+// demo.aito.ai, silently; past this the visitor gets timeoutReply instead.
+const CHAT_DEADLINE_MS = Number(process.env.CHAT_DEADLINE_MS) || 60000
+
+// What to say when the deadline passes. Whatever the tools had already found is
+// still worth showing; otherwise say plainly that the AI service is slow, and
+// that the rest of the demo does not depend on it.
+function timeoutReply(toolResults) {
+  const found = (toolResults || []).find(r => r && r.success !== false && Array.isArray(r.products) && r.products.length)
+  if (found) {
+    return 'That took longer than it should, but here is what I found so far:\n\n' +
+      fallbackReply([found]).split('\n\n').slice(1).join('\n\n')
+  }
+  return 'Sorry, that is taking longer than it should: the AI service is slow right now. ' +
+         'Please try again in a moment. Search, recommendations and autofill elsewhere on ' +
+         'the page work without it.'
+}
+
+module.exports = { completeWithHeadroom, fallbackReply, timeoutReply, RETRY_BUDGET, CHAT_DEADLINE_MS }

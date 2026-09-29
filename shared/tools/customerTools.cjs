@@ -321,7 +321,8 @@ async function getSearchSuggestions(userId, prefix) {
     // $startsWith is Aito's string prefix matching operator
     if (prefix) {
       where['queryPhrase'] = {
-        "$startsWith": prefix
+        // phrases are stored lowercase, as the frontend's 02-autocomplete.js assumes
+        "$startsWith": prefix.toLowerCase()
       }
     } 
     
@@ -349,7 +350,11 @@ async function getSearchSuggestions(userId, prefix) {
     });
     
     // Return array of suggestions with their probability scores
-    const suggestions = response.data.hits.map(hit => hit.$value);
+    // An empty search is logged as the phrase "", and it is the most likely one:
+    // drop it, or the reply reads "Here are some search suggestions: , bread, ..."
+    const suggestions = response.data.hits
+      .map(hit => hit.$value)
+      .filter(value => typeof value === 'string' && value.trim() !== '');
     
     return {
       success: true,

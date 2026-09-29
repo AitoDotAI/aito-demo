@@ -48,3 +48,11 @@ test("smart-cart predictions give Larry more than the one item over 0.4", async 
   assert.ok(result.products.length >= 5, `got ${result.products.length} products`)
   assert.ok(!result.products.some(p => p.id === 'p6'), 'a 0.12 guess is not added')
 })
+
+test('search suggestions drop the empty phrase and match the prefix case-insensitively', async () => {
+  const sent = answer({ hits: [{ $p: 0.436, $value: '' }, { $p: 0.038, $value: 'bread' }, { $p: 0.03, $value: 'banana' }] })
+  const result = await executeCustomerTool('get_search_suggestions', { prefix: 'B' }, 'larry', [])
+  assert.deepStrictEqual(result.suggestions, ['bread', 'banana'])
+  assert.doesNotMatch(result.message, /: ,/)
+  assert.deepStrictEqual(sent[0].body.where.queryPhrase, { $startsWith: 'b' })
+})
