@@ -202,7 +202,7 @@ Create `.env` file (or copy from `.env.example`):
 ```bash
 # Aito Configuration
 AITO_URL=https://shared.aito.ai/db/aito-demo
-AITO_API_KEY=bvss2i2dIkaWUfBCdzEO89LpPNhqjD
+AITO_API_KEY=yg4rTlXkqDzm4y8gPeY75HCKaNwfbTQ2si64ONTi   # public read-only key; writes need your own
 
 # Application
 PORT=3000
