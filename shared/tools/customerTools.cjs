@@ -36,14 +36,14 @@ async function searchProducts(userId, query, limit = 5) {
   try {
     console.log(`Searching products for user ${userId} with query: "${query}"`);
     
+    // Match on the product NAME, as the frontend's 03-search.js does. The old
+    // clause also sent {'tags': {$match}}, but `tags` is an Array[String] in the
+    // live data, which $match cannot take: every search_products call failed with
+    // a 400 ("field 'product.tags' of type Array[String] cannot match ..."), so
+    // any chat question that needed a product search ended in the "unable to
+    // generate a response" apology (td-20260928211432040153).
     var where = {
-      'product' : {
-        // Use $or to search across multiple fields
-        '$or': [
-          {'tags': { "$match": query }},  // Search in product tags
-          {'name': { "$match": query }}   // Search in product names
-        ]
-      }
+      'product.name': { "$match": query }
     }
     
     // Add user context for personalization if userId is provided
@@ -75,7 +75,7 @@ async function searchProducts(userId, query, limit = 5) {
       },
       
       // Select specific fields to return, including match highlights
-      select: ["name", "id", "tags", "price", "$matches"],
+      select: ["name", "id", "tags", "price"],
       limit: limit  // Return top results
     }, {
       headers: { 'x-api-key': config.aito.apiKey },
@@ -239,19 +239,14 @@ async function getAutoFill(userId) {
   })
     .then(result => {
       console.log(`getAutoFill: API response received:`, result.data);
-      var ids = []
-
-      // Filter predictions to include only high-confidence items
-      result.data.hits.forEach(hit => {
-        console.log(`getAutoFill: Processing hit - probability: ${hit.$p}, value: ${hit.$value}`);
-        // Include products with 40%+ purchase probability
-        // This threshold balances relevance with variety
-        if (hit.$p >= 0.4) {
-          ids.push(hit.$value)
-        }
-      })
-      console.log(`getAutoFill: Filtered IDs (>= 0.4 probability):`, ids);
-            
+      // The same pick as the frontend's 05-autofill.js: everything >= 0.4, topped
+      // up to 5 with the next most likely down to 0.3. A 0.4 threshold alone put
+      // ONE item in Larry's cart (0.417, then 0.393, 0.370, ...).
+      const ranked = [...result.data.hits].sort((a, b) => b.$p - a.$p)
+      const confident = ranked.filter(h => h.$p >= 0.4)
+      const topUp = ranked.filter(h => h.$p < 0.4 && h.$p >= 0.3).slice(0, Math.max(0, 5 - confident.length))
+      const ids = [...confident, ...topUp].map(h => h.$value)
+      console.log(`getAutoFill: picked IDs:`, ids);
       return ids
     })
     .catch(error => {
@@ -326,7 +321,8 @@ async function getSearchSuggestions(userId, prefix) {
     // $startsWith is Aito's string prefix matching operator
     if (prefix) {
       where['queryPhrase'] = {
-        "$startsWith": prefix
+        // phrases are stored lowercase, as the frontend's 02-autocomplete.js assumes
+        "$startsWith": prefix.toLowerCase()
       }
     } 
     
@@ -354,7 +350,11 @@ async function getSearchSuggestions(userId, prefix) {
     });
     
     // Return array of suggestions with their probability scores
-    const suggestions = response.data.hits.map(hit => hit.$value);
+    // An empty search is logged as the phrase "", and it is the most likely one:
+    // drop it, or the reply reads "Here are some search suggestions: , bread, ..."
+    const suggestions = response.data.hits
+      .map(hit => hit.$value)
+      .filter(value => typeof value === 'string' && value.trim() !== '');
     
     return {
       success: true,

@@ -10,6 +10,7 @@ const {
   executeCustomerTool, 
   CUSTOMER_SYSTEM_PROMPT 
 } = require('./shared/tools/customerTools.cjs');
+const { completeWithHeadroom, fallbackReply, timeoutReply, CHAT_DEADLINE_MS } = require('./shared/llm/completion.cjs');
 
 // Load environment variables
 dotenv.config();
@@ -161,6 +162,19 @@ app.post('/api/chat/completions', async (req, res) => {
  * Handles customer chat with tool execution server-side
  */
 app.post('/api/assistant/customer', async (req, res) => {
+  // what the tools returned, for a reply built from them if the model gives no
+  // text or the deadline passes
+  const toolResults = [];
+  // cart changes already made, so a deadline reply still syncs the frontend
+  const cartOperations = [];
+  // One deadline for the whole request (model AND Aito tools). Past it the
+  // visitor gets a plain answer instead of waiting on in silence; whatever is
+  // still running finishes unobserved.
+  const deadline = setTimeout(() => {
+    if (res.headersSent) return;
+    console.warn(`Customer assistant: ${CHAT_DEADLINE_MS} ms deadline passed`);
+    res.json({ response: timeoutReply(toolResults), timedOut: true, toolsUsed: [], cartOperations });
+  }, CHAT_DEADLINE_MS);
   try {
     if (!openai) {
       return res.status(500).json({
@@ -240,7 +254,7 @@ app.post('/api/assistant/customer', async (req, res) => {
     });
 
     // First OpenAI call with tools
-    const completion = await openai.chat.completions.create({
+    const completion = await completeWithHeadroom(openai, {
       model: AZURE_CONFIG.deploymentName,
       messages,
       tools: CUSTOMER_TOOLS,
@@ -255,8 +269,6 @@ app.post('/api/assistant/customer', async (req, res) => {
     console.log('Initial assistant response content:', assistantMessage?.content);
     console.log('Tool calls present:', !!assistantMessage?.tool_calls);
 
-    // Track cart operations for frontend state sync
-    const cartOperations = [];
 
     // Handle tool calls if present
     if (assistantMessage?.tool_calls) {
@@ -340,6 +352,7 @@ app.post('/api/assistant/customer', async (req, res) => {
             tool_call_id: toolCall.id,
             content: JSON.stringify(toolResult)
           });
+          toolResults.push({ ...toolResult, tool: toolCall.function.name });
         } catch (toolError) {
           console.error(`Tool execution error for ${toolCall.function.name}:`, toolError);
           
@@ -381,17 +394,17 @@ app.post('/api/assistant/customer', async (req, res) => {
 - Ask the customer if they would like to add these items to their cart.`
       });
 
-      const finalCompletion = await openai.chat.completions.create({
+      const finalCompletion = await completeWithHeadroom(openai, {
         model: AZURE_CONFIG.deploymentName,
         messages,
         max_completion_tokens: 1000
       });
 
-      finalResponse = finalCompletion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
+      finalResponse = finalCompletion.choices[0]?.message?.content || fallbackReply(toolResults);
       console.log('Final response after tool execution:', finalResponse);
     } else {
       // No tool calls, use the original response but ensure it's clean
-      finalResponse = assistantMessage?.content || 'I apologize, but I was unable to generate a response.';
+      finalResponse = assistantMessage?.content || fallbackReply(toolResults);
       console.log('Using original response (no tools):', finalResponse);
     }
 
@@ -427,6 +440,8 @@ app.post('/api/assistant/customer', async (req, res) => {
       }
     ];
 
+    clearTimeout(deadline);
+    if (res.headersSent) return;   // the deadline already answered
     res.json({
       response: finalResponse,
       usage: completion.usage,
@@ -438,10 +453,14 @@ app.post('/api/assistant/customer', async (req, res) => {
 
   } catch (error) {
     console.error('Customer assistant error:', error);
+    if (res.headersSent) return;
     res.status(500).json({
       error: 'Failed to process customer request',
       message: error.message
     });
+  } finally {
+    // every exit, including the early 400/500 returns, releases the timer
+    clearTimeout(deadline);
   }
 });
 
@@ -494,7 +513,7 @@ app.post('/api/assistant/admin', async (req, res) => {
       }
     ];
 
-    const completion = await openai.chat.completions.create({
+    const completion = await completeWithHeadroom(openai, {
       model: AZURE_CONFIG.deploymentName,
       messages,
       max_completion_tokens: 1000

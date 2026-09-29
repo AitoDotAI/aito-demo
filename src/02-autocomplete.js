@@ -44,7 +44,9 @@ export function getAutoComplete(userId, prefix) {
     select: ["$p", "$value"]
   })
     .then(result => {
-      // Return array of suggestions with their probability scores
-      return result.data.hits
+      // Return array of suggestions with their probability scores. A search
+      // with no text is logged as the phrase "", and it is the MOST likely one
+      // (Larry: p 0.436 against 0.038 for "bread"), so it is dropped here.
+      return result.data.hits.filter(hit => typeof hit.$value === 'string' && hit.$value.trim() !== '')
     })
 }

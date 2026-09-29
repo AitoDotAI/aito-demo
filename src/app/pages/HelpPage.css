@@ -233,3 +233,15 @@
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(255, 107, 53, 0.25);
 }
+/* confidence of a routed field (td-20260928211432040153) */
+.HelpPage__confidence {
+  display: inline-block;
+  margin-left: 0.5em;
+  padding: 0.05em 0.5em;
+  border-radius: 999px;
+  font-size: 0.8em;
+  white-space: nowrap;
+}
+.HelpPage__confidence--high { background: #e3f5e8; color: #1e6b34; }
+.HelpPage__confidence--medium { background: #fdf3dc; color: #8a5a00; }
+.HelpPage__confidence--low { background: #fbe4e4; color: #9b2c2c; }

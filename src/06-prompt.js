@@ -1,6 +1,19 @@
 import { aitoPostRaw, nonExclusivePredict } from './aito-client'
 
 /**
+ * How sure Aito is about one routed field, in words a support agent can act on.
+ * The help form used to compute each field's probability, filter on it, and
+ * drop it, so an urgency guessed at 51% looked exactly like one at 95%.
+ */
+export function confidenceTier(p) {
+  if (p >= 0.8) return 'high'
+  if (p >= 0.5) return 'medium'
+  return 'low'
+}
+
+const confidenceOf = (p) => ({ p, tier: confidenceTier(p) })
+
+/**
  * Analyzes a user prompt to determine its type and extract relevant information
  * Uses Aito.ai's predictive capabilities to classify prompts as questions, feedback, or requests
  * and extract structured data accordingly
@@ -60,13 +73,15 @@ export function prompt(question) {
             }).then(response => response.data.hits[0])
           })).then(responses => {
             var rv = {
-              "type": "feedback"
+              "type": "feedback",
+              "confidence": {}
             }
             console.log(JSON.stringify(responses))
             for (var i = 0; i < fields.length; i++) {
               if (responses[i].$p >= 0.5) {
                 const key = fields[i].split(".")[0]
                 rv[key] = responses[i].feature
+                rv.confidence[key] = confidenceOf(responses[i].$p)
               }
             }
             console.log(JSON.stringify(rv))
@@ -133,12 +148,14 @@ export function prompt(question) {
 
           return Promise.all([assignee, categories, urgency]).then(responses => {
             var rv = {
-              "type": "request"
+              "type": "request",
+              "confidence": {}
             }
             console.log(JSON.stringify(responses))
             for (var i = 0; i < fields.length; i++) {
               if (responses[i][0] >= 0.25) {
                 rv[fields[i]] = responses[i][1]
+                rv.confidence[fields[i]] = confidenceOf(responses[i][0])
               }
             }
             console.log(JSON.stringify(rv))
