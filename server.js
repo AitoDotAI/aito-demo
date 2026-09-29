@@ -165,13 +165,15 @@ app.post('/api/assistant/customer', async (req, res) => {
   // what the tools returned, for a reply built from them if the model gives no
   // text or the deadline passes
   const toolResults = [];
+  // cart changes already made, so a deadline reply still syncs the frontend
+  const cartOperations = [];
   // One deadline for the whole request (model AND Aito tools). Past it the
   // visitor gets a plain answer instead of waiting on in silence; whatever is
   // still running finishes unobserved.
   const deadline = setTimeout(() => {
     if (res.headersSent) return;
     console.warn(`Customer assistant: ${CHAT_DEADLINE_MS} ms deadline passed`);
-    res.json({ response: timeoutReply(toolResults), timedOut: true, toolsUsed: [], cartOperations: [] });
+    res.json({ response: timeoutReply(toolResults), timedOut: true, toolsUsed: [], cartOperations });
   }, CHAT_DEADLINE_MS);
   try {
     if (!openai) {
@@ -267,8 +269,6 @@ app.post('/api/assistant/customer', async (req, res) => {
     console.log('Initial assistant response content:', assistantMessage?.content);
     console.log('Tool calls present:', !!assistantMessage?.tool_calls);
 
-    // Track cart operations for frontend state sync
-    const cartOperations = [];
 
     // Handle tool calls if present
     if (assistantMessage?.tool_calls) {
@@ -452,13 +452,15 @@ app.post('/api/assistant/customer', async (req, res) => {
     });
 
   } catch (error) {
-    clearTimeout(deadline);
     console.error('Customer assistant error:', error);
     if (res.headersSent) return;
     res.status(500).json({
       error: 'Failed to process customer request',
       message: error.message
     });
+  } finally {
+    // every exit, including the early 400/500 returns, releases the timer
+    clearTimeout(deadline);
   }
 });
 

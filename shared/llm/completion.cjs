@@ -66,8 +66,10 @@ const CHAT_DEADLINE_MS = Number(process.env.CHAT_DEADLINE_MS) || 60000
 function timeoutReply(toolResults) {
   const found = (toolResults || []).find(r => r && r.success !== false && Array.isArray(r.products) && r.products.length)
   if (found) {
+    // fallbackReply over ALL results, so a cart change still suppresses the
+    // "add these to your cart?" question; its first paragraph is the header
     return 'That took longer than it should, but here is what I found so far:\n\n' +
-      fallbackReply([found]).split('\n\n').slice(1).join('\n\n')
+      fallbackReply(toolResults).split('\n\n').slice(1).join('\n\n')
   }
   return 'Sorry, that is taking longer than it should: the AI service is slow right now. ' +
          'Please try again in a moment. Search, recommendations and autofill elsewhere on ' +
