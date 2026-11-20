@@ -38,15 +38,27 @@ export function prompt(question) {
             return match
           })
         } else if (top.feature === "feedback") {
-          const fields = ["sentiment", "categories.$feature", "tags"]
-          
+          // Plain field names. This list used to carry the `.$feature`
+          // spelling for categories, which is what broke Help: `.$feature` IS
+          // the non-exclusive per-member form, and because the string was not
+          // literally "tags" it also fell through to the exclusive arm below
+          // and picked up `exclusiveness: true`. The resulting body asked v2
+          // for per-member and exclusive scoring at once, and v2 answered 400
+          // — so every piece of feedback anyone typed failed.
+          const fields = ["sentiment", "categories", "tags"]
+          // Multi-valued: a prompt really can be about produce AND queueing,
+          // so these are scored per member rather than competing for one slot.
+          // `sentiment` is single-valued and stays exclusive. The `request`
+          // branch below has always treated categories this way; only this
+          // branch disagreed.
+          const multiValued = ["categories", "tags"]
+
           return Promise.all(fields.map(predicted => {
-            // `tags` is multi-valued and must be scored per member; the other
-            // two are exclusive. v2 rejects `exclusiveness: false` outright,
-            // so the non-exclusive case goes through the client helper while
-            // the exclusive one keeps the explicit flag (v2 accepts `true`).
-            const target = predicted === "tags"
-              ? nonExclusivePredict("tags")
+            // v2 rejects `exclusiveness: false` outright, so the non-exclusive
+            // case goes through the client helper while the exclusive one
+            // keeps the explicit flag (v2 accepts `true`).
+            const target = multiValued.includes(predicted)
+              ? nonExclusivePredict(predicted)
               : { predict: predicted, exclusiveness: true }
 
             return aitoPostRaw('_predict', {
@@ -65,8 +77,7 @@ export function prompt(question) {
             console.log(JSON.stringify(responses))
             for (var i = 0; i < fields.length; i++) {
               if (responses[i].$p >= 0.5) {
-                const key = fields[i].split(".")[0]
-                rv[key] = responses[i].feature
+                rv[fields[i]] = responses[i].feature
               }
             }
             console.log(JSON.stringify(rv))
