@@ -2,14 +2,25 @@ import React, { Component } from 'react'
 import { FaChevronRight, FaBook, FaExternalLinkAlt, FaGithub, FaTimes } from 'react-icons/fa'
 import { trackEvent } from '../../analytics'
 import { CONTEXT_PANEL_CONTENT, DEFAULT_CONTEXT } from '../constants/contextPanelContent'
+import { onRequest } from '../../aito-client'
+import { paneQuery } from './paneQuery'
 import aitoLogo from '../assets/aito-logo-theme.svg'
 import aitoFavicon from '../assets/aito-favicon.svg'
 
 import './ContextPanel.css'
 
+// Only claims that are true and sourced.
+//
+// This used to lead with "0.92 Confidence" and "20-50ms Response". Neither was
+// measured: no query in the app returns a 0.92, and nothing times a request.
+// They sat beside three live panels, where a visitor had no way to tell the
+// decoration from the data — which is what makes an invented number worse than
+// no number at all.
+//
+// "Records" is the dataset size (README: 90K impressions), checked against the
+// live instance rather than taken on trust. "Training" is not a measurement at
+// all; it is how Aito works, and it is true.
 const STATS = [
-  { value: '0.92', label: 'Confidence' },
-  { value: '20-50ms', label: 'Response' },
   { value: '90K+', label: 'Records' },
   { value: 'Zero', label: 'Training' },
 ]
@@ -28,6 +39,17 @@ class ContextPanel extends Component {
 
   componentDidMount() {
     this.updateBodyClass()
+    // Re-render when a request goes out, so the pane shows what this page just
+    // did rather than whatever had happened by the time the panel mounted.
+    // A counter rather than the body itself: paneQuery reads the log directly,
+    // and holding a second copy in state is how the two drift apart.
+    this.stopWatchingRequests = onRequest(() => {
+      this.setState(prev => ({ requestTick: (prev.requestTick || 0) + 1 }))
+    })
+  }
+
+  componentWillUnmount() {
+    if (this.stopWatchingRequests) this.stopWatchingRequests()
   }
 
   componentDidUpdate(_, prevState) {
@@ -119,14 +141,24 @@ class ContextPanel extends Component {
             </div>
           )}
 
-          {content.exampleQuery && (
-            <div className="ContextPanel__querySection">
-              <h4 className="ContextPanel__sectionLabel">Example Query</h4>
-              <pre className="ContextPanel__codeBlock">
-                <code>{content.exampleQuery}</code>
-              </pre>
-            </div>
-          )}
+          {/* The body this page actually sent, when it has sent one. The
+              static example is the fallback and says so — it had drifted from
+              the code, and a pane that quietly shows an approximation of the
+              mechanism is worse than one that admits it is an example. */}
+          {(() => {
+            const pane = paneQuery(content.endpoints, content.exampleQuery)
+            if (!pane) return null
+            return (
+              <div className="ContextPanel__querySection">
+                <h4 className="ContextPanel__sectionLabel">
+                  {pane.live ? `Last ${pane.endpoint} sent` : 'Example Query'}
+                </h4>
+                <pre className="ContextPanel__codeBlock">
+                  <code>{pane.body}</code>
+                </pre>
+              </div>
+            )
+          })()}
 
           {content.links.useCases && content.links.useCases.length > 0 && (
             <div className="ContextPanel__links">

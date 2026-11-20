@@ -144,7 +144,63 @@ export function aitoPost(endpoint, body, axiosOptions = {}) {
  * Same as `aitoPost` but returns the axios response with its payload already
  * normalised, for the call sites that read `result.data`.
  */
+/**
+ * What was last sent to each endpoint, so the query panes can show the real
+ * thing instead of a hand-written approximation of it.
+ *
+ * Kept here because this is the one place every call passes through, so a pane
+ * cannot drift from the request the way the static examples did. Last-only and
+ * in memory: the panes show "what this page just did", nothing is persisted,
+ * and nothing is sent anywhere.
+ */
+const lastRequests = new Map()
+const requestListeners = new Set()
+
+export function recordRequest(endpoint, body) {
+  lastRequests.set(endpoint, body)
+  requestListeners.forEach(fn => {
+    // A pane that throws must not take down the request it is describing.
+    try { fn(endpoint, body) } catch (e) { console.error('request listener failed', e) }
+  })
+}
+
+export function getLastRequest(endpoint) {
+  return lastRequests.get(endpoint)
+}
+
+/** Subscribe to request activity. Returns the unsubscribe. */
+export function onRequest(fn) {
+  requestListeners.add(fn)
+  return () => requestListeners.delete(fn)
+}
+
+/** Tests only. */
+export function clearRequestLog() {
+  lastRequests.clear()
+  requestListeners.clear()
+}
+
+/**
+ * True when a request failed only because a nested `from` selected no rows.
+ *
+ * The engine answers 400 `request.invalid` with "nested from: the restriction
+ * matched no rows of '<table>'" rather than returning an empty result. That
+ * matters for every scoped-population fix: moving a filter from `where` into a
+ * nested `from` converts "an unhelpful answer" into "a broken page" for any
+ * subject with no rows. Callers that can sensibly show nothing should use this
+ * to tell that case apart from a real failure.
+ */
+export function isEmptyPopulation(error) {
+  const message = error
+    && error.response
+    && error.response.data
+    && error.response.data.data
+    && error.response.data.data.message
+  return typeof message === 'string' && message.includes('matched no rows')
+}
+
 export function aitoPostRaw(endpoint, body, axiosOptions = {}) {
+  recordRequest(endpoint, body)
   return axios.post(`${config.aito.apiBase}/${endpoint}`, body, {
     headers: { 'x-api-key': config.aito.apiKey },
     ...axiosOptions,
@@ -154,6 +210,6 @@ export function aitoPostRaw(endpoint, body, axiosOptions = {}) {
   })
 }
 
-const aitoClient = { aitoPost, aitoPostRaw, isV2, estimateSelect }
+const aitoClient = { aitoPost, aitoPostRaw, isV2, estimateSelect, getLastRequest, onRequest }
 
 export default aitoClient

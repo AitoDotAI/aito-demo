@@ -1,5 +1,6 @@
 import { aitoPostRaw, nonExclusivePredict } from './aito-client'
 import config from './config'
+import { isEmptyPopulation } from './aito-client'
 
 /**
  * Retrieves multiple products by their IDs in a single query
@@ -39,17 +40,25 @@ export function getProductsByIds(ids) {
 export function getAutoFill(userId) {
   console.log(`getAutoFill: Starting prediction for userId: ${userId}`);
   
-  var where = {}
-  if (userId) {
-    where['user'] = userId
-  }
-  console.log(`getAutoFill: Query where clause:`, where);
+  // The user is a POPULATION, not evidence.
+  //
+  // This used to send `where: { user: userId }` at the top level, which reads
+  // as "given that the shopper is Larry" while still drawing on every visit by
+  // every shopper. Larry's next basket was being predicted partly from
+  // strangers'. A nested `from` makes it a boundary instead — the same shape
+  // 06-prompt.js already uses to scope prompts to `type: "request"`.
+  //
+  // With no userId there is no boundary to draw, so the plain table is the
+  // honest spelling of "all visits".
+  const from = userId
+    ? { "from": "visits", "where": { "user": userId } }
+    : "visits"
+  console.log(`getAutoFill: population:`, from);
 
   // Predict future purchases based on historical patterns
   console.log(`getAutoFill: Making API call to ${config.aito.apiBase}/_predict`);
   return aitoPostRaw('_predict', {
-    "from": "visits",        // Analyze visit/session data
-    "where" : where,         // Filter by user if specified
+    "from": from,            // this shopper's visits, not everyone's
     // Score each product independently — a user can buy several.
     ...nonExclusivePredict('purchases'),
     
@@ -74,6 +83,20 @@ export function getAutoFill(userId) {
       return ids
     })
     .catch(error => {
+      // A nested `from` whose restriction matches nothing is a 400, not an
+      // empty result: "nested from: the restriction matched no rows of
+      // 'visits'". So scoping to a shopper with no visits turns what used to
+      // be an unhelpful answer into a broken page. Measured against shared
+      // 2026-10-01; the three demo personas all have visits (9/8/6), which is
+      // why this is luck rather than safety.
+      //
+      // Nothing to prefill is the honest answer for a shopper with no history,
+      // and it is what the pooled version effectively returned. Falling back to
+      // everyone's visits would be worse: prefilling a stranger's basket.
+      if (isEmptyPopulation(error)) {
+        console.log(`getAutoFill: no visits for ${userId}; nothing to prefill`);
+        return [];
+      }
       console.error(`getAutoFill: API error for userId ${userId}:`, error);
       throw error;
     })
